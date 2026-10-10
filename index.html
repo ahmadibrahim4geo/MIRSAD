@@ -407,92 +407,312 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         <!-- Source 1: Hybrid Engine -->
-        <div class="glass-card p-6 rounded-2xl border-2 border-ocean-500/50 relative overflow-hidden group">
-          <div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-ocean-500 to-brand-500"></div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="px-2.5 py-1 rounded bg-ocean-500/20 text-ocean-400 text-xs font-bold font-inter" data-i18n="src_badge_default">المصدر الافتراضي</span>
-            <span class="text-xs text-slate-400 font-inter">1901 - Present</span>
+        <div class="glass-card p-6 rounded-2xl border-2 border-ocean-500/60 relative overflow-hidden group flex flex-col justify-between">
+          <div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-ocean-500 via-brand-500 to-solar-500"></div>
+          <div>
+            <!-- Header Badges -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-1 rounded-md bg-ocean-500/20 text-ocean-400 border border-ocean-500/30 text-xs font-black font-inter flex items-center gap-1.5">
+                <i class="fa-solid fa-star text-solar-400 text-[10px]"></i>
+                <span data-i18n="src_badge_default">المصدر الافتراضي الموصى به</span>
+              </span>
+              <span class="text-xs px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 font-inter font-bold">1901 - Present</span>
+            </div>
+
+            <!-- Title & Authority -->
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_1_title">النموذج الهجين (Hybrid Climate Engine)</h4>
+            <p class="text-xs font-semibold text-brand-400 mb-3 font-inter" data-i18n="src_1_sub">MIRSAD Multi-Source Fusion Architecture</p>
+            
+            <!-- Description -->
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_1_desc">
+              الخيار القياسي الموصى به لإنتاج أطلس متكامل. يعتمد على الرصد المادي المباشر لحساسات المحطة (حرارة، رطوبة، ضغط، رياح، أمطار)، ويدمج الأقمار الصناعية (CERES/FLASHFlux) للإشعاع والـ UV، مع الاستكمال الذكي لثغرات الصيانة دون ترك أي خلية فارغة.
+            </p>
+
+            <!-- Technical Specifications Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_res">الدقة المكانية</span>
+                <span class="font-bold text-white">Point / Station</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_latency">سرعة التحديث</span>
+                <span class="font-bold text-brand-400">Current (Zero Lag)</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_continuity">جودة الاتصال</span>
+                <span class="font-bold text-emerald-400">100% Zero-Gap</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_auth">المصادقة</span>
+                <span class="font-bold text-ocean-400">Zero-Auth</span>
+              </div>
+            </div>
+
+            <!-- Parameters Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-4 text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">All 19 Modules</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Real Ground Station</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">CERES Solar & UV</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">8 Bioclimatic Indices</span>
+            </div>
           </div>
-          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_1_title">النموذج الهجين (Hybrid Climate Engine)</h4>
-          <p class="text-xs text-brand-400 font-semibold mb-3" data-i18n="src_1_sub">رصد حقيقي + إكمال آلي + أقمار صناعية</p>
-          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_1_desc">
-            الخيار الموصى به لإنتاج أطلس متكامل؛ يدمج قراءات محطات الرصد الحقيقية مع إعادة التحليل والأقمار لضمان خلو الأسطح النهائية من أي بيانات مفقودة بنسبة 100%.
-          </p>
-          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
-            <span>Res: Point / Station</span>
-            <span class="text-brand-400 font-bold">100% Zero-Gap</span>
+
+          <!-- Decision Callout -->
+          <div class="p-3 rounded-xl bg-ocean-950/40 border border-ocean-500/30 text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-ocean-400 mb-1">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
+            </div>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_1_best">
+              عند الرغبة في إنتاج أطلس كارتوجرافي متكامل 100% لجميع العناصر الـ 19 دون انقطاع في الخلايا، مع الحفاظ على موثوقية الرصد الأرضي الحقيقي.
+            </p>
           </div>
         </div>
 
         <!-- Source 2: NOAA ISD Ground -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group">
-          <div class="flex items-center justify-between mb-3">
-            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">Physical Ground</span>
-            <span class="text-xs text-slate-400 font-inter">1901 - Real-Time</span>
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group flex flex-col justify-between">
+          <div>
+            <!-- Header Badges -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold font-inter">
+                Physical In-Situ Ground
+              </span>
+              <span class="text-xs px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 font-inter font-bold">1901 - Real-Time</span>
+            </div>
+
+            <!-- Title & Authority -->
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_2_title">أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)</h4>
+            <p class="text-xs font-semibold text-ocean-400 mb-3 font-inter" data-i18n="src_2_sub">National Oceanic & Atmospheric Administration (NOAA NCEI - USA)</p>
+            
+            <!-- Description -->
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_2_desc">
+              الحقيقة الأرضية المادية المباشرة المستمدة حصرياً من موازين الحرارة والبارومترات والأنيموميترات لأكثر من 14,000 محطة حول العالم. معتمد للتقارير القضائية والرسمية الميدانية دون أي نمذجة رياضية تقريبية.
+            </p>
+
+            <!-- Technical Specifications Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_res">الدقة المكانية</span>
+                <span class="font-bold text-white">Point Coordinates</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_latency">سرعة التحديث</span>
+                <span class="font-bold text-emerald-400">Real-Time</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_continuity">جودة الاتصال</span>
+                <span class="font-bold text-solar-400">Sensor Gaps</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_auth">المصادقة</span>
+                <span class="font-bold text-ocean-400">Open Public</span>
+              </div>
+            </div>
+
+            <!-- Parameters Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-4 text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Thermometers T/Td</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Barometer PSL/PS</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Anemometer Wind</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Rain Gauge Precip</span>
+            </div>
           </div>
-          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_2_title">أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)</h4>
-          <p class="text-xs text-ocean-400 font-semibold mb-3" data-i18n="src_2_sub">رصد ميداني بحت من مستشعرات المحطات</p>
-          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_2_desc">
-            الحقيقة الأرضية المادية المباشرة من موازين الحرارة والبارومترات وأجهزة الأنيموميتر لأكثر من 14,000 محطة حول العالم. معتمد للتقارير الرسمية والقضائية.
-          </p>
-          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
-            <span>Res: Point Coordinates</span>
-            <span class="text-solar-400">Subject to Sensor Gaps</span>
+
+          <!-- Decision Callout -->
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-ocean-400 mb-1">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
+            </div>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_2_best">
+              للأبحاث الأكاديمية الصارمة المشترطة لبيانات أجهزة الرصد الميداني الخام، والتقارير القانونية التي ترفض أي استكمال حسابي.
+            </p>
           </div>
         </div>
 
         <!-- Source 3: NASA POWER -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group">
-          <div class="flex items-center justify-between mb-3">
-            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">Satellite & MERRA-2</span>
-            <span class="text-xs text-slate-400 font-inter">1981 - Present</span>
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group flex flex-col justify-between">
+          <div>
+            <!-- Header Badges -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-1 rounded-md bg-solar-500/10 text-solar-400 border border-solar-500/20 text-xs font-bold font-inter">
+                Satellite Radiometry & MERRA-2
+              </span>
+              <span class="text-xs px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 font-inter font-bold">1981 - Present</span>
+            </div>
+
+            <!-- Title & Authority -->
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_3_title">وكالة ناسا الفضائية (NASA POWER)</h4>
+            <p class="text-xs font-semibold text-solar-400 mb-3 font-inter" data-i18n="src_3_sub">NASA Langley Research Center & CERES Team (USA)</p>
+            
+            <!-- Description -->
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_3_desc">
+              المعيار العالمي الذهبي لقياسات الطاقة الشمسية والإشعاعية السطحية (GHI, DNI, Diffuse) ومؤشر UV الفضائي، المستمدة من أقمار CERES و FLASHFlux مع نموذج MERRA-2، لتغطية شبكية عالمية شاملة خالية من الفجوات.
+            </p>
+
+            <!-- Technical Specifications Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_res">الدقة المكانية</span>
+                <span class="font-bold text-white">0.5° × 0.625° (~50km)</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_latency">سرعة التحديث</span>
+                <span class="font-bold text-solar-400">2-4 Days</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_continuity">جودة الاتصال</span>
+                <span class="font-bold text-emerald-400">100% Gridded</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_auth">المصادقة</span>
+                <span class="font-bold text-ocean-400">Zero-Auth</span>
+              </div>
+            </div>
+
+            <!-- Parameters Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-4 text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">All-Sky Solar GHI</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Satellite UV Index</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Skin Temp (LST)</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Wind at 10m/50m</span>
+            </div>
           </div>
-          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_3_title">وكالة ناسا الفضائية (NASA POWER)</h4>
-          <p class="text-xs text-solar-400 font-semibold mb-3" data-i18n="src_3_sub">المعيار الذهبي للإشعاع الشمسي والـ UV</p>
-          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_3_desc">
-            قراءات مستمرة مستمدة من أقمار CERES و FLASHFlux الفضائية مع نموذج MERRA-2. مثالي لدراسات الطاقة المتجددة، ومؤشر الأشعة فوق البنفسجية، والمناخ الزراعي.
-          </p>
-          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
-            <span>Res: 0.5° × 0.625° (~50km)</span>
-            <span class="text-brand-400 font-bold">Continuous Grid</span>
+
+          <!-- Decision Callout -->
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-solar-400 mb-1">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
+            </div>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_3_best">
+              لدراسات الطاقة الشمسية ومزارع الطاقة الكهروضوئية، ومؤشرات الأشعة فوق البنفسجية، ودراسات المناخ الزراعي للفترة من 1981 وحتى الآن.
+            </p>
           </div>
         </div>
 
         <!-- Source 4: Open-Meteo ERA5 -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group">
-          <div class="flex items-center justify-between mb-3">
-            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">High-Res Reanalysis</span>
-            <span class="text-xs text-slate-400 font-inter">1940 - Present</span>
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group flex flex-col justify-between">
+          <div>
+            <!-- Header Badges -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold font-inter">
+                Topo-Adjusted Reanalysis
+              </span>
+              <span class="text-xs px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 font-inter font-bold">1940 - Present</span>
+            </div>
+
+            <!-- Title & Authority -->
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_4_title">النموذج الأوروبي (Open-Meteo ERA5-Land)</h4>
+            <p class="text-xs font-semibold text-brand-400 mb-3 font-inter" data-i18n="src_4_sub">Open-Meteo & ECMWF IFS Reanalysis (~9 km)</p>
+            
+            <!-- Description -->
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_4_desc">
+              أعلى دقة مكانية شبكية لليابسة في العالم (~9 كم). تتميز بمراعاة انحدار درجات الحرارة مع التضاريس والارتفاع، وتوفر هبات الرياح القصوى، وضغط مستوى البحر المباشر، ومقاطع رطوبة وحرارة التربة حتى 255 سم.
+            </p>
+
+            <!-- Technical Specifications Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_res">الدقة المكانية</span>
+                <span class="font-bold text-white">0.10° (~9 km)</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_latency">سرعة التحديث</span>
+                <span class="font-bold text-emerald-400">2-5 Days</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_continuity">جودة الاتصال</span>
+                <span class="font-bold text-emerald-400">100% Gridded</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_auth">المصادقة</span>
+                <span class="font-bold text-ocean-400">Zero-Auth</span>
+              </div>
+            </div>
+
+            <!-- Parameters Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-4 text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Soil 0-255cm Moisture</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Peak Wind Gusts</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">High-Res PSL Isobars</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">FAO-56 Penman ET0</span>
+            </div>
           </div>
-          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_4_title">النموذج الأوروبي (Open-Meteo ERA5-Land)</h4>
-          <p class="text-xs text-brand-400 font-semibold mb-3" data-i18n="src_4_sub">دقة فائقة معدلة طبوغرافياً لليابسة</p>
-          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_4_desc">
-            أعلى دقة مكانية شبكية متاحة عالمياً لليابسة (~9 كم) مع مراعاة انحدار درجات الحرارة مع التضاريس والارتفاع، ودعم رطوبة وحرارة التربة حتى عمق 255 سم.
-          </p>
-          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
-            <span>Res: 0.10° (~9 km)</span>
-            <span class="text-brand-400 font-bold">100% Gridded</span>
+
+          <!-- Decision Callout -->
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-brand-400 mb-1">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
+            </div>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_4_best">
+              للمناطق الجبلية والتضاريس الوعرة، أو دراسات فيزياء ورطوبة التربة الزراعية، أو دراسة الفترات الممتدة من 1940 إلى 1980.
+            </p>
           </div>
         </div>
 
         <!-- Source 5: Copernicus CDS -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group lg:col-span-2">
-          <div class="flex items-center justify-between mb-3">
-            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">European Commission C3S / ECMWF</span>
-            <span class="text-xs text-slate-400 font-inter">1940 - Present</span>
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-ocean-500/50 transition group lg:col-span-2 flex flex-col justify-between">
+          <div>
+            <!-- Header Badges -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold font-inter">
+                European Commission & ECMWF Climate Authority (C3S)
+              </span>
+              <span class="text-xs px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 font-inter font-bold">1940 - Present</span>
+            </div>
+
+            <!-- Title & Authority -->
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_5_title">مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)</h4>
+            <p class="text-xs font-semibold text-ocean-400 mb-3 font-inter" data-i18n="src_5_sub">ECMWF Copernicus Climate Change Service (ERA5 & AgERA5 Official)</p>
+            
+            <!-- Description -->
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_5_desc">
+              المرجعية الأوروبية الأحدث والأشمل لبيانات المناخ وإعادة التحليل. تدعم الأداة المصادقة المباشرة عبر مفتاح CDS API Key الرسمي مع تمكين التدفق المفتوح التلقائي دون مفتاح (Zero-Auth Fallback)، وتوافق كامل مع استخراج شرائح الراستر بصيغة NetCDF وتحويلها لنقاط شبكية.
+            </p>
+
+            <!-- Technical Specifications Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_res">الدقة المكانية</span>
+                <span class="font-bold text-white">0.10° (~9 km)</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_latency">سرعة التحديث</span>
+                <span class="font-bold text-cyan-400">2-5 Days</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_continuity">جودة الاتصال</span>
+                <span class="font-bold text-emerald-400">100% Gridded C3S</span>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400 block text-[10px]" data-i18n="src_spec_auth">المصادقة</span>
+                <span class="font-bold text-cyan-400">Optional Key + Zero-Auth</span>
+              </div>
+            </div>
+
+            <!-- Parameters Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-4 text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Official ECMWF ERA5</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">AgERA5 Agricultural Data</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">NetCDF Raster Tile Ingestion</span>
+              <span class="px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/60 font-inter">Soil Profile 4 Layers</span>
+            </div>
           </div>
-          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_5_title">مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)</h4>
-          <p class="text-xs text-ocean-400 font-semibold mb-3" data-i18n="src_5_sub">المصدر الرسمي المعتمد من ECMWF مع دعم المفتاح الرسمي والتدفق المفتوح</p>
-          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_5_desc">
-            المرجعية الأوروبية الأحدث عالمياً لبيانات ERA5 و AgERA5. تدعم المنظومة إدخال مفتاح الاعتماد الشخصي (CDS API Key) مع دعم التدفق السريع دون مفتاح (Zero-Auth Fallback)، وتوافق تام مع تحميل شرائح NetCDF وتحويلها لنقاط شبكية.
-          </p>
-          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex flex-wrap items-center justify-between font-inter">
-            <span>Res: 0.10° (~9 km) Grid</span>
-            <span class="text-ocean-400 font-semibold">Optional API Key + Zero-Auth Fallback</span>
-            <span class="text-brand-400 font-bold">ECMWF Certified</span>
+
+          <!-- Decision Callout -->
+          <div class="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-cyan-400 mb-1">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
+            </div>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_5_best">
+              للأبحاث المشترطة لتوثيق المصدر الأوروبي الرسمي من كوبرنيكوس ومركز ECMWF، أو لاستخراج شرائح الراستر الشبكية وتحليل المتغيرات الزراعية AgERA5.
+            </p>
           </div>
         </div>
 
@@ -890,6 +1110,33 @@
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" data-i18n="author_bio">
               باحث ومطور متخصص في الجغرافيا المناخية الرقمية والنمذجة المكانية الآلية ونظم المعلومات الجغرافية. قام بتطوير منظومة مِرصاد (MIRSAD) لدعم الباحثين والجامعات ومراكز الأبحاث في جمهورية مصر العربية والوطن العربي بأدوات رصد واستيفاء كارتوجرافي بمعايير علمية دولية.
             </p>
+
+            <!-- Paid Consultation & WhatsApp Direct Contact -->
+            <div class="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950/50 via-slate-900 to-slate-900 border border-emerald-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                  <i class="fa-brands fa-whatsapp text-2xl"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-emerald-400" data-i18n="wa_badge">حجز الاستشارات والخدمات الجغرافية</span>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-inter">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      Available
+                    </span>
+                  </div>
+                  <p class="text-xs text-slate-300 mt-1" data-i18n="wa_consult_text">
+                    لحجز الاستشارات المدفوعة، والمشاريع الكارتوجرافية، وأبحاث النمذجة المكانية، يُرجى التواصل مباشرة عبر واتساب:
+                  </p>
+                </div>
+              </div>
+              <a href="https://wa.me/201111915925" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-emerald-900/40 shrink-0 transform hover:-translate-y-0.5 font-inter">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>+20 111 191 5925</span>
+                <span class="text-[10px] opacity-80">(WhatsApp)</span>
+              </a>
+            </div>
+
             <div class="flex flex-wrap items-center gap-3 pt-2">
               <a href="https://github.com/ahmadibrahim4geo" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-2 transition">
                 <i class="fa-brands fa-github text-sm"></i>
@@ -897,7 +1144,11 @@
               </a>
               <a href="mailto:ahmadibrahim4geo@gmail.com" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-2 transition">
                 <i class="fa-solid fa-envelope text-sm"></i>
-                <span data-i18n="btn_contact">تواصل مع المطور</span>
+                <span data-i18n="btn_contact">البريد الإلكتروني</span>
+              </a>
+              <a href="https://wa.me/201111915925" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center gap-2 transition font-inter">
+                <i class="fa-brands fa-whatsapp text-sm text-emerald-400"></i>
+                <span>WhatsApp: +201111915925</span>
               </a>
             </div>
           </div>
@@ -1190,22 +1441,32 @@
         src_tag: "5 مصادر بيانات معتمدة",
         src_heading: "المصادر الخمسة المعتمدة في منظومة مِرصاد",
         src_subheading: "تدمج المنظومة بين الرصد الأرضي المادي، ونماذج إعادة التحليل الأوروبية والأمريكية، والقياسات الإشعاعية الفضائية لتوفير أعلى درجات الموثوقية العلمية.",
-        src_badge_default: "المصدر الافتراضي",
+        src_badge_default: "المصدر الافتراضي الموصى به",
+        src_spec_res: "الدقة المكانية",
+        src_spec_latency: "سرعة التحديث",
+        src_spec_continuity: "جودة الاتصال",
+        src_spec_auth: "المصادقة",
+        src_best_for_title: "متى تختار هذا النموذج؟",
         src_1_title: "النموذج الهجين (Hybrid Climate Engine)",
-        src_1_sub: "رصد حقيقي + إكمال آلي + أقمار صناعية",
-        src_1_desc: "الخيار الموصى به لإنتاج أطلس متكامل؛ يدمج قراءات محطات الرصد الحقيقية مع إعادة التحليل والأقمار لضمان خلو الأسطح النهائية من أي بيانات مفقودة بنسبة 100%.",
+        src_1_sub: "MIRSAD Multi-Source Fusion Architecture",
+        src_1_desc: "الخيار القياسي الموصى به لإنتاج أطلس متكامل. يعتمد على الرصد المادي المباشر لحساسات المحطة (حرارة، رطوبة، ضغط، رياح، أمطار)، ويدمج الأقمار الصناعية (CERES/FLASHFlux) للإشعاع والـ UV، مع الاستكمال الذكي لثغرات الصيانة دون ترك أي خلية فارغة.",
+        src_1_best: "عند الرغبة في إنتاج أطلس كارتوجرافي متكامل 100% لجميع العناصر الـ 19 دون انقطاع في الخلايا، مع الحفاظ على موثوقية الرصد الأرضي الحقيقي.",
         src_2_title: "أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)",
-        src_2_sub: "رصد ميداني بحت من مستشعرات المحطات",
-        src_2_desc: "الحقيقة الأرضية المادية المباشرة من موازين الحرارة والبارومترات وأجهزة الأنيموميتر لأكثر من 14,000 محطة حول العالم. معتمد للتقارير الرسمية والقضائية.",
+        src_2_sub: "National Oceanic & Atmospheric Administration (NOAA NCEI - USA)",
+        src_2_desc: "الحقيقة الأرضية المادية المباشرة المستمدة حصرياً من موازين الحرارة والبارومترات والأنيموميترات لأكثر من 14,000 محطة حول العالم. معتمد للتقارير القضائية والرسمية الميدانية دون أي نمذجة رياضية تقريبية.",
+        src_2_best: "للأبحاث الأكاديمية الصارمة المشترطة لبيانات أجهزة الرصد الميداني الخام، والتقارير القانونية التي ترفض أي استكمال حسابي.",
         src_3_title: "وكالة ناسا الفضائية (NASA POWER)",
-        src_3_sub: "المعيار الذهبي للإشعاع الشمسي والـ UV",
-        src_3_desc: "قراءات مستمرة مستمدة من أقمار CERES و FLASHFlux الفضائية مع نموذج MERRA-2. مثالي لدراسات الطاقة المتجددة، ومؤشر الأشعة فوق البنفسجية، والمناخ الزراعي.",
+        src_3_sub: "NASA Langley Research Center & CERES Team (USA)",
+        src_3_desc: "المعيار العالمي الذهبي لقياسات الطاقة الشمسية والإشعاعية السطحية (GHI, DNI, Diffuse) ومؤشر UV الفضائي، المستمدة من أقمار CERES و FLASHFlux مع نموذج MERRA-2، لتغطية شبكية عالمية شاملة خالية من الفجوات.",
+        src_3_best: "لدراسات الطاقة الشمسية ومزارع الطاقة الكهروضوئية، ومؤشرات الأشعة فوق البنفسجية، ودراسات المناخ الزراعي للفترة من 1981 وحتى الآن.",
         src_4_title: "النموذج الأوروبي (Open-Meteo ERA5-Land)",
-        src_4_sub: "دقة فائقة معدلة طبوغرافياً لليابسة",
-        src_4_desc: "أعلى دقة مكانية شبكية متاحة عالمياً لليابسة (~9 كم) مع مراعاة انحدار درجات الحرارة مع التضاريس والارتفاع، ودعم رطوبة وحرارة التربة حتى عمق 255 سم.",
+        src_4_sub: "Open-Meteo & ECMWF IFS Reanalysis (~9 km)",
+        src_4_desc: "أعلى دقة مكانية شبكية لليابسة في العالم (~9 كم). تتميز بمراعاة انحدار درجات الحرارة مع التضاريس والارتفاع، وتوفر هبات الرياح القصوى، وضغط مستوى البحر المباشر، ومقاطع رطوبة وحرارة التربة حتى 255 سم.",
+        src_4_best: "للمناطق الجبلية والتضاريس الوعرة، أو دراسات فيزياء ورطوبة التربة الزراعية، أو دراسة الفترات الممتدة من 1940 إلى 1980.",
         src_5_title: "مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)",
-        src_5_sub: "المصدر الرسمي المعتمد من ECMWF مع دعم المفتاح الرسمي والتدفق المفتوح",
-        src_5_desc: "المرجعية الأوروبية الأحدث عالمياً لبيانات ERA5 و AgERA5. تدعم المنظومة إدخال مفتاح الاعتماد الشخصي (CDS API Key) مع دعم التدفق السريع دون مفتاح (Zero-Auth Fallback)، وتوافق تام مع تحميل شرائح NetCDF وتحويلها لنقاط شبكية.",
+        src_5_sub: "ECMWF Copernicus Climate Change Service (ERA5 & AgERA5 Official)",
+        src_5_desc: "المرجعية الأوروبية الأحدث والأشمل لبيانات المناخ وإعادة التحليل. تدعم الأداة المصادقة المباشرة عبر مفتاح CDS API Key الرسمي مع تمكين التدفق المفتوح التلقائي دون مفتاح (Zero-Auth Fallback)، وتوافق كامل مع استخراج شرائح الراستر بصيغة NetCDF وتحويلها لنقاط شبكية.",
+        src_5_best: "للأبحاث المشترطة لتوثيق المصدر الأوروبي الرسمي من كوبرنيكوس ومركز ECMWF، أو لاستخراج شرائح الراستر الشبكية وتحليل المتغيرات الزراعية AgERA5.",
         mod_tag: "الحزم المناخية الـ 19",
         mod_heading: "استعراض الحزم الـ 19 والمؤشرات العلمية",
         mod_subheading: "تغطي المنظومة 19 حزمة علمية مستقلة يمكن تفعيلها منفردة أو مجتمعة لإنتاج مئات الطبقات المناخية المشتقة.",
@@ -1256,7 +1517,9 @@
         dev_card3_desc: "نرحب بكافة المساهمات العلمية والأكاديمية عبر فتح Pull Request أو الإبلاغ عن أي استفسار أو مشكلة عبر نافذة GitHub Issues.",
         author_role: "أخصائي نظم معلومات جغرافية وكارتوجرافي",
         author_bio: "باحث ومطور متخصص في الجغرافيا المناخية الرقمية والنمذجة المكانية الآلية ونظم المعلومات الجغرافية. قام بتطوير منظومة مِرصاد (MIRSAD) لدعم الباحثين والجامعات ومراكز الأبحاث في جمهورية مصر العربية والوطن العربي بأدوات رصد واستيفاء كارتوجرافي بمعايير علمية دولية.",
-        btn_contact: "تواصل مع المطور",
+        btn_contact: "البريد الإلكتروني",
+        wa_badge: "حجز الاستشارات والخدمات الجغرافية",
+        wa_consult_text: "لحجز الاستشارات المدفوعة، والمشاريع الكارتوجرافية، وأبحاث النمذجة المكانية، يُرجى التواصل مباشرة عبر واتساب:",
         credits_title: "مصادر البيانات الرسمية المعتمدة:",
         footer_signature: "تطوير أحمد إبراهيم (Ahmad Ibrahim) • صُممت لخدمة البحث العلمي الجغرافي والكارتوجرافي"
       },
@@ -1302,22 +1565,32 @@
         src_tag: "5 AUTHORITATIVE CLIMATE SOURCES",
         src_heading: "The 5 Integrated Climate Data Sources",
         src_subheading: "Seamlessly uniting physical station telemetry, European & American atmospheric reanalyses, and satellite radiometers for uncompromising scientific rigor.",
-        src_badge_default: "Default Engine",
+        src_badge_default: "Recommended Default",
+        src_spec_res: "Spatial Resolution",
+        src_spec_latency: "Latency & Update",
+        src_spec_continuity: "Continuity",
+        src_spec_auth: "Authentication",
+        src_best_for_title: "When to choose this model?",
         src_1_title: "Hybrid Climate Engine (Default)",
-        src_1_sub: "Real Telemetry + Auto Gap-Filling + Satellite Fusion",
-        src_1_desc: "The recommended choice for complete atlas generation. Blends ground sensor readings with satellite observations and reanalysis to ensure 100% gap-free raster surfaces.",
+        src_1_sub: "MIRSAD Multi-Source Fusion Architecture",
+        src_1_desc: "The recommended standard for complete atlas production. Driven by physical in-situ station sensors (temperature, humidity, pressure, wind, rain), augmented with CERES/FLASHFlux satellites for solar & UV, with automated gap-filling leaving zero empty cells.",
+        src_1_best: "For generating complete, 100% continuous atlases across all 19 modules with zero raster gaps while retaining physical station accuracy.",
         src_2_title: "NOAA ISD Ground Station Archive",
-        src_2_sub: "Pure Physical Ground Sensor Readings",
-        src_2_desc: "Physical ground truth directly from thermometers, barometers, and anemometers across 14,000+ stations worldwide. Fully certified for legal and official forensic reports.",
+        src_2_sub: "National Oceanic & Atmospheric Administration (NOAA NCEI - USA)",
+        src_2_desc: "Direct physical ground truth strictly measured by thermometers, barometers, and cup anemometers across 14,000+ stations globally. Certified for formal legal, forensic, and observational validation.",
+        src_2_best: "For strict observational studies requiring raw, unmodeled instrument records, and legal or forensic weather verifications.",
         src_3_title: "NASA POWER Agroclimatology",
-        src_3_sub: "Global Gold Standard for Solar Radiation & UV",
-        src_3_desc: "Satellite-derived fluxes from CERES and FLASHFlux combined with MERRA-2. Ideal for renewable energy, UV index assessments, and agrometeorological crop water balance.",
+        src_3_sub: "NASA Langley Research Center & CERES Team (USA)",
+        src_3_desc: "The global benchmark for surface solar radiation (GHI, DNI, Diffuse) and satellite UV index, derived from CERES and FLASHFlux instruments assimilated into MERRA-2 for unbroken global grid coverage.",
+        src_3_best: "For solar power assessments, PV farm site selection, satellite UV index monitoring, and post-1981 agrometeorological modeling.",
         src_4_title: "Open-Meteo ERA5 / ERA5-Land",
-        src_4_sub: "Ultra High-Resolution Topo-Corrected Reanalysis",
-        src_4_desc: "The highest global land reanalysis resolution (~9 km), adjusted for elevation lapses and complex terrain, with multi-layer soil moisture down to 255 cm.",
+        src_4_sub: "Open-Meteo & ECMWF IFS Reanalysis (~9 km)",
+        src_4_desc: "Peak global land reanalysis resolution (~9 km). Topographically adjusted for lapse rates and mountain terrain, featuring peak wind gusts, direct sea-level pressure, and 4-layer soil moisture down to 255 cm.",
+        src_4_best: "For complex mountainous terrains, steep elevation gradients, agricultural soil moisture down to 255 cm, and historical eras from 1940-1980.",
         src_5_title: "Copernicus Climate Data Store (CDS)",
-        src_5_sub: "Official ECMWF / C3S Source with API Key & Zero-Auth Streaming",
+        src_5_sub: "ECMWF Copernicus Climate Change Service (ERA5 & AgERA5 Official)",
         src_5_desc: "The European flagship authority for ERA5 and AgERA5. Fully supports user CDS API Key authentication with automatic zero-auth fallback streaming and NetCDF tiling.",
+        src_5_best: "For European-standard climate assessments, direct ECMWF provenance compliance, NetCDF tile ingestion, and AgERA5 crop parameters.",
         mod_tag: "THE 19 CLIMATE MODULES",
         mod_heading: "Interactive 19 Climate Packages Showcase",
         mod_subheading: "Covering 19 distinct physical and bioclimatic domains that can be executed independently or in concert to produce hundreds of thematic map layers.",
@@ -1368,7 +1641,9 @@
         dev_card3_desc: "We welcome academic and professional contributions via GitHub Pull Requests or reporting issues on our GitHub tracker.",
         author_role: "GIS Specialist & Cartographer",
         author_bio: "Researcher and developer specializing in digital spatial climatology, automated spatial modeling, and GIS. Developed MIRSAD to equip researchers, universities, and planning institutions with international-grade climate atlas generators.",
-        btn_contact: "Contact Developer",
+        btn_contact: "Email Developer",
+        wa_badge: "Paid Consultations & GIS Projects",
+        wa_consult_text: "For paid consultations, cartographic commissions, and spatial climate modeling inquiries, connect directly via WhatsApp:",
         credits_title: "Authoritative Data Citations:",
         footer_signature: "Developed by Ahmad Ibrahim • Dedicated to Advancing Spatial Climate Science"
       }
