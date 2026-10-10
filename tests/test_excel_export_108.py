@@ -18,8 +18,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-mod = type(sys)("pyt_tool")
-exec(compile(open(os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt"), "rb").read(), "pyt_tool", "exec"), mod.__dict__)
+import types
+mod = types.ModuleType("pyt_tool")
+_pyt_file = os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+if not os.path.exists(_pyt_file):
+    _pyt_file = os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")
+exec(compile(open(_pyt_file, "rb").read(), "pyt_tool", "exec"), mod.__dict__)
 pyt_mod = mod
 
 
@@ -96,6 +100,67 @@ class TestExcelAndArabicExport(unittest.TestCase):
         decoded = content.decode("utf-8")
         self.assertIn(u"مرسى علم", decoded)
 
+    def test_get_element_source_metadata_all_providers(self):
+        # 1. Hybrid
+        hyb = pyt_mod.get_element_source_metadata("Temperature", "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling")
+        self.assertIn("NOAA", hyb["primary_source"])
+        self.assertIn("ERA5", hyb["gap_fill_source"])
+        self.assertIn("In-Situ", hyb["spatial_resolution"])
+
+        # 2. NOAA Direct
+        noaa = pyt_mod.get_element_source_metadata("Wind", "NOAA ISD / GHCN Direct Station Ground Observations Archive")
+        self.assertIn("NOAA", noaa["primary_source"])
+        self.assertIn("Synoptic", noaa["model_used"])
+
+        # 3. Open-Meteo ERA5
+        om = pyt_mod.get_element_source_metadata("Precipitation", "Open-Meteo Historical API (ERA5 Reanalysis)", om_model="ERA5-Land")
+        self.assertIn("Open-Meteo", om["primary_source"])
+        self.assertIn("ERA5-Land", om["model_used"])
+        self.assertIn("9 km", om["spatial_resolution"])
+
+        # 4. NASA POWER
+        nasa = pyt_mod.get_element_source_metadata("Solar Radiation", "NASA POWER API")
+        self.assertIn("NASA POWER", nasa["primary_source"])
+        self.assertIn("CERES", nasa["model_used"])
+
+    def test_export_source_data_folder(self):
+        pts = [
+            {"oid": 1, "station_id": "623660-99999", "station_name": "Cairo Intl", "country": "EG", "lat": 30.12, "lon": 31.40, "elevation": 74.0},
+            {"oid": 2, "station_id": "401800-99999", "station_name": "Jerusalem Airport", "country": "PS", "lat": 31.86, "lon": 35.21, "elevation": 757.0}
+        ]
+        modules = ["Temperature", "Precipitation", "Wind"]
+
+        pyt_mod.export_source_data_folder(
+            self.test_dir, pts, modules,
+            provider="Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+            om_model="ERA5-Land", gap_method="climatological", y0=1996, y1=2025
+        )
+
+        source_dir = os.path.join(self.test_dir, "Source Data")
+        self.assertTrue(os.path.isdir(source_dir), "Source Data folder was not created")
+
+        xls_path = os.path.join(source_dir, "Climate_Data_Sources_Provenance.xls")
+        self.assertTrue(os.path.isfile(xls_path), "Climate_Data_Sources_Provenance.xls missing")
+        self.assertGreater(os.path.getsize(xls_path), 1000)
+
+        csv_path = os.path.join(source_dir, "Climate_Data_Sources_Provenance.csv")
+        self.assertTrue(os.path.isfile(csv_path), "Climate_Data_Sources_Provenance.csv missing")
+        with open(csv_path, "rb") as fh:
+            content = fh.read()
+            self.assertTrue(content.startswith(b"\xef\xbb\xbf"), "Provenance CSV missing UTF-8 BOM")
+            decoded = content.decode("utf-8")
+            self.assertIn("Cairo Intl", decoded)
+            self.assertIn("Jerusalem Airport", decoded)
+            self.assertIn("623660-99999", decoded)
+            self.assertIn("NOAA", decoded)
+
+        readme_en = os.path.join(source_dir, "README_Sources_Provenance.txt")
+        self.assertTrue(os.path.isfile(readme_en), "README_Sources_Provenance.txt missing")
+
+        readme_ar = os.path.join(source_dir, u"README_مصادر_البيانات_والنماذج.txt")
+        self.assertTrue(os.path.isfile(readme_ar), "README_مصادر_البيانات_والنماذج.txt missing")
+
 
 if __name__ == "__main__":
     unittest.main()
+

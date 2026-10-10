@@ -46,4 +46,7 @@ style/ArcMap_Style_Files/
 tests/_test_reclass_tmp/
 .dsh_tmp/
 _tmp_test/
+*_TMP/
+*Test_TMP/
+scratch/
 *.zip

@@ -7,8 +7,8 @@ import os
 import shutil
 import sys
 
-BASE = r"C:\Users\ahmad\Desktop\NASA POWER Climate Atlas Generator"
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 OUT = os.path.join(BASE, "SmokeTest_108_Output")
 PTS = os.path.join(BASE, "Egypt Climate Data", "Egpyt_Climate.gdb", "Point_Sample_Climate")
 MASK = os.path.join(BASE, "Egypt Climate Data", "Egpyt_Climate.gdb", "Egypt")
@@ -18,7 +18,11 @@ mod = type(sys)("m108")
 raw = open(PYT, "rb").read()
 exec(compile(raw, PYT, "exec"), mod.__dict__)
 
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 arcpy.env.overwriteOutput = True
 
 lfh = open(LOG, "w")

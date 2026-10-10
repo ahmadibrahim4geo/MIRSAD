@@ -16,7 +16,10 @@ try:
 except ImportError:  # Python 2.7 fallback
     import imp as _imp
     _load_source = _imp.load_source
-pyt_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "POWER_Climate_Atlas_Generator_10_8.pyt")
+_base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+pyt_path = os.path.join(_base, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+if not os.path.exists(pyt_path):
+    pyt_path = os.path.join(_base, "POWER_Climate_Atlas_Generator_10_8.pyt")
 mod = _load_source("power_atlas_108", pyt_path)
 
 passed = 0
@@ -48,7 +51,11 @@ check("10 colors starts with first color", c10[0].upper() == base7[0].upper(), c
 check("10 colors ends with last color", c10[-1].upper() == base7[-1].upper(), c10[-1])
 
 print("\n=== 2. Reclassification Methods in ArcPy Spatial Analyst ===")
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 arcpy.CheckOutExtension("Spatial")
 
 tool = mod.PowerClimateAtlasGenerator()

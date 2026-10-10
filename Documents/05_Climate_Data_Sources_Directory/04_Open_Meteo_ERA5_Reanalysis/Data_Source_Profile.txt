@@ -1,0 +1,35 @@
+================================================================================
+DATA SOURCE PROFILE: OPEN-METEO (ECMWF ERA5 & ERA5-LAND REANALYSIS)
+================================================================================
+Source Name           : Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)
+Provider Organization : Open-Meteo Weather API
+Foundational Models   : European Centre for Medium-Range Weather Forecasts (ECMWF)
+Program               : Copernicus Climate Change Service (C3S)
+Coverage Start        : 1940-01-01 (ERA5 Global Reanalysis)
+                        1950-01-01 (ERA5-Land Enhanced Surface)
+Coverage End          : Present (Near-Real-Time with 2-5 days latency)
+Temporal Resolution   : Hourly and Daily
+Spatial Resolution    : 0.1° (~9 km to 11 km) for ERA5-Land (Topography-Adjusted)
+                        0.25° (~28 km) for ERA5 Global
+Spatial Domain        : Continuous Global Gridded Coverage
+
+WHAT THIS SOURCE CAN PROVIDE:
+[+] Finest Global Public Spatial Resolution: 0.10° (~9 km to 11 km) on Land
+[+] Continuous Unbroken 85+ Year Historical Time Series (1940-Present)
+[+] Lapse-Rate Topographic Downscaling Ideal for Mountain Microclimates
+[+] 2m Air Temperature (Mean, Daily Max, Daily Min) & Apparent Temp
+[+] 2m Dew Point Temperature and Relative Humidity
+[+] Direct High-Resolution Mean Sea Level Pressure (PSL) & Surface Pressure
+[+] Boundary Layer Winds: 10m & 100m Wind Speed, Direction, and 10m Gusts
+[+] Total Precipitation (Liquid Equivalent, Rain, Snowfall, Snow Depth)
+[+] Multi-Layer Cloud Cover (Low, Mid, High, Total Fractions %)
+[+] Soil Temperature at 4 Layer Depths (0-7, 7-28, 28-100, 100-255 cm)
+[+] Volumetric Soil Moisture at 4 Layer Depths (m3/m3)
+[+] Standard Reference Evapotranspiration (ET0 FAO-56 Penman-Monteith)
+
+WHAT THIS SOURCE CANNOT PROVIDE:
+[-] Historical Data Prior to January 1, 1940 (1901-1939 Unavailable)
+[-] Dedicated Satellite UV Erythemal Index (Relies on General Radiative Model)
+[-] Pure Physical Ground Truth Instrument Readings (It is a Reanalysis Model)
+[-] Zero-Day Instant Real-Time Data (Trails Real-Time by 2-5 Days)
+================================================================================

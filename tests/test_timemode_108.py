@@ -6,7 +6,7 @@ import os
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 
 mod = type(sys)("mtm")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)
@@ -20,7 +20,11 @@ def check(name, cond, detail=""):
         line += " | " + str(detail)
     print(line)
 
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 tool = mod.PowerClimateAtlasGenerator()
 ps = tool.getParameterInfo()
 pdict = dict((p.name, p) for p in ps)

@@ -302,13 +302,13 @@ ARABIC_ALIASES = {
     "PET_Hargreaves_Annual": u"البخر-نتح الممكن بهارجريفز",
 
     # Trends & Anomalies
-    "T_Trend_Decade": u"معدل تغير الحرارة لكل عقد",
-    "R_Trend_Decade": u"معدل تغير الأمطار لكل عقد",
-    "T_Anom_Annual": u"شذوذ درجة الحرارة السنوي",
+    "T_Annual_Trend_Decade": u"معدل تغير الحرارة لكل عقد",
+    "R_Annual_Trend_Decade": u"معدل تغير الأمطار لكل عقد",
+    "T_Annual_Anom": u"شذوذ درجة الحرارة السنوي",
     "T_Anom_Winter": u"شذوذ حرارة الشتاء",
     "T_Anom_Summer": u"شذوذ حرارة الصيف",
-    "R_Anom_Annual": u"شذوذ الأمطار السنوي",
-    "R_Anom_Annual_Pct": u"النسبة المئوية لشذوذ الأمطار السنوي",
+    "R_Annual_Anom": u"شذوذ الأمطار السنوي",
+    "R_Annual_Anom_Pct": u"النسبة المئوية لشذوذ الأمطار السنوي",
     "R_Anom_Winter": u"شذوذ أمطار الشتاء",
     "R_Anom_Winter_Pct": u"النسبة المئوية لشذوذ أمطار الشتاء",
 }

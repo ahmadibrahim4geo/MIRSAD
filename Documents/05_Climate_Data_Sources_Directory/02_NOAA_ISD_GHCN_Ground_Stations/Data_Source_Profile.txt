@@ -1,0 +1,31 @@
+================================================================================
+DATA SOURCE PROFILE: NOAA ISD / GHCN GROUND OBSERVATIONS ARCHIVE
+================================================================================
+Source Name           : NOAA ISD / GHCN Direct Station Ground Observations Archive
+Provider Organization : National Oceanic and Atmospheric Administration (NOAA) / NCEI
+Collaborator          : World Meteorological Organization (WMO)
+Coverage Start        : 1901 (Standard Synoptic Digital Archive)
+Coverage End          : Present (Real-Time Ingestion)
+Temporal Resolution   : Sub-hourly, Hourly, 3-hourly, Daily, Monthly
+Spatial Resolution    : Point Station Physical Coordinates (WGS84 EPSG:4326)
+Total Station Network : 35,000+ cataloged stations (28,095 curated in Atlas Hub)
+
+WHAT THIS SOURCE CAN PROVIDE:
+[+] 100% Pure Physical Ground Truth from In-Situ Meteorological Instruments
+[+] Ambient Air Temperature at 2m (Mean, Maximum, Minimum)
+[+] Dew Point Temperature and Psychrometric Relative Humidity
+[+] Dual Barometric Pressure: Station Pressure (PS) and Sea Level Pressure (PSL)
+[+] Wind Speed at 10m Mast, Compass Wind Direction, and Peak Wind Gusts
+[+] Liquid Precipitation Accumulation (mm), Rain Day Counts, Extreme Storms
+[+] Total Cloud Cover (Oktas 0-8) and Ceilometer Cloud Base Ceiling Height
+[+] Official Present Weather Phenology (Fog, Dust, Thunderstorm, Rain Types)
+[+] Certified Evidentiary Legal Compliance for Audits and Court Forensics
+
+WHAT THIS SOURCE CANNOT PROVIDE:
+[-] Surface Solar Radiation Flux (W/m2) for Routine Synoptic Stations
+[-] Satellite UV Erythemal Index (Requires Specialized Spectrometers)
+[-] Land Surface Skin Temperature (LST - Satellite Sensor Property)
+[-] Subsurface Multi-Layer Soil Moisture/Temperature Profiles
+[-] 100% Temporal Continuity (Prone to Sensor Outages, Maintenance Gaps, -999)
+[-] Gridded Continuous Coverage Across Deserts, Oceans, or Station Voids
+================================================================================

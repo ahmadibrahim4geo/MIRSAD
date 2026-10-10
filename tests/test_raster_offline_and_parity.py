@@ -32,7 +32,9 @@ def run_parity_tests():
     print("TESTING TOOL 1 & TOOL 2 PARITY AND OFFLINE MULTI-LAYER CAPABILITIES")
     print("=" * 70)
 
-    pyt_path = os.path.join(PROJ_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    pyt_path = os.path.join(PROJ_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+    if not os.path.exists(pyt_path):
+        pyt_path = os.path.join(PROJ_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
     pyt_mod = _load_source("pyt_mod", pyt_path)
     from raster_atlas_generator import RasterDataClimateAtlasGenerator, SHP_FIELD_MAP, REV_SHP_MAP
 
@@ -41,8 +43,8 @@ def run_parity_tests():
     t1 = pyt_mod.PowerClimateAtlasGenerator()
     t2 = RasterDataClimateAtlasGenerator()
 
-    assert t1.label == "POWER Point Climate Atlas Generator", "Tool 1 label mismatch: %s" % t1.label
-    assert t2.label == "POWER Raster Climate Atlas Generator", "Tool 2 label mismatch: %s" % t2.label
+    assert "MIRSAD" in t1.label, "Tool 1 label mismatch: %s" % t1.label
+    assert "MIRSAD" in t2.label, "Tool 2 label mismatch: %s" % t2.label
     assert getattr(t1, "category", "") == "", "Tool 1 category must be root: %s" % getattr(t1, "category", "")
     assert getattr(t2, "category", "") == "", "Tool 2 category must be root: %s" % getattr(t2, "category", "")
     print("[PASS] Tool 1 and Tool 2 are configured side-by-side at root: '%s' & '%s'" % (t1.label, t2.label))

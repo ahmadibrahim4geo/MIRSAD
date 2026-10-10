@@ -1,0 +1,88 @@
+================================================================================
+OFFICIAL WEATHER STATIONS DIRECTORY & SCIENTIFIC DATA PROVENANCE
+NOAA Integrated Surface Database (ISD) & WMO Global Observing System
+NASA POWER & Open-Meteo Climate Atlas Generator Framework
+================================================================================
+
+Date of Compilation: October 2026
+Coordinate System: World Geodetic System 1984 (WGS 84 / EPSG:4326)
+Entities & Custodians: 
+  - National Oceanic and Atmospheric Administration (NOAA NCEI)
+  - World Meteorological Organization (WMO) Global Telecommunication System (GTS)
+  - Egyptian Meteorological Authority (EMA) National Station Network
+
+--------------------------------------------------------------------------------
+1. INSTITUTIONAL SOURCES & ARCHITECTURAL PROVENANCE
+--------------------------------------------------------------------------------
+This directory aggregates certified meteorological stations worldwide, providing
+a primary observational ground-truth foundation for climatological surface
+modeling and spatial interpolation.
+
+Primary Data Ingestion Endpoints:
+1. NOAA ISD Master Inventory:
+   https://www.ncei.noaa.gov/pub/data/noaa/isd-history.txt
+2. NOAA Global Historical Climatology Network (GHCN):
+   https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
+3. WMO Observing Systems Capability Analysis and Review Tool (OSCAR):
+   https://oscar.wmo.int/surface/
+4. High-Speed Historical Observations Access Archive:
+   https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/access/
+
+--------------------------------------------------------------------------------
+2. DATASET INVENTORY IN THIS HUB
+--------------------------------------------------------------------------------
+A. Geodatabase (Geodatabase/Weather_Stations_Directory.gdb):
+   - Feature Class 'Egypt_Weather_Stations': 87 official meteorological stations
+     covering all 27 governorates, Sinai Peninsula, New Valley Oases, and Red Sea.
+   - Feature Class 'Global_Weather_Stations': 28,095 certified stations worldwide
+     with multi-tier regional classifications (Arab League, Africa, Asia, Europe,
+     North America, South America, Oceania, Antarctica).
+
+B. Shapefiles (Shapefiles/):
+   - Egypt_Weather_Stations.shp (.dbf, .prj, .shx)
+   - Global_Weather_Stations.shp (.dbf, .prj, .shx)
+
+C. Interactive Web Maps (HTML_Explorers/):
+   - Egypt_Weather_Stations_Map.html: Focused explorer with Esri Satellite imagery
+     and instant station search.
+   - Global_Weather_Stations_Map.html: Complete world explorer supporting
+     hierarchical multi-tier filtering (Arab League first, Continents, and Open
+     Worldwide), Drag-and-Drop Shapefile uploads (.zip), automated client-side
+     reprojection (Proj4js supporting UTM, Mercator, WGS84, national grids),
+     buffer halo influential station filtering (Turf.js), and 1-click station ID exports.
+
+--------------------------------------------------------------------------------
+3. ATTRIBUTE SCHEMA & FIELD DICTIONARY
+--------------------------------------------------------------------------------
+Every station record carries standardized geodetic and administrative attributes:
+
+| Field Name   | Data Type   | Description                                     |
+|--------------|-------------|-------------------------------------------------|
+| Station_ID   | String (10) | USAF 6-digit identifier / WMO assigned code     |
+| WBAN         | String (10) | Weather Bureau Army Navy 5-digit station code   |
+| Name         | String (40) | Official international station name             |
+| Country      | String (4)  | FIPS 2-letter country code (e.g. EG, SA, US)    |
+| Country_Nm   | String (50) | Full English standard country name              |
+| Country_Ar   | String (50) | Full Arabic standard country name               |
+| Continent    | String (20) | Continent / Region name                         |
+| Is_Arab      | Short (2)   | 1 = Arab League Member State, 0 = Otherwise     |
+| ICAO         | String (6)  | International Civil Aviation Org airport code   |
+| Lat          | Double      | Latitude in decimal degrees (WGS84)             |
+| Lon          | Double      | Longitude in decimal degrees (WGS84)            |
+| Elev_m       | Double      | Elevation above Mean Sea Level in meters        |
+| Start_Yr     | String (6)  | Earliest available recorded year                |
+| End_Yr       | String (6)  | Latest available recorded year (e.g. 2025)      |
+
+--------------------------------------------------------------------------------
+4. CITATION & USAGE TERMS
+--------------------------------------------------------------------------------
+These datasets are open public domain data provided by NOAA and WMO:
+
+Citation Standard:
+Smith, A., et al. (2011). The Integrated Surface Database: Recent Developments
+and Partnerships. Bulletin of the American Meteorological Society, 92(6), 704-708.
+
+NOAA National Centers for Environmental Information (NCEI):
+National Oceanic and Atmospheric Administration, 151 Patton Avenue,
+Asheville, North Carolina 28801, USA. https://www.ncei.noaa.gov/
+================================================================================

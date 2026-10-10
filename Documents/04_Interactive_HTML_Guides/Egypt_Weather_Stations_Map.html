@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIRSAD — Official Weather Stations of Egypt (مِرصاد)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; overflow: hidden; background: #0f172a; color: #f8fafc; }
+  #sidebar { width: 380px; height: 100%; overflow-y: auto; background: #0f172a; color: #fff; padding: 18px; box-sizing: border-box; display: flex; flex-direction: column; border-right: 1px solid #1e293b; }
+  #map { flex: 1; height: 100%; }
+  h2 { margin-top: 0; color: #38bdf8; font-size: 1.25rem; border-bottom: 2px solid #1e293b; padding-bottom: 10px; }
+  .stat-card { background: #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; border-left: 4px solid #38bdf8; }
+  .stat-card:hover { background: #334155; transform: translateX(4px); }
+  .stat-name { font-weight: bold; color: #f8fafc; font-size: 0.95rem; }
+  .stat-meta { font-size: 0.82rem; color: #94a3b8; margin-top: 4px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; background: #0284c7; color: #fff; margin-top: 6px; }
+  .search-box { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; margin-bottom: 14px; font-size: 0.9rem; }
+  .search-box:focus { outline: none; border-color: #38bdf8; }
+  #stationList { flex: 1; overflow-y: auto; padding-right: 4px; }
+  .leaflet-popup-content-wrapper { direction: ltr; text-align: left; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div id="sidebar">
+  <h2>🇪🇬 MIRSAD Egypt Weather Stations Explorer</h2>
+  <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;">
+    <strong>منظومة مِرصاد (MIRSAD)</strong> — NOAA Integrated Surface Database (ISD) & WMO Network: 
+    <br><strong style="color:#38bdf8; font-size:1.05rem;">87 Certified Stations</strong> covering all 27 governorates, Sinai Peninsula, coastal margins, and New Valley Oases.
+  </p>
+  <input type="text" id="search" class="search-box" placeholder="Search by station name or USAF ID..." oninput="filterStations()">
+  <div id="stationList"></div>
+</div>
+<div id="map"></div>
+<script>
+const stations = [{"id": "624190", "name": "ABU SIMBEL", "lat": 22.376, "lon": 31.612, "elev": 187.8, "start": "1973", "end": "2025"}, {"id": "624380", "name": "ABU SUWAYR", "lat": 30.567, "lon": 32.1, "elev": 16.0, "start": "1958", "end": "2008"}, {"id": "624580", "name": "ABURDEES", "lat": 28.9, "lon": 33.183, "elev": 8.0, "start": "2001", "end": "2025"}, {"id": "623430", "name": "AD DANABIQ", "lat": 31.05, "lon": 31.467, "elev": 7.0, "start": "1960", "end": "1966"}, {"id": "623180", "name": "ALEXANDRIA INTL", "lat": 31.184, "lon": 29.949, "elev": -1.8, "start": "1937", "end": "2025"}, {"id": "624140", "name": "ASWAN INTL", "lat": 23.964, "lon": 32.82, "elev": 201.8, "start": "1937", "end": "2025"}, {"id": "623930", "name": "ASYUT INTL", "lat": 27.047, "lon": 31.012, "elev": 235.3, "start": "1949", "end": "2025"}, {"id": "623920", "name": "ASYUT-AGRIMET", "lat": 27.2, "lon": 31.167, "elev": 52.0, "start": "1938", "end": "2005"}, {"id": "624200", "name": "BAHARIA", "lat": 28.333, "lon": 28.867, "elev": 130.0, "start": "1949", "end": "2025"}, {"id": "623690", "name": "BAHTIM", "lat": 30.133, "lon": 31.25, "elev": 16.0, "start": "2001", "end": "2002"}, {"id": "623250", "name": "BALTIM", "lat": 31.55, "lon": 31.1, "elev": 2.0, "start": "1994", "end": "2025"}, {"id": "623630", "name": "BANHA", "lat": 30.467, "lon": 31.183, "elev": 14.0, "start": "2001", "end": "2023"}, {"id": "624540", "name": "BEAR EL ABD", "lat": 30.967, "lon": 32.767, "elev": 24.0, "start": "2004", "end": "2016"}, {"id": "131430", "name": "BOGUS YUGOSLAVIAN", "lat": 28.867, "lon": 31.333, "elev": 103.6, "start": "1991", "end": "1992"}, {"id": "623601", "name": "BORG EL ARAB INTL", "lat": 30.918, "lon": 29.696, "elev": 53.9, "start": "2004", "end": "2025"}, {"id": "623720", "name": "CAIRO /ALMAZA", "lat": 30.1, "lon": 31.367, "elev": 74.1, "start": "1949", "end": "1952"}, {"id": "623670", "name": "CAIRO ALMAZA", "lat": 30.083, "lon": 31.367, "elev": 51.0, "start": "1937", "end": "1940"}, {"id": "623710", "name": "CAIRO H.Q.", "lat": 30.083, "lon": 31.283, "elev": 26.0, "start": "1999", "end": "2003"}, {"id": "623660", "name": "CAIRO INTL", "lat": 30.122, "lon": 31.406, "elev": 116.4, "start": "1943", "end": "2025"}, {"id": "623680", "name": "CAIRO WEST", "lat": 30.117, "lon": 30.917, "elev": 151.0, "start": "1973", "end": "2017"}, {"id": "623090", "name": "DABAA", "lat": 31.017, "lon": 28.433, "elev": 18.0, "start": "1957", "end": "2025"}, {"id": "624670", "name": "DAHAB", "lat": 28.483, "lon": 34.5, "elev": 19.0, "start": "2004", "end": "2023"}, {"id": "624320", "name": "DAKHLA", "lat": 25.5, "lon": 28.967, "elev": 117.0, "start": "1938", "end": "2025"}, {"id": "623390", "name": "DAMANHOUR", "lat": 31.033, "lon": 30.467, "elev": 2.0, "start": "1989", "end": "2022"}, {"id": "623300", "name": "DAMIETTA", "lat": 31.417, "lon": 31.817, "elev": 1.0, "start": "2001", "end": "2014"}, {"id": "624110", "name": "DARAW", "lat": 24.416, "lon": 32.956, "elev": 99.1, "start": "1985", "end": "1997"}, {"id": "624080", "name": "EDFOU", "lat": 24.983, "lon": 32.817, "elev": 89.0, "start": "2008", "end": "2008"}, {"id": "623665", "name": "EDFU", "lat": 24.983, "lon": 32.867, "elev": 85.0, "start": "2009", "end": "2024"}, {"id": "623370", "name": "EL ARISH INTL", "lat": 31.073, "lon": 33.836, "elev": 36.9, "start": "1985", "end": "2025"}, {"id": "623360", "name": "EL ARISH-AGRIMET", "lat": 31.083, "lon": 33.817, "elev": 27.0, "start": "1938", "end": "2025"}, {"id": "624590", "name": "EL TOR", "lat": 28.209, "lon": 33.646, "elev": 35.1, "start": "1938", "end": "2025"}, {"id": "624500", "name": "EL-SUEZ", "lat": 29.867, "lon": 32.467, "elev": 3.6, "start": "1960", "end": "2019"}, {"id": "624530", "name": "ELHASANA", "lat": 30.45, "lon": 33.767, "elev": 255.0, "start": "2004", "end": "2024"}, {"id": "623730", "name": "EMBABA", "lat": 30.067, "lon": 31.183, "elev": 19.0, "start": "1974", "end": "2008"}, {"id": "624440", "name": "FAID", "lat": 30.317, "lon": 32.283, "elev": 11.0, "start": "1949", "end": "1952"}, {"id": "624230", "name": "FARAFRA", "lat": 27.05, "lon": 27.983, "elev": 78.0, "start": "1950", "end": "2025"}, {"id": "623810", "name": "FAYOUM", "lat": 29.3, "lon": 30.85, "elev": 23.0, "start": "1960", "end": "2016"}, {"id": "623380", "name": "GHAZZA", "lat": 31.5, "lon": 34.45, "elev": 16.0, "start": "1960", "end": "2021"}, {"id": "623750", "name": "GIZA-AGRIMET", "lat": 30.05, "lon": 31.217, "elev": 18.0, "start": "2001", "end": "2017"}, {"id": "623780", "name": "HELWAN", "lat": 29.867, "lon": 31.333, "elev": 141.0, "start": "1938", "end": "2023"}, {"id": "624630", "name": "HURGHADA INTL", "lat": 27.178, "lon": 33.799, "elev": 15.8, "start": "1990", "end": "2025"}, {"id": "624640", "name": "HURGUADA", "lat": 27.283, "lon": 33.733, "elev": 7.0, "start": "2010", "end": "2014"}, {"id": "624400", "name": "ISMAILIA", "lat": 30.6, "lon": 32.25, "elev": 12.5, "start": "1943", "end": "2025"}, {"id": "624410", "name": "ISMAILIA          &", "lat": 30.6, "lon": 32.283, "elev": 3.0, "start": "1937", "end": "1988"}, {"id": "623662", "name": "ISMALIA", "lat": 30.583, "lon": 32.25, "elev": 3.0, "start": "2008", "end": "2021"}, {"id": "624620", "name": "JIYANKLIS NEW", "lat": 30.82, "lon": 30.191, "elev": 14.9, "start": "1949", "end": "2022"}, {"id": "624350", "name": "KHARGA", "lat": 25.45, "lon": 30.533, "elev": 73.0, "start": "1957", "end": "2025"}, {"id": "624650", "name": "KOSSEIR", "lat": 26.133, "lon": 34.25, "elev": 11.0, "start": "1938", "end": "2025"}, {"id": "624050", "name": "LUXOR INTL", "lat": 25.671, "lon": 32.707, "elev": 89.6, "start": "1943", "end": "2025"}, {"id": "624470", "name": "MADIYAH", "lat": 30.05, "lon": 32.533, "elev": 14.0, "start": "1949", "end": "1952"}, {"id": "623890", "name": "MALAWY-AGRIMET", "lat": 27.7, "lon": 30.75, "elev": 44.0, "start": "2003", "end": "2013"}, {"id": "623661", "name": "MARSA ALAM INTL", "lat": 25.557, "lon": 34.582, "elev": 76.5, "start": "2004", "end": "2025"}, {"id": "623060", "name": "MERSA MATRUH", "lat": 31.325, "lon": 27.222, "elev": 28.7, "start": "1937", "end": "2025"}, {"id": "623663", "name": "MINYA", "lat": 28.0, "lon": 30.75, "elev": 1.0, "start": "2007", "end": "2009"}, {"id": "623860", "name": "MINYA", "lat": 28.083, "lon": 30.733, "elev": 40.0, "start": "1988", "end": "2004"}, {"id": "623870", "name": "MINYA", "lat": 28.083, "lon": 30.733, "elev": 37.2, "start": "1938", "end": "2025"}, {"id": "624520", "name": "NEKHEL", "lat": 29.917, "lon": 33.733, "elev": 403.0, "start": "2001", "end": "2025"}, {"id": "623150", "name": "PORT ALEXANDRIA", "lat": 31.183, "lon": 29.867, "elev": 14.0, "start": "2001", "end": "2023"}, {"id": "623290", "name": "PORT DAMIETTA", "lat": 31.467, "lon": 31.767, "elev": 4.0, "start": "1937", "end": "2016"}, {"id": "623330", "name": "PORT SAID", "lat": 31.267, "lon": 32.3, "elev": 6.0, "start": "1949", "end": "2025"}, {"id": "623320", "name": "PORT SAID/EL GAMIL", "lat": 31.283, "lon": 32.233, "elev": 6.0, "start": "1987", "end": "2023"}, {"id": "624490", "name": "PORT TAWFIK", "lat": 29.933, "lon": 32.567, "elev": 4.0, "start": "1979", "end": "2004"}, {"id": "624020", "name": "QENA", "lat": 26.183, "lon": 32.733, "elev": 74.0, "start": "1938", "end": "2023"}, {"id": "623350", "name": "RAFH-AGRIMET", "lat": 31.2, "lon": 34.2, "elev": 73.0, "start": "2003", "end": "2023"}, {"id": "623080", "name": "RAS EL HIKMA / QISM MOURSY MA", "lat": 31.117, "lon": 27.867, "elev": 40.0, "start": "2001", "end": "2023"}, {"id": "624550", "name": "RAS SEDR", "lat": 29.583, "lon": 32.717, "elev": 16.0, "start": "1996", "end": "2025"}, {"id": "623240", "name": "ROSETTA", "lat": 31.45, "lon": 30.367, "elev": 1.0, "start": "2002", "end": "2015"}, {"id": "623000", "name": "SALLOUM", "lat": 31.533, "lon": 25.183, "elev": 6.0, "start": "1937", "end": "1997"}, {"id": "623050", "name": "SALLUM PLATEAU", "lat": 31.567, "lon": 25.133, "elev": 6.0, "start": "1995", "end": "2025"}, {"id": "624570", "name": "SANT KATREIN AIRPORT", "lat": 28.683, "lon": 34.05, "elev": 1331.0, "start": "2011", "end": "2012"}, {"id": "624760", "name": "SHALATIN", "lat": 23.133, "lon": 35.583, "elev": 21.0, "start": "2003", "end": "2025"}, {"id": "624250", "name": "SHARK EL OWEINAT INTL", "lat": 22.586, "lon": 28.717, "elev": 261.8, "start": "2001", "end": "2023"}, {"id": "624639", "name": "SHARM EL SHEIKH INT", "lat": 27.967, "lon": 34.383, "elev": 45.0, "start": "1997", "end": "2025"}, {"id": "623600", "name": "SHEBIN EL KOM", "lat": 30.6, "lon": 31.017, "elev": 11.0, "start": "2001", "end": "2020"}, {"id": "623010", "name": "SIDI BARRANI", "lat": 31.617, "lon": 25.9, "elev": 23.0, "start": "1999", "end": "2014"}, {"id": "623030", "name": "SIDI BARRANI", "lat": 31.633, "lon": 25.967, "elev": 23.0, "start": "1957", "end": "2023"}, {"id": "624170", "name": "SIWA", "lat": 29.2, "lon": 25.483, "elev": -15.0, "start": "1937", "end": "2025"}, {"id": "624160", "name": "SIWA OASIS ARPT", "lat": 29.346, "lon": 25.507, "elev": 101.0, "start": "2001", "end": "2025"}, {"id": "623980", "name": "SOHAG / SUHAG INTL", "lat": 26.333, "lon": 31.733, "elev": 92.7, "start": "2007", "end": "2025"}, {"id": "623970", "name": "SOHAG AIRPORT", "lat": 26.333, "lon": 31.75, "elev": 92.7, "start": "1999", "end": "2016"}, {"id": "624030", "name": "SOUTH OF VALLEY UNIVERSITY", "lat": 26.2, "lon": 32.75, "elev": 96.0, "start": "2004", "end": "2025"}, {"id": "623664", "name": "ST CATHERINE INTL", "lat": 28.683, "lon": 34.067, "elev": 1331.0, "start": "2007", "end": "2025"}, {"id": "624560", "name": "TABA AIRPORT (RAS ELNAKB)", "lat": 29.6, "lon": 34.783, "elev": 749.0, "start": "2004", "end": "2012"}, {"id": "624655", "name": "TABA INTL", "lat": 29.6, "lon": 34.767, "elev": 768.0, "start": "1999", "end": "2024"}, {"id": "623450", "name": "TAHRIR", "lat": 30.65, "lon": 30.7, "elev": 15.0, "start": "1988", "end": "2024"}, {"id": "623480", "name": "TANTA", "lat": 30.783, "lon": 31.0, "elev": 12.0, "start": "1960", "end": "2016"}, {"id": "623570", "name": "WADI EL NATROON", "lat": 30.4, "lon": 30.35, "elev": 1.0, "start": "1996", "end": "2025"}];
+
+const map = L.map('map').setView([27.0, 30.5], 6);
+
+const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP'
+});
+
+const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 20,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+});
+
+const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 20,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+});
+
+const esriStreets = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  attribution: 'Tiles &copy; Esri'
+});
+
+satellite.addTo(map);
+
+L.control.layers({
+  'Satellite Imagery (Esri)': satellite,
+  'Dark Canvas (CARTO)': cartoDark,
+  'Street Map (Esri)': esriStreets,
+  'Clean Light (CARTO)': cartoLight
+}, null, { position: 'topleft' }).addTo(map);
+
+const markers = {};
+
+function renderList(items) {
+  const listEl = document.getElementById('stationList');
+  listEl.innerHTML = '';
+  items.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'stat-card';
+    card.onclick = () => {
+      map.flyTo([s.lat, s.lon], 11, { duration: 1.2 });
+      markers[s.id].openPopup();
+    };
+    card.innerHTML = `
+      <div class="stat-name">${s.name}</div>
+      <div class="stat-meta">USAF / WMO ID: <code>${s.id}</code> | Elevation: ${s.elev} m</div>
+      <div class="stat-meta">Coordinates: ${s.lat.toFixed(3)}° N, ${s.lon.toFixed(3)}° E</div>
+      <span class="badge">Active Record: ${s.start} - ${s.end}</span>
+    `;
+    listEl.appendChild(card);
+  });
+}
+
+stations.forEach(s => {
+  const marker = L.circleMarker([s.lat, s.lon], {
+    radius: 7,
+    fillColor: '#38bdf8',
+    color: '#0369a1',
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.9
+  }).addTo(map);
+
+  marker.bindPopup(`
+    <div style="font-family:'Segoe UI',sans-serif; min-width:180px;">
+      <h3 style="margin:0 0 6px; color:#0369a1; font-size:1.05rem;">${s.name}</h3>
+      <p style="margin:4px 0; font-size:12px; color:#475569;"><b>USAF / WMO ID:</b> <code>${s.id}</code></p>
+      <p style="margin:4px 0; font-size:12px; color:#475569;"><b>Latitude:</b> ${s.lat}° N</p>
+      <p style="margin:4px 0; font-size:12px; color:#475569;"><b>Longitude:</b> ${s.lon}° E</p>
+      <p style="margin:4px 0; font-size:12px; color:#475569;"><b>Elevation:</b> ${s.elev} meters</p>
+      <p style="margin:4px 0; font-size:12px; color:#0284c7;"><b>Data Record:</b> ${s.start} &ndash; ${s.end}</p>
+    </div>
+  `);
+
+  markers[s.id] = marker;
+});
+
+renderList(stations);
+
+function filterStations() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const filtered = stations.filter(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q));
+  renderList(filtered);
+
+  stations.forEach(s => {
+    const m = markers[s.id];
+    const isMatch = filtered.some(f => f.id === s.id);
+    if (isMatch) {
+      if (!map.hasLayer(m)) map.addLayer(m);
+    } else {
+      if (map.hasLayer(m)) map.removeLayer(m);
+    }
+  });
+
+  if (filtered.length > 0 && q.length > 0) {
+    const bounds = L.latLngBounds(filtered.map(s => [s.lat, s.lon]));
+    map.fitBounds(bounds, { padding: [40, 40] });
+  } else if (q.length === 0) {
+    map.setView([27.0, 30.5], 6);
+  }
+}
+</script>
+</body>
+</html>

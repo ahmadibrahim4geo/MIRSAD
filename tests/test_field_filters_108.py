@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Test Suite: Multi-Level Smart Variable, Season, and Field Filtering System
 Target: POWER_Climate_Atlas_Generator_10_8.pyt
@@ -9,7 +9,9 @@ import sys
 
 _test_dir = os.path.dirname(os.path.abspath(__file__))
 BASE = os.path.dirname(_test_dir)
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+if not os.path.exists(PYT):
+    PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 
 mod = type(sys)("mfilter")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)
@@ -64,8 +66,8 @@ check("Winter precip only has R_Winter_Mean", win_p_names == ["R_Winter_Mean"], 
 # Annual only for Precipitation
 c_ann_p = mod.get_candidate_fields(["Precipitation"], ["Annual Summaries"], [])
 ann_p_names = [c[0] for c in c_ann_p]
-check("Annual precip has R_Annual_Mean and R_Month_Mean",
-      "R_Annual_Mean" in ann_p_names and "R_Month_Mean" in ann_p_names, ann_p_names)
+check("Annual precip has R_Annual_Mean and R_Annual_Range",
+      "R_Annual_Mean" in ann_p_names and "R_Annual_Range" in ann_p_names and "R_Month_Mean" not in ann_p_names, ann_p_names)
 
 print("=== 2. Field Resolution Engine (resolve_filtered_fields) ===")
 # Mode: Full Suite
@@ -110,6 +112,40 @@ check("Custom Checklist: Temperature has T_Summer_Mean only",
 check("Custom Checklist: Precipitation has R_Winter_Mean only",
       res_custom["Precipitation"] == ["R_Winter_Mean"], res_custom["Precipitation"])
 
+print("=== 2.5 Measurement Units Conversion & Mapping ===")
+sample_f = {
+    "T_Annual_Mean": 20.0, "T_Annual_Range": 10.0, "T_Annual_Anom": 0.5,
+    "T_Max_Summer_Month_Mean": 35.0, "T_Min_Winter_Month_Mean": 10.0,
+    "R_Annual_Mean": 100.0, "R_Annual_Anom_Pct": 15.0,
+    "PS_Annual_Mean": 1013.25,
+    "W_Spd_Annual_Mean": 5.0, "W_Dir_Annual_Mean": 350.0,
+    "Sol_Annual_Mean": 5.5
+}
+f_conv = mod.convert_fields_to_user_units(
+    sample_f,
+    unit_temp="Fahrenheit",
+    unit_precip="Inches",
+    unit_press="inHg",
+    unit_wind="mph",
+    unit_solar="MJ"
+)
+check("Temperature mean converts to Fahrenheit", f_conv["T_Annual_Mean"] == 68.0, f_conv["T_Annual_Mean"])
+check("Temperature range converts delta (1.8x)", f_conv["T_Annual_Range"] == 18.0, f_conv["T_Annual_Range"])
+check("Temperature anomaly converts delta", f_conv["T_Annual_Anom"] == 0.9, f_conv["T_Annual_Anom"])
+check("T Max Summer converts to Fahrenheit", f_conv["T_Max_Summer_Month_Mean"] == 95.0, f_conv["T_Max_Summer_Month_Mean"])
+check("T Min Winter converts to Fahrenheit", f_conv["T_Min_Winter_Month_Mean"] == 50.0, f_conv["T_Min_Winter_Month_Mean"])
+check("Precipitation converts to Inches", f_conv["R_Annual_Mean"] == 3.94, f_conv["R_Annual_Mean"])
+check("Precipitation percentage anomaly unaffected", f_conv["R_Annual_Anom_Pct"] == 15.0, f_conv["R_Annual_Anom_Pct"])
+check("Pressure converts to inHg", f_conv["PS_Annual_Mean"] == 29.92, f_conv["PS_Annual_Mean"])
+check("Wind speed converts to mph", f_conv["W_Spd_Annual_Mean"] == 11.18, f_conv["W_Spd_Annual_Mean"])
+check("Wind direction angle unaffected", f_conv["W_Dir_Annual_Mean"] == 350.0, f_conv["W_Dir_Annual_Mean"])
+check("Solar radiation converts to MJ/m2/day", f_conv["Sol_Annual_Mean"] == 19.8, f_conv["Sol_Annual_Mean"])
+
+u_map = mod.get_units_mapping(unit_solar="Kilowatt-hours per square meter per day (kWh/m2/day) [Default]")
+check("Solar Radiation default unit is kWh/m2/day", u_map["Solar Radiation"] == "kWh/m²/day", u_map["Solar Radiation"])
+u_map_mj = mod.get_units_mapping(unit_solar="Megajoules per square meter per day (MJ/m2/day)")
+check("Solar Radiation unit MJ/m2/day", u_map_mj["Solar Radiation"] == "MJ/m²/day", u_map_mj["Solar Radiation"])
+
 print("=== 3. Toolbox Parameters & Dynamic GUI Synchronization ===")
 try:
     import arcpy
@@ -119,7 +155,7 @@ except ImportError:
     sys.exit(0 if not FAIL else 1)
 tool = mod.PowerClimateAtlasGenerator()
 ps = tool.getParameterInfo()
-check("Total parameters is 59", len(ps) == 59, len(ps))
+check("Total parameters is 60", len(ps) == 60, len(ps))
 
 pdict = dict((p.name, p) for p in ps)
 check("Field_Filter_Scope exists", "Field_Filter_Scope" in pdict)
@@ -134,6 +170,10 @@ check("Temperature_Unit exists", "Temperature_Unit" in pdict)
 check("Precipitation_Unit exists", "Precipitation_Unit" in pdict)
 check("Pressure_Unit exists", "Pressure_Unit" in pdict)
 check("Wind_Speed_Unit exists", "Wind_Speed_Unit" in pdict)
+check("Solar_Radiation_Unit exists", "Solar_Radiation_Unit" in pdict)
+check("Study_Area_Name defaults to None", pdict["Study_Area_Name"].value is None)
+check("Climate_Modules defaults to None", pdict["Climate_Modules"].value is None)
+check("Input_Point_Features is Required", pdict["Input_Point_Features"].parameterType == "Required")
 check("Enable_Raster_Reclass default False", pdict["Enable_Raster_Reclass"].value == False)
 
 # Check positions and display names

@@ -292,6 +292,8 @@ MODULES_INFO = [
         "fields": [
             ("HI_Annual_Mean", "Annual Mean Heat Index"),
             ("HI_Summer_Mean", "Summer Mean Heat Index"),
+            ("HI_Spring_Mean", "Spring Mean Heat Index"),
+            ("HI_Autumn_Mean", "Autumn Mean Heat Index"),
             ("HI_Winter_Mean", "Winter Mean Heat Index"),
             ("HI_Annual_Range", "Annual Heat Index Range"),
             ("WBGT_Summer_Mean", "Summer Mean WBGT Heat Stress"),
@@ -304,6 +306,11 @@ MODULES_INFO = [
         "fields": [
             ("WC_Annual_Mean", "Annual Mean Wind Chill Temperature"),
             ("WC_Winter_Mean", "Winter Mean Wind Chill Temperature"),
+            ("WC_Spring_Mean", "Spring Mean Wind Chill Temperature"),
+            ("WC_Summer_Mean", "Summer Mean Wind Chill Temperature"),
+            ("WC_Autumn_Mean", "Autumn Mean Wind Chill Temperature"),
+            ("WC_Annual_Range", "Annual Wind Chill Range"),
+            ("WC_Seasonal_Range", "Seasonal Wind Chill Range"),
         ]
     },
     {
@@ -351,13 +358,13 @@ MODULES_INFO = [
         "folder": "17_Trends_And_Anomalies",
         "short": "Trends_Anomalies",
         "fields": [
-            ("T_Trend_Decade", "Temperature Trend per Decade"),
-            ("R_Trend_Decade", "Precipitation Trend per Decade"),
-            ("T_Anom_Annual", "Annual Temperature Anomaly vs 1991-2020"),
+            ("T_Annual_Trend_Decade", "Temperature Trend per Decade"),
+            ("R_Annual_Trend_Decade", "Precipitation Trend per Decade"),
+            ("T_Annual_Anom", "Annual Temperature Anomaly vs 1991-2020"),
             ("T_Anom_Winter", "Winter Temperature Anomaly vs 1991-2020"),
             ("T_Anom_Summer", "Summer Temperature Anomaly vs 1991-2020"),
-            ("R_Anom_Annual", "Annual Precipitation Anomaly vs 1991-2020"),
-            ("R_Anom_Annual_Pct", "Annual Precipitation Anomaly Percent vs 1991-2020"),
+            ("R_Annual_Anom", "Annual Precipitation Anomaly vs 1991-2020"),
+            ("R_Annual_Anom_Pct", "Annual Precipitation Anomaly Percent vs 1991-2020"),
             ("R_Anom_Winter", "Winter Precipitation Anomaly vs 1991-2020"),
             ("R_Anom_Winter_Pct", "Winter Precipitation Anomaly Percent vs 1991-2020"),
         ]
@@ -375,8 +382,11 @@ SHP_FIELD_MAP = {
     "Dry_Months_Count": "Dry_Months",
     "HI_Annual_Mean": "HI_AnnMean",
     "HI_Annual_Range": "HI_AnRng",
+    "HI_Seasonal_Range": "HI_SeaRng",
     "WBGT_Summer_Mean": "WBGT_SuMn",
     "HI_Summer_Mean": "HI_SumMean",
+    "HI_Spring_Mean": "HI_SprMean",
+    "HI_Autumn_Mean": "HI_AutMean",
     "HI_Winter_Mean": "HI_WinMean",
     "Interp_Meth": "Intrp_Meth",
     "PSL_Annual_Mean": "PSL_AnMean",
@@ -451,14 +461,31 @@ SHP_FIELD_MAP = {
     "UNEP_Aridity_Annual": "UNEP_Arid",
     "Water_Deficit_Annual": "WatDefAnn",
     "WC_Winter_Mean": "WC_WinMean",
+    "WC_Spring_Mean": "WC_SprMean",
+    "WC_Summer_Mean": "WC_SumMean",
+    "WC_Autumn_Mean": "WC_AutMean",
     "WC_Annual_Mean": "WC_AnnMean",
-    "T_Trend_Decade": "T_TrendDec",
-    "R_Trend_Decade": "R_TrendDec",
-    "T_Anom_Annual": "T_AnomAnn",
+    "WC_Annual_Range": "WC_AnRng",
+    "WC_Seasonal_Range": "WC_SeaRng",
+    "WC_January_Mean": "WC_JanMean",
+    "WC_February_Mean": "WC_FebMean",
+    "WC_March_Mean": "WC_MarMean",
+    "WC_April_Mean": "WC_AprMean",
+    "WC_May_Mean": "WC_MayMean",
+    "WC_June_Mean": "WC_JunMean",
+    "WC_July_Mean": "WC_JulMean",
+    "WC_August_Mean": "WC_AugMean",
+    "WC_September_Mean": "WC_SepMean",
+    "WC_October_Mean": "WC_OctMean",
+    "WC_November_Mean": "WC_NovMean",
+    "WC_December_Mean": "WC_DecMean",
+    "T_Annual_Trend_Decade": "T_AnnTrDec",
+    "R_Annual_Trend_Decade": "R_AnnTrDec",
+    "T_Annual_Anom": "T_AnnAnom",
     "T_Anom_Winter": "T_AnomWin",
     "T_Anom_Summer": "T_AnomSum",
-    "R_Anom_Annual": "R_AnomAnn",
-    "R_Anom_Annual_Pct": "R_AnomPct",
+    "R_Annual_Anom": "R_AnnAnom",
+    "R_Annual_Anom_Pct": "R_AnnAnPct",
     "R_Anom_Winter": "R_AnomWin",
     "R_Anom_Winter_Pct": "R_AnomWPct",
 }
@@ -685,6 +712,12 @@ class LegacyAtlasMigrator(object):
                     f["HI_Winter_Mean"] = round(hw, 2)
             if f.get("HI_Annual_Range") is None and f.get("HI_Summer_Mean") is not None and f.get("HI_Winter_Mean") is not None:
                 f["HI_Annual_Range"] = round(abs(f["HI_Summer_Mean"] - f["HI_Winter_Mean"]), 2)
+            if f.get("HI_Seasonal_Range") is None:
+                _s4 = [f.get("HI_Spring_Mean"), f.get("HI_Summer_Mean"),
+                       f.get("HI_Autumn_Mean"), f.get("HI_Winter_Mean")]
+                _s4 = [float(v) for v in _s4 if v is not None]
+                if len(_s4) >= 2:
+                    f["HI_Seasonal_Range"] = round(max(_s4) - min(_s4), 2)
             if f.get("WBGT_Summer_Mean") is None and t_val is not None and rh_val is not None:
                 wb = wbgt_shade_c(float(t_val), float(rh_val))
                 if wb is not None:

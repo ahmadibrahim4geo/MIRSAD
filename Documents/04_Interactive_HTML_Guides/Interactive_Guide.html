@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدليل التفاعلي الشامل لمنظومة أطلس المناخ | POWER Climate Atlas Interactive Guide</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2b6cb0;
+            --accent: #319795;
+            --bg: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --success: #38a169;
+            --warning: #dd6b20;
+            --danger: #e53e3e;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --primary: #2b6cb0;
+            --primary-light: #4299e1;
+            --accent: #38b2ac;
+            --bg: #1a202c;
+            --card-bg: #2d3748;
+            --text: #f7fafc;
+            --text-muted: #a0aec0;
+            --border: #4a5568;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            color: var(--primary-light);
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-bottom: 3px solid var(--primary-light);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            color: var(--primary-light);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .badge-blue { background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
+        .badge-green { background: #f0fff4; color: #276749; border: 1px solid #c6f6d5; }
+        .badge-orange { background: #fffaf0; color: #c05621; border: 1px solid #feebc8; }
+
+        /* Calculator Styles */
+        .calc-box {
+            background: linear-gradient(135deg, rgba(43, 108, 176, 0.05) 0%, rgba(49, 151, 149, 0.05) 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .calc-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .res-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .res-card .title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .res-card .val {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-light);
+        }
+
+        .res-card .class-tag {
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Table Search */
+        .search-box {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary-light);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            text-align: right;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        code {
+            background: rgba(0,0,0,0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            font-size: 0.9em;
+            color: #d53f8c;
+        }
+
+        .formula-box {
+            background: rgba(0, 0, 0, 0.03);
+            border-right: 4px solid var(--primary-light);
+            padding: 12px 18px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.15rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 تبديل المظهر (Dark/Light)</button>
+    <h1>منظومة أطلس المناخ التفاعلية | POWER Climate Atlas</h1>
+    <p>الدليل الشامل، المعايير المناخية الدولية لـ WMO، حاسبة الجفاف التفاعلية، وجدول الـ 92 مؤشراً مناخياً لـ ArcGIS 10.8</p>
+</header>
+
+<div class="container">
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab(this,'modes')">🔄 أنماط التشغيل (Operation Modes)</button>
+        <button class="nav-tab" onclick="switchTab(this,'wmo')">🌐 معايير WMO ودورة الـ 30 سنة</button>
+        <button class="nav-tab" onclick="switchTab(this,'calculator')">🧮 حاسبة الجفاف والقحولة الحية</button>
+        <button class="nav-tab" onclick="switchTab(this,'elements')">☀️ العناصر المناخية الـ 18</button>
+        <button class="nav-tab" onclick="switchTab(this,'database')">📋 قاعدة المؤشرات الـ 287 (بحث فوري)</button>
+      <a class="nav-tab" href="Styles_Browser.html" style="text-decoration:none;">مستعرض الستايلات</a>
+  <a class="nav-tab" href="Parameters_Guide.html" style="text-decoration:none;">دليل البراميترات</a>
+  <a class="nav-tab" href="Modules_Dependency_Map.html" style="text-decoration:none;">خريطة الاعتماديات</a>
+</nav>
+
+    <!-- TAB 1: Operation Modes -->
+    <div id="tab-modes" class="tab-content active">
+        <div class="card">
+            <h2>🔄 نمطا التشغيل في أعلى الأداة (Operation Mode)</h2>
+            <p>تتيح الأداة خياراً رئيسياً في أعلى النافذة للتبديل بين طريقتين للعمل:</p>
+            <br>
+            <div class="grid-2">
+                <div class="card" style="border-top: 4px solid var(--primary-light);">
+                    <h3>1. نمط التحميل الكامل (Download Mode)</h3>
+                    <span class="badge badge-blue">الوضع الافتراضي</span>
+                    <span class="badge badge-green">يتطلب إنترنت</span>
+                    <p style="margin-top: 10px;">مخصص لمن يمتلك طبقة نقاط عينات/محطات أولية ويرغب في:</p>
+                    <ul style="padding-right: 20px; margin-top: 8px;">
+                        <li>استدعاء البيانات من NASA POWER أو Open-Meteo ERA5.</li>
+                        <li>تحديد التواريخ، السنوات، والدقة الزمنية (يومي/شهري).</li>
+                        <li>حساب المؤشرات الـ 287 تلقائياً.</li>
+                        <li>بناء طبقات GDB والشيب فايل والاستيفاء وإنتاج خرائط الراستر.</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top: 4px solid var(--accent);">
+                    <h3>2. نمط الاستيفاء أوفلاين (Offline Mode)</h3>
+                    <span class="badge badge-orange">أوفلاين 100%</span>
+                    <span class="badge badge-green">فوري فائق السرعة</span>
+                    <p style="margin-top: 10px;">مخصص لمن يمتلك طبقة نقاط تم استخراج بياناتها مسبقاً بالأداة:</p>
+                    <ul style="padding-right: 20px; margin-top: 8px;">
+                        <li>إغلاق وتعطيل كافة خانات التحميل والإنترنت والتواريخ تماماً.</li>
+                        <li>التعرف التلقائي الذكي على الحقول المناخية الموجودة في الطبقة.</li>
+                        <li>إعادة الاستيفاء بخوارزمية أخرى (Kriging, Spline, IDW).</li>
+                        <li>تطبيق ماسك جديد، تنعيم بؤري، أو تغيير حجم الخلية بدقة عالية.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+                <div class="card" style="border:2px solid var(--primary-light);">
+                    <h3>المطور</h3>
+                    <p><strong>أحمد إبراهيم (Ahmad Ibrahim)</strong> — باحث ومطور أطلس المناخ (NASA POWER & Open-Meteo).</p>
+                    <p>GitHub: <strong>@ahmadibrahim4geo</strong> &bull; البريد: <strong>ahmadibrahim.geo@gmail.com</strong></p>
+                </div>
+</div>
+
+    <!-- TAB 2: WMO Standards -->
+    <div id="tab-wmo" class="tab-content">
+        <div class="card">
+            <h2>🌐 معايير المنظمة العالمية للأرصاد الجوية (WMO Climatological Normals)</h2>
+            <p>لماذا تم اختيار دورة الـ 30 عاماً كمعيار دولي؟</p>
+            <br>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📅 الدورة المرجعية الدولية (1991–2020)</h3>
+                    <p>اعتمدت WMO رسمياً فترة <strong>1991–2020</strong> كخط أساس قياسي حديث لكافة التنبؤات والتحليلات المناخية والهندسية، مع الحفاظ على دورة <strong>1961–1990</strong> كخط أساس تاريخي لرصد الاحترار العالمي.</p>
+                </div>
+                <div class="card">
+                    <h3>📉 تصفية التذبذب العشوائي (Noise Reduction)</h3>
+                    <p>الفترات القصيرة (5-10 سنوات) تتأثر بالسنوات الشاذة. فترة الـ 30 عاماً تمثل التوازن الرياضي الأمثل لتصفية تذبذبات النينيو (ENSO) واستقرار المتوسط المناخي الحقيقي.</p>
+                </div>
+            </div>
+            <div class="card">
+                <h3>❄️ فصول الأرصاد الجوية القياسية (Meteorological Seasons)</h3>
+                <p>تعتمد الأداة بدقة فصول WMO المبنية على شهور تقويمية كاملة:</p>
+                <ul style="padding-right: 20px; margin-top: 10px;">
+                    <li><strong>الشتاء (DJF)</strong>: ديسمبر، يناير، فبراير.</li>
+                    <li><strong>الربيع (MAM)</strong>: مارس، أبريل، مايو.</li>
+                    <li><strong>الصيف (JJA)</strong>: يونيو، يوليو، أغسطس.</li>
+                    <li><strong>الخريف (SON)</strong>: سبتمبر، أكتوبر، نوفمبر.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: Interactive Calculator -->
+    <div id="tab-calculator" class="tab-content">
+        <div class="card">
+            <h2>🧮 حاسبة مؤشرات الجفاف والقحولة الحية (Live Aridity Calculator)</h2>
+            <p>أدخل قيم المحطة أو المنطقة لحساب مؤشرات الجفاف الخمسة وتصنيفاتها الدولية فورياً:</p>
+            <br>
+            <div class="calc-box">
+                <div class="grid-2">
+                    <div class="input-group">
+                        <label>مجموع الأمطار السنوي P (ملم/سنة):</label>
+                        <input type="number" id="inp_p" value="25.0" step="1" oninput="recalc()">
+                    </div>
+                    <div class="input-group">
+                        <label>متوسط درجة الحرارة السنوي T (°م):</label>
+                        <input type="number" id="inp_t" value="22.5" step="0.5" oninput="recalc()">
+                    </div>
+                    <div class="input-group">
+                        <label>متوسط النهاية العظمى Tmax (°م):</label>
+                        <input type="number" id="inp_tmax" value="28.0" step="0.5" oninput="recalc()">
+                    </div>
+                    <div class="input-group">
+                        <label>متوسط النهاية الصغرى Tmin (°م):</label>
+                        <input type="number" id="inp_tmin" value="16.0" step="0.5" oninput="recalc()">
+                    </div>
+                    <div class="input-group">
+                        <label>دائرة العرض الجغرافية Latitude (درجات شمالاً):</label>
+                        <input type="number" id="inp_lat" value="30.0" step="0.5" oninput="recalc()">
+                    </div>
+                </div>
+
+                <div class="calc-results">
+                    <div class="res-card">
+                        <div class="title">مؤشر دي مارتون (De Martonne)</div>
+                        <div class="val" id="res_dm">0.77</div>
+                        <div class="class-tag" id="tag_dm">شديد الجفاف وقاحل</div>
+                    </div>
+                    <div class="res-card">
+                        <div class="title">التبخر-نتح بهارجريفز (PET)</div>
+                        <div class="val" id="res_pet">1450</div>
+                        <div class="class-tag">ملم / سنة</div>
+                    </div>
+                    <div class="res-card">
+                        <div class="title">مؤشر القحولة UNEP AI</div>
+                        <div class="val" id="res_unep">0.017</div>
+                        <div class="class-tag" id="tag_unep">شديد القحولة </div>
+                    </div>
+                    <div class="res-card">
+                        <div class="title">العجز المائي الصافي (P - PET)</div>
+                        <div class="val" id="res_wd">-1425</div>
+                        <div class="class-tag" style="color: var(--danger);">عجز مائي حاد</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+                <div class="card">
+                    <h3>🌡️ حاسبة الحرارة المحسوسة (روتفوش)</h3>
+                    <div class="input-group"><label>الحرارة (°م)</label><input type="number" id="inp_hit" value="38" oninput="recalcHI()"></div>
+                    <div class="input-group"><label>الرطوبة (%)</label><input type="number" id="inp_hirh" value="45" oninput="recalcHI()"></div>
+                    <p>المؤشر: <strong id="res_hi">-</strong> °م <span id="tag_hi" class="badge badge-orange"></span></p>
+                </div>
+                <div class="card">
+                    <h3>🕶️ مقدر ذروة الأشعة فوق البنفسجية</h3>
+                    <div class="input-group"><label>المتوسط اليومي (من ناسا)</label><input type="number" step="0.01" id="inp_uvm" value="2.66" oninput="recalcUV()"></div>
+                    <div class="input-group"><label>خط العرض</label><input type="number" id="inp_uvlat" value="30" oninput="recalcUV()"></div>
+                    <div class="input-group"><label>الشهر (1-12)</label><input type="number" id="inp_uvmo" value="7" oninput="recalcUV()"></div>
+                    <p>ذروة الظهر التقديرية: <strong id="res_uv">-</strong> <span id="tag_uv" class="badge badge-orange"></span></p>
+                </div>
+                <div class="card">
+                    <h3>❄️ حاسبة مبرد الرياح</h3>
+                    <div class="input-group"><label>الحرارة (°م)</label><input type="number" id="inp_wct" value="5" oninput="recalcWC()"></div>
+                    <div class="input-group"><label>سرعة الرياح (م/ث)</label><input type="number" id="inp_wcv" value="5" oninput="recalcWC()"></div>
+                    <p>الإحساس الفعلي: <strong id="res_wc">-</strong> °م <span id="tag_wc" class="badge badge-orange"></span></p>
+                </div>
+</div>
+
+    <!-- TAB 4: Elements -->
+    <div id="tab-elements" class="tab-content">
+        <div class="card">
+            <h2>☀️ العناصر المناخية العشرة والنماذج المعتمدة</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>🌡️ الحرارة</h3>
+                    <p>المتوسطات الشهرية والفصلية والسنوية، المدى الحراري، العظمى والصغرى.</p>
+                </div>
+                <div class="card">
+                    <h3>🌧️ الأمطار</h3>
+                    <p>المجاميع السنوية والفصلية والمديات والمعدلات الشهرية.</p>
+                </div>
+                <div class="card">
+                    <h3>🧭 ضغط مستوى البحر</h3>
+                    <p>المتوسطات السنوية والفصلية مع إمكانية خطوط الأيزوبار.</p>
+                </div>
+                <div class="card">
+                    <h3>🧭 الضغط السطحي</h3>
+                    <p>الضغط الفعلي عند منسوب المحطة.</p>
+                </div>
+                <div class="card">
+                    <h3>💨 الرياح</h3>
+                    <p>السرعة والاتجاه بالمتوسط الدائري الاتجاهي.</p>
+                </div>
+                <div class="card">
+                    <h3>💧 الرطوبة النسبية</h3>
+                    <p>المتوسطات الشهرية والفصلية والسنوية.</p>
+                </div>
+                <div class="card">
+                    <h3>🌫️ نقطة الندى</h3>
+                    <p>درجة التكثف الشهرية والفصلية والسنوية.</p>
+                </div>
+                <div class="card">
+                    <h3>☀️ الإشعاع الشمسي</h3>
+                    <p>المعدل اليومي والإجمالي السنوي (كيلوواط ساعة/م²).</p>
+                </div>
+                <div class="card">
+                    <h3>🕶️ الأشعة فوق البنفسجية</h3>
+                    <p>ذروة الظهيرة بمقياس منظمة الصحة العالمية الثابت.</p>
+                </div>
+                <div class="card">
+                    <h3>☁️ الغطاء السحابي</h3>
+                    <p>نسب التغطية الشهرية والفصلية والسنوية.</p>
+                </div>
+                <div class="card">
+                    <h3>🌡️ الحرارة المحسوسة</h3>
+                    <p>روتفوش صيفاً وربيعاً وخريفاً وهيوميدكس شتاءً + المدى الفصلي.</p>
+                </div>
+                <div class="card">
+                    <h3>❄️ مبرد الرياح</h3>
+                    <p>شتاءً وسنوياً افتراضياً، وباقة كاملة للمناطق الباردة اختيارياً.</p>
+                </div>
+                <div class="card">
+                    <h3>🌵 القحولة (دي مارتون)</h3>
+                    <p>دليل الجفاف السنوي.</p>
+                </div>
+                <div class="card">
+                    <h3>🌱 البخر-نتح</h3>
+                    <p>هارجريفز-ساماني الشهري والفصلي والسنوي.</p>
+                </div>
+                <div class="card">
+                    <h3>🌍 القحولة (الأمم المتحدة)</h3>
+                    <p>مؤشر الجفاف العالمي (الأمطار ÷ البخر-نتح).</p>
+                </div>
+                <div class="card">
+                    <h3>💧 العجز المائي</h3>
+                    <p>الموازنة المناخية (الأمطار − البخر-نتح).</p>
+                </div>
+                <div class="card">
+                    <h3>📅 الأشهر الجافة</h3>
+                    <p>عدد الأشهر الجافة بيولوجياً.</p>
+                </div>
+                <div class="card">
+                    <h3>📈 الاتجاهات والشذوذ</h3>
+                    <p>اتجاهات العقود وشذوذ خط الأساس.</p>
+                </div>
+                </div>
+
+    <!-- TAB 5: Database -->
+    <div id="tab-database" class="tab-content">
+        <div class="card">
+            <h2>📋 قاعدة المؤشرات الـ 287 الكاملة</h2>
+            <p>ابحث في الحقول أو الرموز أو العناصر المناخية فورياً:</p>
+            <input type="text" id="db_search" class="search-box" placeholder="ابحث باسم الحقل (مثال: Aridity, Temperature, Rain, الضغط)..." onkeyup="filterTable()">
+            <div style="overflow-x: auto; max-height: 600px;">
+                <table id="fields_table">
+                    <thead>
+                        <tr>
+                            <th>اسم الحقل (Field Name)</th>
+                            <th>الاسم بالعربية</th>
+                            <th>العنصر المناخي</th>
+                            <th>الفترة</th>
+                            <th>الوحدة</th>
+                            <th>المعادلة / الوصف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table_body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Theme Toggle
+    function toggleTheme() {
+        const body = document.body;
+        const current = body.getAttribute('data-theme');
+        body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Tab Switching
+    function switchTab(ev, tabId) {
+        var el = (ev && ev.classList) ? ev : ((ev && ev.currentTarget) ? ev.currentTarget : null);
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        if (el) el.classList.add('active');
+        document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    // Live Aridity Calculator
+    function recalc() {
+        const p = parseFloat(document.getElementById('inp_p').value) || 0;
+        const t = parseFloat(document.getElementById('inp_t').value) || 0;
+        const tx = parseFloat(document.getElementById('inp_tmax').value) || (t + 5);
+        const tn = parseFloat(document.getElementById('inp_tmin').value) || (t - 5);
+        const lat = parseFloat(document.getElementById('inp_lat').value) || 30;
+
+        // De Martonne: P / (T + 10)
+        const dm = p / (t + 10.0);
+        document.getElementById('res_dm').innerText = dm.toFixed(2);
+        let tag_dm = "رطب ";
+        if (dm < 5) tag_dm = "شديد الجفاف وقاحل ";
+        else if (dm < 10) tag_dm = "جاف ";
+        else if (dm < 20) tag_dm = "شبه جاف ";
+        else if (dm < 30) tag_dm = "شبه رطب ";
+        document.getElementById('tag_dm').innerText = tag_dm;
+
+        // Approx Hargreaves Ra for latitude (mean ~12 mm/day)
+        const lat_rad = (Math.PI / 180.0) * lat;
+        const ra_mean = 12.0 * Math.cos(lat_rad * 0.7);
+        const td = Math.max(0.1, tx - tn);
+        const pet_day = 0.0023 * ra_mean * (t + 17.8) * Math.sqrt(td);
+        const pet_ann = Math.round(pet_day * 365.25);
+        document.getElementById('res_pet').innerText = pet_ann;
+
+        // UNEP AI: P / PET
+        const unep = pet_ann > 0 ? (p / pet_ann) : 0;
+        document.getElementById('res_unep').innerText = unep.toFixed(3);
+        let tag_unep = "رطب ";
+        if (unep < 0.05) tag_unep = "شديد القحولة ";
+        else if (unep < 0.20) tag_unep = "جاف وقاحل ";
+        else if (unep < 0.50) tag_unep = "شبه جاف ";
+        else if (unep < 0.65) tag_unep = "شبه رطب ";
+        document.getElementById('tag_unep').innerText = tag_unep;
+
+        // Water Deficit: P - PET
+        const wd = Math.round(p - pet_ann);
+        document.getElementById('res_wd').innerText = (wd > 0 ? "+" : "") + wd;
+    }
+
+    // Database of Fields
+            const fieldsData = [
+        { f: "T_Annual_Mean", ar: "المتوسط السنوي لدرجة الحرارة", mod: "الحرارة", per: "Annual", u: "C", desc: "" },
+        { f: "T_Winter_Mean", ar: "متوسط درجة الحرارة في الشتاء", mod: "الحرارة", per: "Winter", u: "C", desc: "" },
+        { f: "T_Spring_Mean", ar: "متوسط درجة الحرارة في الربيع", mod: "الحرارة", per: "Spring", u: "C", desc: "" },
+        { f: "T_Summer_Mean", ar: "متوسط درجة الحرارة في الصيف", mod: "الحرارة", per: "Summer", u: "C", desc: "" },
+        { f: "T_Autumn_Mean", ar: "متوسط درجة الحرارة في الخريف", mod: "الحرارة", per: "Autumn", u: "C", desc: "" },
+        { f: "T_Annual_Range", ar: "المدى الحراري السنوي العام", mod: "الحرارة", per: "Annual", u: "C", desc: "" },
+        { f: "T_Max_Summer_Month_Mean", ar: "أقصى متوسط شهري لدرجة الحرارة في الصيف", mod: "الحرارة", per: "Summer", u: "C", desc: "" },
+        { f: "T_Min_Winter_Month_Mean", ar: "أدنى متوسط شهري لدرجة الحرارة في الشتاء", mod: "الحرارة", per: "Winter", u: "C", desc: "" },
+        { f: "T_Annual_Max_Mean", ar: "المتوسط السنوي لدرجات الحرارة العظمى", mod: "الحرارة", per: "Annual", u: "C", desc: "" },
+        { f: "T_Annual_Min_Mean", ar: "المتوسط السنوي لدرجات الحرارة الصغرى", mod: "الحرارة", per: "Annual", u: "C", desc: "" },
+        { f: "HI_Annual_Mean", ar: "المتوسط السنوي لمؤشر الحرارة المحسوسة", mod: "الحرارة المحسوسة", per: "Annual", u: "C", desc: "" },
+        { f: "HI_Summer_Mean", ar: "متوسط مؤشر الحرارة المحسوسة في فصل الصيف", mod: "الحرارة المحسوسة", per: "Summer", u: "C", desc: "" },
+        { f: "HI_Spring_Mean", ar: "متوسط مؤشر الحرارة المحسوسة في فصل الربيع", mod: "الحرارة المحسوسة", per: "Spring", u: "C", desc: "" },
+        { f: "HI_Autumn_Mean", ar: "متوسط مؤشر الحرارة المحسوسة في فصل الخريف", mod: "الحرارة المحسوسة", per: "Autumn", u: "C", desc: "" },
+        { f: "HI_Winter_Mean", ar: "متوسط مؤشر الحرارة المحسوسة في فصل الشتاء", mod: "الحرارة المحسوسة", per: "Winter", u: "C", desc: "" },
+        { f: "HI_Annual_Range", ar: "المدى السنوي لمؤشر الحرارة المحسوسة (الإجهاد الحراري)", mod: "الحرارة المحسوسة", per: "Annual", u: "C", desc: "" },
+        { f: "WBGT_Summer_Mean", ar: "متوسط الإجهاد الحراري صيفاً (WBGT)", mod: "الحرارة المحسوسة", per: "Summer", u: "C", desc: "" },
+        { f: "HI_January_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر يناير (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_February_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر فبراير (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_March_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر مارس (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_April_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر أبريل (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_May_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر مايو (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_June_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر يونيو (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_July_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر يوليو (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_August_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر أغسطس (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_September_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر سبتمبر (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_October_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر أكتوبر (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_November_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر نوفمبر (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "HI_December_Mean", ar: "متوسط مؤشر الحرارة المحسوسة لشهر ديسمبر (خيار إضافي)", mod: "الحرارة المحسوسة", per: "Monthly", u: "C", desc: "" },
+        { f: "R_Annual_Mean", ar: "المتوسط السنوي لتساقط الأمطار", mod: "الأمطار", per: "Annual", u: "mm/year", desc: "" },
+        { f: "R_Annual_Range", ar: "المدى السنوي للأمطار", mod: "الأمطار", per: "Annual", u: "mm", desc: "" },
+        { f: "R_Winter_Mean", ar: "متوسط هطول الأمطار خلال فصل الشتاء", mod: "الأمطار", per: "Winter", u: "mm/season", desc: "" },
+        { f: "R_Spring_Mean", ar: "متوسط هطول الأمطار خلال فصل الربيع", mod: "الأمطار", per: "Spring", u: "mm/season", desc: "" },
+        { f: "R_Summer_Mean", ar: "متوسط هطول الأمطار خلال فصل الصيف", mod: "الأمطار", per: "Summer", u: "mm/season", desc: "" },
+        { f: "R_Autumn_Mean", ar: "متوسط هطول الأمطار خلال فصل الخريف", mod: "الأمطار", per: "Autumn", u: "mm/season", desc: "" },
+        { f: "PSL_Annual_Mean", ar: "المتوسط السنوي لضغط مستوى سطح البحر", mod: "ضغط مستوى البحر", per: "Annual", u: "mbar/hPa", desc: "" },
+        { f: "PSL_Winter_Mean", ar: "متوسط ضغط مستوى سطح البحر في الشتاء", mod: "ضغط مستوى البحر", per: "Winter", u: "mbar/hPa", desc: "" },
+        { f: "PSL_Spring_Mean", ar: "متوسط ضغط مستوى سطح البحر في الربيع", mod: "ضغط مستوى البحر", per: "Spring", u: "mbar/hPa", desc: "" },
+        { f: "PSL_Summer_Mean", ar: "متوسط ضغط مستوى سطح البحر في الصيف", mod: "ضغط مستوى البحر", per: "Summer", u: "mbar/hPa", desc: "" },
+        { f: "PSL_Autumn_Mean", ar: "متوسط ضغط مستوى سطح البحر في الخريف", mod: "ضغط مستوى البحر", per: "Autumn", u: "mbar/hPa", desc: "" },
+        { f: "PSL_Annual_Range", ar: "المدى السنوي لضغط مستوى سطح البحر", mod: "ضغط مستوى البحر", per: "Annual", u: "mbar/hPa", desc: "" },
+        { f: "PS_Annual_Mean", ar: "المتوسط السنوي للضغط الجوي عند السطح الفعلي", mod: "الضغط السطحي", per: "Annual", u: "mbar/hPa", desc: "" },
+        { f: "PS_Winter_Mean", ar: "متوسط الضغط السطحي في الشتاء", mod: "الضغط السطحي", per: "Winter", u: "mbar/hPa", desc: "" },
+        { f: "PS_Spring_Mean", ar: "متوسط الضغط السطحي في الربيع", mod: "الضغط السطحي", per: "Spring", u: "mbar/hPa", desc: "" },
+        { f: "PS_Summer_Mean", ar: "متوسط الضغط السطحي في الصيف", mod: "الضغط السطحي", per: "Summer", u: "mbar/hPa", desc: "" },
+        { f: "PS_Autumn_Mean", ar: "متوسط الضغط السطحي في الخريف", mod: "الضغط السطحي", per: "Autumn", u: "mbar/hPa", desc: "" },
+        { f: "PS_Annual_Range", ar: "المدى السنوي للضغط السطحي الفعلي", mod: "الضغط السطحي", per: "Annual", u: "mbar/hPa", desc: "" },
+        { f: "W_Spd_Annual_Mean", ar: "المتوسط السنوي لسرعة الرياح", mod: "الرياح", per: "Annual", u: "m/s", desc: "" },
+        { f: "W_Spd_Winter_Mean", ar: "متوسط سرعة الرياح في الشتاء", mod: "الرياح", per: "Winter", u: "m/s", desc: "" },
+        { f: "W_Spd_Spring_Mean", ar: "متوسط سرعة الرياح ربيعاً", mod: "الرياح", per: "Spring", u: "m/s", desc: "" },
+        { f: "W_Spd_Summer_Mean", ar: "متوسط سرعة الرياح صيفاً", mod: "الرياح", per: "Summer", u: "m/s", desc: "" },
+        { f: "W_Spd_Autumn_Mean", ar: "متوسط سرعة الرياح خريفاً", mod: "الرياح", per: "Autumn", u: "m/s", desc: "" },
+        { f: "W_Spd_Annual_Max_Month", ar: "أقصى متوسط سرعة رياح شهري مسجل خلال العام", mod: "الرياح", per: "Annual", u: "m/s", desc: "" },
+        { f: "W_Spd_Annual_Min_Month", ar: "أدنى متوسط سرعة رياح شهري مسجل خلال العام", mod: "الرياح", per: "Annual", u: "m/s", desc: "" },
+        { f: "W_Spd_Annual_Range", ar: "المدى السنوي لسرعة الرياح الشهرية", mod: "الرياح", per: "Annual", u: "m/s", desc: "" },
+        { f: "W_Dir_Annual_Mean", ar: "المتوسط السنوي لاتجاه الرياح السائد", mod: "الرياح", per: "Annual", u: "degree", desc: "" },
+        { f: "W_Dir_Winter_Mean", ar: "متوسط اتجاه الرياح في الشتاء", mod: "الرياح", per: "Winter", u: "degree", desc: "" },
+        { f: "W_Dir_Spring_Mean", ar: "متوسط اتجاه الرياح في الربيع", mod: "الرياح", per: "Spring", u: "degree", desc: "" },
+        { f: "W_Dir_Summer_Mean", ar: "متوسط اتجاه الرياح في الصيف", mod: "الرياح", per: "Summer", u: "degree", desc: "" },
+        { f: "W_Dir_Autumn_Mean", ar: "متوسط اتجاه الرياح في الخريف", mod: "الرياح", per: "Autumn", u: "degree", desc: "" },
+        { f: "RH_Annual_Mean", ar: "المتوسط السنوي للرطوبة النسبية", mod: "الرطوبة النسبية", per: "Annual", u: "%", desc: "" },
+        { f: "RH_Winter_Mean", ar: "متوسط الرطوبة النسبية شتاءً", mod: "الرطوبة النسبية", per: "Winter", u: "%", desc: "" },
+        { f: "RH_Spring_Mean", ar: "متوسط الرطوبة النسبية ربيعاً", mod: "الرطوبة النسبية", per: "Spring", u: "%", desc: "" },
+        { f: "RH_Summer_Mean", ar: "متوسط الرطوبة النسبية صيفاً", mod: "الرطوبة النسبية", per: "Summer", u: "%", desc: "" },
+        { f: "RH_Autumn_Mean", ar: "متوسط الرطوبة النسبية خريفاً", mod: "الرطوبة النسبية", per: "Autumn", u: "%", desc: "" },
+        { f: "RH_Annual_Range", ar: "المدى السنوي للرطوبة النسبية", mod: "الرطوبة النسبية", per: "Annual", u: "%", desc: "" },
+        { f: "Td_Annual_Mean", ar: "المتوسط السنوي لدرجة حرارة نقطة الندى", mod: "نقطة الندى", per: "Annual", u: "C", desc: "" },
+        { f: "Td_Winter_Mean", ar: "متوسط نقطة الندى في الشتاء", mod: "نقطة الندى", per: "Winter", u: "C", desc: "" },
+        { f: "Td_Spring_Mean", ar: "متوسط نقطة الندى في الربيع", mod: "نقطة الندى", per: "Spring", u: "C", desc: "" },
+        { f: "Td_Summer_Mean", ar: "متوسط نقطة الندى في الصيف", mod: "نقطة الندى", per: "Summer", u: "C", desc: "" },
+        { f: "Td_Autumn_Mean", ar: "متوسط نقطة الندى في الخريف", mod: "نقطة الندى", per: "Autumn", u: "C", desc: "" },
+        { f: "Td_Annual_Range", ar: "المدى السنوي لدرجة حرارة نقطة الندى", mod: "نقطة الندى", per: "Annual", u: "C", desc: "" },
+        { f: "Sol_Annual_Mean", ar: "المتوسط اليومي السنوي للإشعاع الشمسي", mod: "الإشعاع الشمسي", per: "Annual", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_Annual_Total", ar: "إجمالي الإشعاع الشمسي السنوي التراكمي", mod: "الإشعاع الشمسي", per: "Annual", u: "kWh/m2/year", desc: "" },
+        { f: "Sol_Winter_Mean", ar: "متوسط الإشعاع الشمسي شتاءً", mod: "الإشعاع الشمسي", per: "Winter", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_Spring_Mean", ar: "متوسط الإشعاع الشمسي ربيعاً", mod: "الإشعاع الشمسي", per: "Spring", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_Summer_Mean", ar: "متوسط الإشعاع الشمسي صيفاً", mod: "الإشعاع الشمسي", per: "Summer", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_Autumn_Mean", ar: "متوسط الإشعاع الشمسي خريفاً", mod: "الإشعاع الشمسي", per: "Autumn", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_Annual_Range", ar: "المدى السنوي للإشعاع الشمسي", mod: "الإشعاع الشمسي", per: "Annual", u: "kWh/m2/day", desc: "" },
+        { f: "UV_Annual_Mean", ar: "المتوسط السنوي لمؤشر الأشعة فوق البنفسجية", mod: "الأشعة فوق البنفسجية", per: "Annual", u: "Index", desc: "" },
+        { f: "UV_Winter_Mean", ar: "متوسط مؤشر UV شتاءً", mod: "الأشعة فوق البنفسجية", per: "Winter", u: "Index", desc: "" },
+        { f: "UV_Spring_Mean", ar: "متوسط مؤشر UV ربيعاً", mod: "الأشعة فوق البنفسجية", per: "Spring", u: "Index", desc: "" },
+        { f: "UV_Summer_Mean", ar: "متوسط مؤشر UV صيفاً", mod: "الأشعة فوق البنفسجية", per: "Summer", u: "Index", desc: "" },
+        { f: "UV_Autumn_Mean", ar: "متوسط مؤشر UV خريفاً", mod: "الأشعة فوق البنفسجية", per: "Autumn", u: "Index", desc: "" },
+        { f: "UV_Annual_Range", ar: "المدى السنوي لمؤشر الأشعة فوق البنفسجية", mod: "الأشعة فوق البنفسجية", per: "Annual", u: "Index", desc: "" },
+        { f: "Cld_Annual_Mean", ar: "المتوسط السنوي للغطاء السحابي", mod: "الغطاء السحابي", per: "Annual", u: "%", desc: "" },
+        { f: "Cld_Winter_Mean", ar: "متوسط الغطاء السحابي شتاءً", mod: "الغطاء السحابي", per: "Winter", u: "%", desc: "" },
+        { f: "Cld_Spring_Mean", ar: "متوسط الغطاء السحابي ربيعاً", mod: "الغطاء السحابي", per: "Spring", u: "%", desc: "" },
+        { f: "Cld_Summer_Mean", ar: "متوسط الغطاء السحابي صيفاً", mod: "الغطاء السحابي", per: "Summer", u: "%", desc: "" },
+        { f: "Cld_Autumn_Mean", ar: "متوسط الغطاء السحابي خريفاً", mod: "الغطاء السحابي", per: "Autumn", u: "%", desc: "" },
+        { f: "Cld_Annual_Range", ar: "المدى السنوي للغطاء السحابي", mod: "الغطاء السحابي", per: "Annual", u: "%", desc: "" },
+        { f: "DM_Aridity_Annual", ar: "مؤشر دي مارتون للجفاف والقحولة", mod: "القحولة (دي مارتون)", per: "Annual", u: "Index", desc: "" },
+        { f: "ET_Annual_Mean", ar: "المتوسط السنوي للبخر والنتح (مجموع السنة النمطية)", mod: "البخر-نتح", per: "Annual", u: "mm/year", desc: "" },
+        { f: "ET_Annual_Range", ar: "المدى السنوي للبخر والنتح", mod: "البخر-نتح", per: "Annual", u: "mm/month", desc: "" },
+        { f: "ET_Winter_Mean", ar: "متوسط بخر ونتح الشتاء", mod: "البخر-نتح", per: "Winter", u: "mm", desc: "" },
+        { f: "ET_Spring_Mean", ar: "متوسط بخر ونتح الربيع", mod: "البخر-نتح", per: "Spring", u: "mm", desc: "" },
+        { f: "ET_Summer_Mean", ar: "متوسط بخر ونتح الصيف", mod: "البخر-نتح", per: "Summer", u: "mm", desc: "" },
+        { f: "ET_Autumn_Mean", ar: "متوسط بخر ونتح الخريف", mod: "البخر-نتح", per: "Autumn", u: "mm", desc: "" },
+        { f: "PET_Hargreaves_Annual", ar: "التبخر-نتح الكامن السنوي بهارجريفز", mod: "البخر-نتح", per: "Annual", u: "mm/year", desc: "" },
+        { f: "UNEP_Aridity_Annual", ar: "مؤشر القحولة العالمي (برنامج الأمم المتحدة للبيئة)", mod: "القحولة (الأمم المتحدة)", per: "Annual", u: "Index", desc: "" },
+        { f: "Water_Deficit_Annual", ar: "العجز/الفائض المائي المناخي السنوي", mod: "العجز المائي", per: "Annual", u: "mm/year", desc: "" },
+        { f: "Dry_Months_Count", ar: "عدد الأشهر الجافة بيولوجياً (والتر-ليث)", mod: "الأشهر الجافة", per: "Annual", u: "months", desc: "" },
+        { f: "WC_Winter_Mean", ar: "متوسط الإحساس بالبرودة شتاءً (تبريد الرياح)", mod: "مبرد الرياح", per: "Winter", u: "C", desc: "" },
+        { f: "WC_Spring_Mean", ar: "متوسط الإحساس بالبرودة ربيعاً (تبريد الرياح)", mod: "مبرد الرياح", per: "Spring", u: "C", desc: "" },
+        { f: "WC_Summer_Mean", ar: "متوسط الإحساس بالبرودة صيفاً (تبريد الرياح)", mod: "مبرد الرياح", per: "Summer", u: "C", desc: "" },
+        { f: "WC_Autumn_Mean", ar: "متوسط الإحساس بالبرودة خريفاً (تبريد الرياح)", mod: "مبرد الرياح", per: "Autumn", u: "C", desc: "" },
+        { f: "WC_Annual_Range", ar: "المدى السنوي للإحساس بالبرودة (تبريد الرياح)", mod: "مبرد الرياح", per: "Annual", u: "C", desc: "" },
+        { f: "WC_January_Mean", ar: "متوسط مبرد الرياح لشهر يناير (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_February_Mean", ar: "متوسط مبرد الرياح لشهر فبراير (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_March_Mean", ar: "متوسط مبرد الرياح لشهر مارس (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_April_Mean", ar: "متوسط مبرد الرياح لشهر أبريل (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_May_Mean", ar: "متوسط مبرد الرياح لشهر مايو (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_June_Mean", ar: "متوسط مبرد الرياح لشهر يونيو (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_July_Mean", ar: "متوسط مبرد الرياح لشهر يوليو (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_August_Mean", ar: "متوسط مبرد الرياح لشهر أغسطس (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_September_Mean", ar: "متوسط مبرد الرياح لشهر سبتمبر (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_October_Mean", ar: "متوسط مبرد الرياح لشهر أكتوبر (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_November_Mean", ar: "متوسط مبرد الرياح لشهر نوفمبر (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_December_Mean", ar: "متوسط مبرد الرياح لشهر ديسمبر (خيار إضافي للمناطق الباردة)", mod: "مبرد الرياح", per: "Monthly", u: "C", desc: "" },
+        { f: "WC_Annual_Mean", ar: "المتوسط السنوي للإحساس بالبرودة (تبريد الرياح)", mod: "مبرد الرياح", per: "Annual", u: "C", desc: "" },
+        { f: "T_Annual_Trend_Decade", ar: "اتجاه الحرارة في العقد (الميل المناخي)", mod: "الاتجاهات والشذوذ", per: "Annual", u: "C/decade", desc: "" },
+        { f: "R_Annual_Trend_Decade", ar: "اتجاه الأمطار في العقد (الميل المناخي)", mod: "الاتجاهات والشذوذ", per: "Annual", u: "mm/decade", desc: "" },
+        { f: "T_Annual_Anom", ar: "شذوذ الحرارة السنوي عن معيار 1991-2020", mod: "الاتجاهات والشذوذ", per: "Annual", u: "C", desc: "" },
+        { f: "T_Anom_Winter", ar: "شذوذ حرارة الشتاء عن معيار 1991-2020", mod: "الاتجاهات والشذوذ", per: "Winter", u: "C", desc: "" },
+        { f: "T_Anom_Summer", ar: "شذوذ حرارة الصيف عن معيار 1991-2020", mod: "الاتجاهات والشذوذ", per: "Summer", u: "C", desc: "" },
+        { f: "R_Annual_Anom", ar: "شذوذ الأمطار السنوي عن معيار 1991-2020", mod: "الاتجاهات والشذوذ", per: "Annual", u: "mm/year", desc: "" },
+        { f: "R_Annual_Anom_Pct", ar: "شذوذ الأمطار السنوي بالنسبة المئوية", mod: "الاتجاهات والشذوذ", per: "Annual", u: "%", desc: "" },
+        { f: "R_Anom_Winter", ar: "شذوذ أمطار الشتاء عن معيار 1991-2020", mod: "الاتجاهات والشذوذ", per: "Winter", u: "mm", desc: "" },
+        { f: "R_Anom_Winter_Pct", ar: "شذوذ أمطار الشتاء بالنسبة المئوية", mod: "الاتجاهات والشذوذ", per: "Winter", u: "%", desc: "" },
+        { f: "T_January_Mean", ar: "متوسط درجة الحرارة لشهر يناير", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_February_Mean", ar: "متوسط درجة الحرارة لشهر فبراير", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_March_Mean", ar: "متوسط درجة الحرارة لشهر مارس", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_April_Mean", ar: "متوسط درجة الحرارة لشهر أبريل", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_May_Mean", ar: "متوسط درجة الحرارة لشهر مايو", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_June_Mean", ar: "متوسط درجة الحرارة لشهر يونيو", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_July_Mean", ar: "متوسط درجة الحرارة لشهر يوليو", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_August_Mean", ar: "متوسط درجة الحرارة لشهر أغسطس", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_September_Mean", ar: "متوسط درجة الحرارة لشهر سبتمبر", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_October_Mean", ar: "متوسط درجة الحرارة لشهر أكتوبر", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_November_Mean", ar: "متوسط درجة الحرارة لشهر نوفمبر", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "T_December_Mean", ar: "متوسط درجة الحرارة لشهر ديسمبر", mod: "الحرارة", per: "Monthly", u: "C", desc: "" },
+        { f: "R_January_Mean", ar: "متوسط تراكم أمطار شهر يناير", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_February_Mean", ar: "متوسط تراكم أمطار شهر فبراير", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_March_Mean", ar: "متوسط تراكم أمطار شهر مارس", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_April_Mean", ar: "متوسط تراكم أمطار شهر أبريل", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_May_Mean", ar: "متوسط تراكم أمطار شهر مايو", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_June_Mean", ar: "متوسط تراكم أمطار شهر يونيو", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_July_Mean", ar: "متوسط تراكم أمطار شهر يوليو", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_August_Mean", ar: "متوسط تراكم أمطار شهر أغسطس", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_September_Mean", ar: "متوسط تراكم أمطار شهر سبتمبر", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_October_Mean", ar: "متوسط تراكم أمطار شهر أكتوبر", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_November_Mean", ar: "متوسط تراكم أمطار شهر نوفمبر", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "R_December_Mean", ar: "متوسط تراكم أمطار شهر ديسمبر", mod: "الأمطار", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "PSL_January_Mean", ar: "متوسط ضغط مستوى البحر لشهر يناير", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_February_Mean", ar: "متوسط ضغط مستوى البحر لشهر فبراير", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_March_Mean", ar: "متوسط ضغط مستوى البحر لشهر مارس", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_April_Mean", ar: "متوسط ضغط مستوى البحر لشهر أبريل", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_May_Mean", ar: "متوسط ضغط مستوى البحر لشهر مايو", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_June_Mean", ar: "متوسط ضغط مستوى البحر لشهر يونيو", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_July_Mean", ar: "متوسط ضغط مستوى البحر لشهر يوليو", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_August_Mean", ar: "متوسط ضغط مستوى البحر لشهر أغسطس", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_September_Mean", ar: "متوسط ضغط مستوى البحر لشهر سبتمبر", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_October_Mean", ar: "متوسط ضغط مستوى البحر لشهر أكتوبر", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_November_Mean", ar: "متوسط ضغط مستوى البحر لشهر نوفمبر", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PSL_December_Mean", ar: "متوسط ضغط مستوى البحر لشهر ديسمبر", mod: "ضغط مستوى البحر", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_January_Mean", ar: "متوسط الضغط السطحي لشهر يناير", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_February_Mean", ar: "متوسط الضغط السطحي لشهر فبراير", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_March_Mean", ar: "متوسط الضغط السطحي لشهر مارس", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_April_Mean", ar: "متوسط الضغط السطحي لشهر أبريل", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_May_Mean", ar: "متوسط الضغط السطحي لشهر مايو", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_June_Mean", ar: "متوسط الضغط السطحي لشهر يونيو", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_July_Mean", ar: "متوسط الضغط السطحي لشهر يوليو", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_August_Mean", ar: "متوسط الضغط السطحي لشهر أغسطس", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_September_Mean", ar: "متوسط الضغط السطحي لشهر سبتمبر", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_October_Mean", ar: "متوسط الضغط السطحي لشهر أكتوبر", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_November_Mean", ar: "متوسط الضغط السطحي لشهر نوفمبر", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "PS_December_Mean", ar: "متوسط الضغط السطحي لشهر ديسمبر", mod: "الضغط السطحي", per: "Monthly", u: "mbar/hPa", desc: "" },
+        { f: "W_Spd_January_Mean", ar: "متوسط سرعة الرياح لشهر يناير", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_February_Mean", ar: "متوسط سرعة الرياح لشهر فبراير", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_March_Mean", ar: "متوسط سرعة الرياح لشهر مارس", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_April_Mean", ar: "متوسط سرعة الرياح لشهر أبريل", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_May_Mean", ar: "متوسط سرعة الرياح لشهر مايو", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_June_Mean", ar: "متوسط سرعة الرياح لشهر يونيو", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_July_Mean", ar: "متوسط سرعة الرياح لشهر يوليو", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_August_Mean", ar: "متوسط سرعة الرياح لشهر أغسطس", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_September_Mean", ar: "متوسط سرعة الرياح لشهر سبتمبر", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_October_Mean", ar: "متوسط سرعة الرياح لشهر أكتوبر", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_November_Mean", ar: "متوسط سرعة الرياح لشهر نوفمبر", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Spd_December_Mean", ar: "متوسط سرعة الرياح لشهر ديسمبر", mod: "الرياح", per: "Monthly", u: "m/s", desc: "" },
+        { f: "W_Dir_January_Mean", ar: "متوسط اتجاه الرياح السائد لشهر يناير", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_February_Mean", ar: "متوسط اتجاه الرياح السائد لشهر فبراير", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_March_Mean", ar: "متوسط اتجاه الرياح السائد لشهر مارس", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_April_Mean", ar: "متوسط اتجاه الرياح السائد لشهر أبريل", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_May_Mean", ar: "متوسط اتجاه الرياح السائد لشهر مايو", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_June_Mean", ar: "متوسط اتجاه الرياح السائد لشهر يونيو", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_July_Mean", ar: "متوسط اتجاه الرياح السائد لشهر يوليو", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_August_Mean", ar: "متوسط اتجاه الرياح السائد لشهر أغسطس", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_September_Mean", ar: "متوسط اتجاه الرياح السائد لشهر سبتمبر", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_October_Mean", ar: "متوسط اتجاه الرياح السائد لشهر أكتوبر", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_November_Mean", ar: "متوسط اتجاه الرياح السائد لشهر نوفمبر", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "W_Dir_December_Mean", ar: "متوسط اتجاه الرياح السائد لشهر ديسمبر", mod: "الرياح", per: "Monthly", u: "degree", desc: "" },
+        { f: "RH_January_Mean", ar: "متوسط الرطوبة النسبية لشهر يناير", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_February_Mean", ar: "متوسط الرطوبة النسبية لشهر فبراير", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_March_Mean", ar: "متوسط الرطوبة النسبية لشهر مارس", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_April_Mean", ar: "متوسط الرطوبة النسبية لشهر أبريل", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_May_Mean", ar: "متوسط الرطوبة النسبية لشهر مايو", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_June_Mean", ar: "متوسط الرطوبة النسبية لشهر يونيو", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_July_Mean", ar: "متوسط الرطوبة النسبية لشهر يوليو", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_August_Mean", ar: "متوسط الرطوبة النسبية لشهر أغسطس", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_September_Mean", ar: "متوسط الرطوبة النسبية لشهر سبتمبر", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_October_Mean", ar: "متوسط الرطوبة النسبية لشهر أكتوبر", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_November_Mean", ar: "متوسط الرطوبة النسبية لشهر نوفمبر", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "RH_December_Mean", ar: "متوسط الرطوبة النسبية لشهر ديسمبر", mod: "الرطوبة النسبية", per: "Monthly", u: "%", desc: "" },
+        { f: "Td_January_Mean", ar: "متوسط نقطة الندى لشهر يناير", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_February_Mean", ar: "متوسط نقطة الندى لشهر فبراير", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_March_Mean", ar: "متوسط نقطة الندى لشهر مارس", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_April_Mean", ar: "متوسط نقطة الندى لشهر أبريل", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_May_Mean", ar: "متوسط نقطة الندى لشهر مايو", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_June_Mean", ar: "متوسط نقطة الندى لشهر يونيو", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_July_Mean", ar: "متوسط نقطة الندى لشهر يوليو", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_August_Mean", ar: "متوسط نقطة الندى لشهر أغسطس", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_September_Mean", ar: "متوسط نقطة الندى لشهر سبتمبر", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_October_Mean", ar: "متوسط نقطة الندى لشهر أكتوبر", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_November_Mean", ar: "متوسط نقطة الندى لشهر نوفمبر", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Td_December_Mean", ar: "متوسط نقطة الندى لشهر ديسمبر", mod: "نقطة الندى", per: "Monthly", u: "C", desc: "" },
+        { f: "Sol_January_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر يناير", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_February_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر فبراير", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_March_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر مارس", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_April_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر أبريل", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_May_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر مايو", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_June_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر يونيو", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_July_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر يوليو", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_August_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر أغسطس", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_September_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر سبتمبر", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_October_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر أكتوبر", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_November_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر نوفمبر", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "Sol_December_Mean", ar: "المتوسط اليومي للإشعاع الشمسي لشهر ديسمبر", mod: "الإشعاع الشمسي", per: "Monthly", u: "kWh/m2/day", desc: "" },
+        { f: "UV_January_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر يناير", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_February_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر فبراير", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_March_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر مارس", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_April_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر أبريل", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_May_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر مايو", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_June_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر يونيو", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_July_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر يوليو", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_August_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر أغسطس", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_September_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر سبتمبر", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_October_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر أكتوبر", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_November_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر نوفمبر", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "UV_December_Mean", ar: "متوسط مؤشر الأشعة فوق البنفسجية لشهر ديسمبر", mod: "الأشعة فوق البنفسجية", per: "Monthly", u: "Index", desc: "" },
+        { f: "Cld_January_Mean", ar: "متوسط الغطاء السحابي لشهر يناير", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_February_Mean", ar: "متوسط الغطاء السحابي لشهر فبراير", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_March_Mean", ar: "متوسط الغطاء السحابي لشهر مارس", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_April_Mean", ar: "متوسط الغطاء السحابي لشهر أبريل", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_May_Mean", ar: "متوسط الغطاء السحابي لشهر مايو", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_June_Mean", ar: "متوسط الغطاء السحابي لشهر يونيو", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_July_Mean", ar: "متوسط الغطاء السحابي لشهر يوليو", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_August_Mean", ar: "متوسط الغطاء السحابي لشهر أغسطس", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_September_Mean", ar: "متوسط الغطاء السحابي لشهر سبتمبر", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_October_Mean", ar: "متوسط الغطاء السحابي لشهر أكتوبر", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_November_Mean", ar: "متوسط الغطاء السحابي لشهر نوفمبر", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "Cld_December_Mean", ar: "متوسط الغطاء السحابي لشهر ديسمبر", mod: "الغطاء السحابي", per: "Monthly", u: "%", desc: "" },
+        { f: "ET_January_Mean", ar: "متوسط البخر والنتح لشهر يناير", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_February_Mean", ar: "متوسط البخر والنتح لشهر فبراير", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_March_Mean", ar: "متوسط البخر والنتح لشهر مارس", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_April_Mean", ar: "متوسط البخر والنتح لشهر أبريل", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_May_Mean", ar: "متوسط البخر والنتح لشهر مايو", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_June_Mean", ar: "متوسط البخر والنتح لشهر يونيو", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_July_Mean", ar: "متوسط البخر والنتح لشهر يوليو", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_August_Mean", ar: "متوسط البخر والنتح لشهر أغسطس", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_September_Mean", ar: "متوسط البخر والنتح لشهر سبتمبر", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_October_Mean", ar: "متوسط البخر والنتح لشهر أكتوبر", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_November_Mean", ar: "متوسط البخر والنتح لشهر نوفمبر", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+        { f: "ET_December_Mean", ar: "متوسط البخر والنتح لشهر ديسمبر", mod: "البخر-نتح", per: "Monthly", u: "mm/month", desc: "" },
+    ];
+
+    function populateTable(data) {
+        const tbody = document.getElementById('table_body');
+        tbody.innerHTML = '';
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><code>${row.f}</code></td>
+                <td><strong>${row.ar}</strong></td>
+                <td><span class="badge badge-blue">${row.mod}</span></td>
+                <td>${row.per}</td>
+                <td>${row.u}</td>
+                <td>${row.desc}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function filterTable() {
+        const q = document.getElementById('db_search').value.toLowerCase();
+        const filtered = fieldsData.filter(r => 
+            r.f.toLowerCase().includes(q) ||
+            r.ar.toLowerCase().includes(q) ||
+            r.mod.toLowerCase().includes(q) ||
+            r.desc.toLowerCase().includes(q)
+        );
+        populateTable(filtered);
+    }
+
+    // Initialize
+    recalc();
+    populateTable(fieldsData);
+
+    // Heat Index (Rothfusz, NWS)
+    function recalcHI() {
+        var t = parseFloat(document.getElementById('inp_hit').value) || 0;
+        var rh = Math.min(100, Math.max(0, parseFloat(document.getElementById('inp_hirh').value) || 0));
+        var tf = t * 9 / 5 + 32, hi;
+        if (tf < 80) { hi = t; }
+        else {
+            hi = -42.379 + 2.04901523 * tf + 10.14333127 * rh - 0.22475541 * tf * rh
+                - 0.00683783 * tf * tf - 0.05481717 * rh * rh + 0.00122874 * tf * tf * rh
+                + 0.00085282 * tf * rh * rh - 0.00000199 * tf * tf * rh * rh;
+            hi = (hi - 32) * 5 / 9;
+        }
+        document.getElementById('res_hi').innerText = hi.toFixed(1);
+        var tag = 'مريح';
+        if (hi >= 54) tag = 'خطر شديد';
+        else if (hi >= 41) tag = 'خطر';
+        else if (hi >= 32) tag = 'حذر شديد';
+        else if (hi >= 27) tag = 'حذر';
+        document.getElementById('tag_hi').innerText = tag;
+    }
+    // UV noon-max estimator (daylength-based, k=0.435)
+    function recalcUV() {
+        var m24 = parseFloat(document.getElementById('inp_uvm').value) || 0;
+        var lat = parseFloat(document.getElementById('inp_uvlat').value) || 30;
+        var mo = Math.min(12, Math.max(1, parseInt(document.getElementById('inp_uvmo').value) || 7));
+        var doy = [15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349][mo - 1];
+        var decl = -23.44 * Math.cos(2 * Math.PI * (doy + 10) / 365) * Math.PI / 180;
+        var la = lat * Math.PI / 180;
+        var c = -Math.tan(la) * Math.tan(decl);
+        var dl = (c <= -1) ? 24 : (c >= 1 ? 0 : 2 * Math.acos(c) * 180 / Math.PI / 15);
+        var noon = (dl < 0.5 || m24 <= 0) ? 0 : m24 * 24 / (dl * 0.435);
+        document.getElementById('res_uv').innerText = noon.toFixed(1);
+        var tag = 'منخفض';
+        if (noon >= 11) tag = 'متطرف';
+        else if (noon >= 8) tag = 'عال جدا';
+        else if (noon >= 6) tag = 'عال';
+        else if (noon >= 3) tag = 'معتدل';
+        document.getElementById('tag_uv').innerText = tag;
+    }
+    // Wind Chill (NWS 2001)
+    function recalcWC() {
+        var t = parseFloat(document.getElementById('inp_wct').value) || 0;
+        var v = Math.max(0, parseFloat(document.getElementById('inp_wcv').value) || 0) * 3.6;
+        var wc = t;
+        if (t <= 10 && v >= 4.8) {
+            var p = Math.pow(v, 0.16);
+            wc = 13.12 + 0.6215 * t - 11.37 * p + 0.3965 * t * p;
+        }
+        document.getElementById('res_wc').innerText = wc.toFixed(1);
+        var tag = (t <= 10 && v >= 4.8) ? 'تبريد فعلي بالرياح' : 'يساوي حرارة الهواء';
+        document.getElementById('tag_wc').innerText = tag;
+    }
+
+</script>
+
+</body>
+</html>

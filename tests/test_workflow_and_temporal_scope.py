@@ -13,7 +13,9 @@ import sys
 import os
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT_PATH = os.path.join(ROOT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+PYT_PATH = os.path.join(ROOT_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+if not os.path.exists(PYT_PATH):
+    PYT_PATH = os.path.join(ROOT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
 
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
@@ -136,7 +138,7 @@ class TestTemporalScopeAndWorkflow(unittest.TestCase):
             ("T_Autumn_Mean", "Autumn"),
             ("T_Annual_Range", "Annual"),
             ("R_Annual_Mean", "Annual"),
-            ("R_Month_Mean", "Annual"),
+            ("R_Annual_Range", "Annual"),
             ("R_Winter_Mean", "Winter"),
             ("R_Spring_Mean", "Spring"),
             ("R_Summer_Mean", "Summer"),
@@ -193,7 +195,8 @@ class TestTemporalScopeAndWorkflow(unittest.TestCase):
         self.assertNotIn("T_Summer_Mean", fields_annual["Temperature"])
 
         self.assertIn("R_Annual_Mean", fields_annual["Precipitation"])
-        self.assertIn("R_Month_Mean", fields_annual["Precipitation"])
+        self.assertIn("R_Annual_Range", fields_annual["Precipitation"])
+        self.assertNotIn("R_Month_Mean", fields_annual["Precipitation"])
         self.assertNotIn("R_Winter_Mean", fields_annual["Precipitation"])
         self.assertNotIn("R_Summer_Mean", fields_annual["Precipitation"])
 

@@ -5,8 +5,11 @@ Uses local REC as Layer 1 (download extent) and Egypt as Layer 2 (final clip mas
 """
 import os
 import sys
-import shutil
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 
 # Ensure workspace in path
 proj_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

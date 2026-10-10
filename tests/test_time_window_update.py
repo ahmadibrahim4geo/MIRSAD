@@ -20,10 +20,16 @@ PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJ_DIR not in sys.path:
     sys.path.insert(0, PROJ_DIR)
 
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 
 # Load tools
-pyt_path = os.path.join(PROJ_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+pyt_path = os.path.join(PROJ_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+if not os.path.exists(pyt_path):
+    pyt_path = os.path.join(PROJ_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
 pyt_mod = _load_source("pyt_mod", pyt_path)
 from raster_atlas_generator import RasterDataClimateAtlasGenerator
 

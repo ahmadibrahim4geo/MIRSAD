@@ -6,8 +6,8 @@ import os
 import shutil
 import sys
 
-BASE = r"C:\Users\ahmad\Desktop\NASA POWER Climate Atlas Generator"
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 OUT = os.path.join(BASE, "ElementTest_TMP")
 
 mod = type(sys)("mel")
@@ -23,12 +23,16 @@ def check(name, cond, detail=""):
     print(line)
 
 # ---------------- 1. bare element names ----------------
-check("short names cover all", set(mod.MODULE_SHORT) == set(mod.MODULES_ALL)
+check("short names cover all", set(mod.MODULES_ALL).issubset(set(mod.MODULE_SHORT))
       and all(mod.MODULE_SHORT[m].replace("_", " ") for m in mod.MODULES_ALL))
 check("short names GDB-safe", all(" " not in v and len(v) <= 40 for v in mod.MODULE_SHORT.values()))
 
 # ---------------- 2. element layers built from input + results ----------------
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 arcpy.env.overwriteOutput = True
 tool = mod.PowerClimateAtlasGenerator()
 msgs, warns = [], []

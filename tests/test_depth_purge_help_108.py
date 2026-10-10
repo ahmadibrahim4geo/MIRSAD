@@ -6,8 +6,8 @@ import os
 import shutil
 import sys
 
-BASE = r"C:\Users\ahmad\Desktop\NASA POWER Climate Atlas Generator"
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 TMP = os.path.join(BASE, "DepthTest_TMP")
 
 mod = type(sys)("mdepth")
@@ -22,7 +22,11 @@ def check(name, cond, detail=""):
         line += " | " + str(detail)
     print(line)
 
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 arcpy.env.overwriteOutput = True
 tool = mod.PowerClimateAtlasGenerator()
 msgs, warns = [], []

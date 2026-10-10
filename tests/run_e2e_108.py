@@ -7,8 +7,8 @@ import shutil
 import sys
 import traceback
 
-BASE = r"C:\Users\ahmad\Desktop\NASA POWER Climate Atlas Generator"
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 OUT = os.path.join(BASE, "E2E_108_Output")
 GDBIN = os.path.join(BASE, "Egypt Climate Data", "Egpyt_Climate.gdb")
 PTSIN = os.path.join(GDBIN, "Point_Sample_Climate")
@@ -16,7 +16,11 @@ MASK = os.path.join(GDBIN, "Egypt")
 
 mod = type(sys)("me2e")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 arcpy.env.overwriteOutput = True
 
 LOG = open(os.path.join(BASE, "e2e_progress.log"), "w")

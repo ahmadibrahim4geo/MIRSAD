@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
 """
 Master Climate Atlas Classification & Specification Workbook Generator.
-Builds the complete 7-sheet professional workbook:
-  1. 01_عن_المخرج_About_Atlas
+Builds the comprehensive professional 22-sheet cartographic classification guide:
+  1. 01_عن_الدليل_About_Guide
   2. 02_حقول_الإدارة_Admin_Fields
-  3. 03_المعايير_العلمية_Standards
-  4. 04_تصنيف_3_فئات_Classes_3
-  5. 05_تصنيف_5_فئات_Classes_5
-  6. 06_تصنيف_7_فئات_Classes_7
-  7. 07_تصنيف_9_فئات_Classes_9
+  3. 03_المعايير_القياسية_Standards
+  4..22: 19 dedicated sheets, one for each Climate Module (01_Temperature to 19_Trends_And_Anomalies)
+
+Inside each of the 19 module sheets, indicators are organized into 4 tiered tables:
+  • Level 1: تصنيف 3 فئات (3 Classes Overview - Executive)
+  • Level 2: تصنيف 5 فئات (5 Classes Standard - Golden Standard)
+  • Level 3: تصنيف 7 فئات (7 Classes Detailed - Academic)
+  • Level 4: تصنيف 9 فئات (9 Classes High-Resolution - Wide Range)
+Separated by distinct, stylish section divider banners.
+No collapsed classes. Adaptive element-aware decimal precision. Global standard preservation.
 """
+from __future__ import print_function
 import os
 import sys
 import math
 import shutil
 import xml.etree.ElementTree as ET
+
 try:
     import openpyxl
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -25,12 +32,18 @@ except Exception:
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_BASE_DIR = r"C:\Users\ahmad\Desktop\Egypt Climate Data 1996-2025"
+
+
 def find_excel_template():
     candidates = [
+        os.path.join(SCRIPT_DIR, "Documents", "03_Excel_Dictionaries", "Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx"),
+        os.path.join(SCRIPT_DIR, "Documents", "Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx"),
+        os.path.join(SCRIPT_DIR, "docs", "03_Excel_Dictionaries", "Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx"),
         os.path.join(SCRIPT_DIR, "docs", "Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx"),
-        os.path.join(SCRIPT_DIR, "docs", "Fields_AR_EN_Units.xlsx"),
+        os.path.join(SCRIPT_DIR, "Documents", "Fields_AR_EN_Units.xlsx"),
         os.path.join(SCRIPT_DIR, "Fields_AR_EN_Units.xlsx"),
-        r"D:\My Software\NASA POWER Climate Atlas Generator\docs\Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx",
+        r"D:\My Software\NASA POWER Climate Atlas Generator\Documents\03_Excel_Dictionaries\Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx",
+        r"D:\My Software\NASA POWER Climate Atlas Generator\docs\03_Excel_Dictionaries\Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx",
         r"D:\My Software\NASA POWER Climate Atlas Generator\Fields_AR_EN_Units.xlsx",
     ]
     for c in candidates:
@@ -38,77 +51,304 @@ def find_excel_template():
             return c
     return candidates[0]
 
+
 EXCEL_TEMPLATE = find_excel_template()
 
 MODULE_FOLDER_MAP = {
     "Temperature": "01_Temperature",
     "01_Temperature": "01_Temperature",
-    "Precipitation": "02_Precipitation",
-    "02_Precipitation": "02_Precipitation",
-    "Sea Level Pressure": "03_Sea_Level_Pressure",
-    "Sea_Level_Pressure": "03_Sea_Level_Pressure",
-    "03_Sea_Level_Pressure": "03_Sea_Level_Pressure",
-    "Surface Pressure": "04_Surface_Pressure",
-    "Surface_Pressure": "04_Surface_Pressure",
-    "04_Surface_Pressure": "04_Surface_Pressure",
-    "Wind": "05_Wind",
-    "05_Wind": "05_Wind",
-    "Relative Humidity": "06_Relative_Humidity",
-    "Relative_Humidity": "06_Relative_Humidity",
-    "06_Relative_Humidity": "06_Relative_Humidity",
-    "Dew Point": "07_Dew_Point",
-    "Dew_Point": "07_Dew_Point",
-    "07_Dew_Point": "07_Dew_Point",
-    "Solar Radiation": "08_Solar_Radiation",
-    "Solar_Radiation": "08_Solar_Radiation",
-    "08_Solar_Radiation": "08_Solar_Radiation",
-    "UV Index": "09_UV_Index",
-    "UV_Index": "09_UV_Index",
-    "09_UV_Index": "09_UV_Index",
-    "Cloud Cover": "10_Cloud_Cover",
-    "Cloud_Cover": "10_Cloud_Cover",
-    "10_Cloud_Cover": "10_Cloud_Cover",
-    "Thermal Comfort": "11_Heat_Index",
-    "Heat Index": "11_Heat_Index",
-    "Heat_Index": "11_Heat_Index",
-    "11_Heat_Index": "11_Heat_Index",
-    "Wind Chill": "12_Wind_Chill",
-    "Wind_Chill": "12_Wind_Chill",
-    "12_Wind_Chill": "12_Wind_Chill",
-    "Aridity & Drought": "13_De_Martonne_Aridity",
-    "De Martonne Aridity": "13_De_Martonne_Aridity",
-    "De_Martonne_Aridity": "13_De_Martonne_Aridity",
-    "13_De_Martonne_Aridity": "13_De_Martonne_Aridity",
-    "Evapotranspiration": "14_Evapotranspiration",
-    "14_Evapotranspiration": "14_Evapotranspiration",
-    "UNEP Aridity": "15_UNEP_Aridity",
-    "UNEP_Aridity": "15_UNEP_Aridity",
-    "15_UNEP_Aridity": "15_UNEP_Aridity",
-    "Water Deficit": "16_Water_Deficit",
-    "Water_Deficit": "16_Water_Deficit",
-    "16_Water_Deficit": "16_Water_Deficit",
-    "Dry Months": "17_Dry_Months",
-    "Dry_Months": "17_Dry_Months",
-    "17_Dry_Months": "17_Dry_Months",
-    "Trends & Anomalies": "18_Trends_And_Anomalies",
-    "Trends_And_Anomalies": "18_Trends_And_Anomalies",
-    "18_Trends_And_Anomalies": "18_Trends_And_Anomalies",
+    "Land Surface Temperature": "02_Land_Surface_Temperature",
+    "Land_Surface_Temperature": "02_Land_Surface_Temperature",
+    "02_Land_Surface_Temperature": "02_Land_Surface_Temperature",
+    "19_Land_Surface_Temperature": "02_Land_Surface_Temperature",
+    "Precipitation": "03_Precipitation",
+    "02_Precipitation": "03_Precipitation",
+    "03_Precipitation": "03_Precipitation",
+    "Sea Level Pressure": "04_Sea_Level_Pressure",
+    "Sea_Level_Pressure": "04_Sea_Level_Pressure",
+    "03_Sea_Level_Pressure": "04_Sea_Level_Pressure",
+    "04_Sea_Level_Pressure": "04_Sea_Level_Pressure",
+    "Surface Pressure": "05_Surface_Pressure",
+    "Surface_Pressure": "05_Surface_Pressure",
+    "04_Surface_Pressure": "05_Surface_Pressure",
+    "05_Surface_Pressure": "05_Surface_Pressure",
+    "Wind": "06_Wind",
+    "05_Wind": "06_Wind",
+    "06_Wind": "06_Wind",
+    "Relative Humidity": "07_Relative_Humidity",
+    "Relative_Humidity": "07_Relative_Humidity",
+    "06_Relative_Humidity": "07_Relative_Humidity",
+    "07_Relative_Humidity": "07_Relative_Humidity",
+    "Dew Point": "08_Dew_Point",
+    "Dew_Point": "08_Dew_Point",
+    "07_Dew_Point": "08_Dew_Point",
+    "08_Dew_Point": "08_Dew_Point",
+    "Solar Radiation": "09_Solar_Radiation",
+    "Solar_Radiation": "09_Solar_Radiation",
+    "08_Solar_Radiation": "09_Solar_Radiation",
+    "09_Solar_Radiation": "09_Solar_Radiation",
+    "UV Index": "10_UV_Index",
+    "UV_Index": "10_UV_Index",
+    "09_UV_Index": "10_UV_Index",
+    "10_UV_Index": "10_UV_Index",
+    "Cloud Cover": "11_Cloud_Cover",
+    "Cloud_Cover": "11_Cloud_Cover",
+    "10_Cloud_Cover": "11_Cloud_Cover",
+    "11_Cloud_Cover": "11_Cloud_Cover",
+    "Thermal Comfort": "12_Heat_Index",
+    "Heat Index": "12_Heat_Index",
+    "Heat_Index": "12_Heat_Index",
+    "11_Heat_Index": "12_Heat_Index",
+    "12_Heat_Index": "12_Heat_Index",
+    "Wind Chill": "13_Wind_Chill",
+    "Wind_Chill": "13_Wind_Chill",
+    "12_Wind_Chill": "13_Wind_Chill",
+    "13_Wind_Chill": "13_Wind_Chill",
+    "Aridity & Drought": "14_De_Martonne_Aridity",
+    "De Martonne Aridity": "14_De_Martonne_Aridity",
+    "De_Martonne_Aridity": "14_De_Martonne_Aridity",
+    "13_De_Martonne_Aridity": "14_De_Martonne_Aridity",
+    "14_De_Martonne_Aridity": "14_De_Martonne_Aridity",
+    "Evapotranspiration": "15_Evapotranspiration",
+    "14_Evapotranspiration": "15_Evapotranspiration",
+    "15_Evapotranspiration": "15_Evapotranspiration",
+    "UNEP Aridity": "16_UNEP_Aridity",
+    "UNEP_Aridity": "16_UNEP_Aridity",
+    "15_UNEP_Aridity": "16_UNEP_Aridity",
+    "16_UNEP_Aridity": "16_UNEP_Aridity",
+    "Water Deficit": "17_Water_Deficit",
+    "Water_Deficit": "17_Water_Deficit",
+    "16_Water_Deficit": "17_Water_Deficit",
+    "17_Water_Deficit": "17_Water_Deficit",
+    "Dry Months": "18_Dry_Months",
+    "Dry_Months": "18_Dry_Months",
+    "17_Dry_Months": "18_Dry_Months",
+    "18_Dry_Months": "18_Dry_Months",
+    "Trends & Anomalies": "19_Trends_And_Anomalies",
+    "Trends_And_Anomalies": "19_Trends_And_Anomalies",
+    "18_Trends_And_Anomalies": "19_Trends_And_Anomalies",
+    "19_Trends_And_Anomalies": "19_Trends_And_Anomalies",
 }
 
-NICE_INTEGERS = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23, 24, 25, 26, 28, 30, 32, 35, 36, 40, 45, 50, 60, 70, 75, 80,
-    90, 100, 120, 125, 140, 150, 160, 175, 180, 200, 250, 300, 350, 400, 500,
-    600, 700, 750, 800, 900, 1000, 1200, 1250, 1500, 2000
+MODULES_METADATA = [
+    {
+        "code": "01_Temperature",
+        "pfx": "01",
+        "name_ar": u"درجة الحرارة",
+        "name_en": "Temperature",
+        "unit": "°C",
+        "folder": "01_Temperature",
+        "fc": "01_Temperature",
+        "desc_ar": u"المتوسطات الحسابية لدرجات الحرارة T2M وفق معايير WMO للأطلس المناخي (سنوي، فصلي، ونهايات عظمى وصغرى).",
+        "method_en": "NASA POWER T2M, T2M_MAX, T2M_MIN / WMO Climatological Normals Standard"
+    },
+    {
+        "code": "02_Land_Surface_Temperature",
+        "pfx": "02",
+        "name_ar": u"حرارة سطح الأرض",
+        "name_en": "Land Surface Temperature",
+        "unit": "°C",
+        "folder": "02_Land_Surface_Temperature",
+        "fc": "02_Land_Surface_Temperature",
+        "desc_ar": u"درجة حرارة سطح الأرض المقاسة بالاستشعار الفضائي (MERRA-2 TS) ومتوسطاتها وفروقها مع حرارة الهواء.",
+        "method_en": "NASA POWER MERRA-2 Earth Skin Temperature (TS)"
+    },
+    {
+        "code": "03_Precipitation",
+        "pfx": "03",
+        "name_ar": u"الأمطار والتساقط",
+        "name_en": "Precipitation",
+        "unit": "mm",
+        "folder": "03_Precipitation",
+        "fc": "03_Precipitation",
+        "desc_ar": u"التساقط التراكمي PRECTOTCORR سنوياً وفصلياً وشهرياً، مع حساب المدى والتباين الفصلي.",
+        "method_en": "NASA POWER PRECTOTCORR / Annual, Seasonal Totals & Cumulative Ranges"
+    },
+    {
+        "code": "04_Sea_Level_Pressure",
+        "pfx": "04",
+        "name_ar": u"ضغط مستوى سطح البحر",
+        "name_en": "Sea Level Pressure",
+        "unit": "hPa",
+        "folder": "04_Sea_Level_Pressure",
+        "fc": "04_Sea_Level_Pressure",
+        "desc_ar": u"متوسطات ضغط مستوى سطح البحر SLP المعدل طبوغرافياً وفق المعيار البارومتري الدولي لمقارنة الأنظمة الجوية.",
+        "method_en": "NASA POWER SLP / Reduced to Standard Mean Sea Level (MSLP)"
+    },
+    {
+        "code": "05_Surface_Pressure",
+        "pfx": "05",
+        "name_ar": u"الضغط السطحي الفعلي",
+        "name_en": "Surface Pressure",
+        "unit": "hPa",
+        "folder": "05_Surface_Pressure",
+        "fc": "05_Surface_Pressure",
+        "desc_ar": u"متوسطات الضغط الجوي السطحي الحقيقي PS عند منسوب الارتفاع الطبوغرافي الفعلي للموقع الجغرافي.",
+        "method_en": "NASA POWER PS / Actual Local Topographic Station Surface Pressure"
+    },
+    {
+        "code": "06_Wind",
+        "pfx": "06",
+        "name_ar": u"الرياح السطحية (سرعة واتجاه)",
+        "name_en": "Surface Wind (Speed & Direction)",
+        "unit": "m/s, °",
+        "folder": "06_Wind",
+        "fc": "06_Wind",
+        "desc_ar": u"متوسطات سرعة الرياح WS10M والمتوسط الشعاعي الدائري لاتجاه الرياح WD10M باستخدام دالة atan2(U,V).",
+        "method_en": "NASA POWER WS10M, WD10M / Circular Mean Vector Trigonometry atan2(U,V)"
+    },
+    {
+        "code": "07_Relative_Humidity",
+        "pfx": "07",
+        "name_ar": u"الرطوبة النسبية",
+        "name_en": "Relative Humidity",
+        "unit": "%",
+        "folder": "07_Relative_Humidity",
+        "fc": "07_Relative_Humidity",
+        "desc_ar": u"نسبة بخار الماء الفعلي إلى التشبع RH2M عند درجة حرارة الهواء السطحي (سنوي، فصلي، شهري).",
+        "method_en": "NASA POWER RH2M / WMO Psychrometric Standards"
+    },
+    {
+        "code": "08_Dew_Point",
+        "pfx": "08",
+        "name_ar": u"نقطة الندى",
+        "name_en": "Dew Point",
+        "unit": "°C",
+        "folder": "08_Dew_Point",
+        "fc": "08_Dew_Point",
+        "desc_ar": u"درجة الحرارة T2MDEW التي يتكثف عندها بخار الماء في الهواء الجوي تحت ضغط ثابت مع حساب عجز نقطة الندى.",
+        "method_en": "NASA POWER T2MDEW / Magnus-Tetens Equation Standard"
+    },
+    {
+        "code": "09_Solar_Radiation",
+        "pfx": "09",
+        "name_ar": u"الإشعاع الشمسي",
+        "name_en": "Solar Radiation",
+        "unit": "kWh/m²/day",
+        "folder": "09_Solar_Radiation",
+        "fc": "09_Solar_Radiation",
+        "desc_ar": u"الإشعاع الشمسي الكلي الساقط على سطح أفقي ALLSKY_SFC_SW_DWN، مع المجموع السنوي التراكمي الساقط.",
+        "method_en": "NASA POWER ALLSKY_SFC_SW_DWN / Total Downward Shortwave Flux"
+    },
+    {
+        "code": "10_UV_Index",
+        "pfx": "10",
+        "name_ar": u"مؤشر الأشعة فوق البنفسجية",
+        "name_en": "UV Index",
+        "unit": "Index",
+        "folder": "10_UV_Index",
+        "fc": "10_UV_Index",
+        "desc_ar": u"مؤشر الأشعة فوق البنفسجية القصوى السطحية لحماية الصحة العامة والتخطيط السياحي والبيئي وفق منظمة الصحة العالمية WHO.",
+        "method_en": "WHO Global Solar UV Index Specification"
+    },
+    {
+        "code": "11_Cloud_Cover",
+        "pfx": "11",
+        "name_ar": u"الغطاء السحابي",
+        "name_en": "Cloud Cover",
+        "unit": "%",
+        "folder": "11_Cloud_Cover",
+        "fc": "11_Cloud_Cover",
+        "desc_ar": u"نسبة تغطية السحب الكلية في قبة السماء السنوية والفصلية والشهرية من استشعار CERES.",
+        "method_en": "NASA CERES Total Cloud Area Fraction Standard"
+    },
+    {
+        "code": "12_Heat_Index",
+        "pfx": "12",
+        "name_ar": u"الراحة الحرارية والرطوبة",
+        "name_en": "Heat Index & Thermal Comfort",
+        "unit": "°C",
+        "folder": "12_Heat_Index",
+        "fc": "12_Heat_Index",
+        "desc_ar": u"مؤشرات الإجهاد والراحة الحرارية الناتجة عن تضافر الحرارة والرطوبة (Rothfusz Heat Index و Humidex).",
+        "method_en": "Rothfusz (1990) NWS Heat Index & Masterton (1979) Humidex Standards"
+    },
+    {
+        "code": "13_Wind_Chill",
+        "pfx": "13",
+        "name_ar": u"لسعة الرياح والبرودة",
+        "name_en": "Wind Chill",
+        "unit": "°C",
+        "folder": "13_Wind_Chill",
+        "fc": "13_Wind_Chill",
+        "desc_ar": u"درجة الحرارة المحسوسة الفعالة الناتجة عن سرعة الرياح في الأجواء الباردة والشتوية.",
+        "method_en": "Osczevski & Bluestein (2005) Wind Chill Standard"
+    },
+    {
+        "code": "14_De_Martonne_Aridity",
+        "pfx": "14",
+        "name_ar": u"دليل دومارتون للجفاف",
+        "name_en": "De Martonne Aridity Index",
+        "unit": "Index",
+        "folder": "14_De_Martonne_Aridity",
+        "fc": "14_De_Martonne_Aridity",
+        "desc_ar": u"دليل دومارتون الكلاسيكي للجفاف والمناخ الحيوي IDM = P / (T + 10).",
+        "method_en": "De Martonne (1926) Aridity Index Standard"
+    },
+    {
+        "code": "15_Evapotranspiration",
+        "pfx": "15",
+        "name_ar": u"البخر-نتح المرجعي",
+        "name_en": "Reference Evapotranspiration",
+        "unit": "mm",
+        "folder": "15_Evapotranspiration",
+        "fc": "15_Evapotranspiration",
+        "desc_ar": u"معدل البخر-نتح المرجعي المحسوب وفق معادلة Hargreaves-Samani السنوية والفصلية والشهرية.",
+        "method_en": "Hargreaves & Samani (1985) Reference Evapotranspiration FAO-56"
+    },
+    {
+        "code": "16_UNEP_Aridity",
+        "pfx": "16",
+        "name_ar": u"مؤشر الجفاف العالمي UNEP",
+        "name_en": "UNEP Aridity Index",
+        "unit": "Index",
+        "folder": "16_UNEP_Aridity",
+        "fc": "16_UNEP_Aridity",
+        "desc_ar": u"مؤشر الجفاف الدولي UNEP AI = P / PET لتصنيف الأقاليم الجافة وفق أطلس التصحر العالمي.",
+        "method_en": "UNEP World Atlas of Desertification Standard"
+    },
+    {
+        "code": "17_Water_Deficit",
+        "pfx": "17",
+        "name_ar": u"العجز المائي المناخي",
+        "name_en": "Climatic Water Deficit",
+        "unit": "mm",
+        "folder": "17_Water_Deficit",
+        "fc": "17_Water_Deficit",
+        "desc_ar": u"العجز المائي الصافي (P - PET) لتقييم الموازنة المائية والاحتياجات المائية الزراعية.",
+        "method_en": "Thornthwaite & Mather (1955) Climatic Water Balance"
+    },
+    {
+        "code": "18_Dry_Months",
+        "pfx": "18",
+        "name_ar": u"عدد شهور الجفاف",
+        "name_en": "Dry Months Count",
+        "unit": "شهر (Months)",
+        "folder": "18_Dry_Months",
+        "fc": "18_Dry_Months",
+        "desc_ar": u"عدد شهور السنة التي يقل فيها المطر عن ضعف درجة الحرارة (P < 2T) وفق معيار Bagnouls & Gaussen.",
+        "method_en": "Bagnouls & Gaussen (1957) Xerothermic Index"
+    },
+    {
+        "code": "19_Trends_And_Anomalies",
+        "pfx": "19",
+        "name_ar": u"اتجاهات وشذوذ المناخ",
+        "name_en": "Climate Trends & Anomalies",
+        "unit": "°C/dec, mm/dec, %, °C, mm",
+        "folder": "19_Trends_And_Anomalies",
+        "fc": "19_Trends_And_Anomalies",
+        "desc_ar": u"اتجاهات التغير لعقد من الزمان (Decadal Trends) وشذوذ المناخ مقارنة بالمعدل الطبيعي 1991-2020.",
+        "method_en": "WMO Climate Anomaly Standard & Least-Squares Linear Trends"
+    }
 ]
 
-NICE_DECIMALS_1 = [
-    0.01, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1,
-    0.12, 0.125, 0.15, 0.16, 0.175, 0.18, 0.2, 0.22, 0.24, 0.25, 0.3,
-    0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9,
-    1.1, 1.2, 1.25, 1.3, 1.4, 1.5, 1.6, 1.7, 1.75, 1.8, 2.2, 2.4, 2.5,
-    2.6, 2.8, 3.2, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5
-]
+
+def mod_field_matches(mod_str, pfx, code):
+    norm = MODULE_FOLDER_MAP.get(str(mod_str).strip(), str(mod_str).strip())
+    if norm == code or norm.startswith(pfx + "_"):
+        return True
+    return str(mod_str).strip().startswith(pfx + "_")
+
 
 def get_clean_unit_symbol(unit, fld):
     u = str(unit or "").strip()
@@ -122,7 +362,7 @@ def get_clean_unit_symbol(unit, fld):
         return "شهر"
     if "Aridity" in fld or "UV_" in fld:
         return "Index"
-    if fld.startswith(("T_", "HI_", "WBGT_", "WC_", "TS_", "Td_")):
+    if fld.startswith(("T_", "HI_", "WBGT_", "WC_", "TS_", "Td_", "LST_")):
         return "°C"
     if fld.startswith(("R_", "ET_", "PET_")) or "Deficit" in fld or "Evap" in fld:
         return "mm"
@@ -135,243 +375,184 @@ def get_clean_unit_symbol(unit, fld):
     if fld.startswith(("RH_", "Cld_")):
         return "%"
     if fld.startswith("Sol_"):
-        return "MJ/m²/yr" if "Annual_Total" in fld else "MJ/m²"
+        return "kWh/m²/year" if "Annual_Total" in fld else "kWh/m²/day"
     if u in ("°C", "°C/decade", "mm", "hPa", "m/s", "%", "Index"):
         return u
     return u if u and u != "-" else ""
 
+
+def compute_smart_classes(full_f, vmin, vmax, n_classes, unit=""):
+    """
+    Computes analytical, strictly non-overlapping, non-collapsed class intervals
+    directly from raster empirical min and max.
+    Adheres strictly to Global Standards where applicable (WHO UV, UNEP, Directional Wind, NOAA HI),
+    and applies adaptive dynamic decimal precision to prevent artificial integer truncation.
+    Returns: (step_formatted_str, method_str, list_of_n_labels_from_highest_to_lowest, precision)
+    """
+    u_sym = get_clean_unit_symbol(unit, full_f)
+    u_str = (" " + u_sym) if u_sym and not u_sym.startswith("°") and u_sym != "%" else (u_sym or "")
+
+    # 1. Global Standard: UV Index (WHO Global Solar UV Index Standard)
+    if full_f.startswith("UV_"):
+        if n_classes == 5:
+            labels = [
+                u"11.0+ Index (شديد الخطورة - Extreme)",
+                u"8.0 - 10.9 Index (مرتفع جداً - Very High)",
+                u"6.0 - 7.9 Index (مرتفع - High)",
+                u"3.0 - 5.9 Index (معتدل - Moderate)",
+                u"0.0 - 2.9 Index (منخفض - Low)"
+            ]
+            return "فئات WHO القياسية", u"معيار منظمة الصحة العالمية (WHO UV Standard)", labels, 1
+        elif n_classes == 3:
+            labels = [
+                u"8.0+ Index (مرتفع جداً إلى متطرف - Very High to Extreme)",
+                u"3.0 - 7.9 Index (معتدل إلى مرتفع - Moderate to High)",
+                u"0.0 - 2.9 Index (منخفض - Low)"
+            ]
+            return "فئات WHO المجمعة", u"معيار منظمة الصحة العالمية (WHO Consolidated)", labels, 1
+
+    # 2. Global Standard: UNEP Aridity Index
+    if full_f == "UNEP_Aridity_Annual" and n_classes == 5:
+        labels = [
+            u"> 0.65 (رطب - Humid)",
+            u"0.50 - 0.65 (شبه رطب جاف - Dry sub-humid)",
+            u"0.20 - 0.50 (شبه قاحل - Semi-arid)",
+            u"0.05 - 0.20 (قاحل - Arid)",
+            u"< 0.05 (شديد القحولة - Hyper-arid)"
+        ]
+        return "فئات UNEP القياسية", u"معيار أطلس التصحر الدولي (UNEP Standard)", labels, 3
+
+    # 3. Wind Direction (Directional Azimuth Sectors)
+    if full_f.startswith("W_Dir"):
+        if n_classes == 5:
+            labels = [
+                u"288 - 360° (شمالي غربي إلى شمالي)",
+                u"216 - 288° (غربي إلى شمالي غربي)",
+                u"144 - 216° (جنوبي إلى جنوبي غربي)",
+                u"72 - 144° (شرقي إلى جنوبي شرقي)",
+                u"0 - 72° (شمالي إلى شمالي شرقي)"
+            ]
+            return "72°", u"قطاعات البوصلة الاتجاهية (Directional Azimuth)", labels, 0
+        elif n_classes == 3:
+            labels = [
+                u"240 - 360° (غربي إلى شمالي)",
+                u"120 - 240° (جنوبي إلى جنوبي غربي)",
+                u"0 - 120° (شمالي إلى جنوبي شرقي)"
+            ]
+            return "120°", u"قطاعات البوصلة الاتجاهية (Directional Azimuth)", labels, 0
+
+    # 4. Global Standard: Heat Index / Humidex (NOAA Danger categories)
+    if full_f == "HI_Annual_Mean" and n_classes == 5 and vmax >= 40:
+        labels = [
+            u"≥ 54.0°C (خطر داهم - Extreme Danger)",
+            u"41.0 - 53.9°C (خطر - Danger)",
+            u"32.0 - 40.9°C (حذر شديد - Extreme Caution)",
+            u"27.0 - 31.9°C (تنبيه - Caution)",
+            u"< 27.0°C (طبيعي / مريح - Safe)"
+        ]
+        return "فئات NOAA للراحة الحرارية", u"معيار NOAA / NWS للراحة الحرارية", labels, 1
+
+    # 5. General Analytical Equal Interval with Dynamic Precision
+    raw_min = float(vmin)
+    if abs(raw_min) < 1e-5:
+        raw_min = 0.0
+    raw_max = float(vmax)
+    if abs(raw_max) < 1e-5:
+        raw_max = 0.0
+    span = raw_max - raw_min
+    if span <= 0:
+        span = 1.0
+
+    raw_step = span / float(n_classes)
+
+    # Determine precision based on step size and variable nature
+    if raw_step < 0.05:
+        prec = 3
+    elif raw_step < 0.2:
+        prec = 2
+    elif raw_step < 2.0:
+        prec = 1
+    else:
+        # Step >= 2.0
+        if full_f.startswith(("R_", "ET_", "PET_", "PS_", "Sol_Annual_Total", "Water_Deficit")) and "Pct" not in full_f:
+            prec = 0 if abs(raw_step - round(raw_step)) < 0.15 else 1
+        elif full_f.startswith(("RH_", "Cld_")):
+            prec = 0
+        elif full_f.startswith(("T_", "HI_", "Td_", "WC_")):
+            prec = 0 if (abs(raw_step - round(raw_step)) < 0.1 and abs(raw_min - round(raw_min)) < 0.1) else 1
+        else:
+            prec = 1
+
+    # Format step string
+    if prec == 0:
+        step_str = "{}{}".format(int(round(raw_step)), u_str)
+    else:
+        step_str = "{:.{}f}{}".format(raw_step, prec, u_str)
+
+    # Generate breaks
+    breaks = [round(raw_min + i * raw_step, prec) for i in range(n_classes + 1)]
+    breaks[0] = round(raw_min, prec)
+    breaks[-1] = round(raw_max, prec)
+
+    # Ensure strictly increasing breaks (prevent any collapsed classes)
+    inc = round(10 ** (-prec), prec)
+    for i in range(n_classes):
+        if breaks[i + 1] <= breaks[i]:
+            breaks[i + 1] = round(breaks[i] + inc, prec)
+
+    # Build labels
+    labels = []
+    for i in range(n_classes):
+        low = breaks[i]
+        high = breaks[i + 1]
+        if prec == 0:
+            l_str = str(int(round(low)))
+            h_str = str(int(round(high)))
+        else:
+            l_str = "{:.{}f}".format(low, prec)
+            h_str = "{:.{}f}".format(high, prec)
+
+        sep = u" إلى " if (l_str.startswith("-") or h_str.startswith("-")) else u" - "
+        lbl = u"{}{}{}{}".format(l_str, sep, h_str, u_str)
+        labels.append(lbl)
+
+    ordered_labels = list(reversed(labels))
+    method_str = u"فئات متساوية استرشادية (Equal Interval)"
+    return step_str, method_str, ordered_labels, prec
+
+
+# Legacy compatibility functions
 def fmt_val(v, step=None):
-    """Format values strictly adhering to: whole integers if possible, at most 1, 2 or 3 clean decimal places."""
     if v is None:
         return ""
-    if abs(v) < 1e-6:
-        return "0"
-    if isinstance(v, int) or abs(v - round(v)) < 1e-4:
+    if abs(v - round(v)) < 1e-4:
         return str(int(round(v)))
     if abs(v * 10 - round(v * 10)) < 1e-4:
         return "{:.1f}".format(round(v, 1))
     if abs(v * 100 - round(v * 100)) < 1e-4:
         return "{:.2f}".format(round(v, 2))
-    if abs(v * 1000 - round(v * 1000)) < 1e-4:
-        return "{:.3f}".format(round(v, 3))
     return "{:.2f}".format(v)
 
-def score_start(c, s, n_classes, eff_min, eff_max, is_non_neg):
-    excess = (c + n_classes * s - eff_max) + (eff_min - c)
-    bonus = 0.0
-    if abs(c) < 1e-4:
-        bonus -= 15.0
-    end_val = c + n_classes * s
-    if abs(c + end_val) < 1e-4:
-        bonus -= 20.0
-    elif abs(c + end_val) < s * 0.5:
-        bonus -= 5.0
-    if isinstance(s, int) or abs(s - round(s)) < 1e-4:
-        s_int = int(round(s))
-        if s_int in [1, 2, 5, 10, 20, 25, 50, 100, 200, 500, 1000]: bonus -= 8.0
-        elif s_int in [3, 4, 6, 8, 15, 30, 40]: bonus -= 4.0
-    else:
-        if abs(s * 10 - round(s * 10)) < 1e-4: bonus -= 4.0
-        elif abs(s * 20 - round(s * 20)) < 1e-4: bonus -= 3.0
-    if abs(c - round(c)) < 1e-4:
-        c_int = int(round(c))
-        if c_int % 100 == 0: bonus -= 5.0
-        elif c_int % 10 == 0: bonus -= 3.0
-        elif c_int % 5 == 0: bonus -= 2.0
-        elif isinstance(s, (int, float)) and abs(s) > 1e-4 and c_int % s == 0: bonus -= 2.0
-        else: bonus -= 1.0
-    elif abs(c * 2 - round(c * 2)) < 1e-4:
-        bonus -= 0.8
-    elif abs(c * 10 - round(c * 10)) < 1e-4:
-        bonus -= 0.5
-    elif abs(c * 20 - round(c * 20)) < 1e-4:
-        bonus -= 0.3
-    return excess + bonus
 
 def get_arcmap_classes(fld, vmin, vmax, n_classes, precision=0, unit=""):
-    """Computes exact ArcMap-compliant Equal Interval classes and labels directly from empirical raster min and max.
-    Matches ArcMap Symbology Classified (Equal Interval) exactly:
-    - precision=0: Integer labels matching ArcMap 0-decimal display (e.g. 22 - 25, 19 - 21, 15 - 18, 12 - 14, 7 - 11).
-    - precision=1: 1-Decimal labels matching ArcMap 1-decimal display (e.g. 21.4 - 24.9, 17.8 - 21.3, ...).
-    """
-    if fld.startswith("W_Dir") and precision == 0:
-        if n_classes == 5:
-            labels = [
-                "288 - 360° (شمالي غربي إلى شمالي)",
-                "216 - 288° (غربي إلى شمالي غربي)",
-                "144 - 216° (جنوبي إلى جنوبي غربي)",
-                "72 - 144° (شرقي إلى جنوبي شرقي)",
-                "0 - 72° (شمالي إلى شمالي شرقي)"
-            ]
-            return 72, [0, 72, 144, 216, 288, 360], labels
-        elif n_classes == 3:
-            labels = [
-                "240 - 360° (غربي إلى شمالي)",
-                "120 - 240° (جنوبي إلى جنوبي غربي)",
-                "0 - 120° (شمالي إلى جنوبي شرقي)"
-            ]
-            return 120, [0, 120, 240, 360], labels
+    step_str, method_str, labels, prec = compute_smart_classes(fld, vmin, vmax, n_classes, unit)
+    span = float(vmax) - float(vmin)
+    step_val = span / float(n_classes) if span > 0 else 1.0
+    breaks = [float(vmin) + i * step_val for i in range(n_classes + 1)]
+    return step_val, breaks, labels
 
-    if fld == "Dry_Months_Count" and precision == 0:
-        if n_classes == 5:
-            labels = [
-                "11.6 - 12.3 شهر (جفاف دائم تام)",
-                "10.9 - 11.6 شهر (جفاف شديد جداً)",
-                "10.2 - 10.9 شهر (جفاف شديد)",
-                "9.5 - 10.2 شهر (شبه جاف)",
-                "8.8 - 9.5 شهر (ساحلي معتدل الجفاف)"
-            ]
-            return 0.7, [8.8, 9.5, 10.2, 10.9, 11.6, 12.3], labels
-        elif n_classes == 3:
-            labels = [
-                "11.2 - 12.4 شهر (جفاف دائم)",
-                "10.0 - 11.2 شهر (شديد الجفاف)",
-                "8.8 - 10.0 شهر (ساحلي شبه جاف)"
-            ]
-            return 1.2, [8.8, 10.0, 11.2, 12.4], labels
-
-    raw_min = float(vmin)
-    raw_max = float(vmax)
-    span = raw_max - raw_min
-    if span <= 0: span = 1.0
-
-    raw_step = span / float(n_classes)
-    raw_breaks = [raw_min + i * raw_step for i in range(n_classes + 1)]
-
-    u_sym = get_clean_unit_symbol(unit, fld)
-    u_lbl = "°/dec" if u_sym == "°C/dec" else u_sym
-
-    # Case 1: Discrete Integer Classification (precision == 0)
-    if precision == 0:
-        if raw_step >= 0.95:
-            # 1. Calculate ArcMap's raw mechanical integer breaks and labels
-            b_int = [int(round(x)) for x in raw_breaks]
-            raw_labels = []
-            has_degenerate = False
-            for i in range(n_classes):
-                low = b_int[i] if i == 0 else b_int[i] + 1
-                high = b_int[i+1]
-                if low >= high:
-                    has_degenerate = True
-                low_str = str(int(low))
-                high_str = str(int(high))
-                sep = " إلى " if (low_str.startswith("-") or high_str.startswith("-")) else " - "
-                if u_lbl == "°C" or u_lbl == "°":
-                    lbl = "{}{}{}°".format(low_str, sep, high_str)
-                elif u_lbl == "%":
-                    lbl = "{}{}{}%".format(low_str, sep, high_str)
-                elif u_lbl:
-                    lbl = "{}{}{} {}".format(low_str, sep, high_str, u_lbl)
-                else:
-                    lbl = "{}{}{}".format(low_str, sep, high_str)
-                raw_labels.append(lbl)
-
-            # If ArcMap raw integer labels have NO collapsed/degenerate classes,
-            # return them directly (100% exact match with ArcMap!)
-            if not has_degenerate:
-                step_val = int(round(raw_step))
-                return step_val, b_int, list(reversed(raw_labels))
-
-            # 2. If ArcMap produced degenerate/collapsed classes (e.g. 27 - 27):
-            # Calculate clean rebalanced sequence with uniform integer steps (s >= 2)
-            s = int(round(raw_step))
-            if s < 2: s = 2
-            start = int(round(raw_min))
-            if start + n_classes * s < int(round(raw_max)):
-                s = int(math.ceil((raw_max - start) / float(n_classes)))
-                if s < 2: s = 2
-            
-            step_val = s
-            b_vals = [start + i * s for i in range(n_classes + 1)]
-            clean_labels = []
-            curr = start
-            for i in range(n_classes):
-                low = curr
-                high = curr + s - 1
-                if i == n_classes - 1:
-                    high = max(high, int(round(raw_max)))
-                low_str = str(int(low))
-                high_str = str(int(high))
-                sep = " إلى " if (low_str.startswith("-") or high_str.startswith("-")) else " - "
-                if u_lbl == "°C" or u_lbl == "°":
-                    lbl = "{}{}{}°".format(low_str, sep, high_str)
-                elif u_lbl == "%":
-                    lbl = "{}{}{}%".format(low_str, sep, high_str)
-                elif u_lbl:
-                    lbl = "{}{}{} {}".format(low_str, sep, high_str, u_lbl)
-                else:
-                    lbl = "{}{}{}".format(low_str, sep, high_str)
-                clean_labels.append(lbl)
-                curr = high + 1
-
-            # 3. Combine Clean and ArcMap Raw into the same cell:
-            # Ordered from Highest (Class 1) to Lowest (Class n)
-            rev_clean = list(reversed(clean_labels))
-            rev_raw = list(reversed(raw_labels))
-            final_labels = []
-            for c_lbl, r_lbl in zip(rev_clean, rev_raw):
-                if c_lbl != r_lbl:
-                    final_labels.append(u"{} (أصل أرك ماب: {})".format(c_lbl, r_lbl))
-                else:
-                    final_labels.append(c_lbl)
-
-            return step_val, b_vals, final_labels
-        else:
-            # Narrow step (< 0.95) e.g. PSL, Wind speed: use decimals so classes do not collapse
-            eff_prec = 2 if raw_step < 0.2 else 1
-    else:
-        # Case 2: 1-Decimal Classification (precision == 1)
-        eff_prec = 2 if raw_step < 0.5 else 1
-
-    b_vals = [round(raw_min + i * raw_step, eff_prec) for i in range(n_classes + 1)]
-    inc = round(10**(-eff_prec), eff_prec)
-    step_val = round(raw_step, eff_prec)
-
-    labels = []
-    for i in range(n_classes):
-        low = b_vals[i]
-        high = b_vals[i+1]
-        if i > 0 and low < high:
-            cand = round(low + inc, eff_prec)
-            if cand <= high:
-                low = cand
-
-        if eff_prec == 1:
-            low_str = "{:.1f}".format(low)
-            high_str = "{:.1f}".format(high)
-            if low_str.endswith(".0") and i == 0:
-                low_str = str(int(low))
-        else:
-            low_str = "{:.{}f}".format(low, eff_prec)
-            high_str = "{:.{}f}".format(high, eff_prec)
-
-        sep = " إلى " if (low_str.startswith("-") or high_str.startswith("-")) else " - "
-
-        if u_lbl == "°C" or u_lbl == "°":
-            lbl = "{}{}{}°".format(low_str, sep, high_str)
-        elif u_lbl == "%":
-            lbl = "{}{}{}%".format(low_str, sep, high_str)
-        elif u_lbl:
-            lbl = "{}{}{} {}".format(low_str, sep, high_str, u_lbl)
-        else:
-            lbl = "{}{}{}".format(low_str, sep, high_str)
-        labels.append(lbl)
-
-    return step_val, b_vals, list(reversed(labels))
 
 def get_equal_classes(fld, vmin, vmax, n_classes, unit=""):
-    s, b, l = get_arcmap_classes(fld, vmin, vmax, n_classes, precision=0, unit=unit)
-    return s, b
+    return get_arcmap_classes(fld, vmin, vmax, n_classes, precision=0, unit=unit)[:2]
+
 
 def get_equal_classes_decimal(fld, vmin, vmax, n_classes, unit=""):
-    s, b, l = get_arcmap_classes(fld, vmin, vmax, n_classes, precision=1, unit=unit)
-    return s, b
+    return get_arcmap_classes(fld, vmin, vmax, n_classes, precision=1, unit=unit)[:2]
+
 
 def load_authoritative_fields():
     """Loads authoritative field metadata from Fields_AR_EN_Units.xlsx and/or PYT."""
     fields_list = []
-    
-    # 1. Try reading from Fields_AR_EN_Units.xlsx
     if os.path.exists(EXCEL_TEMPLATE):
         try:
             wb = openpyxl.load_workbook(EXCEL_TEMPLATE)
@@ -385,10 +566,11 @@ def load_authoritative_fields():
                     unit = ws.cell(r, 6).value
                     title_ar = ws.cell(r, 7).value
                     if f_full and 'Admin' not in str(cmod):
+                        norm_mod = MODULE_FOLDER_MAP.get(str(cmod).strip(), str(cmod).strip())
                         fields_list.append({
                             'full_f': str(f_full).strip(),
                             'short_f': str(f_short or f_full).strip(),
-                            'module': str(cmod).strip(),
+                            'module': norm_mod,
                             'desc_ar': str(desc_ar or "").strip(),
                             'unit': str(unit or "").strip(),
                             'title_ar': str(title_ar or f_full).strip()
@@ -396,9 +578,10 @@ def load_authoritative_fields():
         except Exception:
             pass
 
-    # 2. Enrich with English technical name from FIELD_DEFS in pyt
     en_names = {}
-    pyt_path = os.path.join(SCRIPT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    pyt_path = os.path.join(SCRIPT_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+    if not os.path.exists(pyt_path):
+        pyt_path = os.path.join(SCRIPT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
     if os.path.exists(pyt_path):
         try:
             m = type(sys)("pyt_tmp")
@@ -412,9 +595,15 @@ def load_authoritative_fields():
 
     return fields_list
 
+
 def build_master_classification_workbook(base_dir=None, study_area_name="Egypt", target_excel=None, spatial_info=None, tech_info=None, raster_stats=None):
     r"""
-    Builds the complete 7-sheet Master Climate Atlas Classification & Specification Workbook.
+    Builds the comprehensive 22-sheet Master Climate Atlas Classification & Specification Workbook:
+      - Sheet 1: 01_عن_الدليل_About_Guide
+      - Sheet 2: 02_حقول_الإدارة_Admin_Fields
+      - Sheet 3: 03_المعايير_القياسية_Standards
+      - Sheets 4..22: 19 dedicated sheets, one for each Climate Module (01_Temperature to 19_Trends_And_Anomalies).
+    Each module sheet contains 4 tiered tables (3, 5, 7, 9 classes) separated by banners.
     Automatically saves copies to:
       1. target_excel (typically 00_Tables_And_Reports\Climate_Atlas_Classification_Guide.xlsx)
       2. base_dir\Climate_Atlas_Classification_Guide.xlsx (Root Output Workspace)
@@ -423,6 +612,7 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
     if not target_excel:
         target_excel = os.path.join(base_dir, "00_Tables_And_Reports", "Climate_Atlas_Classification_Guide.xlsx")
 
+    # If running under Python 2.7 / ArcMap without openpyxl, delegate via subprocess to Python 3
     if not HAS_OPENPYXL:
         import subprocess
         import json
@@ -445,6 +635,7 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
             env = dict(os.environ)
             env["ATLAS_GUIDE_SUBPROCESS"] = "1"
             py3_cmds = [
+                ["python", script_path, "--json_args", json_file],
                 ["py", "-3", script_path, "--json_args", json_file],
                 [os.path.expandvars(r"%LOCALAPPDATA%\Microsoft\WindowsApps\python.exe"), script_path, "--json_args", json_file]
             ]
@@ -467,6 +658,7 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
 
     if os.path.exists(base_dir):
         for root, dirs, files in os.walk(base_dir):
+            dirs[:] = [d for d in dirs if not d.startswith('_') and not d.startswith('.') and 'retired' not in d.lower()]
             for f in sorted(files):
                 if f.lower().endswith('.tif') and not f.lower().endswith('_cls.tif'):
                     rel_folder = os.path.relpath(root, base_dir)
@@ -503,26 +695,6 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
                             s_mean = float(arcpy.GetRasterProperties_management(tif_fpath, "MEAN")[0])
                         except Exception:
                             pass
-                    # Rasterio fallback
-                    if s_min is None or s_max is None:
-                        try:
-                            import rasterio
-                            import numpy as np
-                            tif_fpath = os.path.join(root, f)
-                            with rasterio.open(tif_fpath) as r_src:
-                                r_arr = r_src.read(1)
-                                r_nd = r_src.nodata
-                                if r_nd is not None:
-                                    r_val = r_arr[r_arr != r_nd]
-                                else:
-                                    r_val = r_arr[~np.isnan(r_arr)]
-                                r_val = r_val[(r_val > -99990) & (r_val < 99990)]
-                                if len(r_val) > 0:
-                                    s_min = float(np.min(r_val))
-                                    s_max = float(np.max(r_val))
-                                    s_mean = float(np.mean(r_val))
-                        except Exception:
-                            pass
                     if s_min is not None and s_max is not None:
                         raster_stats[fld_name] = {
                             'folder': rel_folder,
@@ -532,7 +704,7 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
                             'mean': s_mean if s_mean is not None else (s_min + s_max) / 2.0
                         }
 
-    # Load authoritative climate fields (103 elements)
+    # Load authoritative climate fields
     climate_fields = load_authoritative_fields()
 
     # Styling Constants
@@ -615,16 +787,16 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
     wb.remove(wb.active)
 
     # ==============================================================================
-    # SHEET 1: 01_عن_المخرج_About_Atlas
+    # SHEET 1: 01_عن_الدليل_About_Guide
     # ==============================================================================
-    ws1 = wb.create_sheet(title="01_عن_المخرج_About_Atlas")
+    ws1 = wb.create_sheet(title="01_عن_الدليل_About_Guide")
     ws1.views.sheetView[0].showGridLines = True
 
     # Title Banner
     ws1.merge_cells("A1:G1")
     study_display = sp_info.get("display_name") or study_area_name
-    tcell = ws1.cell(1, 1, u"أطلس المناخ الرقمي لـ {}\nDigital Climate Atlas of {} — NASA POWER Atlas Engine".format(study_display, study_area_name))
-    tcell.font = Font(name="Segoe UI", size=14, bold=True, color="FFFFFF")
+    tcell = ws1.cell(1, 1, u"أطلس المناخ الرقمي لـ {} — دليل التصنيف الكارتوجرافي الاسترشادي\nDigital Climate Atlas of {} — Advisory Cartographic Classification Guide".format(study_display, study_area_name))
+    tcell.font = Font(name="Segoe UI", size=13, bold=True, color="FFFFFF")
     tcell.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
     tcell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
     ws1.row_dimensions[1].height = 45
@@ -706,55 +878,55 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
             ws1.cell(idx, c).fill = ROW_EVEN_FILL if idx % 2 == 0 else ROW_WHITE_FILL
         ws1.row_dimensions[idx].height = 22
 
-    # Section 3: Recommendation Matrix
+    # Section 3: Advisory Guide Philosophy
     r_rec = 19
     ws1.merge_cells("A{0}:G{0}".format(r_rec))
-    s3 = ws1.cell(r_rec, 1, "3. مصفوفة التوصية الذكية لعدد الفئات وفقاً لتباين البيانات والمدى الرقمي (Intelligent Recommendation Based on Data Variance & Range)")
+    s3 = ws1.cell(r_rec, 1, "3. فلسفة الدليل الاسترشادي الكارتوجرافي ومستويات الفئات (Advisory Classification Tiers)")
     s3.font = Font(name="Segoe UI", size=11, bold=True, color="1F4E79")
     s3.fill = SECTION_FILL
     s3.alignment = Alignment(horizontal="right", vertical="center")
     ws1.row_dimensions[r_rec].height = 24
 
     variance_guide_text = (
-        "القاعدة الكارتوجرافية والإحصائية في اختيار عدد الفئات لا تتقيد بالمساحة الجغرافية وحدها؛ بل إن المعيار الجوهري والحاسم هو "
-        "درجة التباين الإحصائي والمدى الرقمي الحقيقي للبيانات (Data Variance & Dynamic Range):\n"
-        "• إذا كان التباين في البيانات كبيراً والمدى واسعاً (سواء كانت المساحة شاسعة أو رقعة محدودة ذات تضاريس متباينة): "
-        "يُتاح للمستخدم كامل الحرية في الاختيار بين (3، 5، 7، أو 9 فئات)، حيث يستوعب التباين الكبير التدرجات المتعددة دون تداخل بصري.\n"
-        "• إذا كان التباين في البيانات صغيراً والمدى ضيقاً أو شبه متجانس (حتى لو كانت المساحة هائلة كهضبة صحراوية أو سهل منبسط): "
-        "يجب الاكتفاء بـ (3 فئات) أو كحد أقصى (5 فئات)، وتجنب (7 و 9 فئات) لتفادي تجزئة قيم متقاربة جداً وخلق حدود مصطنعة ووهمية تشوه مفتاح الخريطة."
+        "هذا الدليل هو مرجع كارتوجرافي استرشادي (Advisory Guidelines) يُتيح للباحث والمصمم الكارتوجرافي مرونة كاملة في اختيار مستوى الفئات "
+        "الأنسب لطبيعة دراسته ومنطقة عمله، دون فرض قوالب جامدة أو إلزامية:\n"
+        "• تم تخصيص صفحة مستقلة لكل عنصر مناخي في أسفل المصنف (من 01_Temperature إلى 19_Trends_And_Anomalies).\n"
+        "• داخل كل عنصر، تُعرض المؤشرات مقسمة إلى 4 مستويات متتالية (3 فئات، ثم فاصل، 5 فئات، ثم فاصل، 7 فئات، ثم فاصل، 9 فئات).\n"
+        "• تم تطبيق الدقة العشرية الذكية الحساسة (Adaptive Decimals) لمنع التقريب العشوائي للأعداد الصحيحة الذي قد يُصفّر أو يشوه المؤشرات الحساسة (مثل مؤشرات الجفاف والاتجاهات العشرية والضغط الجوي).\n"
+        "• تم الحفاظ التام على المعايير العالمية الرسمية (Global Standards) للمؤشرات القياسية (مثل معيار WHO للأشعة فوق البنفسجية UV، ومعيار UNEP لأطلس التصحر)."
     )
 
     rec_rows = [
-        ("3 فئات (Executive & Low Variance)", "3", "المعيار الأساسي للتباين المنخفض والتقارير التنفيذية ★",
-         "البيانات ذات المدى الرقمي الضيق والمناطق المتجانسة مناخياً، والتقارير التنفيذية والملخصات السريعة (بغض النظر عن مساحة المنطقة).",
-         "وضوح كارتوجرافي فائق، قراءة بصرية فورية وسهلة، ومنع توليد حدود مصطنعة بين قيم متقاربة.",
-         "دمج بعض التدرجات والتفاصيل المحلية إذا كانت البيانات ذات تباين ومجال واسع.",
-         "04_تصنيف_3_فئات_Classes_3"),
+        ("3 فئات (Executive Overview)", "3", "المعيار الأساسي للتقارير والملخصات التنفيذية ★",
+         "البيانات ذات المدى الرقمي الضيق والتقارير التنفيذية الموجزة لمتخذي القرار وصناع السياسات.",
+         "وضوح كارتوجرافي فائق، قراءة بصرية فورية وسهلة، ومنع تشتت القارئ غير المتخصص.",
+         "تناسب العرض العام ولكنها تدمج بعض التدرجات والتفاصيل المكانية الدقيقة.",
+         "متاح في جدول المستوى الأول داخل صفحة كل عنصر"),
 
         ("5 فئات (Standard & Balanced)", "5", "المعيار الكارتوجرافي الذهبي العام (الأكثر توازناً) ★",
-         "البيانات ذات التباين الطبيعي والمتوسط والمرتفع (الخيار القياسي المعتمد لأكثر من 90% من خرائط الأطلس للباحثين والمخططين).",
-         "التوازن الكارتوجرافي الأمثل بين إبراز التباين المكاني وسهولة تمييز درجات الألوان وتوافقها مع المعايير الدولية (WMO).",
-         "تغطي النمط العام بكفاءة، ولكنها قد تتطلب النزول لـ 3 فئات إذا كان تباين المتغير شديد الضيق.",
-         "05_تصنيف_5_فئات_Classes_5"),
+         "الخيار القياسي المعتمد لأكثر من 90% من خرائط أطلس المناخ للباحثين والمخططين والجامعات.",
+         "التوازن الأمثل بين إبراز التباين المكاني وسهولة تمييز درجات الألوان وتوافقها مع المعايير الدولية.",
+         "المعيار الأكثر شمولاً واعتماداً لمعظم الظواهر المناخية.",
+         "متاح في جدول المستوى الثاني داخل صفحة كل عنصر"),
 
-        ("7 فئات (Academic & High Variance)", "7", "موصى به في حالات التباين الرقمي والتضاريسي الكبير",
-         "المتغيرات ذات التباين المكاني الواسع، ومناطق التضاريس الجبلية والساحلية، والأبحاث الأكاديمية ودراسات التغير المناخي والزراعة.",
+        ("7 فئات (Academic Detailed)", "7", "موصى به في حالات التباين الرقمي والتضاريسي الكبير",
+         "المتغيرات ذات التباين المكاني الواسع، ومناطق التضاريس الجبلية والساحلية، والأبحاث الأكاديمية المتخصصة.",
          "إبراز التدرجات الدقيقة والتغيرات الانتقالية الحساسة عبر نطاق منطقة الدراسة.",
-         "تتطلب تمايزاً حقيقياً في البيانات؛ ولا تناسب البيانات ذات التباين الضعيف لتجنب التشتت والتقارب اللوني المربك.",
-         "06_تصنيف_7_فئات_Classes_7"),
+         "تتطلب تمايزاً حقيقياً في البيانات لتجنب التقارب اللوني المربك في الطباعة.",
+         "متاح في جدول المستوى الثالث داخل صفحة كل عنصر"),
 
-        ("9 فئات (Specialized & Extreme)", "9", "خاص بالتباين الشديد جداً والمدى الرقمي فائق الاتساع",
-         "المتغيرات ذات المدى الرقمي الفائق (مثل الإشعاع الشمسي الكلي، التساقط في الأقاليم ذات التباين الحاد، وسرعات الرياح العاصفة).",
-         "تغطية طيفية فائقة الدقة تظهر أدق التفاصيل المكانية للبيانات المستمرة.",
-         "محظور استخدامها مع المتغيرات ذات التباين الصغير لتفادي خلق فئات ميكروية غير ذات دلالة وتوليد فئات خالية من المساحة.",
-         "07_تصنيف_9_فئات_Classes_9"),
+        ("9 فئات (High-Resolution)", "9", "خاص بالتباين الشديد جداً والمدى الرقمي فائق الاتساع",
+         "المتغيرات ذات المدى الرقمي الفائق (مثل الإشعاع الشمسي السنوي، أو التباين الحاد في الأمطار والرياح).",
+         "تغطية طيفية فائقة الدقة تُظهر أدق الفروق المكانية للبيانات المستمرة عبر مساحات واسعة.",
+         "تتطلب شاشات عالية الدقة أو طباعة كارتوجرافية جدارية كبيرة لتمييز درجات الألوان التسع.",
+         "متاح في جدول المستوى الرابع داخل صفحة كل عنصر"),
     ]
 
     ws1.merge_cells("A20:G20")
     rec_desc = ws1.cell(20, 1, variance_guide_text)
     rec_desc.font = Font(name="Segoe UI", size=9.5, italic=True)
     rec_desc.alignment = Alignment(horizontal="right", vertical="center", wrap_text=True)
-    ws1.row_dimensions[20].height = 54
+    ws1.row_dimensions[20].height = 65
 
     rec_headers = [
         (1, "خيار التصنيف\nTier", 16),
@@ -763,7 +935,7 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
         (4, "أفضل حالات الاستخدام والتطبيق\nBest Use Case", 42),
         (5, "المزايا والخصائص الكارتوجرافية\nCartographic Advantages", 38),
         (6, "المحددات والملاحظات الفنية\nLimitations & Warnings", 38),
-        (7, "اسم ورقة العمل في الملف\nTarget Sheet", 26),
+        (7, "الموقع في الملف\nLocation in File", 30),
     ]
 
     for col_idx, h_text, width in rec_headers:
@@ -793,129 +965,6 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
                 cell.alignment = Alignment(horizontal="right", vertical="center")
                 cell.font = DATA_FONT
         ws1.row_dimensions[r_idx].height = 25
-
-    # Section 4: Project Output Hierarchy & File Catalog
-    r_hier = 28
-    ws1.merge_cells("A{0}:G{0}".format(r_hier))
-    s4 = ws1.cell(r_hier, 1, "4. دليل الهيكل التنظيمي ومستويات المخرجات والملفات (Project Output Hierarchy & File Catalog)")
-    s4.font = Font(name="Segoe UI", size=11, bold=True, color="1F4E79")
-    s4.fill = SECTION_FILL
-    s4.alignment = Alignment(horizontal="right", vertical="center")
-    ws1.row_dimensions[r_hier].height = 24
-
-    ws1.merge_cells("A{0}:G{0}".format(r_hier + 1))
-    hier_desc = ws1.cell(r_hier+1, 1,
-        "يوضح هذا الجدول المستويات الهرمية للمخرجات، بدءاً من مجلد العمل الجذري، ثم مجلد منطقة الدراسة المسمى تلقائياً، "
-        "يليه تفصيل المجلدات والملفات الفرعية وامتداداتها (.gdb, .tif, .aux.xml, .ovr, .lyr/.lyrx, .xlsx, .xls, .txt) ومعناها الوظيفي والكارتوجرافي:"
-    )
-    hier_desc.font = Font(name="Segoe UI", size=9.5, italic=True)
-    hier_desc.alignment = Alignment(horizontal="right", vertical="center", wrap_text=True)
-    ws1.row_dimensions[r_hier+1].height = 32
-
-    hier_headers = [
-        (1, "المستوى الهرمي\nLevel", 16),
-        (2, "المسار واسم المجلد أو الملف\nRelative Path & Name", 36),
-        (3, "نوع الكائن والامتداد\nObject Type & Ext", 22),
-        (4, "المعنى الوظيفي والوصف الفني التفصيلي\nFunctional Meaning & Technical Specification", 52),
-        (5, "الدور والاستخدام في برمجيات الـ GIS\nRole & Application in GIS / Cartography", 45),
-    ]
-
-    r_hhead = r_hier + 3
-    for col_idx, h_text, width in hier_headers:
-        if col_idx == 4:
-            ws1.merge_cells(start_row=r_hhead, start_column=4, end_row=r_hhead, end_column=5)
-            cell = ws1.cell(r_hhead, 4, h_text)
-        elif col_idx == 5:
-            ws1.merge_cells(start_row=r_hhead, start_column=6, end_row=r_hhead, end_column=7)
-            cell = ws1.cell(r_hhead, 6, h_text)
-        else:
-            cell = ws1.cell(r_hhead, col_idx, h_text)
-        cell.font = HEADER_FONT
-        cell.fill = HEADER_FILL
-        cell.alignment = HEADER_ALIGN
-        target_cols = range(4, 6) if col_idx == 4 else (range(6, 8) if col_idx == 5 else [col_idx])
-        for c in target_cols:
-            ws1.cell(r_hhead, c).border = THIN_BORDER
-            ws1.cell(r_hhead, c).fill = HEADER_FILL
-    ws1.row_dimensions[r_hhead].height = 28
-
-    hier_rows = [
-        ("المستوى 0\nRoot Workspace", "[Output_Workspace]", "Directory (مجلد رئيسي)",
-         "مسار مجلد العمل الأساسي الذي يحدده المستخدم في واجهة الأداة لحفظ كافة مخرجات الأطلس المناخي.",
-         "الحاوية الرئيسية الشاملة لكافة مشاريع ونطاقات التحليل المكاني."),
-
-        ("المستوى 1\nStudy Area Folder", "[Output_Workspace]\\ [{}]".format(study_area_name), "Directory (مجلد منطقة الدراسة)",
-         u"المجلد الرئيسي الخاص بمنطقة الدراسة المحددة ({})؛ يضم داخله كافة قواعد البيانات والراسترات والجداول والتقارير المنظمة.".format(study_area_name),
-         "عزل وتنظيم مشاريع الدول والأقاليم المختلفة لمنع تداخل ملفات التحميل والمعالجة."),
-
-        ("المستوى 2\nGeodatabase", "[{}]\\Climate_Database_From_1996_To_2025.gdb".format(study_area_name), ".gdb (Esri File GDB)",
-         "قاعدة البيانات الجغرافية الرئيسية الشاملة؛ تضم 31+ طبقة نقطية لكافة عناصر المناخ، وحقول الإدارة، والتحليلات الفصلية والسنوية، ووحدة القياس (Measurement_Unit)، وشبكة أسهم الرياح وخطوط تساوي الضغط (Isobars) وحدود منطقة الدراسة.",
-         "المصدر الجغرافي المعياري المرجعي للبيانات المتجهة والتحليلات المكانية داخل ArcGIS Pro و ArcMap."),
-
-        ("المستوى 2\nTables & Reports", "[{}]\\00_Tables_And_Reports".format(study_area_name), "Directory (مجلد الجداول)",
-         "المجلد المخصص لحفظ جداول البيانات المنظمة بصيغة Excel، وقواميس البيانات، ودليل التصنيف وسجل المعالجة الفني، بدون أي ملفات CSV مؤقتة لتقليل التشتت والازدحام.",
-         "الحاوية الوثائقية والجدولية للأطلس للاستعراض السريع وإرفاق التقارير."),
-
-        ("المستوى 3\nClassification Guide", "00_Tables_And_Reports\\Climate_Atlas_Classification_Guide.xlsx", ".xlsx (مصنف إكسل شامل)",
-         "دليل التصنيف الكارتوجرافي المتكامل؛ يضم مواصفات المعالجة، مصفوفة التوصيات، دليل حقول الإدارة، المعايير العلمية، وتصنيفات 3 و 5 و 7 و 9 فئات وقيم الفواصل ومفاتيح الخريطة الجاهزة للنسخ مع رموز الوحدات (°C، mm، إلخ).",
-         "المرجع الأساسي لمهندس الكارتوجرافيا لضبط وترميز وتوحيد مفاتيح خرائط الأطلس."),
-
-        ("المستوى 3\nData Tables", "00_Tables_And_Reports\\[Element]_Table.xls", ".xls (جداول إكسل منظمة)",
-         "جداول بيانات منسقة لكل عنصر مناخي تتضمن إحداثيات محطات الرصد، وكود النقطة، وفترة الرصد، ووحدة القياس المعتمدة (Measurement_Unit)، وكافة المتغيرات.",
-         "تداول البيانات المناخية واستيرادها المباشر في برمجيات الجداول والتحليل الإحصائي (SPSS/R)."),
-
-        ("المستوى 3\nMetadata Dictionaries", "00_Tables_And_Reports\\*Dictionary*.xls", ".xls (قواميس البيانات)",
-         "قواميس المصطلحات والبيانات الوصفية (Metadata_Dictionary.xls & Field_Dictionary_Arabic.xls) التي توثق الاسم الإنجليزي والعربي والوحدة والمعادلة الرياضية والمصدر لكل حقل.",
-         "قاموس البيانات المعتمد (Data Dictionary) للأطلس المناخي لضمان المعيارية وتوثيق البيانات."),
-
-        ("المستوى 3\nProcessing Log", "00_Tables_And_Reports\\Processing_Log.txt", ".txt (سجل المعالجة الفني)",
-         "السجل الزمني والتقني التفصيلي لعملية التشغيل؛ يوثق الخوارزميات، ودقة الخلايا، وفترة السلسلة، وتدقيق الجودة الشامل (QA Status: ALL PASS) مع خلو البيانات من قيم الفقد الشاذة (-999).",
-         "شهادة ضبط الجودة والأصالة الفنية للبيانات المصدرة."),
-
-        ("المستوى 2\nRaster Thematic Folders", u"[{}]\\01_Temperature إلى 18_Trends_And_Anomalies".format(study_area_name), "Directory (مجلدات الراستر)",
-         "مجلدات موضوعية مستقلة ومرتبة كارتوجرافياً لكل عنصر مناخي؛ يحتوي كل مجلد على كافة صور الراستر وطبقات التمثيل الخاصة به.",
-         "التنظيم الموضوعي الكارتوجرافي للمشروع وسهولة أرشفة وتداول الطبقات."),
-
-        ("المستوى 3\nContinuous Raster", "[Folder]\\[Field_Name].tif", ".tif (GeoTIFF 32-bit Float)",
-         "خريطة السطح المناخي الشبكي المستمر للمتغير؛ محسوبة بدقة خلية فائقة وبضغط LZW وبقيم عائمة حقيقية مقصوصة هندسياً تماماً على قناع حدود منطقة الدراسة.",
-         "الطبقة الجغرافية التحليلية الأساسية للخرائط والنمذجة المكانية والتحليل الطبوغرافي."),
-
-        ("المستوى 3\nRaster Statistics Sidecar", "[Folder]\\[Field_Name].tif.aux.xml", ".aux.xml (بيانات مرافقة)",
-         "ملف ميتاداتا مصاحب للراستر؛ يحفظ الإسناد المكاني والإحصائيات الرقمية الدقيقة (Min, Max, Mean, StdDev) وجداول الفئات دون المساس بملف الراستر الأصلي.",
-         "قراءة الإحصائيات الفورية وتحديد فواصل الفئات تلقائياً في برمجيات الـ GIS دون الحاجة لحسابها مجدداً."),
-
-        ("المستوى 3\nPyramid Overviews", "[Folder]\\[Field_Name].tif.ovr", ".ovr (أهرامات الراستر)",
-         "طبقات الاستعراض الهرمي المتعدد الدقات (Pyramid Layers) المنشأة بنمط Bilinear؛ تسرع فتح وتكبير وتصفح الراسترات ذات الملايين من الخلايا دون أي بطء في العرض.",
-         "كفاءة وسلاسة التصفح البصري الفوري في بيئات العرض الجغرافي والكارتوجرافي."),
-
-        ("المستوى 3\nLayer Symbology", "[Folder]\\[Field_Name].lyr / .lyrx", ".lyr / .lyrx (ملف الطبقة)",
-         "ملف حفظ ترميز الطبقة وخصائص التمثيل؛ يحفظ درجات الألوان القياسية (Color Ramp) والفئات الكارتوجرافية المعتمدة للعرض الفوري.",
-         "سحب الطبقة مباشرة إلى جدول المحتويات (TOC) برمزيتها وألوانها الجاهزة دون الحاجة لأي ضبط يدوي."),
-    ]
-
-    for h_i, h_data in enumerate(hier_rows, r_hhead + 1):
-        bg = ROW_EVEN_FILL if h_i % 2 == 0 else ROW_WHITE_FILL
-        ws1.cell(h_i, 1, h_data[0]).alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-        ws1.cell(h_i, 1).font = DATA_FONT_BOLD
-        ws1.cell(h_i, 2, h_data[1]).alignment = Alignment(horizontal="left", vertical="center")
-        ws1.cell(h_i, 2).font = CODE_FONT_BOLD
-        ws1.cell(h_i, 3, h_data[2]).alignment = Alignment(horizontal="center", vertical="center")
-        ws1.cell(h_i, 3).font = DATA_FONT_BOLD
-
-        ws1.merge_cells(start_row=h_i, start_column=4, end_row=h_i, end_column=5)
-        c4 = ws1.cell(h_i, 4, h_data[3])
-        c4.alignment = Alignment(horizontal="right", vertical="center", wrap_text=True)
-        c4.font = DATA_FONT
-
-        ws1.merge_cells(start_row=h_i, start_column=6, end_row=h_i, end_column=7)
-        c6 = ws1.cell(h_i, 6, h_data[4])
-        c6.alignment = Alignment(horizontal="right", vertical="center", wrap_text=True)
-        c6.font = DATA_FONT
-
-        for c in range(1, 8):
-            ws1.cell(h_i, c).border = THIN_BORDER
-            ws1.cell(h_i, c).fill = bg
-        ws1.row_dimensions[h_i].height = 36
 
     # ==============================================================================
     # SHEET 2: 02_حقول_الإدارة_Admin_Fields
@@ -979,9 +1028,9 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
         ws2.row_dimensions[row_idx].height = 24
 
     # ==============================================================================
-    # SHEET 3: 03_المعايير_العلمية_Standards
+    # SHEET 3: 03_المعايير_القياسية_Standards
     # ==============================================================================
-    ws3 = wb.create_sheet(title="03_المعايير_العلمية_Standards")
+    ws3 = wb.create_sheet(title="03_المعايير_القياسية_Standards")
     ws3.views.sheetView[0].showGridLines = True
 
     standards_headers = [
@@ -1006,64 +1055,27 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
         ws3.column_dimensions[col_letter].width = width
     ws3.row_dimensions[1].height = 32
 
-    modules_data_expanded = [
-        ("01", "01_Temperature", "درجة الحرارة", "01_Temperature", "01_Temperature", 10, "°C",
-         "حساب المتوسطات الحسابية لدرجات الحرارة T2M وفق معايير WMO للأطلس المناخي (سنوي، فصلي DJF/MAM/JJA/SON، نهايات عظمى وصغرى يومية).",
-         "NASA POWER T2M, T2M_MAX, T2M_MIN / WMO Climatological Normals Standard"),
-        ("02", "02_Precipitation", "الأمطار والتساقط", "02_Precipitation", "02_Precipitation", 8, "mm",
-         "تجميع التساقط التراكمي PRECTOTCORR سنوياً وفصلياً، مع حساب المدى السنوي والفصلي للأمطار ومجموع الفصول الأربعة.",
-         "NASA POWER PRECTOTCORR / Annual, Seasonal Totals & Cumulative Ranges"),
-        ("03", "03_Sea_Level_Pressure", "ضغط مستوى سطح البحر", "03_Sea_Level_Pressure", "03_Sea_Level_Pressure", 6, "hPa / mbar",
-         "متوسطات ضغط مستوى سطح البحر SLP المعدل طبوغرافياً وفق المعيار البارومتري الدولي لمقارنة الأنظمة الجوية.",
-         "NASA POWER SLP / Reduced to Standard Mean Sea Level (MSLP)"),
-        ("04", "04_Surface_Pressure", "الضغط السطحي الفعلي", "04_Surface_Pressure", "04_Surface_Pressure", 6, "hPa / mbar",
-         "متوسطات الضغط الجوي السطحي الحقيقي PS عند منسوب الارتفاع الطبوغرافي الفعلي للموقع الجغرافي.",
-         "NASA POWER PS / Actual Local Topographic Station Surface Pressure"),
-        ("05", "05_Wind", "الرياح السطحية (سرعة واتجاه)", "05_Wind", "05_Wind", 13, "m/s, °",
-         "متوسطات سرعة الرياح WS10M، والمتوسط الشعاعي الدائري لاتجاه الرياح WD10M باستخدام دالة الظل العكسي atan2(U,V).",
-         "NASA POWER WS10M, WD10M / Circular Mean Vector Trigonometry atan2(U,V)"),
-        ("06", "06_Relative_Humidity", "الرطوبة النسبية", "06_Relative_Humidity", "06_Relative_Humidity", 6, "%",
-         "نسبة بخار الماء الفعلي إلى التشبع RH2M عند درجة حرارة الهواء السطحي (سنوي، فصلي، والمدى السنوي).",
-         "NASA POWER RH2M / WMO Psychrometric Standards"),
-        ("07", "07_Dew_Point", "نقطة الندى", "07_Dew_Point", "07_Dew_Point", 6, "°C",
-         "درجة الحرارة T2MDEW التي يتكثف عندها بخار الماء في الهواء الجوي تحت ضغط ثابت مع حساب عجز نقطة الندى.",
-         "NASA POWER T2MDEW / Magnus-Tetens Equation Standard"),
-        ("08", "08_Solar_Radiation", "الإشعاع الشمسي", "08_Solar_Radiation", "08_Solar_Radiation", 7, "MJ/m²/day",
-         "الإشعاع الشمسي الكلي الساقط على سطح أفقي ALLSKY_SFC_SW_DWN، مع المجموع السنوي التراكمي الساقط.",
-         "NASA POWER ALLSKY_SFC_SW_DWN / Total Downward Shortwave Flux"),
-        ("09", "09_UV_Index", "مؤشر الأشعة فوق البنفسجية", "09_UV_Index", "09_UV_Index", 6, "Index",
-         "مؤشر الأشعة فوق البنفسجية القصوى السطحية لحماية الصحة العامة والتخطيط السياحي والبيئي.",
-         "WHO Global Solar UV Index Specification"),
-        ("10", "10_Cloud_Cover", "الغطاء السحابي", "10_Cloud_Cover", "10_Cloud_Cover", 6, "%",
-         "نسبة تغطية السحب الكلية في قبة السماء السنوية والفصلية من بيانات الاستشعار CERES.",
-         "NASA CERES Total Cloud Area Fraction Standard"),
-        ("11", "11_Heat_Index", "الراحة الحرارية والرطوبة", "11_Heat_Index", "11_Heat_Index", 5, "°C",
-         "دليل الحرارة والرطوبة Humidex، ودليل درجة حرارة البصيلة الرطبة الكروية WBGT لتقييم الإجهاد الحراري البشري.",
-         "Masterton & Richardson (1979) Humidex, Liljegren (2008) WBGT Standard"),
-        ("12", "12_Wind_Chill", "لسعة الرياح والبرودة", "12_Wind_Chill", "12_Wind_Chill", 2, "°C",
-         "مؤشر التبريد الرياحي الشتوي والسنوي لتقييم فقدان الحرارة السطحي للإنسان.",
-         "Osczevski & Bluestein (2005) Wind Chill Standard"),
-        ("13", "13_De_Martonne_Aridity", "دليل دومارتون للجفاف", "13_De_Martonne_Aridity", "13_De_Martonne_Aridity", 1, "Index",
-         "معادلة De Martonne Aridity السنوية I = P / (T + 10) لتحديد درجات الجفاف الإقليمي.",
-         "De Martonne (1926) Aridity Index"),
-        ("14", "14_Evapotranspiration", "البخر-نتح المرجعي", "14_Evapotranspiration", "14_Evapotranspiration", 9, "mm",
-         "معدل البخر-نتح المرجعي المحسوب وفق صيغة Hargreaves-Samani السنوية والفصلية.",
-         "Hargreaves & Samani (1985) Reference Evapotranspiration FAO-56"),
-        ("15", "15_UNEP_Aridity", "مؤشر الجفاف العالمي UNEP", "15_UNEP_Aridity", "15_UNEP_Aridity", 1, "Index",
-         "مؤشر الجفاف الدولي UNEP AI = P / PET لتصنيف المناطق الجافة وشبه الجافة وفق أطلس التصحر العالمي.",
-         "UNEP World Atlas of Desertification Standard"),
-        ("16", "16_Water_Deficit", "العجز المائي المناخي", "16_Water_Deficit", "16_Water_Deficit", 1, "mm",
-         "العجز المائي الصافي (P - PET) لتقييم الاحتياجات المائية والري التكميلي.",
-         "Thornthwaite & Mather (1955) Climatic Water Balance"),
-        ("17", "17_Dry_Months", "عدد شهور الجفاف", "17_Dry_Months", "17_Dry_Months", 1, "Months",
-         "عدد شهور السنة التي يقل فيها المطر عن ضعف درجة الحرارة (P < 2T) وفق معيار Bagnouls & Gaussen.",
-         "Bagnouls & Gaussen (1957) Xerothermic Index"),
-        ("18", "18_Trends_And_Anomalies", "اتجاهات وشذوذ المناخ", "18_Trends_And_Anomalies", "18_Trends_And_Anomalies", 8, "°C, mm, %",
-         "اتجاهات التغير لعقد من الزمان وشذوذ المناخ مقارنة بالمعدل القياسي الطبيعي 1991-2020.",
-         "WMO Climate Anomaly Standard & Least-Squares Linear Trends"),
-    ]
+    has_project_rasters = any(f['full_f'] in raster_stats for f in climate_fields)
 
-    for row_idx, rdata in enumerate(modules_data_expanded, 2):
+    for row_idx, mod_item in enumerate(MODULES_METADATA, 2):
+        # Count actual indicators belonging to this module
+        pfx = mod_item["pfx"]
+        code = mod_item["code"]
+        if has_project_rasters:
+            m_count = len([f for f in climate_fields if mod_field_matches(f['module'], pfx, code) and f['full_f'] in raster_stats])
+        else:
+            m_count = len([f for f in climate_fields if mod_field_matches(f['module'], pfx, code)])
+        rdata = (
+            pfx,
+            mod_item["code"],
+            mod_item["name_ar"],
+            mod_item["folder"],
+            mod_item["fc"],
+            m_count if m_count > 0 else 1,
+            mod_item["unit"],
+            mod_item["desc_ar"],
+            mod_item["method_en"]
+        )
         for col_idx, val in enumerate(rdata, 1):
             cell = ws3.cell(row_idx, col_idx, val)
             cell.border = THIN_BORDER
@@ -1079,153 +1091,235 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
                 cell.font = DATA_FONT_BOLD if col_idx == 3 else DATA_FONT
         ws3.row_dimensions[row_idx].height = 28
 
-    # Total Summary row
-    ws3.cell(20, 3, "الإجمالي العام للمؤشرات المناخية الخرائطية:").alignment = Alignment(horizontal="right", vertical="center")
-    ws3.cell(20, 3).font = Font(name="Segoe UI", size=10, bold=True, color="1F4E79")
-    ws3.cell(20, 6, 103).alignment = Alignment(horizontal="center", vertical="center")
-    ws3.cell(20, 6).font = Font(name="Consolas", size=10, bold=True, color="1F4E79")
+    # Total Summary row in Standards
+    total_r = len(MODULES_METADATA) + 2
+    ws3.cell(total_r, 3, "الإجمالي العام للمؤشرات المناخية الخرائطية:").alignment = Alignment(horizontal="right", vertical="center")
+    ws3.cell(total_r, 3).font = Font(name="Segoe UI", size=10, bold=True, color="1F4E79")
+    if has_project_rasters:
+        tot_indicators = sum(len([f for f in climate_fields if mod_field_matches(f['module'], m['pfx'], m['code']) and f['full_f'] in raster_stats]) for m in MODULES_METADATA)
+    else:
+        tot_indicators = len(climate_fields)
+    ws3.cell(total_r, 6, tot_indicators).alignment = Alignment(horizontal="center", vertical="center")
+    ws3.cell(total_r, 6).font = Font(name="Consolas", size=10, bold=True, color="1F4E79")
     for c in range(1, 10):
-        ws3.cell(20, c).border = THIN_BORDER
-        ws3.cell(20, c).fill = SECTION_FILL
-    ws3.row_dimensions[20].height = 25
+        ws3.cell(total_r, c).border = THIN_BORDER
+        ws3.cell(total_r, c).fill = SECTION_FILL
+    ws3.row_dimensions[total_r].height = 25
 
     # ==============================================================================
-    # FUNCTION TO BUILD A CLASSIFICATION SHEET (Classes_3, Classes_5, Classes_7, Classes_9)
+    # SHEETS 4..22: THE 19 DEDICATED CLIMATE MODULE SHEETS
     # ==============================================================================
-    def build_class_sheet(target_wb, sheet_title, n_classes, tier_label):
-        ws = target_wb.create_sheet(title=sheet_title)
-        ws.views.sheetView[0].showGridLines = True
+    # Level tier definitions
+    TIERS = [
+        {
+            "n": 3,
+            "banner_text": u"🔷 المستوى الأول: تصنيف 3 فئات استرشادية (نطاق عام ملخص للإدارة وصناع القرار — Level 1: 3 Classes Overview)",
+            "banner_fill": PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid"),
+            "header_fill": PatternFill(start_color="2C5E8A", end_color="2C5E8A", fill_type="solid")
+        },
+        {
+            "n": 5,
+            "banner_text": u"🟢 المستوى الثاني: تصنيف 5 فئات استرشادية (المعيار القياسي الذهبي المتوازن للأطلس المناخي — Level 2: 5 Classes Recommended)",
+            "banner_fill": PatternFill(start_color="196F3D", end_color="196F3D", fill_type="solid"),
+            "header_fill": PatternFill(start_color="239B56", end_color="239B56", fill_type="solid")
+        },
+        {
+            "n": 7,
+            "banner_text": u"🟠 المستوى الثالث: تصنيف 7 فئات استرشادية (المعيار الأكاديمي والتفصيلي للدراسات والبحوث المتخصصة — Level 3: 7 Classes Detailed)",
+            "banner_fill": PatternFill(start_color="B9770E", end_color="B9770E", fill_type="solid"),
+            "header_fill": PatternFill(start_color="D68910", end_color="D68910", fill_type="solid")
+        },
+        {
+            "n": 9,
+            "banner_text": u"🟣 المستوى الرابع: تصنيف 9 فئات استرشادية (المعيار الموسع للمناطق ذات التباين التضاريسي الواسع — Level 4: 9 Classes Wide Range)",
+            "banner_fill": PatternFill(start_color="6C3483", end_color="6C3483", fill_type="solid"),
+            "header_fill": PatternFill(start_color="884EA0", end_color="884EA0", fill_type="solid")
+        }
+    ]
 
-        headers = [
-            (1, "م\nNo.", 6),
-            (2, "الموديول المناخي\nClimate Module", 25),
-            (3, "المسار النسبي وهيئة ملف الراستر\nRelative Raster Path & Format", 46),
-            (4, "اسم الحقل في قاعدة البيانات\nField Name (EN)", 26),
-            (5, "الاسم الفني بالإنجليزية\nTechnical Name (EN)", 35),
-            (6, "اسم الخريطة المقترح للأطلس (بالعربية)\nSuggested Atlas Map Title (AR)", 40),
-            (7, "التوصيف العلمي باللغة العربية\nArabic Scientific Description", 48),
-            (8, "وحدة القياس\nUnit", 14),
-            (9, "طريقة التصنيف\nMethod", 18),
-            (10, "طول الخطوة (صحيح)\nStep (Integer)", 16),
-            (11, "طول الخطوة (عشري)\nStep (1 Decimal)", 16),
-            (12, "أدنى قيمة بالمنطقة\nMin", 15),
-            (13, "أقصى قيمة بالمنطقة\nMax", 15),
-            (14, "متوسط المنطقة\nMean", 15),
-        ]
+    for mod_info in MODULES_METADATA:
+        m_code = mod_info["code"]
+        m_pfx = mod_info["pfx"]
+        m_name_ar = mod_info["name_ar"]
+        m_name_en = mod_info["name_en"]
+        m_unit = mod_info["unit"]
+        m_folder = mod_info["folder"]
 
-        base_c = 14
-        for ci in range(1, n_classes + 1):
-            if ci == 1:
-                lbl_int = u"الفئة 1 - أرقام صحيحة (الأعلى)\nClass 1 - Integer (Highest)"
-                lbl_dec = u"الفئة 1 - كسر عشري واحد (الأعلى)\nClass 1 - 1 Decimal (Highest)"
-            elif ci == n_classes:
-                lbl_int = u"الفئة {} - أرقام صحيحة (الأدنى)\nClass {} - Integer (Lowest)".format(ci, ci)
-                lbl_dec = u"الفئة {} - كسر عشري واحد (الأدنى)\nClass {} - 1 Decimal (Lowest)".format(ci, ci)
-            else:
-                lbl_int = u"الفئة {} - أرقام صحيحة\nClass {} - Integer".format(ci, ci)
-                lbl_dec = u"الفئة {} - كسر عشري واحد\nClass {} - 1 Decimal".format(ci, ci)
-            headers.append((base_c + (ci - 1) * 2 + 1, lbl_int, 30))
-            headers.append((base_c + (ci - 1) * 2 + 2, lbl_dec, 20))
+        # Filter fields belonging to this module
+        if has_project_rasters:
+            mod_fields = [f for f in climate_fields if mod_field_matches(f['module'], m_pfx, m_code) and f['full_f'] in raster_stats]
+        else:
+            mod_fields = [f for f in climate_fields if mod_field_matches(f['module'], m_pfx, m_code)]
+        if not mod_fields:
+            continue
 
-        for col_idx, h_text, width in headers:
-            cell = ws.cell(1, col_idx, h_text)
-            cell.font = HEADER_FONT
-            cell.fill = HEADER_FILL
-            cell.alignment = HEADER_ALIGN
-            cell.border = THIN_BORDER
-            col_letter = get_column_letter(col_idx)
-            ws.column_dimensions[col_letter].width = width
-        ws.row_dimensions[1].height = 32
+        ws_mod = wb.create_sheet(title=m_code)
+        ws_mod.views.sheetView[0].showGridLines = True
 
-        for map_idx, fentry in enumerate(climate_fields, 1):
-            full_f = fentry['full_f']
-            mod = fentry['module']
-            unit = fentry['unit']
-            title_ar = fentry['title_ar']
-            desc_ar = fentry['desc_ar']
-            en_name = fentry.get('en_name', full_f.replace('_', ' '))
+        # Module Header Card (Rows 1-3)
+        ws_mod.merge_cells("A1:M1")
+        t_card = ws_mod.cell(1, 1, u"أطلس المناخ الرقمي لـ {} — دليل تصنيف مؤشرات {} ({})\nDigital Climate Atlas of {} — {} Module Classification Guide".format(study_display, m_name_ar, m_code, study_area_name, m_name_en))
+        t_card.font = Font(name="Segoe UI", size=13, bold=True, color="FFFFFF")
+        t_card.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
+        t_card.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        ws_mod.row_dimensions[1].height = 42
 
-            # Lookup actual raster stats
-            st = raster_stats.get(full_f, {'min': 0.0, 'max': 1.0, 'mean': 0.5, 'tif': full_f + '.tif'})
-            
-            # Determine relative path
-            mod_clean = mod.split('(')[0].strip() if '(' in mod else mod
-            default_folder = MODULE_FOLDER_MAP.get(mod_clean, mod_clean.replace(' ', '_'))
-            folder = st.get('folder') or default_folder
-            rel_path_str = u"[{}] \\ {} \\ {} (GeoTIFF Float32)".format(study_area_name, folder, st['tif'])
+        ws_mod.merge_cells("A2:M2")
+        sub_card = ws_mod.cell(2, 1, u"المجال المناخي: {} ({}) | الوحدة الأساسية: {} | عدد المؤشرات: {} مؤشراً | المستويات الاسترشادية: 3 و 5 و 7 و 9 فئات".format(m_name_ar, m_name_en, m_unit, len(mod_fields)))
+        sub_card.font = Font(name="Segoe UI", size=9.5, bold=True, color="1F4E79")
+        sub_card.fill = PatternFill(start_color="EAECEE", end_color="EAECEE", fill_type="solid")
+        sub_card.alignment = Alignment(horizontal="center", vertical="center")
+        ws_mod.row_dimensions[2].height = 22
 
-            vmin, vmax, vmean = st['min'], st['max'], st['mean']
-            step_int, breaks_int, labels_int = get_arcmap_classes(full_f, vmin, vmax, n_classes, precision=0, unit=unit)
-            step_dec, breaks_dec, labels_dec = get_arcmap_classes(full_f, vmin, vmax, n_classes, precision=1, unit=unit)
+        ws_mod.row_dimensions[3].height = 10
+        curr_row = 4
 
-            u_sym = get_clean_unit_symbol(unit, full_f)
-            if u_sym == "°C" or u_sym == "°":
-                u_suf = "°"
-            elif u_sym == "°C/dec":
-                u_suf = " °/dec"
-            elif u_sym == "%":
-                u_suf = "%"
-            elif u_sym:
-                u_suf = " " + u_sym
-            else:
-                u_suf = ""
+        # Iterate over the 4 Tiers (3, 5, 7, 9 classes)
+        for tier in TIERS:
+            n_classes = tier["n"]
+            banner_text = tier["banner_text"]
+            b_fill = tier["banner_fill"]
+            h_fill = tier["header_fill"]
 
-            r_num = map_idx + 1
-            bg_fill = ROW_EVEN_FILL if r_num % 2 == 0 else ROW_WHITE_FILL
+            max_col = 10 + n_classes
 
-            step_dec_val = "{:.2f}".format(step_dec) if (isinstance(step_dec, float) and step_dec < 0.5) else ("{:.1f}".format(step_dec) if isinstance(step_dec, float) else str(step_dec))
-            step_int_val = str(step_int)
+            # 1. Section Banner Row
+            ws_mod.merge_cells(start_row=curr_row, start_column=1, end_row=curr_row, end_column=max_col)
+            b_cell = ws_mod.cell(curr_row, 1, banner_text)
+            b_cell.font = Font(name="Segoe UI", size=10.5, bold=True, color="FFFFFF")
+            b_cell.fill = b_fill
+            b_cell.alignment = Alignment(horizontal="center", vertical="center")
+            for c in range(1, max_col + 1):
+                ws_mod.cell(curr_row, c).border = THIN_BORDER
+                ws_mod.cell(curr_row, c).fill = b_fill
+            ws_mod.row_dimensions[curr_row].height = 26
+            curr_row += 1
 
-            row_cells = [
-                (1, map_idx, Alignment(horizontal="center", vertical="center"), DATA_FONT_BOLD),
-                (2, mod, Alignment(horizontal="left", vertical="center"), DATA_FONT),
-                (3, rel_path_str, Alignment(horizontal="left", vertical="center"), CODE_FONT_BOLD),
-                (4, full_f, Alignment(horizontal="left", vertical="center"), CODE_FONT_BOLD),
-                (5, en_name, Alignment(horizontal="left", vertical="center"), DATA_FONT),
-                (6, title_ar, Alignment(horizontal="right", vertical="center"), DATA_FONT_BOLD),
-                (7, desc_ar, Alignment(horizontal="right", vertical="center"), DATA_FONT),
-                (8, u_sym or unit, Alignment(horizontal="center", vertical="center"), DATA_FONT_BOLD),
-                (9, "Equal Interval", Alignment(horizontal="center", vertical="center"), DATA_FONT),
-                (10, "{}{}".format(step_int_val, u_suf), Alignment(horizontal="center", vertical="center"), CODE_FONT_BOLD),
-                (11, "{}{}".format(step_dec_val, u_suf), Alignment(horizontal="center", vertical="center"), CODE_FONT),
-                (12, "{:.2f}{}".format(vmin, u_suf), Alignment(horizontal="center", vertical="center"), CODE_FONT),
-                (13, "{:.2f}{}".format(vmax, u_suf), Alignment(horizontal="center", vertical="center"), CODE_FONT_BOLD),
-                (14, "{:.2f}{}".format(vmean, u_suf), Alignment(horizontal="center", vertical="center"), CODE_FONT),
+            # 2. Table Header Row
+            headers = [
+                (1, "م\nNo.", 6),
+                (2, "اسم الحقل في قاعدة البيانات\nField Name (EN)", 26),
+                (3, "اسم الخريطة المقترح للأطلس (بالعربية)\nSuggested Atlas Map Title (AR)", 36),
+                (4, "التوصيف العلمي باللغة العربية\nArabic Scientific Description", 48),
+                (5, "وحدة القياس\nUnit", 14),
+                (6, "طريقة التصنيف\nClassification Method", 28),
+                (7, "طول الخطوة\nStep", 16),
+                (8, "أدنى قيمة بالمنطقة\nMin", 15),
+                (9, "أقصى قيمة بالمنطقة\nMax", 15),
+                (10, "متوسط المنطقة\nMean", 15),
             ]
 
             for ci in range(1, n_classes + 1):
-                lbl_i = labels_int[ci - 1]
-                lbl_d = labels_dec[ci - 1]
-                is_extreme = (ci == 1 or ci == n_classes)
-                fnt_i = DATA_FONT_BOLD if is_extreme else DATA_FONT
-                fnt_d = CODE_FONT_BOLD if is_extreme else CODE_FONT
-                row_cells.append((base_c + (ci - 1) * 2 + 1, lbl_i, Alignment(horizontal="center", vertical="center", wrap_text=True), fnt_i))
-                row_cells.append((base_c + (ci - 1) * 2 + 2, lbl_d, Alignment(horizontal="center", vertical="center", wrap_text=True), fnt_d))
+                if ci == 1:
+                    lbl = u"الفئة 1 (الأعلى)\nClass 1 (Highest)"
+                elif ci == n_classes:
+                    lbl = u"الفئة {} (الأدنى)\nClass {} (Lowest)".format(ci, ci)
+                else:
+                    lbl = u"الفئة {}\nClass {}".format(ci, ci)
+                headers.append((10 + ci, lbl, 22))
 
-            for cidx, val, align, fnt in row_cells:
-                cell = ws.cell(r_num, cidx, val)
-                cell.alignment = align
-                cell.font = fnt
-                cell.fill = bg_fill
+            for col_idx, h_text, width in headers:
+                cell = ws_mod.cell(curr_row, col_idx, h_text)
+                cell.font = HEADER_FONT
+                cell.fill = h_fill
+                cell.alignment = HEADER_ALIGN
                 cell.border = THIN_BORDER
-            ws.row_dimensions[r_num].height = 26
+                col_letter = get_column_letter(col_idx)
+                cur_w = ws_mod.column_dimensions[col_letter].width or 0
+                if width > cur_w:
+                    ws_mod.column_dimensions[col_letter].width = width
+            ws_mod.row_dimensions[curr_row].height = 32
+            curr_row += 1
 
-    # Build classification sheets (3, 5, 7, 9 classes)
-    build_class_sheet(wb, "04_تصنيف_3_فئات_Classes_3", 3, "المعيار التنفيذي")
-    build_class_sheet(wb, "05_تصنيف_5_فئات_Classes_5", 5, "المعيار الذهبي القياسي")
-    build_class_sheet(wb, "06_تصنيف_7_فئات_Classes_7", 7, "المعيار الأكاديمي التفصيلي")
-    build_class_sheet(wb, "07_تصنيف_9_فئات_Classes_9", 9, "المعيار المكثف للمدى الواسع")
+            # 3. Data Rows
+            for map_idx, fentry in enumerate(mod_fields, 1):
+                full_f = fentry['full_f']
+                unit = fentry['unit']
+                title_ar = fentry['title_ar']
+                desc_ar = fentry['desc_ar']
 
-    # 1. Save primary copy to target_excel (typically 00_Tables_And_Reports\Climate_Atlas_Classification_Guide.xlsx)
+                # Lookup actual raster stats
+                st = raster_stats.get(full_f, {'min': 0.0, 'max': 1.0, 'mean': 0.5, 'tif': full_f + '.tif'})
+                vmin = float(st['min'])
+                vmax = float(st['max'])
+                vmean = float(st['mean'])
+
+                # Physical floor for strictly non-negative meteorological variables
+                if full_f.startswith(("UNEP_", "DM_", "R_", "ET_", "PET_", "W_Spd", "Sol_", "UV_", "Cld_", "RH_", "Dry_Months")):
+                    if vmin < 0.0:
+                        vmin = 0.0
+                    if vmax < 0.0:
+                        vmax = 0.0
+                    if vmean < 0.0:
+                        vmean = 0.0
+
+                # Compute classes with adaptive precision & global standards
+                step_str, method_str, labels, prec = compute_smart_classes(full_f, vmin, vmax, n_classes, unit)
+
+                # Clean zero rounding to avoid -0.000
+                if round(vmin, prec) == 0.0:
+                    vmin = 0.0
+                if round(vmax, prec) == 0.0:
+                    vmax = 0.0
+                if round(vmean, prec) == 0.0:
+                    vmean = 0.0
+
+                u_sym = get_clean_unit_symbol(unit, full_f)
+                u_str = (" " + u_sym) if u_sym and not u_sym.startswith("°") and u_sym != "%" else (u_sym or "")
+
+                if prec == 0:
+                    min_str = "{}{}".format(int(round(vmin)), u_str)
+                    max_str = "{}{}".format(int(round(vmax)), u_str)
+                    mean_str = "{}{}".format(int(round(vmean)), u_str)
+                else:
+                    min_str = "{:.{}f}{}".format(vmin, prec, u_str)
+                    max_str = "{:.{}f}{}".format(vmax, prec, u_str)
+                    mean_str = "{:.{}f}{}".format(vmean, prec, u_str)
+
+                bg_fill = ROW_EVEN_FILL if map_idx % 2 == 0 else ROW_WHITE_FILL
+
+                row_cells = [
+                    (1, map_idx, Alignment(horizontal="center", vertical="center"), DATA_FONT_BOLD),
+                    (2, full_f, Alignment(horizontal="left", vertical="center"), CODE_FONT_BOLD),
+                    (3, title_ar, Alignment(horizontal="right", vertical="center"), DATA_FONT_BOLD),
+                    (4, desc_ar, Alignment(horizontal="right", vertical="center"), DATA_FONT),
+                    (5, u_sym or unit, Alignment(horizontal="center", vertical="center"), DATA_FONT_BOLD),
+                    (6, method_str, Alignment(horizontal="center", vertical="center"), DATA_FONT),
+                    (7, step_str, Alignment(horizontal="center", vertical="center"), CODE_FONT_BOLD),
+                    (8, min_str, Alignment(horizontal="center", vertical="center"), CODE_FONT),
+                    (9, max_str, Alignment(horizontal="center", vertical="center"), CODE_FONT_BOLD),
+                    (10, mean_str, Alignment(horizontal="center", vertical="center"), CODE_FONT),
+                ]
+
+                for ci in range(1, n_classes + 1):
+                    lbl_c = labels[ci - 1] if ci <= len(labels) else ""
+                    is_extreme = (ci == 1 or ci == n_classes)
+                    fnt_c = DATA_FONT_BOLD if is_extreme else DATA_FONT
+                    row_cells.append((10 + ci, lbl_c, Alignment(horizontal="center", vertical="center", wrap_text=True), fnt_c))
+
+                for cidx, val, align, fnt in row_cells:
+                    cell = ws_mod.cell(curr_row, cidx, val)
+                    cell.alignment = align
+                    cell.font = fnt
+                    cell.fill = bg_fill
+                    cell.border = THIN_BORDER
+                ws_mod.row_dimensions[curr_row].height = 24
+                curr_row += 1
+
+            # 4. Spacer row between tiers
+            ws_mod.row_dimensions[curr_row].height = 16
+            curr_row += 1
+
+    # Save primary copy to target_excel (typically 00_Tables_And_Reports\Climate_Atlas_Classification_Guide.xlsx)
     os.makedirs(os.path.dirname(target_excel), exist_ok=True)
     wb.save(target_excel)
-    print("Successfully generated Climate Atlas Classification Guide: " + str(target_excel))
+    print("Successfully generated Master Climate Atlas Classification Guide: " + str(target_excel))
 
-    # 2. Save root copy directly to base_dir (Root Output Workspace)
+    # Save root workspace copy directly to base_dir
     root_copy = os.path.join(base_dir, "Climate_Atlas_Classification_Guide.xlsx")
     try:
         shutil.copy2(target_excel, root_copy)
-        print("Successfully saved root workspace copy: " + str(root_copy))
+        print("Successfully synced root workspace copy: " + str(root_copy))
     except Exception as ex_rc:
         try:
             wb.save(root_copy)
@@ -1234,6 +1328,7 @@ def build_master_classification_workbook(base_dir=None, study_area_name="Egypt",
             pass
 
     return target_excel
+
 
 if __name__ == "__main__":
     import argparse
@@ -1244,6 +1339,7 @@ if __name__ == "__main__":
     parser.add_argument("--study_area", default="Egypt")
     parser.add_argument("--target_excel", default=None)
     args = parser.parse_args()
+
     if args.json_args and os.path.exists(args.json_args):
         with open(args.json_args, "r") as jf:
             data = json.load(jf)
@@ -1256,4 +1352,8 @@ if __name__ == "__main__":
             raster_stats=data.get("raster_stats")
         )
     else:
-        build_master_classification_workbook(base_dir=args.base_dir, study_area_name=args.study_area, target_excel=args.target_excel)
+        build_master_classification_workbook(
+            base_dir=args.base_dir,
+            study_area_name=args.study_area,
+            target_excel=args.target_excel
+        )

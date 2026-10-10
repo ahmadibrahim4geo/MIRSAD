@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """Validate the SEQUENTIAL _query_all: order preserved, duplicate coords fetched
 once (cache), failures kept without aborting. Uses stubbed fetch (no network)."""
+import os
 import sys
 
-BASE = r"C:\Users\ahmad\Desktop\NASA POWER Climate Atlas Generator"
-PYT = BASE + "\\POWER_Climate_Atlas_Generator_10_8.pyt"
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
 
 mod = type(sys)("qseq")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)
@@ -19,7 +20,11 @@ def fake_fetch(lat, lon, y0, y1, params, temporal="Monthly", timeout=60, retries
 
 mod.fetch_nasa_point = fake_fetch
 
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 
 class Msg(object):
     def __init__(self):

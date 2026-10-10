@@ -5,13 +5,17 @@ import os
 import shutil
 import sys
 
-BASE = r"C:\Users\ahmad\Desktop\NASA POWER Climate Atlas Generator"
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(BASE, "SigTest_TMP")
 
 mod = type(sys)("msig")
-exec(compile(open(os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"), "rb").read(),
+exec(compile(open((os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")), "rb").read(),
              "sig", "exec"), mod.__dict__)
-import arcpy
+try:
+    import arcpy
+except ImportError:
+    print("SKIP: arcpy not available in this environment.")
+    sys.exit(0)
 arcpy.env.overwriteOutput = True
 tool = mod.PowerClimateAtlasGenerator()
 msgs = []

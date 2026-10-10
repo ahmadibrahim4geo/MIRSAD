@@ -1,0 +1,33 @@
+================================================================================
+DATA SOURCE PROFILE: NASA POWER AGROCLIMATOLOGY (MERRA-2 / CERES)
+================================================================================
+Source Name           : NASA POWER API (Agroclimatology / MERRA-2)
+Provider Organization : National Aeronautics and Space Administration (NASA LaRC / GMAO)
+Coverage Start        : 1981-01-01 (Daily/Monthly Meteorology)
+                        1984-01-01 (Surface Solar Flux)
+                        2001-01-01 (Hourly Stream)
+Coverage End          : Present (Near-Real-Time with 2-4 days latency)
+Temporal Resolution   : Hourly, Daily, Monthly, 30-Year Normals (1991-2020)
+Spatial Resolution    : 0.5° Latitude × 0.625° Longitude (~50 km × 60 km)
+Spatial Domain        : Continuous Global Gridded Coverage (No Voids)
+
+WHAT THIS SOURCE CAN PROVIDE:
+[+] Global Gold Standard Surface Solar Irradiance (GHI, DNI, Diffuse) via CERES
+[+] Satellite Daily UV Index (Erythemal Exposure) via CERES FLASHFlux
+[+] 100% Complete Spatial Grids (Zero Missing Pixels across Deserts & Oceans)
+[+] 2m Ambient Air Temperature (Mean, Daily Max, Daily Min, Diurnal Range)
+[+] 2m Dew Point Temperature and Relative Humidity
+[+] Surface Atmospheric Pressure (PS)
+[+] Multi-Height Wind Speeds (2m, 10m, 50m) and 10m Wind Direction
+[+] Corrected Precipitation Daily Rates (mm/day)
+[+] Total Cloud Area Fraction (%)
+[+] Earth Skin Surface Temperature (Land Surface Temperature - LST)
+
+WHAT THIS SOURCE CANNOT PROVIDE:
+[-] Historical Data Prior to January 1, 1981 (1901-1980 Unavailable)
+[-] Instantaneous Peak Wind Gust Spikes (Provides Mean Speeds Only)
+[-] Mean Sea Level Pressure (PSL) Directly (Provides Surface PS Only)
+[-] Subsurface Soil Moisture or Soil Temperature Depth Profiles (0-255 cm)
+[-] Fine Topographic Microclimate Resolution in Steep Mountain Ravines (~50 km grid)
+[-] Zero-Day Instant Real-Time Data (Trails Real-Time by 2-4 Days)
+================================================================================

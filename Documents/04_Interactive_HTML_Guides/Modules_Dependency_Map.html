@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خريطة اعتمادية الموديولات</title>
+<style>
+:root{--primary:#1B365D;--bg:#F1F5F9;--card:#fff;--border:#CBD5E1;--muted:#64748B}
+*{box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);margin:0;color:#0F172A}
+header{background:linear-gradient(135deg,#1B365D,#2A528A);color:#fff;padding:26px}
+header a{color:#FBD38D;font-weight:bold}
+.wrap{max-width:1200px;margin:0 auto;padding:20px}
+.toolbar{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap}
+.toolbar input,.toolbar select{padding:10px 14px;border:2px solid var(--border);border-radius:8px;font-size:1rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.card h3{margin:0 0 4px;color:var(--primary);font-size:1.02rem}
+.meta{color:var(--muted);font-size:0.82rem;margin-bottom:8px}
+.desc{font-size:0.9rem;white-space:pre-wrap}
+.vals{font-size:0.82rem;color:#334155;margin-top:6px}
+code{background:#F1F5F9;padding:1px 6px;border-radius:4px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1B365D;color:#fff;padding:10px 18px;border-radius:6px;display:none;z-index:9999}
+#backTop{display:none;position:fixed;bottom:24px;right:24px;z-index:9998;padding:10px 14px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>خريطة اعتمادية موديولات الأطلس</h1>
+<p>18 موديول — اضغط أي بطاقة لإبراز علاقاتها</p>
+<p><a href="Modules_Dependency_Map_EN.html">English Edition</a></p>
+</div></header>
+<div class="wrap">
+<div class="toolbar">
+<input id="q" placeholder="ابحث باسم الموديول..." onkeyup="applyFilter()" style="flex:1">
+
+</div>
+<p id="count"></p>
+<div id="cards"><div class="card" data-mod="Temperature" data-search="Temperature الحرارة" data-req="" data-dep="Heat Index|Wind Chill|De Martonne Aridity|Evapotranspiration|Hargreaves PET|UNEP Aridity|Water Deficit|Dry Months|Trends & Anomalies" onclick="hi(this)">
+            <h3>الحرارة</h3>
+            <div class="meta"><code>T2M, T2M_MAX, T2M_MIN, RH2M, T2MDEW</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>يغذي: الحرارة المحسوسة، مبرد الرياح، القحولة (دي مارتون)، البخر-نتح، البخر-نتح (هارجريفز)، القحولة (الأمم المتحدة)، العجز المائي، الأشهر الجافة، الاتجاهات والشذوذ</div></div>
+<div class="card" data-mod="Precipitation" data-search="Precipitation الأمطار" data-req="" data-dep="De Martonne Aridity|UNEP Aridity|Water Deficit|Dry Months|Trends & Anomalies" onclick="hi(this)">
+            <h3>الأمطار</h3>
+            <div class="meta"><code>PRECTOTCORR</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>يغذي: القحولة (دي مارتون)، القحولة (الأمم المتحدة)، العجز المائي، الأشهر الجافة، الاتجاهات والشذوذ</div></div>
+<div class="card" data-mod="Sea Level Pressure" data-search="Sea Level Pressure ضغط مستوى البحر" data-req="" data-dep="" onclick="hi(this)">
+            <h3>ضغط مستوى البحر</h3>
+            <div class="meta"><code>SLP</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Surface Pressure" data-search="Surface Pressure الضغط السطحي" data-req="" data-dep="" onclick="hi(this)">
+            <h3>الضغط السطحي</h3>
+            <div class="meta"><code>PS</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Wind" data-search="Wind الرياح" data-req="" data-dep="Wind Chill" onclick="hi(this)">
+            <h3>الرياح</h3>
+            <div class="meta"><code>WS10M, WD10M</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>يغذي: مبرد الرياح</div></div>
+<div class="card" data-mod="Relative Humidity" data-search="Relative Humidity الرطوبة النسبية" data-req="" data-dep="Heat Index" onclick="hi(this)">
+            <h3>الرطوبة النسبية</h3>
+            <div class="meta"><code>RH2M</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>يغذي: الحرارة المحسوسة</div></div>
+<div class="card" data-mod="Dew Point" data-search="Dew Point نقطة الندى" data-req="" data-dep="" onclick="hi(this)">
+            <h3>نقطة الندى</h3>
+            <div class="meta"><code>T2MDEW</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Solar Radiation" data-search="Solar Radiation الإشعاع الشمسي" data-req="" data-dep="" onclick="hi(this)">
+            <h3>الإشعاع الشمسي</h3>
+            <div class="meta"><code>ALLSKY_SFC_SW_DWN</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="UV Index" data-search="UV Index الأشعة فوق البنفسجية" data-req="" data-dep="" onclick="hi(this)">
+            <h3>الأشعة فوق البنفسجية</h3>
+            <div class="meta"><code>ALLSKY_SFC_UV_INDEX</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Cloud Cover" data-search="Cloud Cover الغطاء السحابي" data-req="" data-dep="" onclick="hi(this)">
+            <h3>الغطاء السحابي</h3>
+            <div class="meta"><code>CLOUD_AMT</code></div>
+            <div class="desc">لا يحتاج موديولات (بيانات أولية)<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Heat Index" data-search="Heat Index الحرارة المحسوسة" data-req="Temperature|Relative Humidity" data-dep="" onclick="hi(this)">
+            <h3>الحرارة المحسوسة</h3>
+            <div class="meta"><code>T2M, T2M_MAX, RH2M</code></div>
+            <div class="desc">يحتاج: الحرارة، الرطوبة النسبية<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Wind Chill" data-search="Wind Chill مبرد الرياح" data-req="Temperature|Wind" data-dep="" onclick="hi(this)">
+            <h3>مبرد الرياح</h3>
+            <div class="meta"><code>T2M, WS10M</code></div>
+            <div class="desc">يحتاج: الحرارة، الرياح<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="De Martonne Aridity" data-search="De Martonne Aridity القحولة (دي مارتون)" data-req="Temperature|Precipitation" data-dep="" onclick="hi(this)">
+            <h3>القحولة (دي مارتون)</h3>
+            <div class="meta"><code>T2M, PRECTOTCORR</code></div>
+            <div class="desc">يحتاج: الحرارة، الأمطار<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Evapotranspiration" data-search="Evapotranspiration البخر-نتح" data-req="Temperature" data-dep="" onclick="hi(this)">
+            <h3>البخر-نتح</h3>
+            <div class="meta"><code>T2M, T2M_MAX, T2M_MIN</code></div>
+            <div class="desc">يحتاج: الحرارة<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="UNEP Aridity" data-search="UNEP Aridity القحولة (الأمم المتحدة)" data-req="Temperature|Precipitation" data-dep="" onclick="hi(this)">
+            <h3>القحولة (الأمم المتحدة)</h3>
+            <div class="meta"><code>T2M, T2M_MAX, T2M_MIN, PRECTOTCORR</code></div>
+            <div class="desc">يحتاج: الحرارة، الأمطار<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Water Deficit" data-search="Water Deficit العجز المائي" data-req="Temperature|Precipitation" data-dep="" onclick="hi(this)">
+            <h3>العجز المائي</h3>
+            <div class="meta"><code>T2M, T2M_MAX, T2M_MIN, PRECTOTCORR</code></div>
+            <div class="desc">يحتاج: الحرارة، الأمطار<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Dry Months" data-search="Dry Months الأشهر الجافة" data-req="Temperature|Precipitation" data-dep="" onclick="hi(this)">
+            <h3>الأشهر الجافة</h3>
+            <div class="meta"><code>T2M, PRECTOTCORR</code></div>
+            <div class="desc">يحتاج: الحرارة، الأمطار<br>نهائي (لا يغذي غيره)</div></div>
+<div class="card" data-mod="Trends & Anomalies" data-search="Trends & Anomalies الاتجاهات والشذوذ" data-req="Temperature|Precipitation" data-dep="" onclick="hi(this)">
+            <h3>الاتجاهات والشذوذ</h3>
+            <div class="meta"><code>T2M, PRECTOTCORR</code></div>
+            <div class="desc">يحتاج: الحرارة، الأمطار<br>نهائي (لا يغذي غيره)</div></div></div>
+</div>
+<div id="toast"></div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#9650;</button>
+<script>
+function applyFilter(){
+  var q=document.getElementById('q').value.toLowerCase();
+  var ce=document.getElementById('cat'); var c=ce?ce.value:'';
+  var n=0,total=0;
+  document.querySelectorAll('#cards .card').forEach(function(el){
+    total++;
+    var ok=(el.getAttribute('data-search')||'').toLowerCase().includes(q);
+    if(c) ok=ok&&el.getAttribute('data-cat')===c;
+    el.style.display=ok?'block':'none';
+    if(ok)n++;
+  });
+  document.getElementById('count').innerText=n+' / '+total;
+}
+document.addEventListener('DOMContentLoaded',applyFilter);
+window.addEventListener('scroll',function(){var b=document.getElementById('backTop');if(b)b.style.display=(window.scrollY>600)?'block':'none';});
+</script>
+</body>
+</html>
+<script>
+function hi(el){
+  document.querySelectorAll('#cards .card').forEach(function(c){c.style.opacity='0.35';c.style.border='';});
+  el.style.opacity='1';el.style.border='2px solid #1B365D';
+  function mark(list,color){
+    (list||'').split('|').forEach(function(m){
+      if(!m)return;
+      document.querySelectorAll('#cards .card').forEach(function(c){
+        var s=c.getAttribute('data-search')||'';
+        if(c.getAttribute('data-mod')===m){c.style.opacity='1';c.style.border='2px solid '+color;}
+      });
+    });
+  }
+  mark(el.getAttribute('data-req'),'#059669');
+  mark(el.getAttribute('data-dep'),'#D97706');
+}
+</script>

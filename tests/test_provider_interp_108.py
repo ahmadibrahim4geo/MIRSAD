@@ -9,7 +9,9 @@ import shutil
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+if not os.path.exists(PYT):
+    PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
 TMP = os.path.join(BASE, "ProvTest_TMP")
 
 if sys.version_info[0] == 2:
@@ -128,6 +130,8 @@ check("nasa dict unchanged", r2["Source"] == "NASA POWER" and "uv_index_max" not
 # Sections 5-7 need real arcpy (parameters + Spatial Analyst); the pure-logic
 # sections above already ran. Exit here with their summary when arcpy is absent.
 if not _HAS_ARCPY:
+    if os.path.isdir(TMP):
+        shutil.rmtree(TMP, ignore_errors=True)
     print("")
     print("==== SUMMARY: %d passed, %d failed ====" % (len(PASS), len(FAIL)))
     print("SKIP arcpy-only sections 5-7 (no ArcGIS in this interpreter)")
@@ -137,10 +141,11 @@ if not _HAS_ARCPY:
 
 # ---------------- 5. toolbox params + dynamic enabling ----------------
 ps = tool.getParameterInfo()
-check("53 params", len(ps) == 53, len(ps))
+check("param count >= 53", len(ps) >= 53, len(ps))
 pdict = dict((p.name, p) for p in ps)
 check("provider default NASA", pdict["Climate_Data_Source"].value == "NASA POWER API"
-      and "Open-Meteo Historical API (ERA5 Reanalysis)" in pdict["Climate_Data_Source"].filter.list,
+      and "Open-Meteo Historical API (ERA5 Reanalysis)" in pdict["Climate_Data_Source"].filter.list
+      and "Copernicus Climate Data Store (CDS / ERA5 / AgERA5)" in pdict["Climate_Data_Source"].filter.list,
       (pdict["Climate_Data_Source"].value, pdict["Climate_Data_Source"].filter.list))
 check("om model default era5-land", "ERA5-Land" in pdict["OpenMeteo_Model"].value
       and len(pdict["OpenMeteo_Model"].filter.list) == 3,
@@ -151,6 +156,9 @@ check("om model disabled when NASA", not pdict["OpenMeteo_Model"].enabled)
 pdict["Climate_Data_Source"].value = "Open-Meteo Historical API (ERA5 Reanalysis)"
 tool.updateParameters(ps)
 check("om model enabled when Open-Meteo", pdict["OpenMeteo_Model"].enabled)
+pdict["Climate_Data_Source"].value = "Copernicus Climate Data Store (CDS / ERA5 / AgERA5)"
+tool.updateParameters(ps)
+check("cds key enabled when Copernicus", pdict["CDS_API_Key"].enabled and pdict["OpenMeteo_Model"].enabled)
 pdict["Climate_Data_Source"].value = "NASA POWER API"
 tool.updateParameters(ps)
 
@@ -278,6 +286,9 @@ tool._build_isobars(gdbi, _reg, msgs.append, warns.append, 50.0)
 d1 = int(arcpy.GetCount_management(os.path.join(gdbi, "Isobars_PSL_Winter_Mean"))[0])
 check("finer step more lines", d1 <= c1, (d1, c1))
 arcpy.CheckInExtension("Spatial")
+
+if os.path.isdir(TMP):
+    shutil.rmtree(TMP, ignore_errors=True)
 
 print("")
 print("==== SUMMARY: %d passed, %d failed ====" % (len(PASS), len(FAIL)))

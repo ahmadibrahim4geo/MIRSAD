@@ -61,7 +61,7 @@ SPECIAL_RULES = {
     # Water deficit: -2750 to -750 with step 400
     "Water_Deficit_Annual": (400.0, [-2750.0, -2350.0, -1950.0, -1550.0, -1150.0, -750.0]),
     # Decadal temperature trend: 0.10 to 0.60 with step 0.10
-    "T_Trend_Decade": (0.10, [0.10, 0.20, 0.30, 0.40, 0.50, 0.60]),
+    "T_Annual_Trend_Decade": (0.10, [0.10, 0.20, 0.30, 0.40, 0.50, 0.60]),
     # Temperature summer mean: 25 to 35 with step 2.0
     "T_Summer_Mean": (2.0, [25.0, 27.0, 29.0, 31.0, 33.0, 35.0]),
     # Temperature max summer month: 26 to 36 with step 2.0
@@ -99,8 +99,8 @@ SPECIAL_RULES = {
     "RH_Annual_Mean": (11.0, [20.0, 31.0, 42.0, 53.0, 64.0, 75.0]),
     # Cloud cover annual mean: 0 to 50 with step 10
     "Cld_Annual_Mean": (10.0, [0.0, 10.0, 20.0, 30.0, 40.0, 50.0]),
-    # Evapotranspiration annual total: 1000 to 2750 with step 350
-    "ET_Annual_Total": (350.0, [1000.0, 1350.0, 1700.0, 2050.0, 2400.0, 2750.0]),
+    # Evapotranspiration annual mean (annual total scale): 1000 to 2750 with step 350
+    "ET_Annual_Mean": (350.0, [1000.0, 1350.0, 1700.0, 2050.0, 2400.0, 2750.0]),
     "PET_Hargreaves_Annual": (350.0, [1000.0, 1350.0, 1700.0, 2050.0, 2400.0, 2750.0]),
 }
 

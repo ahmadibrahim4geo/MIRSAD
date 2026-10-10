@@ -1,0 +1,272 @@
+====================================================================================================
+               NASA POWER & NOAA/WMO CLIMATE ATLAS GENERATOR: DATA SOURCES DIRECTORY
+            TEMPORAL COVERAGE, METEOROLOGICAL PARAMETERS, AND ARCHIVAL SPECIFICATIONS
+====================================================================================================
+Document Version : 2.0 (Enterprise Multi-Source Climatology Architecture)
+Author           : Ahmad Ibrahim (أحمد إبراهيم) - GIS & Climatology Specialist
+Date             : October 2026
+Target System    : ArcGIS Pro (Python 3.x) & ArcGIS Desktop 10.8 (Python 2.7)
+
+----------------------------------------------------------------------------------------------------
+EXECUTIVE SUMMARY / ملخص تنفيذي
+----------------------------------------------------------------------------------------------------
+تعتمد أدوات منظومة مِرصاد (MIRSAD Climate Atlas Generator) على خمسة مصادر رئيسية لاستخراج السلاسل الزمنية
+المناخية، وحساب المعدلات المعيارية، وبناء خرائط الراستر الاستيفائية. يوضح هذا الملف الفترات الزمنية 
+الفعلية (بداية التغطية ونهايتها) لكل مصدر، والعناصر المناخية التي يوفرها، ونقاط القوة وحالات الاستخدام:
+
+1. Hybrid Engine (النموذج الهجين - الافتراضي):
+   - البداية: 1901 (حسب رصد المحطة) | النهاية: الوقت الحاضر (Present)
+   - الرصد الأرضي المباشر + استكمال ثغرات الرصد آلياً + دمج عناصر الإشعاع الفضائي.
+
+2. NOAA ISD / GHCN Direct Station Ground Observations:
+   - البداية: 1901 (وسجلات بعض المحطات تعود لأواخر القرن 19) | النهاية: الوقت الحاضر (Real-Time)
+   - قراءات أجهزة ومستشعرات المحطة الأرضية الحقيقية (الحرارة، الرطوبة، الضغط، الرياح، الأمطار، السحب).
+
+3. NASA POWER API (Agroclimatology / MERRA-2):
+   - البداية: 01/01/1981 (البيانات اليومية والشهرية) | 01/01/1984 (الإشعاع الشمسي) | النهاية: الوقت الحاضر
+   - النموذج الزراعي العالمي لناسا (دقة شبكية 0.5° × 0.625°)، تغطية مكانية عالمية كاملة للإشعاع والحرارة.
+
+4. Copernicus Climate Data Store (CDS / ERA5 / AgERA5):
+   - البداية: 01/01/1940 (ERA5) | 01/01/1950 (ERA5-Land) | 01/01/1979 (AgERA5) | النهاية: الوقت الحاضر
+   - مخزن كوبرنيكوس الأوروبي المعتمد دولياً لدى WMO/ECMWF، دقة مكانية 0.1° (~9 كم)، دعم اختياري للرمز الشخصي واستخراج سلس بدون كلمة مرور.
+
+5. Open-Meteo Historical API (ECMWF ERA5 & ERA5-Land Reanalysis):
+   - البداية: 01/01/1940 (ERA5) | 01/01/1950 (ERA5-Land عالي الدقة) | النهاية: الوقت الحاضر
+   - بوابة سحابية مفتوحة للنموذج الأوروبي ERA5-Land (0.1° ~ 9 إلى 11 كم) ملائمة للمناطق الجبلية والتضاريس.
+
+====================================================================================================
+1. HYBRID ENGINE: NOAA GROUND OBSERVATIONS + NASA / ERA5 GAP-FILLING [DEFAULT]
+====================================================================================================
+- Source Identifier      : Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling
+- Operational Role       : Default Engine for NOAA & WMO Ground Weather Stations Tool
+- Primary Institutions   : NOAA NCEI, WMO, NASA LaRC, and ECMWF Copernicus C3S
+- Temporal Start Year    : 1901 (Bound by station's active commissioning date)
+- Temporal End Year      : Present (Updated continuously; 2-5 days latency for gap-filled days)
+- Temporal Resolution    : Hourly, Daily, Monthly Climatology, Multi-Year Normals
+- Spatial Coverage       : Global (>35,000 WMO/USAF stations worldwide)
+
+A. ARCHITECTURE & FUSION MECHANISM:
+   1. Level 1 (Ground Truth Priority):
+      The engine extracts certified ground sensor readings directly from the official NOAA ISD
+      and GHCN archives.
+   2. Level 2 (Seamless Gap-Filling):
+      If a physical station experienced sensor maintenance, power failure, or telemetry dropouts
+      (NoData / -999 sentinels), the missing timestamps are automatically gap-filled using 
+      ECMWF ERA5-Land (1950-Present) or NASA POWER (1981-Present) at the station's exact coordinates.
+   3. Level 3 (Radiative Sensor Synthesis):
+      Since standard synoptic weather stations rarely feature pyranometers or UV spectrometers,
+      Solar Radiation, UV Index, and Land Surface Skin Temperature (LST) are seamlessly retrieved
+      from NASA CERES and ERA5-Land.
+
+B. WHAT THIS SOURCE CAN PROVIDE (100% COMPLETE COVERAGE - ALL 19 MODULES):
+   [+] Air Temperature (Mean, Max, Min, Diurnal Range)
+   [+] Dew Point Temperature & Relative Humidity
+   [+] Atmospheric Pressure (Station Pressure & Sea Level Pressure PSL)
+   [+] Wind Speed (Mean, Max, Gusts) & Wind Direction (Circular Mean 0-360°)
+   [+] Precipitation (Total, Daily Mean, Rain Days, Extremes)
+   [+] Cloud Cover (Okta and Area Fraction %)
+   [+] Solar Radiation (All-Sky Global Horizontal Irradiance, Clear Sky, Direct Normal, Diffuse)
+   [+] UV Index (Erythemal Daily Dose)
+   [+] Land Surface Skin Temperature (LST)
+   [+] Derived Bioclimatic Submodels: Heat Index (Rothfusz), Wind Chill (NWS),
+       De Martonne Aridity, Reference Evapotranspiration (Hargreaves & FAO-56),
+       UNEP Aridity, Annual Water Deficit, Walter-Lieth Dry Months, Baseline Anomalies & Trends.
+
+C. WHAT THIS SOURCE CANNOT PROVIDE:
+   [-] Pure in-situ ground pyranometer records (radiation synthesized via satellite CERES fusion).
+   [-] Multi-layer soil moisture/temperature profiles at physical station towers.
+   [-] Raw unadjusted court forensic records (litigation requires unadjusted NOAA ISD direct transcripts).
+   [-] Gap-filling protection for historical stations decommissioned before 1940.
+
+D. RECOMMENDED USE CASE:
+   The ultimate choice for rigorous scientific and professional GIS atlases. Guarantees true
+   ground observations while eliminating all interpolation voids, null raster pixels, or missing
+   columns in output geodatabases.
+
+====================================================================================================
+2. NOAA ISD / GHCN DIRECT STATION GROUND OBSERVATIONS ARCHIVE
+====================================================================================================
+- Source Identifier      : NOAA ISD / GHCN Direct Station Ground Observations Archive
+- Primary Institutions   : National Oceanic and Atmospheric Administration (NOAA) / NCEI & WMO
+- Temporal Start Year    : 1901 (Global digital synoptic archive; sporadic records from 1850s)
+- Temporal End Year      : Present (Near-Real-Time NRT; updated hourly/sub-daily)
+- Temporal Resolution    : Sub-hourly, Hourly, 3-Hourly, Daily, Monthly
+- Spatial Resolution     : Point Station Physical Coordinates (Lat, Lon, Elevation)
+- Global Network Size    : 35,000+ total stations (28,095 active synoptic stations in directory)
+
+A. AVAILABLE MEASURED PARAMETERS:
+   [X] Air Temperature (T2M): Dry bulb thermometer readings at ~2 meters height.
+   [X] Dew Point Temperature (Td): Wet bulb / hygrometer observations.
+   [X] Relative Humidity (RH): Psychrometrically derived from Dry & Wet bulb.
+   [X] Atmospheric Pressure: Station Pressure (STP) and Sea Level Pressure (SLP / PSL).
+   [X] Wind Speed & Direction: Anemometer speed (m/s, knots) and vane direction (0-360°).
+   [X] Precipitation: Tipping bucket and manual rain gauge accumulation (mm).
+   [X] Cloud Cover / Sky Condition: Visual and ceilometer cloud coverage (Okta, 0-8).
+   [X] Weather Phenomena: Present weather codes (Fog, Haze, Dust Storm, Rain, Thunderstorm).
+
+B. PARAMETERS NOT MEASURED AT STANDARD SYNOPTIC STATIONS:
+   [-] Solar Radiation Flux (W/m2): Measured only at specialized BSRN/SURFRAD stations.
+   [-] UV Index: Measured only at spectrophotometer stations.
+   [-] Land Surface Skin Temperature: Satellite radiometric property (not measured by air probes).
+
+C. RECOMMENDED USE CASE:
+   Official meteorological compliance, historical climate validation against national records,
+   and research focusing purely on ground thermometer, barometer, and anemometer records.
+
+====================================================================================================
+3. NASA POWER API (AGROCLIMATOLOGY / MERRA-2)
+====================================================================================================
+- Source Identifier      : NASA POWER API (Agroclimatology / MERRA-2)
+- Primary Institution    : NASA Langley Research Center (LaRC) & NASA GMAO
+- Primary Models         : GMAO MERRA-2 Assimilation + GEOS-FP-IT + CERES FLASHFlux Satellite
+- Temporal Start Date    : 
+  * Daily & Monthly Meteorology : 1981-01-01 (January 1, 1981)
+  * Surface Solar Radiation     : 1984-01-01 (Continuous global CERES coverage from 2000)
+  * Hourly Meteorology          : 2001-01-01 (January 1, 2001)
+- Temporal End Date      : Present (Trailing real-time by ~2 to 4 days latency)
+- Temporal Resolution    : Hourly, Daily, Monthly, Climatology (30-year Normals)
+- Spatial Resolution     : 0.5° Latitude × 0.625° Longitude (~50 km × 60 km grid cells)
+
+A. AVAILABLE PARAMETERS:
+   [X] ALLSKY_SFC_SW_DWN : All-Sky Surface Shortwave Solar Radiation (MJ/m2/day or kWh/m2/day)
+   [X] CLRSKY_SFC_SW_DWN : Clear-Sky Surface Shortwave Solar Radiation
+   [X] ALLSKY_SFC_UVA/B  : UV Erythemal Exposure and UV Index
+   [X] T2M, T2M_MAX, MIN : Air Temperature at 2 meters (Mean, Max, Min, Range)
+   [X] T2MDEW, RH2M      : Dew Point Temperature and Relative Humidity at 2 meters
+   [X] PS                : Surface Atmospheric Pressure (kPa / mbar / hPa)
+   [X] WS2M, WS10M, WS50M: Wind Speed at 2m, 10m, and 50m heights
+   [X] WD10M             : Wind Direction at 10 meters (0-360°)
+   [X] PRECTOTCORR       : Corrected Total Precipitation rate (mm/day)
+   [X] CLDTOT            : Total Cloud Area Fraction (%)
+   [X] TS                : Earth Skin Surface Temperature (LST)
+
+B. WHAT THIS SOURCE CANNOT PROVIDE:
+   [-] Historical data prior to January 1, 1981 (early 20th century 1901-1980 unavailable).
+   [-] Instantaneous peak wind gust spikes (provides hourly/daily mean speeds only).
+   [-] Mean Sea Level Pressure (PSL) directly (provides surface PS only; requires barometric formula).
+   [-] Subsurface soil moisture and soil temperature depth profiles (0-255 cm).
+   [-] Fine topographic microclimate resolution in steep mountain ravines (~50 km grid cell).
+   [-] Zero-day instant real-time data (trails real-time by 2-4 days).
+
+C. RECOMMENDED USE CASE:
+   Renewable energy site prospecting (Solar PV / Wind), agricultural yield and irrigation planning,
+   and regional studies across desert or ocean regions where ground stations are sparse.
+
+====================================================================================================
+4. OPEN-METEO HISTORICAL WEATHER API (ECMWF ERA5 & ERA5-LAND REANALYSIS)
+====================================================================================================
+- Source Identifier      : Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)
+- Primary Institutions   : European Centre for Medium-Range Weather Forecasts (ECMWF) / Copernicus C3S
+- Primary Models         : ECMWF ERA5 Atmospheric Reanalysis & ERA5-Land Terrestrial Reanalysis
+- Temporal Start Date    :
+  * ERA5 Global Reanalysis      : 1940-01-01 (January 1, 1940)
+  * ERA5-Land Enhanced Surface  : 1950-01-01 (January 1, 1950)
+- Temporal End Date      : Present (Trailing real-time by ~2 to 5 days latency)
+- Temporal Resolution    : Hourly and Daily
+- Spatial Resolution     :
+  * ERA5 Global : 0.25° (~28 km)
+  * ERA5-Land   : 0.10° (~9 km to 11 km) - Exceptional high spatial resolution
+
+A. AVAILABLE PARAMETERS (WHAT THIS SOURCE CAN PROVIDE):
+   [X] Temperature at 2m (Mean, Max, Min) & Apparent Temperature (Heat Index / Wind Chill)
+   [X] Dew Point Temperature & Relative Humidity at 2m
+   [X] Surface Pressure & Mean Sea Level Pressure (MSLP / PSL)
+   [X] Precipitation (Total Precipitation, Rain, Snowfall, Snow Depth)
+   [X] Wind Speed at 10m & 100m, Wind Direction, Wind Gusts
+   [X] Shortwave Solar Radiation (Global Horizontal) & Direct Radiation
+   [X] Total Cloud Cover, Low Cloud Cover, Mid Cloud Cover, High Cloud Cover
+   [X] Soil Temperature at 4 depths (0-7 cm, 7-28 cm, 28-100 cm, 100-255 cm)
+   [X] Soil Moisture at 4 volumetric depths (m3/m3)
+   [X] Reference Evapotranspiration (ET0 FAO-56 Penman-Monteith)
+
+B. WHAT THIS SOURCE CANNOT PROVIDE:
+   [-] Historical data prior to January 1, 1940 (early 20th century 1901-1939 unavailable).
+   [-] Dedicated satellite UV Erythemal Index (relies on general atmospheric radiative approximation).
+   [-] Pure in-situ physical instrument readings (it is a numerical reanalysis model, not ground truth).
+   [-] Zero-day instant real-time data (trails real-time by 2-5 days).
+
+C. RECOMMENDED USE CASE:
+   High-resolution terrain mapping, mountainous watersheds where 9 km grid captures lapse rates,
+   hydrological modeling, soil water balance, and baseline studies spanning 1940 to 1980.
+
+====================================================================================================
+5. COPERNICUS CLIMATE DATA STORE (CDS / ERA5 / AgERA5) [OFFICIAL EUROPEAN REANALYSIS]
+====================================================================================================
+- Source Identifier      : Copernicus Climate Data Store (CDS / ERA5 / AgERA5)
+- Operational Role       : Official ECMWF C3S Reanalysis Provider for Points & Gridded Rasters
+- Primary Institutions   : European Centre for Medium-Range Weather Forecasts (ECMWF) & Copernicus C3S
+- Official Portal        : https://cds.climate.copernicus.eu
+- Temporal Start Year    : 1940 (ERA5) | 1950 (ERA5-Land ~9 km) | 1979 (AgERA5)
+- Temporal End Year      : Present (Continuous near-real-time with 5-day latency)
+- Temporal Resolution    : Hourly, Daily, and Monthly Climatologies
+- Spatial Resolution     : 0.1° (~9 km to 11 km) for ERA5-Land & AgERA5; 0.25° (~31 km) for ERA5 Global
+- Spatial Coverage       : Global Continuous Gridded Archive (Land, Oceans, Atmosphere)
+- Authentication         : Optional Personal Access Token (API Key / Token); Seamless Zero-Auth Fallback
+
+A. WHAT THIS SOURCE CAN PROVIDE:
+   [X] International Gold Standard: WMO and IPCC certified reference reanalysis baseline.
+   [X] Unbroken 85+ Year Historical Series (1940-Present) with 4D-Var Data Assimilation.
+   [X] Air Temperature (Mean, Max, Min, Diurnal Range) & Apparent / Heat Stress Indices.
+   [X] Dew Point & Relative Humidity (computed via Magnus thermodynamic equations).
+   [X] Sea Level Pressure (PSL) & Surface Atmospheric Pressure (PS).
+   [X] Wind Speed at 10m & 100m, Wind Direction, and Maximum Wind Gusts.
+   [X] Total Precipitation, Rain, Snowfall, and Snow Depth.
+   [X] Multi-Layer Soil Moisture & Temperature (4 layers: 0-7, 7-28, 28-100, 100-255 cm).
+   [X] Standard Reference Evapotranspiration (ET0 FAO-56 Penman-Monteith).
+   [X] AgERA5 Tailored Agricultural Indicators for crop and vegetation growth models.
+   [X] Full Support for Spatial Point Features and Gridded Regional NetCDF Processing.
+
+B. WHAT THIS SOURCE CANNOT PROVIDE:
+   [-] Data prior to January 1, 1940 (1901-1939 unavailable in ERA5).
+   [-] Not a physical ground sensor (it is a sophisticated numerical reanalysis assimilation model).
+   [-] Future climate scenario projections (CMIP6 / IPCC SSPs are excluded in current scope).
+   [-] Operational trailing latency of 2 to 5 days.
+
+C. RECOMMENDED USE CASE:
+   Authoritative climatological benchmarks, national atlases, agricultural water demand modeling,
+   and complex terrain mapping where 9 km resolution captures topography accurately.
+
+====================================================================================================
+6. SYNOPTIC COMPARISON MATRIX / جدول المقارنة الشامل للمصادر
+====================================================================================================
++-----------------------------+-------------------+-------------------+--------------------+--------------------+--------------------+
+| Feature / Characteristic    | Hybrid Engine     | NOAA ISD / GHCN   | NASA POWER API     | Copernicus CDS     | Open-Meteo ERA5    |
++-----------------------------+-------------------+-------------------+--------------------+--------------------+--------------------+
+| Earliest Available Year     | 1901              | 1901 (1850s)      | 1981 (1984 Solar)  | 1940 (1950 ERA5-L) | 1940 (1950 ERA5-L) |
+| Latest Available Year       | Present           | Present (NRT)     | Present (2-4 days) | Present (2-5 days) | Present (2-5 days) |
+| Primary Data Nature         | Fused Multi-Source| Physical Sensors  | Gridded Reanalysis | Gridded C3S Reanal | Gridded Reanalysis |
+| Spatial Resolution          | Station Point     | Station Point     | 0.5° × 0.625°      | 0.1° (~9 km)       | 0.1° (~9 km)       |
+| Total Available Stations    | 28,095 active     | 35,000+ cataloged | Global Grid        | Global Grid        | Global Grid        |
+| Air Temp (T, Tmax, Tmin)    | YES (Complete)    | YES (Observed)    | YES (Modeled)      | YES (Modeled)      | YES (Modeled)      |
+| Dew Point & Humidity        | YES (Complete)    | YES (Observed)    | YES (Modeled)      | YES (Modeled)      | YES (Modeled)      |
+| Sea Level Pressure (PSL)    | YES (Complete)    | YES (Observed)    | YES (Surface PS)   | YES (Modeled)      | YES (Modeled)      |
+| Wind Speed & Direction      | YES (Complete)    | YES (Observed)    | YES (Modeled)      | YES (Modeled)      | YES (Modeled)      |
+| Precipitation Rate/Total    | YES (Complete)    | YES (Observed)    | YES (Corrected)    | YES (Modeled)      | YES (Modeled)      |
+| Total Cloud Cover           | YES (Complete)    | YES (Observed)    | YES (Modeled)      | YES (Modeled)      | YES (Modeled)      |
+| Solar Radiation (SW)        | YES (Fused)       | NO (Sparse/None)  | YES (Gold Standard)| YES (Radiative)    | YES (Modeled)      |
+| UV Index                    | YES (Fused)       | NO (Rare)         | YES (CERES Sat)    | NO (Model approx)  | NO (Model approx)  |
+| Land Surface Temp (LST)     | YES (Fused)       | NO (Satellite)    | YES (CERES TS)     | YES (Skin Temp)    | YES (Skin Temp)    |
+| Soil Moisture & Temp        | Optional          | NO                | NO                 | YES (4 Depths)     | YES (4 Depths)     |
+| Gap-Filling Protection      | YES (Automatic)   | NO (Raw gaps)     | Not applicable     | 100% Guaranteed    | 100% Guaranteed    |
+| Authentication Required?    | NO (Open)         | NO (Open)         | NO (Open)          | Optional Token     | NO (Open)          |
+| Default in Station Tool?    | YES [Default]     | Optional          | Optional           | Optional           | Optional           |
++-----------------------------+-------------------+-------------------+--------------------+--------------------+--------------------+
+
+====================================================================================================
+7. RESEARCH DECISION TREE / شجرة اتخاذ القرار للباحث الجغرافي والمناخي
+====================================================================================================
+- هل تدرس محطات الأرصاد الجوية وتحتاج أعلى دقة للرصد الأرضي مع ضمان خلو الراستر من الخلايا المفقودة؟
+  -> اختر: Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling [الخيار الافتراضي الموصى به].
+
+- هل تبحث عن بيانات رصد ميدانية معتمدة من أجهزة المحطة حصراً بدون أي نمذجة أو استكمال؟
+  -> اختر: NOAA ISD / GHCN Direct Station Ground Observations Archive.
+
+- هل دراستك تركز على الطاقة الشمسية والحرارية أو التبخر نتح الزراعي لفترة بعد عام 1981؟
+  -> اختر: NASA POWER API (Agroclimatology / MERRA-2).
+
+- هل تبحث عن المرجع الأوروبي الرسمي المعتمد دولياً WMO/C3S مع دعم مفتاح الحساب الشخصي أو الدقة الفائقة 9 كم؟
+  -> اختر: Copernicus Climate Data Store (CDS / ERA5 / AgERA5).
+
+- هل دراستك تقع في منطقة ذات تضاريس وعرة أو جبال أو تتطلب سلسلة زمنية تبدأ من عام 1940 بسرعة عالية؟
+  -> اختر: Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution).
+====================================================================================================

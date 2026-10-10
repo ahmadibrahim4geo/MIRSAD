@@ -1,18 +1,22 @@
-# NASA POWER & Open-Meteo Climate Atlas Generator
-## منظومة مولد أطلس المناخ الشامل ومكتبة الستايلات الكارتوجرافية المعتمدة لبرنامجي ArcGIS Pro و ArcMap 10.8
+# MIRSAD (مِرصاد) — Climate Atlas & Meteorological Database Platform
+## Multi-source Integrated Reanalysis & Surface Atlas Database
+### منظومة مِرصاد لتوليد الأطالس المناخية وقواعد البيانات الجغرافية المعتمدة لبرنامجي ArcGIS Pro و ArcMap 10.8
 
+[![Platform: MIRSAD](https://img.shields.io/badge/Platform-MIRSAD%20(مِرصاد)-0284c7.svg?style=for-the-badge)](https://github.com/ahmadibrahim4geo)
 [![Developer](https://img.shields.io/badge/Developer-Ahmad%20Ibrahim-1F4E79.svg?style=for-the-badge&logo=github)](https://github.com/ahmadibrahim4geo)
 [![المطور](https://img.shields.io/badge/المطور-أحمد%20إبراهيم-2E75B6.svg?style=for-the-badge)](https://github.com/ahmadibrahim4geo)
 [![ArcGIS Pro](https://img.shields.io/badge/ArcGIS%20Pro-3.x%20%7C%202.x-0079c1.svg)](https://pro.arcgis.com/)
 [![ArcMap](https://img.shields.io/badge/ArcGIS%20Desktop-10.8%20%7C%2010.x-0079c1.svg)](https://desktop.arcgis.com/)
 [![Python Version](https://img.shields.io/badge/Python-3.x%20%7C%202.7-3776ab.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Data Sources](https://img.shields.io/badge/Data%20Sources-NASA%20POWER%20%7C%20Open--Meteo-blue.svg)](https://power.larc.nasa.gov/)
+[![Data Sources](https://img.shields.io/badge/Data%20Sources-NASA%20POWER%20%7C%20ERA5%20%7C%20NOAA%20ISD%20%7C%20WMO-blue.svg)](https://power.larc.nasa.gov/)
 [![Modular Architecture](https://img.shields.io/badge/Elements-18%20Modular%20Layers-darkgreen.svg)](#٣-العناصر-والمؤشرات-المناخية-الـ-18-الموديلية-والربط-الموحد-11-unified-mapping)
 
+> **اسم المنظومة الرسمي:** **مِرصاد (MIRSAD)** — *Multi-source Integrated Reanalysis & Surface Atlas Database*  
 > **إعداد وتطوير:** **أحمد إبراهيم (Ahmad Ibrahim)**  
 > **حساب المطور على GitHub:** [@ahmadibrahim4geo](https://github.com/ahmadibrahim4geo)  
-> **مستودع المشروع:** [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim4geo/NASA-POWER-Climate-Atlas-Generator)
+> **البريد الإلكتروني:** ahmadibrahim.geo@gmail.com  
+> **مستودع المشروع:** [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim4geo/MIRSAD)
 
 ---
 
@@ -40,12 +44,19 @@
 
 # 🇪🇬 دليل الاستخدام والتوثيق الشامل باللغة العربية
 
-### ١. ما هي منظومة أطلس المناخ؟
-منظومة **NASA POWER & Open-Meteo Climate Atlas Generator** هي حزمة برمجية جغرافية متقدمة ومفتوحة المصدر صُممت وهُندست لتوفير حل متكامل لأتمتة إنشاء الأطالس المناخية الإقليمية والوطنية، واستخراج وتحليل البيانات متعددة العقود ونمذجة أسطح الراستر المناخية بدقة علمية وفيزيائية فائقة.
+### ١. ما هي منظومة مِرصاد (MIRSAD)؟
+منظومة **مِرصاد (MIRSAD - Multi-source Integrated Reanalysis & Surface Atlas Database)** هي منصة برمجية وجغرافية متطورة وشاملة صُممت وهُندست لتوفير حل متكامل لأتمتة إنشاء الأطالس المناخية الإقليمية والوطنية، واستخراج وتحليل البيانات متعددة العقود ونمذجة أسطح الراستر المناخية بدقة علمية وفيزيائية فائقة.
 
-تتكون المنظومة من أداتين رئيسيتين تعملان بتناغم كامل:
-1. **صندوق أدوات معالم المناخ (`POWER_Climate_Atlas_Generator_10_8.pyt`)**: أداة الواجهة الرسومية التفاعلية (Geoprocessing Tool) لإدارة الاتصال السحابي، وسحب السلاسل الزمنية، وتطبيق ضوابط الجودة (QA/QC)، وحساب كافة المؤشرات المناخية وتوليد الطبقات النقطية وقواعد البيانات الجغرافية (`File Geodatabase`).
-2. **محرك الأطلس الراستري (`raster_atlas_generator.py`)**: المحرك الحسابي المتقدم للاستيفاء المكاني للأسطح المناخية المستمرة (Spatial Interpolation via IDW, Kriging, Spline, Natural Neighbor)، والتقطيع على الماسك، وبناء خطوط الضغط المتساوي (Isobars)، وحساب شبكات متجهات الرياح، وتطبيق أحدث تقنيات الضغط بدون أي فقدان للبيانات.
+تتكامل داخل المنظومة أربعة مصادر رئيسية للمعلومات المناخية:
+1. **شبكة محطات الأرصاد الأرضية المعتمدة (In-Situ Ground Weather Stations)**: تضم 28,095 محطة عالمية معتمدة من NOAA ISD و WMO (منها 87 محطة رسمية في مصر، وكافة محطات الوطن العربي وقارات العالم).
+2. **نماذج إعادة التحليل الجوي عالية الدقة (High-Resolution Reanalysis)**: نموذج ERA5-Land الأوروبي بدقة ~9 كم (Open-Meteo API).
+3. **النماذج الفضائية وشبكات إعادة التحليل العالمية**: نماذج NASA POWER MERRA-2 للإشعاع والحرارة والضغط، ونموذج CERES للإشعاع الشمسي.
+4. **النموذج الهجين الذكي (Hybrid Ground Truth & Satellite Gap-Filling)**: دمج الأرصاد الأرضية الحقيقية مع الاستكمال التلقائي للفجوات من الأقمار الصناعية ونماذج إعادة التحليل.
+
+تتكون المنظومة من 3 أدوات رئيسية تعمل بتناغم تام:
+1. **أداة محطات الأرصاد الأرضية (`NOAA_WMO_Weather_Stations_Atlas_Generator.pyt`)**: لجلب وفلترة المحطات الأرضية المعتمدة وطنياً وإقليمياً وعالمياً وتوليد أطالسها المناخية.
+2. **صندوق أدوات معالم المناخ (`MIRSAD_Climate_Atlas_Generator_10_8.pyt`)**: لإدارة الاتصال السحابي، وسحب السلاسل الزمنية، وحساب المؤشرات والموديلات الحيوية لطبقات النقاط وبناء قواعد البيانات الجغرافية (`File Geodatabase`).
+3. **محرك الأطلس الراستري (`raster_atlas_generator.py`)**: المحرك الحسابي المتقدم للاستيفاء المكاني للأسطح المناخية المستمرة (Spatial Interpolation via IDW, Kriging, Spline, Natural Neighbor)، والتقطيع على الماسك، وبناء خطوط الضغط المتساوي (Isobars)، وحساب شبكات متجهات الرياح، وتطبيق أحدث تقنيات الضغط بدون أي فقدان للبيانات.
 
 ---
 
@@ -77,17 +88,20 @@
 | **06** | `Relative Humidity` | `06_Relative_Humidity` | `06_Relative_Humidity` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | % |
 | **07** | `Dew Point` | `07_Dew_Point` | `07_Dew_Point` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | °C |
 | **08** | `Solar Radiation` | `08_Solar_Radiation` | `08_Solar_Radiation` | **20** | 8 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | kWh/m²/day |
-| **09** | `UV Index` | `09_UV_Index` | `09_UV_Index` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | مؤشر (0–16+) |
+| **09** | `UV Index` | `09_UV_Index` | `09_UV_Index` | **20** | 8 سنوي وفصلي ومعدل شهري ومدى + 12 شهري مناخي | مؤشر (0–16+) |
 | **10** | `Cloud Cover` | `10_Cloud_Cover` | `10_Cloud_Cover` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | % |
-| **11** | `Heat Index` | `11_Heat_Index` | `11_Heat_Index` | **5** | 5 مؤشرات سنوية وفصلية ومجمعة | °C |
-| **12** | `Wind Chill` | `12_Wind_Chill` | `12_Wind_Chill` | **2** | مؤشران شتويان للبرودة الريحية | °C |
+| **11** | `Heat Index` | `11_Heat_Index` | `11_Heat_Index` | **8** | 8 مؤشرات سنوية وفصلية (ربيع/خريف/مدى فصلي مضافة) | °C |
+| **12** | `Wind Chill` | `12_Wind_Chill` | `12_Wind_Chill` | **2 + 17*** | شتوي وسنوي افتراضياً (*+3 فصول ومديين و12 شهري بتوجل المناطق الباردة) | °C |
 | **13** | `De Martonne Aridity` | `13_De_Martonne_Aridity` | `13_De_Martonne_Aridity` | **1** | مؤشر جفاف سنوي لدي مارتون | مؤشر لا بُعدي |
 | **14** | `Evapotranspiration` | `14_Evapotranspiration` | `14_Evapotranspiration` | **22** | 10 سنوي وفصلي ومعدل شهري + 12 شهري FAO-56 | mm, mm/month |
 | **15** | `UNEP Aridity` | `15_UNEP_Aridity` | `15_UNEP_Aridity` | **1** | مؤشر قحولة سنوي لبرنامج الأمم المتحدة | نسبة |
 | **16** | `Water Deficit` | `16_Water_Deficit` | `16_Water_Deficit` | **1** | عجز وموازنة مائية سنوية | mm/year |
 | **17** | `Dry Months` | `17_Dry_Months` | `17_Dry_Months` | **1** | عدد شهور الجفاف البيولوجي | شهور (0–12) |
 | **18** | `Trends & Baseline Anomalies` | `18_Trends_And_Anomalies` | `18_Trends_And_Anomalies` | **9** | اتجاهات وشذوذ خط الأساس 1991–2020 | °C/decade, mm/decade, % |
-| **الإجمالي** | **18 عنصراً وموديولاً** | **18 Feature Class** | **18 مجلد راستر** | **258** | **114 مؤشراً سنوياً وفصلياً ومعدلاً شهرياً + 144 متوسطاً شهرياً** | — |
+| **الإجمالي** | **18 عنصراً وموديولاً** | **18 Feature Class** | **18 مجلد راستر** | **279** | **123 مؤشراً سنوياً وفصلياً ومعدلاً شهرياً + 156 متوسطاً شهرياً** | — |
+
+> **حقول اختيارية (Opt-in، مطفية افتراضياً):** +17 حقل WC للمناطق الباردة + 132 حقل مدى شهري (`<Prefix>_<Month>_Range`) + 12 حقل HI شهري — لا تظهر في المخرجات الافتراضية.
+> **ملاحظة الهيكلية الانسيابية (Streamlined Schema):** تم تقاعد الحقول الزائدة المكررة حسابياً (13 حقل `_Month_Mean` و 14 حقل `_Seasonal_Range`) من المخرجات والراسترات الافتراضية لمنع التكرار الحسابي، مع الإبقاء الصارم على `Annual_Mean` و `Annual_Range` ومؤشري التطرف البيومناخي (`T_Max_Summer_Month_Mean` و `T_Min_Winter_Month_Mean`).
 
 ---
 
@@ -98,14 +112,14 @@
 * **الأساس العلمي والمنهجية**: يعتمد المؤشر كلياً على معادلة **هارجريفز-ساماني (Hargreaves & Samani, 1985)** والمعتمدة رسمياً لدى منظمة الأغذية والزراعة للأمم المتحدة (**FAO**) في الدليل الإرشادي للري والصرف رقم 56 (**FAO Irrigation and Drainage Paper No. 56**)، وهي الصيغة المثلى لحساب البخر والنتح المرجعي ($ET_o$) من بيانات درجات الحرارة والإشعاع الشمسي الفلكي خارج الغلاف الجوي ($R_a$):
   $$ET_o = 0.0023 \cdot R_a \cdot (T_{mean} + 17.8) \cdot \sqrt{T_{max} - T_{min}} \cdot \text{Days}$$
 * **المؤشرات الثمانية على المستويين السنوي والفصلي**:
-  1. `ET_Annual_Total`: المجموع السنوي للبخر والنتح (ملم/سنة).
-  2. `ET_Annual_Mean`: المتوسط الشهري السنوي للبخر والنتح (ملم/شهر).
+  1. `ET_Annual_Mean`: المتوسط السنوي للبخر والنتح = متوسط مجموع السنة الواحدة (ملم/سنة، يقابل `R_Annual_Mean` للمطر).
+  2. `ET_Month_Mean`: المتوسط الشهري للبخر والنتح (ملم/شهر) = السنوي ÷ 12.
   3. `ET_Annual_Range`: المدى الشهري السنوي للبخر والنتح (أعلى شهر ملم - أدنى شهر ملم).
   4. `ET_Seasonal_Range`: المدى الفصلي للبخر والنتح (أعلى فصل ملم - أدنى فصل ملم).
-  5. `ET_Winter_Total`: مجموع البخر والنتح لفصل الشتاء (DJF) (ملم).
-  6. `ET_Spring_Total`: مجموع البخر والنتح لفصل الربيع (MAM) (ملم).
-  7. `ET_Summer_Total`: مجموع البخر والنتح لفصل الصيف (JJA) (ملم).
-  8. `ET_Autumn_Total`: مجموع البخر والنتح لفصل الخريف (SON) (ملم).
+  5. `ET_Winter_Mean`: متوسط البخر والنتح لفصل الشتاء (DJF) (ملم).
+  6. `ET_Spring_Mean`: متوسط البخر والنتح لفصل الربيع (MAM) (ملم).
+  7. `ET_Summer_Mean`: متوسط البخر والنتح لفصل الصيف (JJA) (ملم).
+  8. `ET_Autumn_Mean`: متوسط البخر والنتح لفصل الخريف (SON) (ملم).
   * **التوافق العكسي**: يتم تصدير الحقل الرديف `PET_Hargreaves_Annual` تلقائياً لضمان استمرارية تشغيل أي مشاريع أو أدوات تحليلية سابقة.
 
 ##### 2. استقلال نقطة الندى (Dew Point):
@@ -133,7 +147,7 @@
   - **الإشعاع الشمسي**: المعدل اليومي للإشعاع الساقط على السطح الأفقي (`Sol_January_Mean` .. `Sol_December_Mean`) (kWh/m²/day).
   - **مؤشر UV**: متوسط مؤشر الأشعة فوق البنفسجية القصوى (`UV_January_Mean` .. `UV_December_Mean`) وفق معيار منظمة الصحة العالمية.
   - **الغطاء السحابي**: متوسط نسبة الغطاء السحابي (`Cld_January_Mean` .. `Cld_December_Mean`) (%).
-  - **البخر والنتح (ET)**: مجموع البخر والنتح الكامن لكل شهر وفق صيغة FAO-56 Hargreaves-Samani (`ET_January_Total` .. `ET_December_Total`) (ملم/شهر).
+  - **البخر والنتح (ET)**: متوسط البخر والنتح لكل شهر وفق صيغة FAO-56 Hargreaves-Samani (`ET_January_Mean` .. `ET_December_Mean`) (ملم/شهر).
 * **هيكلة مصنفات الإكسيل المهنية المزدوجة (Dual-Sheet Workbooks)**:
   - تحتوي كافة ملفات الإكسيل الخاصة بالعناصر المناخية (`00_Tables_And_Reports\*.xls`) على صفحتين مستقلتين:
     1. **صفحة `Data`**: تضم المؤشرات السنوية والفصلية والمدى والمتغيرات المشتقة.
@@ -220,32 +234,39 @@
 #### التشغيل داخل ArcGIS Pro:
 1. افتح مشروعك في **ArcGIS Pro**.
 2. من لوحة الكتالوج (**Catalog Pane**)، اضغط بزر الفأرة الأيمن على **Toolboxes** واختر **Add Toolbox**.
-3. توجه لمجلد المشروع واختر الملف: `POWER_Climate_Atlas_Generator_10_8.pyt`.
+3. توجه لمجلد المشروع واختر الملف: `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
 4. افتح أداة **NASA POWER Climate Atlas Generator**، وحدد نمط التشغيل (Online أو Offline)، ثم حدد طبقة النقاط ومضلع منطقة الدراسة، واضغط **Run**.
 
 #### التشغيل داخل ArcMap 10.8:
 1. افتح نافذة **ArcToolbox**.
-2. اضغط بزر الفأرة الأيمن واختر **Add Toolbox...** وحدد `POWER_Climate_Atlas_Generator_10_8.pyt`.
+2. اضغط بزر الفأرة الأيمن واختر **Add Toolbox...** وحدد `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
 3. انقر نقراً مزدوجاً لفتح الأداة، واختر المعاملات، واضغط **OK**.
 
 ---
 
 # 🇬🇧 English Documentation
 
-An enterprise-grade, peer-reviewed Climate Atlas Generator and scientific spatial modeling suite engineered for **both ArcGIS Pro (3.x / 2.x, Python 3)** and **Esri ArcMap Desktop 10.8 (Python 2.7)**.
+**MIRSAD (مِرصاد)** — *Multi-source Integrated Reanalysis & Surface Atlas Database* is an enterprise-grade, peer-reviewed Climate Atlas Generator and scientific spatial modeling suite engineered for **both ArcGIS Pro (3.x / 2.x, Python 3)** and **Esri ArcMap Desktop 10.8 (Python 2.7)**.
 
 Developed by **Ahmad Ibrahim** ([@ahmadibrahim4geo](https://github.com/ahmadibrahim4geo)).  
-Repository: [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim4geo/NASA-POWER-Climate-Atlas-Generator).
+Repository: [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim4geo/MIRSAD).
 
 ---
 
 ## 🌟 Overview & Architecture
 
-The system automates the acquisition, quality control, climatological calculations, spatial interpolation, and standardized cartographic rendering of multi-decadal historical climate records and future projections directly inside Esri GIS environments.
+The **MIRSAD** platform automates the acquisition, quality control, climatological calculations, spatial interpolation, and standardized cartographic rendering of multi-decadal historical climate records and future projections directly inside Esri GIS environments.
 
-### Core Components:
-1. **`POWER_Climate_Atlas_Generator_10_8.pyt`**: Primary Python Toolbox interface managing data acquisition pipelines, calendar GUI dialogs, indicator modeling, and Geodatabase generation.
-2. **`raster_atlas_generator.py`**: High-performance backend engine managing spatial interpolations (IDW, Kriging, Spline, Natural Neighbor), focal neighborhood smoothing, mask clipping, isobar contour generation, wind vector field modeling, and lossless LZW raster compression.
+### Four Integrated Data Source Tiers:
+1. **Certified Ground Weather Stations**: In-situ observations from 28,095 NOAA ISD & WMO stations worldwide.
+2. **High-Resolution Reanalysis**: ECMWF ERA5-Land (~9 km native resolution via Open-Meteo API).
+3. **Global Satellite & Reanalysis Grids**: NASA POWER MERRA-2 atmospheric model and CERES solar radiation.
+4. **Hybrid Intelligent Engine**: Direct observational ground-truth with automated satellite and reanalysis gap-filling.
+
+### Core Toolbox Components:
+1. **`NOAA_WMO_Weather_Stations_Atlas_Generator.pyt`**: MIRSAD ground weather stations harvesting, boundary-based filtering, and climatological atlas generator.
+2. **`MIRSAD_Climate_Atlas_Generator_10_8.pyt`**: MIRSAD multi-source point climate atlas and bioclimatic indicators modeling engine.
+3. **`raster_atlas_generator.py`**: MIRSAD high-performance spatial interpolation engine (IDW, Kriging, Spline, Natural Neighbor), focal smoothing, mask clipping, isobar contours, wind vector fields, and lossless LZW raster compression.
 
 ---
 
@@ -273,8 +294,8 @@ The platform enforces a strict **1:1 unified naming convention** connecting UI p
 | **08** | `Solar Radiation` | `08_Solar_Radiation` | `08_Solar_Radiation` | 7 | kWh/m²/day, kWh/m²/year |
 | **09** | `UV Index` | `09_UV_Index` | `09_UV_Index` | 6 | Index (0–15+) |
 | **10** | `Cloud Cover` | `10_Cloud_Cover` | `10_Cloud_Cover` | 6 | % |
-| **11** | `Heat Index` | `11_Heat_Index` | `11_Heat_Index` | 5 | °C |
-| **12** | `Wind Chill` | `12_Wind_Chill` | `12_Wind_Chill` | 2 | °C |
+| **11** | `Heat Index` | `11_Heat_Index` | `11_Heat_Index` | 8 | °C |
+| **12** | `Wind Chill` | `12_Wind_Chill` | `12_Wind_Chill` | 2 (+17 opt-in) | °C |
 | **13** | `De Martonne Aridity` | `13_De_Martonne_Aridity` | `13_De_Martonne_Aridity` | 1 | Dimensionless Index |
 | **14** | `Evapotranspiration` | `14_Evapotranspiration` | `14_Evapotranspiration` | 8 | mm/year, mm/month, mm |
 | **15** | `UNEP Aridity` | `15_UNEP_Aridity` | `15_UNEP_Aridity` | 1 | Ratio |
@@ -286,11 +307,11 @@ The platform enforces a strict **1:1 unified naming convention** connecting UI p
 - **Methodological Origin**: Implements the globally recognized **FAO-56 Hargreaves-Samani method** (Hargreaves & Samani, 1985), estimating reference evapotranspiration ($ET_o$) using extraterrestrial solar radiation ($R_a$), mean temperature, and diurnal temperature range:
   $$ET_o = 0.0023 \cdot R_a \cdot (T_{mean} + 17.8) \cdot \sqrt{T_{max} - T_{min}} \cdot \text{Days}$$
 - **8 Climatological & Seasonal Indicators**:
-  - `ET_Annual_Total`: Total cumulative annual evapotranspiration (mm/year).
-  - `ET_Annual_Mean`: Mean monthly evapotranspiration (mm/month).
+  - `ET_Annual_Mean`: Mean annual evapotranspiration = mean of per-year annual sums (mm/year, mirrors `R_Annual_Mean`).
+  - `ET_Month_Mean`: Mean monthly evapotranspiration (mm/month) = Annual ÷ 12.
   - `ET_Annual_Range`: Monthly range between peak and minimum ET months (mm/month).
   - `ET_Seasonal_Range`: Seasonal range between maximum and minimum season totals (mm).
-  - `ET_Winter_Total` / `ET_Spring_Total` / `ET_Summer_Total` / `ET_Autumn_Total`: Seasonal accumulated totals (DJF, MAM, JJA, SON) (mm).
+  - `ET_Winter_Mean` / `ET_Spring_Mean` / `ET_Summer_Mean` / `ET_Autumn_Mean`: Seasonal means (DJF, MAM, JJA, SON) (mm).
   - Full backward compatibility maintained via `PET_Hargreaves_Annual`.
 
 ---
@@ -347,11 +368,11 @@ The platform enforces a strict **1:1 unified naming convention** connecting UI p
 ## 🚀 Getting Started & Verification
 
 ### Running in ArcGIS Pro
-1. Add `POWER_Climate_Atlas_Generator_10_8.pyt` via **Catalog -> Toolboxes -> Add Toolbox**.
+1. Add `MIRSAD_Climate_Atlas_Generator_10_8.pyt` via **Catalog -> Toolboxes -> Add Toolbox**.
 2. Select your operation mode, assign your station layer and study area mask, and click **Run**.
 
 ### Running in ArcMap 10.8
-1. Open ArcToolbox -> Right-click -> **Add Toolbox...** -> Select `POWER_Climate_Atlas_Generator_10_8.pyt`.
+1. Open ArcToolbox -> Right-click -> **Add Toolbox...** -> Select `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
 2. Launch the tool, configure parameters, and execute.
 
 ---
@@ -360,5 +381,5 @@ The platform enforces a strict **1:1 unified naming convention** connecting UI p
 
 - **Developer:** **Ahmad Ibrahim** (أحمد إبراهيم)
 - **GitHub:** [@ahmadibrahim4geo](https://github.com/ahmadibrahim4geo)
-- **Repository:** [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim4geo/NASA-POWER-Climate-Atlas-Generator)
+- **Repository:** [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim4geo/MIRSAD)
 - **License:** MIT License

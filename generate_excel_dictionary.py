@@ -358,6 +358,24 @@ FIELDS_DATA = [
         "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة خلال فصل الصيف (°C)"
     },
     {
+        "short_name": "HI_SprMean",
+        "full_name": "HI_Spring_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة خلال فصل الربيع (موسم الخماسين والتحول الحراري).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة خلال فصل الربيع (°C)"
+    },
+    {
+        "short_name": "HI_AutMean",
+        "full_name": "HI_Autumn_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة خلال فصل الخريف (الاحترار المتأخر في سبتمبر).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة خلال فصل الخريف (°C)"
+    },
+    {
         "short_name": "HI_WinMean",
         "full_name": "HI_Winter_Mean",
         "module_code": "11_Heat_Index",
@@ -376,6 +394,15 @@ FIELDS_DATA = [
         "map_title": u"خريطة المدى السنوي لمؤشر الحرارة المحسوسة (°C)"
     },
     {
+        "short_name": "HI_SeaRng",
+        "full_name": "HI_Seasonal_Range",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"المدى الفصلي لمؤشر الحرارة المحسوسة (الفارق بين أعلى متوسط فصلي وأدناه).",
+        "unit": u"°C",
+        "map_title": u"خريطة المدى الفصلي لمؤشر الحرارة المحسوسة (°C)"
+    },
+    {
         "short_name": "WBGT_SuMn",
         "full_name": "WBGT_Summer_Mean",
         "module_code": "11_Heat_Index",
@@ -383,6 +410,114 @@ FIELDS_DATA = [
         "desc_ar": u"متوسط درجة حرارة البصيلة الرطبة الكروية الصيفي في الظل (معيار ISO 7243 للإجهاد المهني والرياضي).",
         "unit": u"°C",
         "map_title": u"خريطة متوسط مؤشر الإجهاد الحراري الصيفي (WBGT) (°C)"
+    },
+    {
+        "short_name": "HI_JanMean",
+        "full_name": "HI_January_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر يناير (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر يناير (°C)"
+    },
+    {
+        "short_name": "HI_FebMean",
+        "full_name": "HI_February_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر فبراير (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر فبراير (°C)"
+    },
+    {
+        "short_name": "HI_MarMean",
+        "full_name": "HI_March_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر مارس (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر مارس (°C)"
+    },
+    {
+        "short_name": "HI_AprMean",
+        "full_name": "HI_April_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر أبريل (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر أبريل (°C)"
+    },
+    {
+        "short_name": "HI_MayMean",
+        "full_name": "HI_May_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر مايو (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر مايو (°C)"
+    },
+    {
+        "short_name": "HI_JunMean",
+        "full_name": "HI_June_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر يونيو (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر يونيو (°C)"
+    },
+    {
+        "short_name": "HI_JulMean",
+        "full_name": "HI_July_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر يوليو (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر يوليو (°C)"
+    },
+    {
+        "short_name": "HI_AugMean",
+        "full_name": "HI_August_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر أغسطس (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر أغسطس (°C)"
+    },
+    {
+        "short_name": "HI_SepMean",
+        "full_name": "HI_September_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر سبتمبر (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر سبتمبر (°C)"
+    },
+    {
+        "short_name": "HI_OctMean",
+        "full_name": "HI_October_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر أكتوبر (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر أكتوبر (°C)"
+    },
+    {
+        "short_name": "HI_NovMean",
+        "full_name": "HI_November_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر نوفمبر (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر نوفمبر (°C)"
+    },
+    {
+        "short_name": "HI_DecMean",
+        "full_name": "HI_December_Mean",
+        "module_code": "11_Heat_Index",
+        "module_name": "11_Heat_Index (مؤشر الحرارة)",
+        "desc_ar": u"متوسط مؤشر الحرارة المحسوسة (روثفوز) لشهر ديسمبر (خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مؤشر الحرارة المحسوسة لشهر ديسمبر (°C)"
     },
 
     # --- 4. نقطة الندى (07_Dew_Point) ---
@@ -639,6 +774,15 @@ FIELDS_DATA = [
         "desc_ar": u"متوسط هطول الأمطار خلال فصل الخريف (شهور سبتمبر، أكتوبر، نوفمبر - SON).",
         "unit": u"مم/فصل (mm/season)",
         "map_title": u"خريطة متوسط هطول الأمطار خلال فصل الخريف (مم/فصل)"
+    },
+    {
+        "short_name": "R_AutTot",
+        "full_name": "R_Autumn_Total",
+        "module_code": "02_Precipitation",
+        "module_name": "02_Precipitation (الأمطار)",
+        "desc_ar": u"إجمالي كميات الأمطار التراكمية لفصل الخريف الأرصادي عبر سنوات فترة الرصد (SON).",
+        "unit": u"ملم (mm)",
+        "map_title": u"خريطة إجمالي كميات أمطار فصل الخريف (ملم)"
     },
     {
         "short_name": "R_JanMean",
@@ -2223,6 +2367,159 @@ FIELDS_DATA = [
         "map_title": u"خريطة متوسط مبرد الرياح خلال فصل الشتاء (°C)"
     },
     {
+        "short_name": "WC_SprMean",
+        "full_name": "WC_Spring_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح خلال فصل الربيع (خيار إضافي للمناطق الباردة صيفاً/ربيعاً).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح خلال فصل الربيع (°C)"
+    },
+    {
+        "short_name": "WC_SumMean",
+        "full_name": "WC_Summer_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح خلال فصل الصيف (خيار إضافي للمناطق الباردة صيفاً).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح خلال فصل الصيف (°C)"
+    },
+    {
+        "short_name": "WC_AutMean",
+        "full_name": "WC_Autumn_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح خلال فصل الخريف (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح خلال فصل الخريف (°C)"
+    },
+    {
+        "short_name": "WC_JanMean",
+        "full_name": "WC_January_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر يناير (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر يناير (°C)"
+    },
+    {
+        "short_name": "WC_FebMean",
+        "full_name": "WC_February_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر فبراير (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر فبراير (°C)"
+    },
+    {
+        "short_name": "WC_MarMean",
+        "full_name": "WC_March_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر مارس (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر مارس (°C)"
+    },
+    {
+        "short_name": "WC_AprMean",
+        "full_name": "WC_April_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر أبريل (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر أبريل (°C)"
+    },
+    {
+        "short_name": "WC_MayMean",
+        "full_name": "WC_May_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر مايو (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر مايو (°C)"
+    },
+    {
+        "short_name": "WC_JunMean",
+        "full_name": "WC_June_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر يونيو (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر يونيو (°C)"
+    },
+    {
+        "short_name": "WC_JulMean",
+        "full_name": "WC_July_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر يوليو (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر يوليو (°C)"
+    },
+    {
+        "short_name": "WC_AugMean",
+        "full_name": "WC_August_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر أغسطس (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر أغسطس (°C)"
+    },
+    {
+        "short_name": "WC_SepMean",
+        "full_name": "WC_September_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر سبتمبر (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر سبتمبر (°C)"
+    },
+    {
+        "short_name": "WC_OctMean",
+        "full_name": "WC_October_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر أكتوبر (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر أكتوبر (°C)"
+    },
+    {
+        "short_name": "WC_NovMean",
+        "full_name": "WC_November_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر نوفمبر (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر نوفمبر (°C)"
+    },
+    {
+        "short_name": "WC_DecMean",
+        "full_name": "WC_December_Mean",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"متوسط مبرد الرياح لشهر ديسمبر (خيار إضافي للمناطق الباردة).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط مبرد الرياح لشهر ديسمبر (°C)"
+    },
+    {
+        "short_name": "WC_AnRng",
+        "full_name": "WC_Annual_Range",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"المدى السنوي لمبرد الرياح (الفارق بين أعلى شهر وأدناه، خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة المدى السنوي لمبرد الرياح (°C)"
+    },
+    {
+        "short_name": "WC_SeaRng",
+        "full_name": "WC_Seasonal_Range",
+        "module_code": "12_Wind_Chill",
+        "module_name": "12_Wind_Chill (مبرد الرياح)",
+        "desc_ar": u"المدى الفصلي لمبرد الرياح (الفارق بين أعلى فصل وأدناه، خيار إضافي).",
+        "unit": u"°C",
+        "map_title": u"خريطة المدى الفصلي لمبرد الرياح (°C)"
+    },
+    {
         "short_name": "WC_AnnMean",
         "full_name": "WC_Annual_Mean",
         "module_code": "12_Wind_Chill",
@@ -2245,22 +2542,13 @@ FIELDS_DATA = [
 
     # --- 15. البخر والنتح (14_Evapotranspiration) ---
     {
-        "short_name": "ET_AnnTot",
-        "full_name": "ET_Annual_Total",
-        "module_code": "14_Evapotranspiration",
-        "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"المجموع التراكمي السنوي للبخر والنتح المرجعي الكامن المحسوب بمعادلة Hargreaves-Samani (FAO-56).",
-        "unit": u"ملم (mm)",
-        "map_title": u"خريطة المجموع السنوي للبخر والنتح (ملم)"
-    },
-    {
         "short_name": "ET_AnnMean",
         "full_name": "ET_Annual_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"المعدل الشهري للبخر والنتح المرجعي (المجموع التراكمي السنوي مقسوماً على 12 شهراً).",
-        "unit": u"ملم (mm)",
-        "map_title": u"خريطة المعدل الشهري للبخر والنتح (ملم)"
+        "desc_ar": u"متوسط مجموع البخر والنتح السنوي (متوسط السنة الواحدة من التراكمات بهارجريفز-ساماني FAO-56، يقابل R_Annual_Mean للمطر).",
+        "unit": u"ملم/سنة (mm/year)",
+        "map_title": u"خريطة المتوسط السنوي للبخر والنتح (ملم/سنة)"
     },
     {
         "short_name": "ET_MonMean",
@@ -2290,157 +2578,157 @@ FIELDS_DATA = [
         "map_title": u"خريطة المدى الفصلي للبخر والنتح (ملم)"
     },
     {
-        "short_name": "ET_WinTot",
-        "full_name": "ET_Winter_Total",
+        "short_name": "ET_WinMean",
+        "full_name": "ET_Winter_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"مجموع البخر والنتح لفصل الشتاء الأرصادي (شهور ديسمبر، يناير، فبراير - DJF).",
+        "desc_ar": u"متوسط البخر والنتح لفصل الشتاء (متوسط مجموع ديسمبر، يناير، فبراير - DJF).",
         "unit": u"ملم (mm)",
-        "map_title": u"خريطة مجموع البخر والنتح خلال فصل الشتاء (ملم)"
+        "map_title": u"خريطة متوسط البخر والنتح خلال فصل الشتاء (ملم)"
     },
     {
-        "short_name": "ET_SprTot",
-        "full_name": "ET_Spring_Total",
+        "short_name": "ET_SprMean",
+        "full_name": "ET_Spring_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"مجموع البخر والنتح لفصل الربيع الأرصادي (شهور مارس، أبريل، مايو - MAM).",
+        "desc_ar": u"متوسط البخر والنتح لفصل الربيع (متوسط مجموع مارس، أبريل، مايو - MAM).",
         "unit": u"ملم (mm)",
-        "map_title": u"خريطة مجموع البخر والنتح خلال فصل الربيع (ملم)"
+        "map_title": u"خريطة متوسط البخر والنتح خلال فصل الربيع (ملم)"
     },
     {
-        "short_name": "ET_SumTot",
-        "full_name": "ET_Summer_Total",
+        "short_name": "ET_SumMean",
+        "full_name": "ET_Summer_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"مجموع البخر والنتح لفصل الصيف الأرصادي (شهور يونيو، يوليو، أغسطس - JJA).",
+        "desc_ar": u"متوسط البخر والنتح لفصل الصيف (متوسط مجموع يونيو، يوليو، أغسطس - JJA).",
         "unit": u"ملم (mm)",
-        "map_title": u"خريطة مجموع البخر والنتح خلال فصل الصيف (ملم)"
+        "map_title": u"خريطة متوسط البخر والنتح خلال فصل الصيف (ملم)"
     },
     {
-        "short_name": "ET_AutTot",
-        "full_name": "ET_Autumn_Total",
+        "short_name": "ET_AutMean",
+        "full_name": "ET_Autumn_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"مجموع البخر والنتح لفصل الخريف الأرصادي (شهور سبتمبر، أكتوبر، نوفمبر - SON).",
+        "desc_ar": u"متوسط البخر والنتح لفصل الخريف (متوسط مجموع سبتمبر، أكتوبر، نوفمبر - SON).",
         "unit": u"ملم (mm)",
-        "map_title": u"خريطة مجموع البخر والنتح خلال فصل الخريف (ملم)"
+        "map_title": u"خريطة متوسط البخر والنتح خلال فصل الخريف (ملم)"
     },
     {
         "short_name": "PET_HarAnn",
         "full_name": "PET_Hargreaves_Annual",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"التبخر-نتح الكامن السنوي بهارجريفز (حقل رديف مطابق تماماً لـ ET_Annual_Total للتوافقية العكسية).",
-        "unit": u"ملم (mm)",
-        "map_title": u"خريطة التبخر والنتح الكامن السنوي بهارجريفز (ملم)"
+        "desc_ar": u"التبخر-نتح الكامن السنوي بهارجريفز (حقل رديف مطابق تماماً لـ ET_Annual_Mean للتوافقية العكسية).",
+        "unit": u"ملم/سنة (mm/year)",
+        "map_title": u"خريطة التبخر والنتح الكامن السنوي بهارجريفز (ملم/سنة)"
     },
     {
-        "short_name": "ET_JanTot",
-        "full_name": "ET_January_Total",
+        "short_name": "ET_JanMean",
+        "full_name": "ET_January_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر يناير بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر يناير بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر يناير (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر يناير (ملم/شهر)"
     },
     {
-        "short_name": "ET_FebTot",
-        "full_name": "ET_February_Total",
+        "short_name": "ET_FebMean",
+        "full_name": "ET_February_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر فبراير بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر فبراير بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر فبراير (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر فبراير (ملم/شهر)"
     },
     {
-        "short_name": "ET_MarTot",
-        "full_name": "ET_March_Total",
+        "short_name": "ET_MarMean",
+        "full_name": "ET_March_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر مارس بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر مارس بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر مارس (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر مارس (ملم/شهر)"
     },
     {
-        "short_name": "ET_AprTot",
-        "full_name": "ET_April_Total",
+        "short_name": "ET_AprMean",
+        "full_name": "ET_April_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر أبريل بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر أبريل بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر أبريل (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر أبريل (ملم/شهر)"
     },
     {
-        "short_name": "ET_MayTot",
-        "full_name": "ET_May_Total",
+        "short_name": "ET_MayMean",
+        "full_name": "ET_May_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر مايو بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر مايو بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر مايو (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر مايو (ملم/شهر)"
     },
     {
-        "short_name": "ET_JunTot",
-        "full_name": "ET_June_Total",
+        "short_name": "ET_JunMean",
+        "full_name": "ET_June_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر يونيو بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر يونيو بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر يونيو (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر يونيو (ملم/شهر)"
     },
     {
-        "short_name": "ET_JulTot",
-        "full_name": "ET_July_Total",
+        "short_name": "ET_JulMean",
+        "full_name": "ET_July_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر يوليو بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر يوليو بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر يوليو (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر يوليو (ملم/شهر)"
     },
     {
-        "short_name": "ET_AugTot",
-        "full_name": "ET_August_Total",
+        "short_name": "ET_AugMean",
+        "full_name": "ET_August_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر أغسطس بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر أغسطس بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر أغسطس (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر أغسطس (ملم/شهر)"
     },
     {
-        "short_name": "ET_SepTot",
-        "full_name": "ET_September_Total",
+        "short_name": "ET_SepMean",
+        "full_name": "ET_September_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر سبتمبر بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر سبتمبر بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر سبتمبر (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر سبتمبر (ملم/شهر)"
     },
     {
-        "short_name": "ET_OctTot",
-        "full_name": "ET_October_Total",
+        "short_name": "ET_OctMean",
+        "full_name": "ET_October_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر أكتوبر بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر أكتوبر بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر أكتوبر (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر أكتوبر (ملم/شهر)"
     },
     {
-        "short_name": "ET_NovTot",
-        "full_name": "ET_November_Total",
+        "short_name": "ET_NovMean",
+        "full_name": "ET_November_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر نوفمبر بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر نوفمبر بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر نوفمبر (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر نوفمبر (ملم/شهر)"
     },
     {
-        "short_name": "ET_DecTot",
-        "full_name": "ET_December_Total",
+        "short_name": "ET_DecMean",
+        "full_name": "ET_December_Mean",
         "module_code": "14_Evapotranspiration",
         "module_name": "14_Evapotranspiration (البخر والنتح)",
-        "desc_ar": u"متوسط مجموع البخر والنتح المرجعي الكامن لشهر ديسمبر بطريقة هارجريفز-ساماني FAO-56.",
+        "desc_ar": u"متوسط البخر والنتح لشهر ديسمبر بطريقة هارجريفز-ساماني (ملم/شهر).",
         "unit": u"ملم/شهر (mm/month)",
-        "map_title": u"خريطة مجموع البخر والنتح لشهر ديسمبر (ملم/شهر)"
+        "map_title": u"خريطة متوسط البخر والنتح لشهر ديسمبر (ملم/شهر)"
     },
 
     # --- 16. مؤشر القحولة العالمي (15_UNEP_Aridity) ---
@@ -2478,8 +2766,8 @@ FIELDS_DATA = [
 
     # --- 19. الاتجاهات والشذوذ المناخي (18_Trends_And_Anomalies) ---
     {
-        "short_name": "T_TrendDec",
-        "full_name": "T_Trend_Decade",
+        "short_name": "T_AnnTrDec",
+        "full_name": "T_Annual_Trend_Decade",
         "module_code": "18_Trends_And_Anomalies",
         "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
         "desc_ar": u"معدل تغير واتجاه درجة الحرارة لكل عقد زمني (10 سنوات) باستخدام انحدار المربعات الصغرى الخطي.",
@@ -2487,8 +2775,8 @@ FIELDS_DATA = [
         "map_title": u"خريطة اتجاه تغير درجة الحرارة في العقد الزمني (°C/decade)"
     },
     {
-        "short_name": "R_TrendDec",
-        "full_name": "R_Trend_Decade",
+        "short_name": "R_AnnTrDec",
+        "full_name": "R_Annual_Trend_Decade",
         "module_code": "18_Trends_And_Anomalies",
         "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
         "desc_ar": u"معدل تغير واتجاه تساقط الأمطار لكل عقد زمني (10 سنوات) باستخدام انحدار المربعات الصغرى الخطي.",
@@ -2496,8 +2784,8 @@ FIELDS_DATA = [
         "map_title": u"خريطة اتجاه تغير تساقط الأمطار في العقد الزمني (mm/decade)"
     },
     {
-        "short_name": "T_AnomAnn",
-        "full_name": "T_Anom_Annual",
+        "short_name": "T_AnnAnom",
+        "full_name": "T_Annual_Anom",
         "module_code": "18_Trends_And_Anomalies",
         "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
         "desc_ar": u"الشذوذ الحراري السنوي لدرجة الحرارة مقارنة بخط الأساس المناخي العالمي 1991–2020.",
@@ -2523,8 +2811,8 @@ FIELDS_DATA = [
         "map_title": u"خريطة الشذوذ الحراري لفصل الصيف مقارنة بخط أساس 1991–2020 (°C)"
     },
     {
-        "short_name": "R_AnomAnn",
-        "full_name": "R_Anom_Annual",
+        "short_name": "R_AnnAnom",
+        "full_name": "R_Annual_Anom",
         "module_code": "18_Trends_And_Anomalies",
         "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
         "desc_ar": u"شذوذ الأمطار السنوي المطلق مقارنة بمتوسط الأمطار لخط الأساس المناخي 1991–2020.",
@@ -2532,8 +2820,8 @@ FIELDS_DATA = [
         "map_title": u"خريطة شذوذ تساقط الأمطار السنوي مقارنة بخط أساس 1991–2020 (ملم)"
     },
     {
-        "short_name": "R_AnomPct",
-        "full_name": "R_Anom_Annual_Pct",
+        "short_name": "R_AnnAnPct",
+        "full_name": "R_Annual_Anom_Pct",
         "module_code": "18_Trends_And_Anomalies",
         "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
         "desc_ar": u"شذوذ الأمطار السنوي كنسبة مئوية من خط الأساس المناخي 1991–2020 (فرق نسبي مئوي).",
@@ -2557,8 +2845,548 @@ FIELDS_DATA = [
         "desc_ar": u"شذوذ أمطار فصل الشتاء كنسبة مئوية مقارنة بأمطار شتاء خط الأساس المناخي 1991–2020.",
         "unit": u"%",
         "map_title": u"خريطة الشذوذ النسبي المئوي لأمطار الشتاء مقارنة بخط أساس 1991–2020 (%)"
+    },
+    {
+        "short_name": "T_WinTrDec",
+        "full_name": "T_Winter_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه درجة حرارة فصل الشتاء لكل عقد زمني (10 سنوات) باستخدام انحدار المربعات الصغرى.",
+        "unit": u"°C/decade",
+        "map_title": u"خريطة اتجاه تغير حرارة فصل الشتاء في العقد الزمني (°C/decade)"
+    },
+    {
+        "short_name": "T_SprTrDec",
+        "full_name": "T_Spring_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه درجة حرارة فصل الربيع لكل عقد زمني (10 سنوات) باستخدام انحدار المربعات الصغرى.",
+        "unit": u"°C/decade",
+        "map_title": u"خريطة اتجاه تغير حرارة فصل الربيع في العقد الزمني (°C/decade)"
+    },
+    {
+        "short_name": "T_SumTrDec",
+        "full_name": "T_Summer_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه درجة حرارة فصل الصيف لكل عقد زمني (10 سنوات) باستخدام انحدار المربعات الصغرى.",
+        "unit": u"°C/decade",
+        "map_title": u"خريطة اتجاه تغير حرارة فصل الصيف في العقد الزمني (°C/decade)"
+    },
+    {
+        "short_name": "T_AutTrDec",
+        "full_name": "T_Autumn_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه درجة حرارة فصل الخريف لكل عقد زمني (10 سنوات) باستخدام انحدار المربعات الصغرى.",
+        "unit": u"°C/decade",
+        "map_title": u"خريطة اتجاه تغير حرارة فصل الخريف في العقد الزمني (°C/decade)"
+    },
+    {
+        "short_name": "T_AnomSpr",
+        "full_name": "T_Anom_Spring",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"الشذوذ الحراري لفصل الربيع مقارنة بمتوسط شهور الربيع لخط الأساس المناخي 1991–2020.",
+        "unit": u"°C",
+        "map_title": u"خريطة الشذوذ الحراري لفصل الربيع مقارنة بخط أساس 1991–2020 (°C)"
+    },
+    {
+        "short_name": "T_AnomAut",
+        "full_name": "T_Anom_Autumn",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"الشذوذ الحراري لفصل الخريف مقارنة بمتوسط شهور الخريف لخط الأساس المناخي 1991–2020.",
+        "unit": u"°C",
+        "map_title": u"خريطة الشذوذ الحراري لفصل الخريف مقارنة بخط أساس 1991–2020 (°C)"
+    },
+    {
+        "short_name": "R_WinTrDec",
+        "full_name": "R_Winter_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه تساقط أمطار فصل الشتاء لكل عقد زمني (10 سنوات) بانحدار المربعات الصغرى.",
+        "unit": u"mm/decade",
+        "map_title": u"خريطة اتجاه تغير أمطار فصل الشتاء في العقد الزمني (mm/decade)"
+    },
+    {
+        "short_name": "R_SprTrDec",
+        "full_name": "R_Spring_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه تساقط أمطار فصل الربيع لكل عقد زمني (10 سنوات) بانحدار المربعات الصغرى.",
+        "unit": u"mm/decade",
+        "map_title": u"خريطة اتجاه تغير أمطار فصل الربيع في العقد الزمني (mm/decade)"
+    },
+    {
+        "short_name": "R_SumTrDec",
+        "full_name": "R_Summer_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه تساقط أمطار فصل الصيف لكل عقد زمني (10 سنوات) بانحدار المربعات الصغرى.",
+        "unit": u"mm/decade",
+        "map_title": u"خريطة اتجاه تغير أمطار فصل الصيف في العقد الزمني (mm/decade)"
+    },
+    {
+        "short_name": "R_AutTrDec",
+        "full_name": "R_Autumn_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه تساقط أمطار فصل الخريف لكل عقد زمني (10 سنوات) بانحدار المربعات الصغرى.",
+        "unit": u"mm/decade",
+        "map_title": u"خريطة اتجاه تغير أمطار فصل الخريف في العقد الزمني (mm/decade)"
+    },
+    {
+        "short_name": "R_AnomSpr",
+        "full_name": "R_Anom_Spring",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ أمطار فصل الربيع المطلق مقارنة بأمطار ربيع خط الأساس المناخي 1991–2020.",
+        "unit": u"ملم (mm)",
+        "map_title": u"خريطة شذوذ أمطار فصل الربيع مقارنة بخط أساس 1991–2020 (ملم)"
+    },
+    {
+        "short_name": "R_AnSpPct",
+        "full_name": "R_Anom_Spring_Pct",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ أمطار فصل الربيع كنسبة مئوية مقارنة بأمطار ربيع خط الأساس المناخي 1991–2020.",
+        "unit": u"%",
+        "map_title": u"خريطة الشذوذ النسبي المئوي لأمطار الربيع مقارنة بخط أساس 1991–2020 (%)"
+    },
+    {
+        "short_name": "R_AnomSum",
+        "full_name": "R_Anom_Summer",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ أمطار فصل الصيف المطلق مقارنة بأمطار صيف خط الأساس المناخي 1991–2020.",
+        "unit": u"ملم (mm)",
+        "map_title": u"خريطة شذوذ أمطار فصل الصيف مقارنة بخط أساس 1991–2020 (ملم)"
+    },
+    {
+        "short_name": "R_AnSuPct",
+        "full_name": "R_Anom_Summer_Pct",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ أمطار فصل الصيف كنسبة مئوية مقارنة بأمطار صيف خط الأساس المناخي 1991–2020.",
+        "unit": u"%",
+        "map_title": u"خريطة الشذوذ النسبي المئوي لأمطار الصيف مقارنة بخط أساس 1991–2020 (%)"
+    },
+    {
+        "short_name": "R_AnomAut",
+        "full_name": "R_Anom_Autumn",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ أمطار فصل الخريف المطلق مقارنة بأمطار خريف خط الأساس المناخي 1991–2020.",
+        "unit": u"ملم (mm)",
+        "map_title": u"خريطة شذوذ أمطار فصل الخريف مقارنة بخط أساس 1991–2020 (ملم)"
+    },
+    {
+        "short_name": "R_AnAuPct",
+        "full_name": "R_Anom_Autumn_Pct",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ أمطار فصل الخريف كنسبة مئوية مقارنة بأمطار خريف خط الأساس المناخي 1991–2020.",
+        "unit": u"%",
+        "map_title": u"خريطة الشذوذ النسبي المئوي لأمطار الخريف مقارنة بخط أساس 1991–2020 (%)"
+    },
+    {
+        "short_name": "T_MonTrDec",
+        "full_name": "T_Month_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه درجة الحرارة الشهرية العامة لكل عقد زمني (10 سنوات).",
+        "unit": u"°C/decade",
+        "map_title": u"خريطة اتجاه تغير درجات الحرارة الشهرية في العقد الزمني (°C/decade)"
+    },
+    {
+        "short_name": "T_AnomMon",
+        "full_name": "T_Anom_Month",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"الشذوذ الحراري الشهري العام لدرجة الحرارة مقارنة بمتوسط الشهور لخط الأساس المناخي 1991–2020.",
+        "unit": u"°C",
+        "map_title": u"خريطة الشذوذ الحراري الشهري العام مقارنة بخط أساس 1991–2020 (°C)"
+    },
+    {
+        "short_name": "R_MonTrDec",
+        "full_name": "R_Month_Trend_Decade",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"معدل تغير واتجاه تساقط الأمطار الشهرية العامة لكل عقد زمني (10 سنوات).",
+        "unit": u"mm/decade",
+        "map_title": u"خريطة اتجاه تغير تساقط الأمطار الشهرية في العقد الزمني (mm/decade)"
+    },
+    {
+        "short_name": "R_AnomMon",
+        "full_name": "R_Anom_Month",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ الأمطار الشهري العام المطلق مقارنة بمتوسط الشهور لخط الأساس المناخي 1991–2020.",
+        "unit": u"ملم (mm)",
+        "map_title": u"خريطة شذوذ الأمطار الشهري العام مقارنة بخط أساس 1991–2020 (ملم)"
+    },
+    {
+        "short_name": "R_AnMonPct",
+        "full_name": "R_Anom_Month_Pct",
+        "module_code": "18_Trends_And_Anomalies",
+        "module_name": "18_Trends_And_Anomalies (الاتجاهات والشذوذ)",
+        "desc_ar": u"شذوذ الأمطار الشهري العام كنسبة مئوية من متوسط الشهور لخط الأساس المناخي 1991–2020.",
+        "unit": u"%",
+        "map_title": u"خريطة الشذوذ النسبي المئوي للأمطار الشهرية العامة مقارنة بخط أساس 1991–2020 (%)"
+    },
+    {
+        "short_name": "LST_AnMean",
+        "full_name": "LST_Annual_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"المتوسط السنوي لدرجة حرارة سطح الأرض (LST) عبر سنوات السلسلة المناخية (1996–2025).",
+        "unit": u"°C",
+        "map_title": u"خريطة المتوسط السنوي لدرجة حرارة سطح الأرض (°C)"
+    },
+    {
+        "short_name": "LST_MonMn",
+        "full_name": "LST_Month_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط الشهور السنوي لدرجة حرارة سطح الأرض (عمود جدول إحصائي فقط مطابق للسنوي).",
+        "unit": u"°C",
+        "map_title": u"متوسط الشهور لدرجة حرارة سطح الأرض (°C)"
+    },
+    {
+        "short_name": "LST_WinMn",
+        "full_name": "LST_Winter_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لفصل الشتاء (ديسمبر، يناير، فبراير).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط درجة حرارة سطح الأرض شتاءً (°C)"
+    },
+    {
+        "short_name": "LST_SprMn",
+        "full_name": "LST_Spring_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لفصل الربيع (مارس، أبريل، مايو).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط درجة حرارة سطح الأرض ربيعاً (°C)"
+    },
+    {
+        "short_name": "LST_SumMn",
+        "full_name": "LST_Summer_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لفصل الصيف (يونيو، يوليو، أغسطس).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط درجة حرارة سطح الأرض صيفاً (°C)"
+    },
+    {
+        "short_name": "LST_AutMn",
+        "full_name": "LST_Autumn_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لفصل الخريف (سبتمبر، أكتوبر، نوفمبر).",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط درجة حرارة سطح الأرض خريفاً (°C)"
+    },
+    {
+        "short_name": "LST_AnRng",
+        "full_name": "LST_Annual_Range",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"المدى السنوي لدرجة حرارة سطح الأرض (الفرق بين أعلى وأدنى متوسط شهري).",
+        "unit": u"°C",
+        "map_title": u"خريطة المدى السنوي لدرجة حرارة سطح الأرض (°C)"
+    },
+    {
+        "short_name": "LST_SeaRng",
+        "full_name": "LST_Seasonal_Range",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"المدى الفصلي لدرجة حرارة سطح الأرض (الفرق بين أدفأ فصل وأبرد فصل).",
+        "unit": u"°C",
+        "map_title": u"خريطة المدى الفصلي لدرجة حرارة سطح الأرض (°C)"
+    },
+    {
+        "short_name": "LST_mT_Ann",
+        "full_name": "LST_minus_T_Annual",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"الفارق السنوي بين حرارة السطح وحرارة الهواء عند 2 م (LST_Annual_Mean - T_Annual_Mean).",
+        "unit": u"°C",
+        "map_title": u"خريطة الفارق السنوي بين حرارة السطح وحرارة الهواء (°C)"
+    },
+    {
+        "short_name": "LST_mT_Wi",
+        "full_name": "LST_minus_T_Winter",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق الشتاء بين حرارة السطح وحرارة الهواء عند 2 م (LST_Winter_Mean - T_Winter_Mean).",
+        "unit": u"°C",
+        "map_title": u"خريطة فارق الشتاء بين حرارة السطح وحرارة الهواء (°C)"
+    },
+    {
+        "short_name": "LST_mT_Sp",
+        "full_name": "LST_minus_T_Spring",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق الربيع بين حرارة السطح وحرارة الهواء عند 2 م (LST_Spring_Mean - T_Spring_Mean).",
+        "unit": u"°C",
+        "map_title": u"خريطة فارق الربيع بين حرارة السطح وحرارة الهواء (°C)"
+    },
+    {
+        "short_name": "LST_mT_Sum",
+        "full_name": "LST_minus_T_Summer",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق الصيف بين حرارة السطح وحرارة الهواء عند 2 م (LST_Summer_Mean - T_Summer_Mean).",
+        "unit": u"°C",
+        "map_title": u"خريطة فارق الصيف بين حرارة السطح وحرارة الهواء (°C)"
+    },
+    {
+        "short_name": "LST_mT_Au",
+        "full_name": "LST_minus_T_Autumn",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق الخريف بين حرارة السطح وحرارة الهواء عند 2 م (LST_Autumn_Mean - T_Autumn_Mean).",
+        "unit": u"°C",
+        "map_title": u"خريطة فارق الخريف بين حرارة السطح وحرارة الهواء (°C)"
+    },
+    {
+        "short_name": "LST_JanMn",
+        "full_name": "LST_January_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر يناير.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر يناير (°C)"
+    },
+    {
+        "short_name": "LST_FebMn",
+        "full_name": "LST_February_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر فبراير.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر فبراير (°C)"
+    },
+    {
+        "short_name": "LST_MarMn",
+        "full_name": "LST_March_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر مارس.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر مارس (°C)"
+    },
+    {
+        "short_name": "LST_AprMn",
+        "full_name": "LST_April_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر أبريل.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر أبريل (°C)"
+    },
+    {
+        "short_name": "LST_MayMn",
+        "full_name": "LST_May_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر مايو.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر مايو (°C)"
+    },
+    {
+        "short_name": "LST_JunMn",
+        "full_name": "LST_June_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر يونيو.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر يونيو (°C)"
+    },
+    {
+        "short_name": "LST_JulMn",
+        "full_name": "LST_July_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر يوليو.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر يوليو (°C)"
+    },
+    {
+        "short_name": "LST_AugMn",
+        "full_name": "LST_August_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر أغسطس.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر أغسطس (°C)"
+    },
+    {
+        "short_name": "LST_SepMn",
+        "full_name": "LST_September_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر سبتمبر.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر سبتمبر (°C)"
+    },
+    {
+        "short_name": "LST_OctMn",
+        "full_name": "LST_October_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر أكتوبر.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر أكتوبر (°C)"
+    },
+    {
+        "short_name": "LST_NovMn",
+        "full_name": "LST_November_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر نوفمبر.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر نوفمبر (°C)"
+    },
+    {
+        "short_name": "LST_DecMn",
+        "full_name": "LST_December_Mean",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"متوسط درجة حرارة سطح الأرض لشهر ديسمبر.",
+        "unit": u"°C",
+        "map_title": u"خريطة متوسط حرارة سطح الأرض لشهر ديسمبر (°C)"
+    },
+    {
+        "short_name": "LST_mT_Jan",
+        "full_name": "LST_minus_T_January",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر يناير بين حرارة السطح وحرارة الهواء عند 2 م (LST_January_Mean - T_January_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Feb",
+        "full_name": "LST_minus_T_February",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر فبراير بين حرارة السطح وحرارة الهواء عند 2 م (LST_February_Mean - T_February_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Mar",
+        "full_name": "LST_minus_T_March",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر مارس بين حرارة السطح وحرارة الهواء عند 2 م (LST_March_Mean - T_March_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Apr",
+        "full_name": "LST_minus_T_April",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر أبريل بين حرارة السطح وحرارة الهواء عند 2 م (LST_April_Mean - T_April_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_May",
+        "full_name": "LST_minus_T_May",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر مايو بين حرارة السطح وحرارة الهواء عند 2 م (LST_May_Mean - T_May_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Jun",
+        "full_name": "LST_minus_T_June",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر يونيو بين حرارة السطح وحرارة الهواء عند 2 م (LST_June_Mean - T_June_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Jul",
+        "full_name": "LST_minus_T_July",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر يوليو بين حرارة السطح وحرارة الهواء عند 2 م (LST_July_Mean - T_July_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Aug",
+        "full_name": "LST_minus_T_August",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر أغسطس بين حرارة السطح وحرارة الهواء عند 2 م (LST_August_Mean - T_August_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Sep",
+        "full_name": "LST_minus_T_September",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر سبتمبر بين حرارة السطح وحرارة الهواء عند 2 م (LST_September_Mean - T_September_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Oct",
+        "full_name": "LST_minus_T_October",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر أكتوبر بين حرارة السطح وحرارة الهواء عند 2 م (LST_October_Mean - T_October_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Nov",
+        "full_name": "LST_minus_T_November",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر نوفمبر بين حرارة السطح وحرارة الهواء عند 2 م (LST_November_Mean - T_November_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
+    },
+    {
+        "short_name": "LST_mT_Dec",
+        "full_name": "LST_minus_T_December",
+        "module_code": "19_Land_Surface_Temperature",
+        "module_name": "19_Land_Surface_Temperature (حرارة سطح الأرض)",
+        "desc_ar": u"فارق شهر ديسمبر بين حرارة السطح وحرارة الهواء عند 2 م (LST_December_Mean - T_December_Mean).",
+        "unit": u"°C",
+        "map_title": u"-"
     }
 ]
+
+REMOVED_REDUNDANT_FIELDS = {
+    "T_Month_Mean", "T_Seasonal_Range",
+    "HI_Seasonal_Range",
+    "Td_Month_Mean", "Td_Seasonal_Range",
+    "R_Month_Mean", "R_Seasonal_Range",
+    "PSL_Month_Mean", "PSL_Seasonal_Range",
+    "PS_Month_Mean", "PS_Seasonal_Range",
+    "W_Spd_Month_Mean", "W_Spd_Seasonal_Range", "W_Dir_Month_Mean",
+    "RH_Month_Mean", "RH_Seasonal_Range",
+    "Sol_Month_Mean", "Sol_Seasonal_Range",
+    "UV_Month_Mean", "UV_Seasonal_Range",
+    "Cld_Month_Mean", "Cld_Seasonal_Range",
+    "WC_Seasonal_Range",
+    "ET_Month_Mean", "ET_Seasonal_Range",
+    "LST_Month_Mean", "LST_Seasonal_Range",
+}
+FIELDS_DATA = [f for f in FIELDS_DATA if f["full_name"] not in REMOVED_REDUNDANT_FIELDS]
 
 MODULES_SUMMARY = [
     {
@@ -2567,177 +3395,187 @@ MODULES_SUMMARY = [
         "name_ar": u"درجة الحرارة",
         "folder": "01_Temperature",
         "fc": "01_Temperature",
-        "count": 23,
+        "count": 22,
         "unit": u"°C",
         "method": u"NASA POWER T2M, T2M_MAX, T2M_MIN / WMO Climatological Normals"
     },
     {
         "num": "02",
-        "name_en": "02_Precipitation",
+        "name_en": "02_Land_Surface_Temperature",
+        "name_ar": u"درجة حرارة سطح الأرض",
+        "folder": "02_Land_Surface_Temperature",
+        "fc": "02_Land_Surface_Temperature",
+        "count": 35,
+        "unit": u"°C",
+        "method": u"NASA POWER TS (MERRA-2) / Climatological Skin Temperature & Differences"
+    },
+    {
+        "num": "03",
+        "name_en": "03_Precipitation",
         "name_ar": u"الأمطار والتساقط",
-        "folder": "02_Precipitation",
-        "fc": "02_Precipitation",
-        "count": 20,
+        "folder": "03_Precipitation",
+        "fc": "03_Precipitation",
+        "count": 19,
         "unit": u"mm",
         "method": u"NASA POWER PRECTOTCORR / Annual, Seasonal Totals & Ranges"
     },
     {
-        "num": "03",
-        "name_en": "03_Sea_Level_Pressure",
+        "num": "04",
+        "name_en": "04_Sea_Level_Pressure",
         "name_ar": u"ضغط مستوى سطح البحر",
-        "folder": "03_Sea_Level_Pressure",
-        "fc": "03_Sea_Level_Pressure",
-        "count": 19,
+        "folder": "04_Sea_Level_Pressure",
+        "fc": "04_Sea_Level_Pressure",
+        "count": 18,
         "unit": u"hPa / mbar",
         "method": u"NASA POWER SLP / Reduced to Standard Mean Sea Level"
     },
     {
-        "num": "04",
-        "name_en": "04_Surface_Pressure",
+        "num": "05",
+        "name_en": "05_Surface_Pressure",
         "name_ar": u"الضغط السطحي الفعلي",
-        "folder": "04_Surface_Pressure",
-        "fc": "04_Surface_Pressure",
-        "count": 19,
+        "folder": "05_Surface_Pressure",
+        "fc": "05_Surface_Pressure",
+        "count": 18,
         "unit": u"hPa / mbar",
         "method": u"NASA POWER PS / Actual Local Topographic Station Pressure"
     },
     {
-        "num": "05",
-        "name_en": "05_Wind",
+        "num": "06",
+        "name_en": "06_Wind",
         "name_ar": u"الرياح السطحية (سرعة واتجاه)",
-        "folder": "05_Wind",
-        "fc": "05_Wind",
-        "count": 39,
+        "folder": "06_Wind",
+        "fc": "06_Wind",
+        "count": 37,
         "unit": u"m/s, °",
         "method": u"NASA POWER WS10M, WD10M / Circular Mean Vector atan2"
     },
     {
-        "num": "06",
-        "name_en": "06_Relative_Humidity",
+        "num": "07",
+        "name_en": "07_Relative_Humidity",
         "name_ar": u"الرطوبة النسبية",
-        "folder": "06_Relative_Humidity",
-        "fc": "06_Relative_Humidity",
-        "count": 19,
+        "folder": "07_Relative_Humidity",
+        "fc": "07_Relative_Humidity",
+        "count": 18,
         "unit": u"%",
         "method": u"NASA POWER RH2M / Climatological Relative Humidity at 2m"
     },
     {
-        "num": "07",
-        "name_en": "07_Dew_Point",
+        "num": "08",
+        "name_en": "08_Dew_Point",
         "name_ar": u"نقطة الندى",
-        "folder": "07_Dew_Point",
-        "fc": "07_Dew_Point",
-        "count": 19,
+        "folder": "08_Dew_Point",
+        "fc": "08_Dew_Point",
+        "count": 18,
         "unit": u"°C",
         "method": u"NASA POWER T2MDEW / Dew Point Temperature at 2m"
     },
     {
-        "num": "08",
-        "name_en": "08_Solar_Radiation",
+        "num": "09",
+        "name_en": "09_Solar_Radiation",
         "name_ar": u"الإشعاع الشمسي والطاقة",
-        "folder": "08_Solar_Radiation",
-        "fc": "08_Solar_Radiation",
+        "folder": "09_Solar_Radiation",
+        "fc": "09_Solar_Radiation",
         "count": 19,
         "unit": u"kWh/m²/day",
         "method": u"NASA POWER ALLSKY_SFC_SW_DWN / Daily Mean & Cumulative Annual"
     },
     {
-        "num": "09",
-        "name_en": "09_UV_Index",
+        "num": "10",
+        "name_en": "10_UV_Index",
         "name_ar": u"مؤشر الأشعة فوق البنفسجية",
-        "folder": "09_UV_Index",
-        "fc": "09_UV_Index",
+        "folder": "10_UV_Index",
+        "fc": "10_UV_Index",
         "count": 18,
         "unit": u"Index (0–16+)",
         "method": u"WHO / WMO Global Solar UV Index Standard"
     },
     {
-        "num": "10",
-        "name_en": "10_Cloud_Cover",
+        "num": "11",
+        "name_en": "11_Cloud_Cover",
         "name_ar": u"الغطاء السحابي",
-        "folder": "10_Cloud_Cover",
-        "fc": "10_Cloud_Cover",
+        "folder": "11_Cloud_Cover",
+        "fc": "11_Cloud_Cover",
         "count": 18,
         "unit": u"%",
         "method": u"NASA POWER CLOUD_AMT / Total Sky Cloud Fraction"
     },
     {
-        "num": "11",
-        "name_en": "11_Heat_Index",
+        "num": "12",
+        "name_en": "12_Heat_Index",
         "name_ar": u"مؤشر الحرارة والإجهاد الحراري",
-        "folder": "11_Heat_Index",
-        "fc": "11_Heat_Index",
-        "count": 5,
+        "folder": "12_Heat_Index",
+        "fc": "12_Heat_Index",
+        "count": 19,
         "unit": u"°C",
         "method": u"Steadman-Rothfusz NWS Formula + Humidex + ISO 7243 WBGT"
     },
     {
-        "num": "12",
-        "name_en": "12_Wind_Chill",
+        "num": "13",
+        "name_en": "13_Wind_Chill",
         "name_ar": u"مبرد الرياح",
-        "folder": "12_Wind_Chill",
-        "fc": "12_Wind_Chill",
-        "count": 2,
+        "folder": "13_Wind_Chill",
+        "fc": "13_Wind_Chill",
+        "count": 18,
         "unit": u"°C",
         "method": u"US National Weather Service (NWS) Wind Chill Equivalent"
     },
     {
-        "num": "13",
-        "name_en": "13_De_Martonne_Aridity",
+        "num": "14",
+        "name_en": "14_De_Martonne_Aridity",
         "name_ar": u"دليل الجفاف لدي مارتون",
-        "folder": "13_De_Martonne_Aridity",
-        "fc": "13_De_Martonne_Aridity",
+        "folder": "14_De_Martonne_Aridity",
+        "fc": "14_De_Martonne_Aridity",
         "count": 1,
         "unit": u"Index",
         "method": u"De Martonne (1926) Aridity Index: I = P / (T + 10)"
     },
     {
-        "num": "14",
-        "name_en": "14_Evapotranspiration",
+        "num": "15",
+        "name_en": "15_Evapotranspiration",
         "name_ar": u"البخر والنتح المرجعي (ET)",
-        "folder": "14_Evapotranspiration",
-        "fc": "14_Evapotranspiration",
-        "count": 21,
+        "folder": "15_Evapotranspiration",
+        "fc": "15_Evapotranspiration",
+        "count": 19,
         "unit": u"mm",
         "method": u"FAO-56 Hargreaves-Samani (1985) Extraterrestrial Radiation Ra"
     },
     {
-        "num": "15",
-        "name_en": "15_UNEP_Aridity",
+        "num": "16",
+        "name_en": "16_UNEP_Aridity",
         "name_ar": u"مؤشر القحولة UNEP",
-        "folder": "15_UNEP_Aridity",
-        "fc": "15_UNEP_Aridity",
+        "folder": "16_UNEP_Aridity",
+        "fc": "16_UNEP_Aridity",
         "count": 1,
         "unit": u"Ratio",
         "method": u"UNEP Global Aridity Index: AI = P / ETo"
     },
     {
-        "num": "16",
-        "name_en": "16_Water_Deficit",
+        "num": "17",
+        "name_en": "17_Water_Deficit",
         "name_ar": u"الموازنة والعجز المائي",
-        "folder": "16_Water_Deficit",
-        "fc": "16_Water_Deficit",
+        "folder": "17_Water_Deficit",
+        "fc": "17_Water_Deficit",
         "count": 1,
         "unit": u"mm",
         "method": u"Climatic Water Balance: WD = P - ETo (Negative = Deficit)"
     },
     {
-        "num": "17",
-        "name_en": "17_Dry_Months",
+        "num": "18",
+        "name_en": "18_Dry_Months",
         "name_ar": u"عدد الأشهر الجافة بيولوجياً",
-        "folder": "17_Dry_Months",
-        "fc": "17_Dry_Months",
+        "folder": "18_Dry_Months",
+        "fc": "18_Dry_Months",
         "count": 1,
         "unit": u"Months (0–12)",
         "method": u"Walter-Lieth Bioclimatic Standard: P < 2 * T"
     },
     {
-        "num": "18",
-        "name_en": "18_Trends_And_Anomalies",
+        "num": "19",
+        "name_en": "19_Trends_And_Anomalies",
         "name_ar": u"الاتجاهات والشذوذ المناخي",
-        "folder": "18_Trends_And_Anomalies",
-        "fc": "18_Trends_And_Anomalies",
-        "count": 9,
+        "folder": "19_Trends_And_Anomalies",
+        "fc": "19_Trends_And_Anomalies",
+        "count": 30,
         "unit": u"°C, mm, %",
         "method": u"OLS Linear Regression Trends & WMO 1991–2020 Baseline Anomalies"
     }
@@ -2810,8 +3648,8 @@ def build_excel(output_path):
         (u"الفترة الزمنية المناخية القياسية (Climate Normal Period)", u"1996 – 2025 (سلسلة 30 عاماً تشمل المتوسطات الشهرية والفصلية والسنوية)", u"تطابق المعيار الدولي للمعدلات المناخية القياسية (WMO 30-Year Normal)"),
         (u"المعايير العلمية والمرجعيات الدولية (Scientific Standards)", u"WMO-No. 1203 / FAO-56 Irrigation / Steadman & ISO 7243", u"المنهجيات المعتمدة عالمياً لحساب الراحة الحرارية والقحولة والتبخر"),
         (u"التغطية الجغرافية ونظام الإحداثيات (Spatial Scope & Coordinate System)", u"Global Coverage (WGS 1984 / EPSG:4326)", u"تغطية عالمية شاملة بدقة شبكية منتظمة وقابلة للقص على أي دولة أو إقليم"),
-        (u"إجمالي الحقول الموصوفة في القاموس (Total Defined Fields)", u"259 حقلاً معيارياً (247 مؤشراً مناخياً + 12 حقلاً إدارياً)", u"تشمل الحقول الإدارية والفيزيائية والفصلية ومتجهات الرياح والموديلات"),
-        (u"عدد الحزم والعناصر المناخية (Climate Modules)", u"18 حزمة موديولية متكاملة (18 Complete Modules)", u"مجلدات راسترات وطبقات معالم بقاعدة البيانات الجغرافية متطابقة 1:1"),
+        (u"إجمالي الحقول الموصوفة في القاموس (Total Defined Fields)", u"%d حقلاً معيارياً (%d مؤشراً مناخياً + 12 حقلاً إدارياً)" % (len(FIELDS_DATA), len(FIELDS_DATA) - 12), u"تشمل الحقول الإدارية والفيزيائية والفصلية ومتجهات الرياح والموديلات"),
+        (u"عدد الحزم والعناصر المناخية (Climate Modules)", u"19 حزمة موديولية متكاملة (19 Complete Modules)", u"مجلدات راسترات وطبقات معالم بقاعدة البيانات الجغرافية متطابقة 1:1"),
     ]
 
     for idx, (prop, val, note) in enumerate(engine_meta, 4):
@@ -2848,9 +3686,9 @@ def build_excel(output_path):
             ws0.cell(idx, c_i).border = thin_border
             ws0.cell(idx, c_i).fill = r_fill
 
-    # Section 2: 18 Modules Summary Table (Row 12)
+    # Section 2: 19 Modules Summary Table (Row 12)
     ws0.merge_cells("A12:G12")
-    s2 = ws0.cell(12, 1, u"2. هيكل حزم البيانات والموديلات الـ 18 المتطابقة 1:1 (The 18 Climate Modules Architecture)")
+    s2 = ws0.cell(12, 1, u"2. هيكل حزم البيانات والموديلات الـ 19 المتطابقة 1:1 (The 19 Climate Modules Architecture)")
     s2.font = font_section
     s2.fill = section_fill
     s2.alignment = align_right
@@ -3082,7 +3920,7 @@ def build_excel(output_path):
     # ----------------------------------------------------
     # Sheet 2: Modules Summary
     # ----------------------------------------------------
-    ws2 = wb.create_sheet(title="Modules_18_Summary")
+    ws2 = wb.create_sheet(title="Modules_19_Summary")
     
     headers_ws2 = [
         u"الرقم\nNo.",
@@ -3187,7 +4025,7 @@ def build_excel(output_path):
     wb.save(output_path)
     print("Successfully built Excel dictionary at:", output_path)
     print("Sheet 1 'Climate_Fields' total rows:", len(FIELDS_DATA) + 1)
-    print("Sheet 2 'Modules_18_Summary' total rows:", len(MODULES_SUMMARY) + 1)
+    print("Sheet 2 'Modules_19_Summary' total rows:", len(MODULES_SUMMARY) + 1)
 
 
 if __name__ == "__main__":

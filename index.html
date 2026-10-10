@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIRSAD | مِرصاد - Meteorological Integrated Reanalysis Spatial Atlas Database</title>
+  <meta name="description" content="منظومة مِرصاد: المحرك الكارتوجرافي الذكي لإنشاء أطالس المناخ الرقمية وقواعد البيانات المناخية الآلية عبر منصات ArcGIS Desktop 10.8 & Pro">
+  <link rel="icon" type="image/jpeg" href="assets/mirsad_logo.jpg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F0FDF4',
+              100: '#DCFCE7',
+              500: '#10B981',
+              600: '#059669',
+              700: '#047857',
+            },
+            ocean: {
+              50: '#F0F9FF',
+              100: '#E0F2FE',
+              500: '#0284C7',
+              600: '#0369A1',
+              700: '#075985',
+              800: '#0C4A6E',
+              900: '#0F172A',
+              950: '#020617',
+            },
+            solar: {
+              400: '#FBBF24',
+              500: '#F59E0B',
+              600: '#D97706',
+            }
+          },
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Cairo & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.25s ease-in-out;
+    }
+    body.lang-en {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-light {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(2, 132, 199, 0.15);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 35px -5px rgba(2, 132, 199, 0.35);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.35);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #0284c7;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-ocean-500 selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- 1. NAVIGATION BAR -->
+  <!-- ========================================================================= -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-slate-800 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo & Brand -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="relative">
+            <img src="assets/mirsad_logo.jpg" alt="MIRSAD Logo" class="w-12 h-12 rounded-full border-2 border-ocean-500 shadow-md transition-transform duration-300 group-hover:scale-105">
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-brand-500 border-2 border-slate-950 rounded-full animate-ping"></span>
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-brand-500 border-2 border-slate-950 rounded-full"></span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl font-black tracking-tight text-white group-hover:text-ocean-400 transition-colors">MIRSAD</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-ocean-500/20 text-ocean-400 border border-ocean-500/40 font-bold font-inter">v2.0</span>
+            </div>
+            <p class="text-xs text-slate-400 hidden sm:block" data-i18n="nav_tagline">منظومة مِرصاد للأطالس المناخية الرقمية</p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-300">
+          <a href="#about" class="hover:text-ocean-400 transition-colors" data-i18n="nav_about">عن المنظومة</a>
+          <a href="#sources" class="hover:text-ocean-400 transition-colors" data-i18n="nav_sources">المصادر الـ 5</a>
+          <a href="#modules" class="hover:text-ocean-400 transition-colors" data-i18n="nav_modules">الحزم الـ 19</a>
+          <a href="#tools" class="hover:text-ocean-400 transition-colors" data-i18n="nav_tools">الأدوات</a>
+          <a href="#setup" class="hover:text-ocean-400 transition-colors" data-i18n="nav_setup">التثبيت والتشغيل</a>
+          <a href="#downloads" class="hover:text-ocean-400 transition-colors" data-i18n="nav_downloads">التحميلات</a>
+          <a href="#author" class="hover:text-ocean-400 transition-colors" data-i18n="nav_author">المطور</a>
+        </div>
+
+        <!-- Action Buttons & Language Switcher -->
+        <div class="flex items-center gap-3">
+          <!-- Language Toggle Button -->
+          <button id="langToggleBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition-all shadow-sm">
+            <i class="fa-solid fa-globe text-ocean-400"></i>
+            <span id="langText">English</span>
+          </button>
+
+          <!-- GitHub Repo Button -->
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-ocean-600 to-ocean-500 hover:from-ocean-500 hover:to-ocean-400 text-white text-xs font-bold transition-all shadow-md">
+            <i class="fa-brands fa-github text-sm"></i>
+            <span>GitHub</span>
+          </a>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden glass-card border-b border-slate-800 px-4 pt-3 pb-6 space-y-3">
+      <a href="#about" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_about">عن المنظومة</a>
+      <a href="#sources" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_sources">المصادر الـ 5</a>
+      <a href="#modules" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_modules">الحزم الـ 19</a>
+      <a href="#tools" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_tools">الأدوات</a>
+      <a href="#setup" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_setup">التثبيت والتشغيل</a>
+      <a href="#downloads" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_downloads">التحميلات</a>
+      <a href="#author" class="block py-2 text-slate-300 hover:text-ocean-400" data-i18n="nav_author">المطور</a>
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- 2. HERO SECTION -->
+  <!-- ========================================================================= -->
+  <header class="relative pt-36 pb-24 overflow-hidden border-b border-slate-800">
+    <!-- Atmospheric Ambient Background Light -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-ocean-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-brand-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Text & Call to Actions (7 Cols) -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-start">
+          
+          <!-- Badges Banner -->
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-ocean-500/30 text-ocean-300 text-xs font-semibold backdrop-blur-md">
+            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+            <span data-i18n="hero_badge">الإصدار الشامل 2.0 • توافق تام مع ArcGIS Desktop 10.8 & Pro</span>
+          </div>
+
+          <!-- Main Title -->
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-ocean-300" data-i18n="hero_title_1">منظومة مِرصاد</span>
+            <br>
+            <span class="text-2xl sm:text-3xl md:text-4xl text-ocean-400 font-extrabold" data-i18n="hero_title_2">المحرك الكارتوجرافي الذكي لأطالس المناخ الرقمية</span>
+          </h1>
+
+          <!-- English Acronym Subtitle -->
+          <p class="text-sm font-semibold tracking-wide text-brand-400 font-inter">
+            METEOROLOGICAL INTEGRATED REANALYSIS SPATIAL ATLAS DATABASE (MIRSAD)
+          </p>
+
+          <!-- Descriptive Paragraph -->
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed font-normal" data-i18n="hero_desc">
+            أداة بايثون متطورة (.pyt) مخصصة لبيئة نظم المعلومات الجغرافية (ArcGIS). تؤتمت سحب وتحليل السلاسل الزمنية المناخية المتصلة (1901-الآن)، وحساب 37+ مؤشراً علمياً ومعادلات FAO-56 و WMO، وإجراء الاستيفاء المكاني، وإنتاج أسطح راستر مصححة وخرائط متجهات الرياح والآيزوبار مع 2,250 تدرج لوني كارتوجرافي تلقائي.
+          </p>
+
+          <!-- Interactive Action Buttons -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#downloads" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-ocean-600 to-ocean-500 hover:from-ocean-500 hover:to-ocean-400 text-white font-bold text-sm shadow-lg shadow-ocean-600/30 flex items-center gap-2 transition-all transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-download"></i>
+              <span data-i18n="hero_btn_download">تحميل صندوق الأدوات (.pyt)</span>
+            </a>
+            <a href="https://github.com/ahmadibrahim4geo/MIRSAD" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm shadow-md flex items-center gap-2 transition-all transform hover:-translate-y-0.5">
+              <i class="fa-brands fa-github text-base"></i>
+              <span data-i18n="hero_btn_github">تصفح المستودع على GitHub</span>
+            </a>
+            <a href="#modules" class="px-5 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-ocean-300 border border-ocean-500/30 font-semibold text-sm flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-layer-group"></i>
+              <span data-i18n="hero_btn_modules">استعراض الحزم الـ 19</span>
+            </a>
+          </div>
+
+          <!-- Feature Highlights Tags -->
+          <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs text-slate-400">
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-code text-ocean-400 mr-1 ml-1"></i> Python 2.7 & 3.x</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-map text-brand-400 mr-1 ml-1"></i> ArcMap 10.8 & Pro</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-satellite text-solar-400 mr-1 ml-1"></i> 5 Reanalysis Sources</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-palette text-pink-400 mr-1 ml-1"></i> 2,250 Color Ramps</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-location-dot text-emerald-400 mr-1 ml-1"></i> 73 Egypt Stations Hub</span>
+          </div>
+
+        </div>
+
+        <!-- Official Logo Presentation (5 Cols) -->
+        <div class="lg:col-span-5 flex justify-center relative">
+          <div class="relative group">
+            
+            <!-- Orbiting Glow Rings -->
+            <div class="absolute -inset-4 bg-gradient-to-r from-ocean-500 via-brand-500 to-solar-500 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition duration-700 animate-pulse"></div>
+            
+            <!-- Logo Frame -->
+            <div class="relative w-72 h-72 sm:w-84 sm:h-84 md:w-96 md:h-96 rounded-full p-2 bg-gradient-to-b from-ocean-500/60 to-slate-900 border-4 border-ocean-400/40 shadow-2xl overflow-hidden backdrop-blur-xl">
+              <img src="assets/mirsad_logo.jpg" alt="MIRSAD Emblem Logo" class="w-full h-full object-cover rounded-full transform transition duration-500 group-hover:scale-105">
+            </div>
+
+            <!-- Floating Micro Metric Badges -->
+            <div class="absolute -top-4 -left-4 glass-card px-3.5 py-2 rounded-xl border border-ocean-500/40 shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-gauge-high text-brand-400 text-lg"></i>
+              <div>
+                <p class="text-[10px] text-slate-400 font-bold" data-i18n="badge_res_title">أعلى دقة لليابسة</p>
+                <p class="text-xs font-black text-white font-inter">0.10° (~9 km)</p>
+              </div>
+            </div>
+
+            <div class="absolute -bottom-4 -right-4 glass-card px-3.5 py-2 rounded-xl border border-brand-500/40 shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-ocean-400 text-lg"></i>
+              <div>
+                <p class="text-[10px] text-slate-400 font-bold" data-i18n="badge_zero_title">خلو تام من الفجوات</p>
+                <p class="text-xs font-black text-white font-inter">100% Zero-Gap</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 3. METRICS & COUNTER STRIP -->
+  <!-- ========================================================================= -->
+  <section class="py-10 bg-slate-900/60 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+        
+        <div class="p-4 rounded-xl glass-card border-slate-800">
+          <p class="text-3xl font-black text-ocean-400 font-inter">19</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_modules">حزمة مناخية موديولية</p>
+        </div>
+
+        <div class="p-4 rounded-xl glass-card border-slate-800">
+          <p class="text-3xl font-black text-brand-400 font-inter">5</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_sources">مصادر بيانات معتمدة</p>
+        </div>
+
+        <div class="p-4 rounded-xl glass-card border-slate-800">
+          <p class="text-3xl font-black text-solar-400 font-inter">2,250</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_ramps">تدرج لوني كارتوجرافي</p>
+        </div>
+
+        <div class="p-4 rounded-xl glass-card border-slate-800">
+          <p class="text-3xl font-black text-purple-400 font-inter">73</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_stations">محطة رصد بمصر</p>
+        </div>
+
+        <div class="p-4 rounded-xl glass-card border-slate-800">
+          <p class="text-3xl font-black text-pink-400 font-inter">37+</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_indicators">مؤشراً علمياً مسجلاً</p>
+        </div>
+
+        <div class="p-4 rounded-xl glass-card border-slate-800">
+          <p class="text-3xl font-black text-emerald-400 font-inter">100%</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_free">مفتوح المصدر (MIT)</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. ABOUT & VALUE PROPOSITION -->
+  <!-- ========================================================================= -->
+  <section id="about" class="py-20 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="about_tag">ABOUT MIRSAD PLATFORM</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="about_heading">ما هي منظومة مِرصاد وما القيمة التي تقدمها؟</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="about_subheading">
+          صُممت المنظومة لتتجاوز التحديات التاريخية في أبحاث المناخ التطبيقي ونظم المعلومات الجغرافية؛ حيث تحول مسار العمل من أسابيع من التجميع اليدوي إلى نقرة زر واحدة.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Card 1 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-ocean-500/50 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="val_card1_title">توفير مئات الساعات البحثية</h4>
+          <p class="text-slate-400 text-sm leading-relaxed" data-i18n="val_card1_desc">
+            أتمتة كاملة لتنزيل وتوحيد وحساب السلاسل الزمنية المناخية (اليومية، الشهرية، الفصلية، والسنوية) من 1901 وحتى اليوم دون الحاجة لكتابة أكواد مخصصة في كل مرة.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-brand-500/50 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-wifi-slash"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="val_card2_title">العمل دون إنترنت (Offline Mode)</h4>
+          <p class="text-slate-400 text-sm leading-relaxed" data-i18n="val_card2_desc">
+            دعم كامل للبيئات المعزولة وشبكات العمل المغلقة؛ حيث يمكن تغذية المنظومة بملفات إكسل أو طبقات جاهزة لتوليد الأطلس والاستيفاء والترميز الكارتوجرافي فوراً.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-solar-500/50 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-solar-500/20 text-solar-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="val_card3_title">مطابقة معايير WMO و FAO-56</h4>
+          <p class="text-slate-400 text-sm leading-relaxed" data-i18n="val_card3_desc">
+            تطبيق أدق المعادلات المعتمدة دولياً لحساب البخر-نتح المرجعي القياسي (Penman-Monteith)، وقرائن الجفاف (De Martonne & UNEP)، ومؤشرات الراحة البشرية (HI & WBGT).
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-purple-500/50 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-compass-drafting"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="val_card4_title">إخراج كارتوجرافي متكامل</h4>
+          <p class="text-slate-400 text-sm leading-relaxed" data-i18n="val_card4_desc">
+            توليد أسطح راستر حقيقية مقصوصة (Clipped GeoTIFF)، وخطوط تساوي الضغط (Isobars)، ومتجهات الرياح الدائرية عبر (atan2)، وقواعد بيانات جغرافية (GDB) وشيب فايل.
+          </p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-pink-500/50 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-palette"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="val_card5_title">مكتبة 2,250 تدرج لوني مخصصة</h4>
+          <p class="text-slate-400 text-sm leading-relaxed" data-i18n="val_card5_desc">
+            أكثر من 45 ملف ستايل (.style) تغطي 25 نظام تصنيف إحصائي (من فئتين وحتى 32 فئة)، لضمان تمثيل بصري قياسي يماثل كبرى الأطالس المناخية الدولية.
+          </p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-emerald-500/50 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-shield-virus"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="val_card6_title">سد الفجوات المناخية آلياً</h4>
+          <p class="text-slate-400 text-sm leading-relaxed" data-i18n="val_card6_desc">
+            نظام تدقيق جودة آلي ذكي (Auto QA & Gap-Filling) يستكشف الفجوات الناتجة عن صيانة أجهزة المحطات ويستكملها عبر مصفوفة النمذجة الهجينة دون أي بكسلات فارغة.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 5. THE 5 CLIMATE DATA SOURCES -->
+  <!-- ========================================================================= -->
+  <section id="sources" class="py-20 bg-slate-900/40 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="src_tag">5 AUTHORITATIVE CLIMATE SOURCES</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="src_heading">المصادر الخمسة المعتمدة في منظومة مِرصاد</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="src_subheading">
+          تدمج المنظومة بين الرصد الأرضي المادي، ونماذج إعادة التحليل الأوروبية والأمريكية، والقياسات الإشعاعية الفضائية لتوفير أعلى درجات الموثوقية العلمية.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Source 1: Hybrid Engine -->
+        <div class="glass-card p-6 rounded-2xl border-2 border-ocean-500/50 relative overflow-hidden group">
+          <div class="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-ocean-500 to-brand-500"></div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="px-2.5 py-1 rounded bg-ocean-500/20 text-ocean-400 text-xs font-bold font-inter" data-i18n="src_badge_default">المصدر الافتراضي</span>
+            <span class="text-xs text-slate-400 font-inter">1901 - Present</span>
+          </div>
+          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_1_title">النموذج الهجين (Hybrid Climate Engine)</h4>
+          <p class="text-xs text-brand-400 font-semibold mb-3" data-i18n="src_1_sub">رصد حقيقي + إكمال آلي + أقمار صناعية</p>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_1_desc">
+            الخيار الموصى به لإنتاج أطلس متكامل؛ يدمج قراءات محطات الرصد الحقيقية مع إعادة التحليل والأقمار لضمان خلو الأسطح النهائية من أي بيانات مفقودة بنسبة 100%.
+          </p>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
+            <span>Res: Point / Station</span>
+            <span class="text-brand-400 font-bold">100% Zero-Gap</span>
+          </div>
+        </div>
+
+        <!-- Source 2: NOAA ISD Ground -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group">
+          <div class="flex items-center justify-between mb-3">
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">Physical Ground</span>
+            <span class="text-xs text-slate-400 font-inter">1901 - Real-Time</span>
+          </div>
+          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_2_title">أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)</h4>
+          <p class="text-xs text-ocean-400 font-semibold mb-3" data-i18n="src_2_sub">رصد ميداني بحت من مستشعرات المحطات</p>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_2_desc">
+            الحقيقة الأرضية المادية المباشرة من موازين الحرارة والبارومترات وأجهزة الأنيموميتر لأكثر من 14,000 محطة حول العالم. معتمد للتقارير الرسمية والقضائية.
+          </p>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
+            <span>Res: Point Coordinates</span>
+            <span class="text-solar-400">Subject to Sensor Gaps</span>
+          </div>
+        </div>
+
+        <!-- Source 3: NASA POWER -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group">
+          <div class="flex items-center justify-between mb-3">
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">Satellite & MERRA-2</span>
+            <span class="text-xs text-slate-400 font-inter">1981 - Present</span>
+          </div>
+          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_3_title">وكالة ناسا الفضائية (NASA POWER)</h4>
+          <p class="text-xs text-solar-400 font-semibold mb-3" data-i18n="src_3_sub">المعيار الذهبي للإشعاع الشمسي والـ UV</p>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_3_desc">
+            قراءات مستمرة مستمدة من أقمار CERES و FLASHFlux الفضائية مع نموذج MERRA-2. مثالي لدراسات الطاقة المتجددة، ومؤشر الأشعة فوق البنفسجية، والمناخ الزراعي.
+          </p>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
+            <span>Res: 0.5° × 0.625° (~50km)</span>
+            <span class="text-brand-400 font-bold">Continuous Grid</span>
+          </div>
+        </div>
+
+        <!-- Source 4: Open-Meteo ERA5 -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group">
+          <div class="flex items-center justify-between mb-3">
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">High-Res Reanalysis</span>
+            <span class="text-xs text-slate-400 font-inter">1940 - Present</span>
+          </div>
+          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_4_title">النموذج الأوروبي (Open-Meteo ERA5-Land)</h4>
+          <p class="text-xs text-brand-400 font-semibold mb-3" data-i18n="src_4_sub">دقة فائقة معدلة طبوغرافياً لليابسة</p>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_4_desc">
+            أعلى دقة مكانية شبكية متاحة عالمياً لليابسة (~9 كم) مع مراعاة انحدار درجات الحرارة مع التضاريس والارتفاع، ودعم رطوبة وحرارة التربة حتى عمق 255 سم.
+          </p>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-inter">
+            <span>Res: 0.10° (~9 km)</span>
+            <span class="text-brand-400 font-bold">100% Gridded</span>
+          </div>
+        </div>
+
+        <!-- Source 5: Copernicus CDS -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition group lg:col-span-2">
+          <div class="flex items-center justify-between mb-3">
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-bold font-inter">European Commission C3S / ECMWF</span>
+            <span class="text-xs text-slate-400 font-inter">1940 - Present</span>
+          </div>
+          <h4 class="text-lg font-extrabold text-white mb-1" data-i18n="src_5_title">مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)</h4>
+          <p class="text-xs text-ocean-400 font-semibold mb-3" data-i18n="src_5_sub">المصدر الرسمي المعتمد من ECMWF مع دعم المفتاح الرسمي والتدفق المفتوح</p>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_5_desc">
+            المرجعية الأوروبية الأحدث عالمياً لبيانات ERA5 و AgERA5. تدعم المنظومة إدخال مفتاح الاعتماد الشخصي (CDS API Key) مع دعم التدفق السريع دون مفتاح (Zero-Auth Fallback)، وتوافق تام مع تحميل شرائح NetCDF وتحويلها لنقاط شبكية.
+          </p>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex flex-wrap items-center justify-between font-inter">
+            <span>Res: 0.10° (~9 km) Grid</span>
+            <span class="text-ocean-400 font-semibold">Optional API Key + Zero-Auth Fallback</span>
+            <span class="text-brand-400 font-bold">ECMWF Certified</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 6. THE 19 MODULES INTERACTIVE SHOWCASE -->
+  <!-- ========================================================================= -->
+  <section id="modules" class="py-20 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="mod_tag">THE 19 CLIMATE MODULES</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="mod_heading">استعراض الحزم الـ 19 والمؤشرات العلمية</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="mod_subheading">
+          تغطي المنظومة 19 حزمة علمية مستقلة يمكن تفعيلها منفردة أو مجتمعة لإنتاج مئات الطبقات المناخية المشتقة.
+        </p>
+      </div>
+
+      <!-- Filters & Search Bar -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+        
+        <!-- Category Filter Tabs -->
+        <div class="flex flex-wrap items-center gap-2" id="moduleCategoryTabs">
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-ocean-500 text-white" data-cat="all" data-i18n="filter_all">الكل (19)</button>
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="thermal" data-i18n="filter_thermal">الحرارة والسطح</button>
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="hydro" data-i18n="filter_hydro">الأمطار والرطوبة</button>
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="wind" data-i18n="filter_wind">الرياح والضغط</button>
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="bio" data-i18n="filter_bio">البيومناخ والجفاف</button>
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="solar" data-i18n="filter_solar">الإشعاع والشمس</button>
+          <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="trends" data-i18n="filter_trends">الاتجاهات والشذوذ</button>
+        </div>
+
+        <!-- Instant Search Box -->
+        <div class="relative w-full md:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="text" id="moduleSearchInput" placeholder="ابحث باسم الموديول أو الرمز..." class="w-full pl-4 pr-9 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-ocean-500 font-cairo">
+        </div>
+
+      </div>
+
+      <!-- Modules Grid Container (Rendered dynamically or static for SEO) -->
+      <div id="modulesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Module cards will be injected by JavaScript with bilingual data -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 7. DUAL TOOLS SUITE ARCHITECTURE -->
+  <!-- ========================================================================= -->
+  <section id="tools" class="py-20 bg-slate-900/40 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="tool_tag">MIRSAD TOOLS SUITE</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="tool_heading">هيكلية وأدوات منظومة مِرصاد</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="tool_subheading">
+          تتضمن المنظومة أداتين متخصصتين تغطيان كافة سيناريوهات البيانات النقطية والشريطية، بالإضافة لمركز محطات الطقس.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Tool 1: Point Generator -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-location-crosshairs"></i>
+            </div>
+            <span class="text-xs font-bold text-ocean-400 font-inter">66 Parameters</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">MIRSAD: Spatial Climate Atlas Generator</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_point_desc">
+              الأداة النقطية الرئيسية (`.pyt`). تتولى استعلام المحطات والنقاط، سحب السلاسل الزمنية، تطبيق المعادلات وحساب المؤشرات، وإجراء الاستيفاء المكاني (IDW, Kriging, Spline)، وإنتاج خرائط متجهات الرياح والآيزوبار والتصدير لـ GDB و Shapefile و Excel.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 font-inter">
+            <span>Entry: MIRSAD_Climate_Atlas_Generator_10_8.pyt</span>
+          </div>
+        </div>
+
+        <!-- Tool 2: Raster Generator -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-border-all"></i>
+            </div>
+            <span class="text-xs font-bold text-brand-400 font-inter">34 Parameters</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">MIRSAD: Raster Data Climate Atlas Generator</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_raster_desc">
+              أداة سحب ومعالجة الراستر الشريطي. متخصصة في تنزيل شرائح NetCDF والبيانات الشبكية المقصوصة من ERA5 و Copernicus CDS، وتحويل البكسلات لنقاط تحليل رئيسية لإنتاج طبقات الراستر الموزونة مباشرة.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 font-inter">
+            <span>Entry: raster_atlas_generator.py</span>
+          </div>
+        </div>
+
+        <!-- Tool 3: Stations Hub -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-solar-500/20 text-solar-400 flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-tower-broadcast"></i>
+            </div>
+            <span class="text-xs font-bold text-solar-400 font-inter">73 Verified Stations</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">Weather Stations Hub</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_hub_desc">
+              مركز محطات الرصد الجوي المرجعية لجمهورية مصر العربية ومحيطها الإقليمي. قاعدة بيانات جغرافية جاهزة (.gdb) مع أرقام WMO الرسمية، المناسيب الطبوغرافية، وسجلات الرصد لاختبار الأطلس فوراً.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 font-inter">
+            <span>Entry: Weather_Stations_Directory.gdb</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 8. SYSTEM REQUIREMENTS & SETUP -->
+  <!-- ========================================================================= -->
+  <section id="setup" class="py-20 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="setup_tag">SYSTEM REQUIREMENTS & QUICK SETUP</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="setup_heading">متطلبات التشغيل وخطوات التثبيت خطوة بخطوة</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="setup_subheading">
+          لا تتطلب المنظومة أي عمليات تثبيت معقدة عبر سطر الأوامر؛ فقط أضف صندوق الأدوات مباشرة داخل بيئة ArcGIS المفضلة لديك.
+        </p>
+      </div>
+
+      <!-- Requirements Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        
+        <div class="glass-card p-6 rounded-2xl border-slate-800">
+          <h4 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-server text-ocean-400"></i>
+            <span data-i18n="req_software_title">البيئة البرمجية المدعومة (Software Compatibility)</span>
+          </h4>
+          <ul class="space-y-3 text-xs text-slate-300">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+              <span><strong>ArcGIS Desktop:</strong> ArcMap 10.8 (Python 2.7) مع تفعيل Spatial Analyst.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+              <span><strong>ArcGIS Pro:</strong> 2.8+ / 3.x (Python 3.x) مع تفعيل Spatial Analyst.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+              <span><strong>نظام التشغيل:</strong> Windows 7 / 8.1 / 10 / 11 (64-bit).</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl border-slate-800">
+          <h4 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-microchip text-brand-400"></i>
+            <span data-i18n="req_hardware_title">العتاد والتوصيل (Hardware & Network)</span>
+          </h4>
+          <ul class="space-y-3 text-xs text-slate-300">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+              <span><strong>الاتصال بالإنترنت:</strong> مطلوب لوضع Online Mode (بدون قيود في وضع Offline).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+              <span><strong>الذاكرة العشوائية (RAM):</strong> 4 جيجابايت كحد أدنى (يوصى بـ 8+ جيجابايت لدقة الاستيفاء العالية).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-circle-check text-brand-400 mt-0.5"></i>
+              <span><strong>المساحة التخزينية:</strong> 500 ميجابايت للأداة والستايلات، ومساحة متغيرة لمخرجات الراستر.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- 4-Step Installation Visual Guide -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="glass-card p-5 rounded-2xl border-slate-800 relative">
+          <div class="w-8 h-8 rounded-full bg-ocean-500 text-white font-black text-sm flex items-center justify-center mb-3 font-inter">1</div>
+          <h5 class="text-sm font-bold text-white mb-2" data-i18n="step1_title">تحميل المستودع</h5>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="step1_desc">
+            قم بتحميل حزمة المستودع كملف ZIP وفك الضغط في أي مجلد عمل محلي، أو استنساخ المستودع عبر Git.
+          </p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl border-slate-800 relative">
+          <div class="w-8 h-8 rounded-full bg-ocean-500 text-white font-black text-sm flex items-center justify-center mb-3 font-inter">2</div>
+          <h5 class="text-sm font-bold text-white mb-2" data-i18n="step2_title">فتح نافذة ArcToolbox</h5>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="step2_desc">
+            في برنامج ArcMap أو ArcGIS Pro، افتح نافذة ArcToolbox أو متصفح الكتالوج (Catalog Window).
+          </p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl border-slate-800 relative">
+          <div class="w-8 h-8 rounded-full bg-ocean-500 text-white font-black text-sm flex items-center justify-center mb-3 font-inter">3</div>
+          <h5 class="text-sm font-bold text-white mb-2" data-i18n="step3_title">إضافة صندوق الأدوات</h5>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="step3_desc">
+            انقر بزر الفأرة الأيمن واختر Add Toolbox، ثم حدد ملف `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
+          </p>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl border-slate-800 relative">
+          <div class="w-8 h-8 rounded-full bg-brand-500 text-white font-black text-sm flex items-center justify-center mb-3 font-inter">4</div>
+          <h5 class="text-sm font-bold text-white mb-2" data-i18n="step4_title">التشغيل الفوري</h5>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="step4_desc">
+            افتح الأداة، وحدد طبقة النقاط والموديولات المطلوبة ومجلد الحفظ، ثم اضغط OK لبدء التوليد الآلي!
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 9. DOWNLOADS & REPOSITORY FILES -->
+  <!-- ========================================================================= -->
+  <section id="downloads" class="py-20 bg-slate-900/40 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="down_tag">DOWNLOADS & REPOSITORY PACKAGES</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="down_heading">حزم التحميل ومحتويات المستودع الرسمي</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="down_subheading">
+          كافة الأدوات والقواميس والملفات التوثيقية مفتوحة ومتاحة للتحميل المباشر والاستخدام الأكاديمي والمهني.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        
+        <!-- Item 1: PYT Toolbox -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-toolbox"></i>
+            </div>
+            <h5 class="text-sm font-bold text-white mb-1">MIRSAD Python Toolbox</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_pyt_desc">صندوق الأدوات الرئيسي (.pyt) الجاهز للعمل داخل ArcMap 10.8 و ArcGIS Pro.</p>
+          </div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/MIRSAD_Climate_Atlas_Generator_10_8.pyt" class="w-full py-2 rounded-lg bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-bold text-center transition">
+            <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
+          </a>
+        </div>
+
+        <!-- Item 2: Excel Dictionary -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-file-excel"></i>
+            </div>
+            <h5 class="text-sm font-bold text-white mb-1">Fields Dictionary (.xlsx)</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_dict_desc">قاموس الحقول والمؤشرات باللغتين العربية والإنجليزية مع الوحدات الفيزيائية.</p>
+          </div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/Documents/02_Excel_Classification_and_Dictionaries/Climate_Atlas_Fields_Dictionary_AR_EN_Units.xlsx" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold text-center transition">
+            <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
+          </a>
+        </div>
+
+        <!-- Item 3: Color Guide -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-solar-500/20 text-solar-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-palette"></i>
+            </div>
+            <h5 class="text-sm font-bold text-white mb-1">Color Ramps Guide (.xlsx)</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_color_desc">دليل الـ 2,250 تدرج لوني وقواعد التصنيف الكارتوجرافي للطبقات.</p>
+          </div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/Documents/02_Excel_Classification_and_Dictionaries/Climate_Atlas_Classification_Guide.xlsx" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold text-center transition">
+            <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
+          </a>
+        </div>
+
+        <!-- Item 4: Word & PDF Manual -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-file-word"></i>
+            </div>
+            <h5 class="text-sm font-bold text-white mb-1">Scientific Guide (.docx)</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_doc_desc">الدليل العلمي الشامل ومقارنة مصادر البيانات ومعادلات المؤشرات.</p>
+          </div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/Documents/05_Climate_Data_Sources_Directory/Climate_Data_Sources_Comparison_Guide.docx" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold text-center transition">
+            <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Quick Git Clone Command Snippet -->
+      <div class="glass-card p-5 rounded-2xl border-slate-800 max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <i class="fa-brands fa-git-alt text-solar-400 text-2xl"></i>
+          <div>
+            <p class="text-xs text-slate-400 font-bold" data-i18n="clone_title">الاستنساخ المباشر عبر سطر الأوامر:</p>
+            <code class="text-xs text-brand-400 font-inter">git clone https://github.com/ahmadibrahim4geo/MIRSAD.git</code>
+          </div>
+        </div>
+        <button id="copyGitCloneBtn" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 transition">
+          <i class="fa-regular fa-copy"></i>
+          <span data-i18n="btn_copy">نسخ</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 10. CONTRIBUTING & METHODOLOGY -->
+  <!-- ========================================================================= -->
+  <section id="contribute" class="py-20 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="dev_tag">CONTRIBUTING & METHODOLOGY</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="dev_heading">كيف تساهم وتطور في منظومة مِرصاد؟</h3>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="dev_subheading">
+          المنظومة مبنية بمعمارية معيارية تتيح لأي باحث أو مبرمج إضافة مؤشرات أو حزم مناخية جديدة بسهولة وأمان.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <div class="glass-card p-6 rounded-2xl border-slate-800">
+          <div class="w-10 h-10 rounded-lg bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-code-fork"></i>
+          </div>
+          <h4 class="text-base font-bold text-white mb-2" data-i18n="dev_card1_title">1. فصل النواة عن ArcPy</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="dev_card1_desc">
+            تعتمد المنظومة على كتابة الدوال الرياضية والخوارزميات بلغة Pure Python القياسية أولاً، ثم ربطها مع ArcPy لتسهيل الاختبار خارج بيئة ArcGIS.
+          </p>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl border-slate-800">
+          <div class="w-10 h-10 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-puzzle-piece"></i>
+          </div>
+          <h4 class="text-base font-bold text-white mb-2" data-i18n="dev_card2_title">2. اتباع دليل المنهجية (Doc 06)</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="dev_card2_desc">
+            يتوفر في مجلد `Documents/06_Methodology_Adding_New_Climate_Module` دليل تطبيقي خطوة بخطوة لكيفية تسجيل موديول جديد وتوليد تدرجاته اللونية.
+          </p>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl border-slate-800">
+          <div class="w-10 h-10 rounded-lg bg-solar-500/20 text-solar-400 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-code-pull-request"></i>
+          </div>
+          <h4 class="text-base font-bold text-white mb-2" data-i18n="dev_card3_title">3. سحب الفروع وإرسال PR</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="dev_card3_desc">
+            نرحب بكافة المساهمات العلمية والأكاديمية عبر فتح Pull Request أو الإبلاغ عن أي استفسار أو مشكلة عبر نافذة GitHub Issues.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 11. AUTHOR & CREDITS FOOTER -->
+  <!-- ========================================================================= -->
+  <footer id="author" class="pt-20 pb-12 bg-slate-950 text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Author Profile Card -->
+      <div class="glass-card p-8 rounded-3xl border-slate-800 mb-16 relative overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          
+          <div class="md:col-span-3 text-center">
+            <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-ocean-500 to-brand-500 p-1 mb-3">
+              <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-3xl font-black text-white font-inter">
+                AI
+              </div>
+            </div>
+            <h4 class="text-base font-black text-white">أحمد إبراهيم</h4>
+            <p class="text-xs font-semibold text-ocean-400 font-inter">Ahmad Ibrahim</p>
+            <p class="text-[11px] text-slate-400 mt-1" data-i18n="author_role">أخصائي نظم معلومات جغرافية وكارتوجرافي</p>
+          </div>
+
+          <div class="md:col-span-9 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-ocean-500/20 text-ocean-400 text-xs font-bold font-inter">Lead Developer & Cartographer</span>
+              <span class="text-xs text-slate-400 font-inter">@ahmadibrahim4geo</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" data-i18n="author_bio">
+              باحث ومطور متخصص في الجغرافيا المناخية الرقمية والنمذجة المكانية الآلية ونظم المعلومات الجغرافية. قام بتطوير منظومة مِرصاد (MIRSAD) لدعم الباحثين والجامعات ومراكز الأبحاث في جمهورية مصر العربية والوطن العربي بأدوات رصد واستيفاء كارتوجرافي بمعايير علمية دولية.
+            </p>
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <a href="https://github.com/ahmadibrahim4geo" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-2 transition">
+                <i class="fa-brands fa-github text-sm"></i>
+                <span>GitHub Profile</span>
+              </a>
+              <a href="mailto:ahmadibrahim4geo@gmail.com" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-2 transition">
+                <i class="fa-solid fa-envelope text-sm"></i>
+                <span data-i18n="btn_contact">تواصل مع المطور</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Official Citations Strip -->
+      <div class="py-6 border-t border-b border-slate-900 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-4 font-inter">
+        <div>
+          <span class="font-bold text-slate-300" data-i18n="credits_title">Official Data Citations:</span>
+          <span>NASA POWER Project • ECMWF Copernicus C3S • Open-Meteo • NOAA NCEI</span>
+        </div>
+        <div>
+          <span>Open Source under <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" class="text-ocean-400 hover:underline font-bold">MIT License</a></span>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-8 text-center text-xs text-slate-400">
+        <p>© 2026 MIRSAD (Meteorological Integrated Reanalysis Spatial Atlas Database). All rights reserved.</p>
+        <p class="mt-1 text-[11px] text-slate-400" data-i18n="footer_signature">تطوير أحمد إبراهيم (Ahmad Ibrahim) • صُممت لخدمة البحث العلمي الجغرافي والكارتوجرافي</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: BILINGUAL ENGINE & INTERACTIVE LOGIC -->
+  <!-- ========================================================================= -->
+  <script>
+    // -----------------------------------------------------------------------
+    // 1. DATA DICTIONARIES (19 MODULES)
+    // -----------------------------------------------------------------------
+    const modulesData = [
+      {
+        id: "MOD_01_TEMP",
+        cat: "thermal",
+        title_ar: "درجات حرارة الهواء والمجال الحراري",
+        title_en: "Air Temperature & Thermal Regime",
+        unit: "°C",
+        formula_ar: "T, Tmax, Tmin, DTR = Tmax - Tmin",
+        formula_en: "T, Tmax, Tmin, DTR = Tmax - Tmin",
+        desc_ar: "متوسط درجات الحرارة والقصوى والدنيا والمجال الحراري اليومي والمعدلات الفصلية.",
+        desc_en: "Mean, maximum, minimum temperatures, diurnal temperature range, and seasonal means."
+      },
+      {
+        id: "MOD_02_LST",
+        cat: "thermal",
+        title_ar: "حرارة سطح الأرض الإشعاعية (LST)",
+        title_en: "Land Surface Temperature (LST)",
+        unit: "°C",
+        formula_ar: "LST_Day, LST_Night, Diurnal Delta",
+        formula_en: "LST_Day, LST_Night, Diurnal Delta",
+        desc_ar: "حرارة جلد الأرض المستمدة من الأقمار الصناعية نهاراً وليلاً والفرق الإشعاعي.",
+        desc_en: "Satellite-derived skin temperature for day, night, and radiative diurnal difference."
+      },
+      {
+        id: "MOD_03_PRECIP",
+        cat: "hydro",
+        title_ar: "الأمطار التراكمية وخصائص الهطول",
+        title_en: "Precipitation & Rainfall Regimes",
+        unit: "mm / mm/day",
+        formula_ar: "P_tot, Rain_Days, SDII = P / Rain_Days",
+        formula_en: "P_tot, Rain_Days, SDII = P / Rain_Days",
+        desc_ar: "مجموع الهطول، عدد الأيام المطيرة (≥1 مم)، ومؤشر شدة المطر اليومي القياسي.",
+        desc_en: "Total precipitation, rainy days count (≥1 mm), and simple daily intensity index."
+      },
+      {
+        id: "MOD_04_MSLP",
+        cat: "wind",
+        title_ar: "ضغط مستوى سطح البحر والآيزوبار",
+        title_en: "Mean Sea-Level Pressure & Isobars",
+        unit: "hPa / mbar",
+        formula_ar: "PSL = P_stn * exp(M*g*z / R*T)",
+        formula_en: "PSL = P_stn * exp(M*g*z / R*T)",
+        desc_ar: "الضغط الجوي المعدل لمستوى البحر مع التوليد التلقائي لخطوط الآيزوبار الكارتوجرافية.",
+        desc_en: "Sea-level reduced pressure with automated vector isobar contour generation."
+      },
+      {
+        id: "MOD_05_SURF_PRESS",
+        cat: "wind",
+        title_ar: "الضغط الجوي السطحي للمحطة",
+        title_en: "Surface Atmospheric Pressure",
+        unit: "kPa / hPa",
+        formula_ar: "P_surf (Station Elevation)",
+        formula_en: "P_surf (Station Elevation)",
+        desc_ar: "الضغط الجوي الفعلي عند منسوب المحطة مع رصد تأثيرات التضاريس والارتفاع.",
+        desc_en: "Actual measured pressure at station elevation reflecting terrain variability."
+      },
+      {
+        id: "MOD_06_WIND_SPEED",
+        cat: "wind",
+        title_ar: "سرعة الرياح وهباتها القصوى",
+        title_en: "Wind Speed Dynamics & Gusts",
+        unit: "m/s / km/h",
+        formula_ar: "WS_mean, WS_max, Wind_Gusts",
+        formula_en: "WS_mean, WS_max, Wind_Gusts",
+        desc_ar: "سرعات الرياح على ارتفاع 10م و 2م مع رصد هبات الرياح القصوى اللحظية.",
+        desc_en: "Wind speeds at 10m and 2m heights along with peak instantaneous wind gusts."
+      },
+      {
+        id: "MOD_07_WIND_DIR",
+        cat: "wind",
+        title_ar: "الاتجاه المتجهي للرياح ووردة الرياح",
+        title_en: "Vector Wind Direction & Flow",
+        unit: "Degrees (°)",
+        formula_ar: "Dir = mod(atan2(-u, -v) * 180/pi, 360)",
+        formula_en: "Dir = mod(atan2(-u, -v) * 180/pi, 360)",
+        desc_ar: "حساب اتجاه الرياح المتجهي الدائري عبر atan2 وتوليد أسهم اتجاه الرياح في الخرائط.",
+        desc_en: "Circular vector wind direction using atan2 with automated map arrow vectors."
+      },
+      {
+        id: "MOD_08_RH",
+        cat: "hydro",
+        title_ar: "الرطوبة النسبية وعجز ضغط البخار",
+        title_en: "Relative Humidity & VPD",
+        unit: "% / kPa",
+        formula_ar: "RH = 100 * (e / es), VPD = es - e",
+        formula_en: "RH = 100 * (e / es), VPD = es - e",
+        desc_ar: "الرطوبة النسبية اليومية والشهرية وعجز ضغط بخار الماء المعتمد زراعياً.",
+        desc_en: "Daily and monthly relative humidity with vapor pressure deficit calculations."
+      },
+      {
+        id: "MOD_09_DEWPOINT",
+        cat: "hydro",
+        title_ar: "درجة حرارة نقطة الندى (Dew Point)",
+        title_en: "Dew Point Temperature",
+        unit: "°C",
+        formula_ar: "Magnus-Tetens Formula",
+        formula_en: "Magnus-Tetens Formula",
+        desc_ar: "نقطة الندى المحسوبة بدقة لتقدير التشبع المائي وتكون الضباب والصقيع.",
+        desc_en: "Precisely derived dew point for atmospheric saturation, fog, and frost analysis."
+      },
+      {
+        id: "MOD_10_SOLAR_RAD",
+        cat: "solar",
+        title_ar: "الإشعاع الشمسي الكلي (GHI & DNI)",
+        title_en: "Solar Radiation & Clearness Index",
+        unit: "MJ/m²/day / kWh/m²",
+        formula_ar: "ALLSKY_SFC_SW_DWN, KT Clearness",
+        formula_en: "ALLSKY_SFC_SW_DWN, KT Clearness",
+        desc_ar: "الإشعاع الشمسي السطحي الكلي ومعامل صفاء السماء المعتمد لدراسات الطاقة المتجددة.",
+        desc_en: "Total surface downwelling shortwave irradiance and clearness index for solar studies."
+      },
+      {
+        id: "MOD_11_UV_INDEX",
+        cat: "solar",
+        title_ar: "مؤشر الأشعة فوق البنفسجية (UV Index)",
+        title_en: "Ultraviolet (UV) Radiation Index",
+        unit: "Index (0 - 16+)",
+        formula_ar: "WHO 5-Tier Danger Scale",
+        formula_en: "WHO 5-Tier Danger Scale",
+        desc_ar: "مؤشر الأشعة فوق البنفسجية اليومي مصنفاً طبقاً لمعايير منظمة الصحة العالمية (WHO).",
+        desc_en: "Daily UV index categorized according to World Health Organization health tiers."
+      },
+      {
+        id: "MOD_12_CLOUD_COVER",
+        cat: "solar",
+        title_ar: "الغطاء السحابي بالأثمان والنسبة",
+        title_en: "Total Cloud Cover Amount",
+        unit: "% / Oktas (0-8)",
+        formula_ar: "Oktas = round(Cloud_% * 8 / 100)",
+        formula_en: "Oktas = round(Cloud_% * 8 / 100)",
+        desc_ar: "نسبة التغيم الكلية وتحويلها لأثمان السحب المعتمدة سينوبتيكياً في محطات الرصد.",
+        desc_en: "Cloud fraction percentage converted to synoptic oktas for aviation and climatology."
+      },
+      {
+        id: "MOD_13_HEAT_INDEX",
+        cat: "bio",
+        title_ar: "مؤشر الحرارة والإجهاد الحراري",
+        title_en: "Heat Index & Thermal Stress",
+        unit: "°C / Danger Tiers",
+        formula_ar: "Rothfusz 16-Term Regression (NWS)",
+        formula_en: "Rothfusz 16-Term Regression (NWS)",
+        desc_ar: "الحرارة المحسوسة الناتجة عن دمج الحرارة والرطوبة مع تصنيفات الخطورة الصحية.",
+        desc_en: "Apparent temperature combining heat and humidity with NWS danger categories."
+      },
+      {
+        id: "MOD_14_WIND_CHILL",
+        cat: "bio",
+        title_ar: "مؤشر برودة الرياح (Wind Chill)",
+        title_en: "Wind Chill Temperature Index",
+        unit: "°C",
+        formula_ar: "NWS 2001 Standard Formula",
+        formula_en: "NWS 2001 Standard Formula",
+        desc_ar: "الحرارة المكافئة لبرودة الرياح في الأجواء الباردة والرياح العاتية.",
+        desc_en: "Equivalent cooling sensation produced by wind on exposed human skin."
+      },
+      {
+        id: "MOD_15_HUMIDEX",
+        cat: "bio",
+        title_ar: "مؤشر الرطوبة الكندي (Humidex)",
+        title_en: "Canadian Humidex Index",
+        unit: "°C / Discomfort Scale",
+        formula_ar: "Masterson & Richardson (1979)",
+        formula_en: "Masterson & Richardson (1979)",
+        desc_ar: "مؤشر الانزعاج الحراري البشري المعتمد في كندا وأوروبا لدراسات راحة الإنسان.",
+        desc_en: "Human discomfort scale widely applied in bioclimatic and occupational studies."
+      },
+      {
+        id: "MOD_16_WBGT",
+        cat: "bio",
+        title_ar: "حرارة البصيلة الرطبة الكروية (WBGT)",
+        title_en: "Wet Bulb Globe Temp (WBGT)",
+        unit: "°C / ISO 7243",
+        formula_ar: "Liljegren Atmospheric Model",
+        formula_en: "Liljegren Atmospheric Model",
+        desc_ar: "المعيار العسكري والرياضي والمهني الدولي لتقييم الإجهاد الحراري تحت الشمس المباشرة.",
+        desc_en: "International occupational and sports standard for direct sun heat stress."
+      },
+      {
+        id: "MOD_17_ET0",
+        cat: "hydro",
+        title_ar: "البخر والنتح القياسي (FAO-56 ET0)",
+        title_en: "Reference Evapotranspiration (ET0)",
+        unit: "mm/day / mm/month",
+        formula_ar: "FAO-56 Penman-Monteith / Hargreaves",
+        formula_en: "FAO-56 Penman-Monteith / Hargreaves",
+        desc_ar: "حساب استهلاك المياه النباتي المرجعي وفق معادلة منظمة الأغذية والزراعة (FAO).",
+        desc_en: "Standard agricultural water demand based on the FAO-56 Penman-Monteith equation."
+      },
+      {
+        id: "MOD_18_ARIDITY",
+        cat: "bio",
+        title_ar: "قرائن الجفاف (De Martonne & UNEP)",
+        title_en: "Aridity & Drought Indices",
+        unit: "Index / Classes",
+        formula_ar: "Idm = P / (T + 10), AI = P / ET0",
+        formula_en: "Idm = P / (T + 10), AI = P / ET0",
+        desc_ar: "تصنيف الأقاليم المناخية من شديدة الجفاف إلى رطبة وفق قرائن دي مارتون والأمم المتحدة.",
+        desc_en: "Climatic classification from hyper-arid to humid using De Martonne and UNEP ratios."
+      },
+      {
+        id: "MOD_19_TRENDS",
+        cat: "trends",
+        title_ar: "اتجاهات وشذوذ المناخ (Trends & Anomalies)",
+        title_en: "Climate Trends & Standard Anomalies",
+        unit: "Slope/yr / Z-Score",
+        formula_ar: "Theil-Sen Median & Mann-Kendall",
+        formula_en: "Theil-Sen Median & Mann-Kendall",
+        desc_ar: "تحليل الانحدار اللامعلمي، ومعدل التغير السنوي، والشذوذ المعياري عن الفترات القياسية.",
+        desc_en: "Non-parametric trend slopes, decadal change, and baseline normalized anomalies."
+      }
+    ];
+
+    // -----------------------------------------------------------------------
+    // 2. BILINGUAL DICTIONARY
+    // -----------------------------------------------------------------------
+    const i18n = {
+      ar: {
+        nav_tagline: "منظومة مِرصاد للأطالس المناخية الرقمية",
+        nav_about: "عن المنظومة",
+        nav_sources: "المصادر الـ 5",
+        nav_modules: "الحزم الـ 19",
+        nav_tools: "الأدوات",
+        nav_setup: "التثبيت والتشغيل",
+        nav_downloads: "التحميلات",
+        nav_author: "المطور",
+        hero_badge: "الإصدار الشامل 2.0 • توافق تام مع ArcGIS Desktop 10.8 & Pro",
+        hero_title_1: "منظومة مِرصاد",
+        hero_title_2: "المحرك الكارتوجرافي الذكي لأطالس المناخ الرقمية",
+        hero_desc: "أداة بايثون متطورة (.pyt) مخصصة لبيئة نظم المعلومات الجغرافية (ArcGIS). تؤتمت سحب وتحليل السلاسل الزمنية المناخية المتصلة (1901-الآن)، وحساب 37+ مؤشراً علمياً ومعادلات FAO-56 و WMO، وإجراء الاستيفاء المكاني، وإنتاج أسطح راستر مصححة وخرائط متجهات الرياح والآيزوبار مع 2,250 تدرج لوني كارتوجرافي تلقائي.",
+        hero_btn_download: "تحميل صندوق الأدوات (.pyt)",
+        hero_btn_github: "تصفح المستودع على GitHub",
+        hero_btn_modules: "استعراض الحزم الـ 19",
+        badge_res_title: "أعلى دقة لليابسة",
+        badge_zero_title: "خلو تام من الفجوات",
+        metric_modules: "حزمة مناخية موديولية",
+        metric_sources: "مصادر بيانات معتمدة",
+        metric_ramps: "تدرج لوني كارتوجرافي",
+        metric_stations: "محطة رصد بمصر",
+        metric_indicators: "مؤشراً علمياً مسجلاً",
+        metric_free: "مفتوح المصدر (MIT)",
+        about_tag: "عن منظومة مِرصاد",
+        about_heading: "ما هي منظومة مِرصاد وما القيمة التي تقدمها؟",
+        about_subheading: "صُممت المنظومة لتتجاوز التحديات التاريخية في أبحاث المناخ التطبيقي ونظم المعلومات الجغرافية؛ حيث تحول مسار العمل من أسابيع من التجميع اليدوي إلى نقرة زر واحدة.",
+        val_card1_title: "توفير مئات الساعات البحثية",
+        val_card1_desc: "أتمتة كاملة لتنزيل وتوحيد وحساب السلاسل الزمنية المناخية (اليومية، الشهرية، الفصلية، والسنوية) من 1901 وحتى اليوم دون الحاجة لكتابة أكواد مخصصة في كل مرة.",
+        val_card2_title: "العمل دون إنترنت (Offline Mode)",
+        val_card2_desc: "دعم كامل للبيئات المعزولة وشبكات العمل المغلقة؛ حيث يمكن تغذية المنظومة بملفات إكسل أو طبقات جاهزة لتوليد الأطلس والاستيفاء والترميز الكارتوجرافي فوراً.",
+        val_card3_title: "مطابقة معايير WMO و FAO-56",
+        val_card3_desc: "تطبيق أدق المعادلات المعتمدة دولياً لحساب البخر-نتح المرجعي القياسي (Penman-Monteith)، وقرائن الجفاف (De Martonne & UNEP)، ومؤشرات الراحة البشرية (HI & WBGT).",
+        val_card4_title: "إخراج كارتوجرافي متكامل",
+        val_card4_desc: "توليد أسطح راستر حقيقية مقصوصة (Clipped GeoTIFF)، وخطوط تساوي الضغط (Isobars)، ومتجهات الرياح الدائرية عبر (atan2)، وقواعد بيانات جغرافية (GDB) وشيب فايل.",
+        val_card5_title: "مكتبة 2,250 تدرج لوني مخصصة",
+        val_card5_desc: "أكثر من 45 ملف ستايل (.style) تغطي 25 نظام تصنيف إحصائي (من فئتين وحتى 32 فئة)، لضمان تمثيل بصري قياسي يماثل كبرى الأطالس المناخية الدولية.",
+        val_card6_title: "سد الفجوات المناخية آلياً",
+        val_card6_desc: "نظام تدقيق جودة آلي ذكي (Auto QA & Gap-Filling) يستكشف الفجوات الناتجة عن صيانة أجهزة المحطات ويستكملها عبر مصفوفة النمذجة الهجينة دون أي بكسلات فارغة.",
+        src_tag: "5 مصادر بيانات معتمدة",
+        src_heading: "المصادر الخمسة المعتمدة في منظومة مِرصاد",
+        src_subheading: "تدمج المنظومة بين الرصد الأرضي المادي، ونماذج إعادة التحليل الأوروبية والأمريكية، والقياسات الإشعاعية الفضائية لتوفير أعلى درجات الموثوقية العلمية.",
+        src_badge_default: "المصدر الافتراضي",
+        src_1_title: "النموذج الهجين (Hybrid Climate Engine)",
+        src_1_sub: "رصد حقيقي + إكمال آلي + أقمار صناعية",
+        src_1_desc: "الخيار الموصى به لإنتاج أطلس متكامل؛ يدمج قراءات محطات الرصد الحقيقية مع إعادة التحليل والأقمار لضمان خلو الأسطح النهائية من أي بيانات مفقودة بنسبة 100%.",
+        src_2_title: "أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)",
+        src_2_sub: "رصد ميداني بحت من مستشعرات المحطات",
+        src_2_desc: "الحقيقة الأرضية المادية المباشرة من موازين الحرارة والبارومترات وأجهزة الأنيموميتر لأكثر من 14,000 محطة حول العالم. معتمد للتقارير الرسمية والقضائية.",
+        src_3_title: "وكالة ناسا الفضائية (NASA POWER)",
+        src_3_sub: "المعيار الذهبي للإشعاع الشمسي والـ UV",
+        src_3_desc: "قراءات مستمرة مستمدة من أقمار CERES و FLASHFlux الفضائية مع نموذج MERRA-2. مثالي لدراسات الطاقة المتجددة، ومؤشر الأشعة فوق البنفسجية، والمناخ الزراعي.",
+        src_4_title: "النموذج الأوروبي (Open-Meteo ERA5-Land)",
+        src_4_sub: "دقة فائقة معدلة طبوغرافياً لليابسة",
+        src_4_desc: "أعلى دقة مكانية شبكية متاحة عالمياً لليابسة (~9 كم) مع مراعاة انحدار درجات الحرارة مع التضاريس والارتفاع، ودعم رطوبة وحرارة التربة حتى عمق 255 سم.",
+        src_5_title: "مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)",
+        src_5_sub: "المصدر الرسمي المعتمد من ECMWF مع دعم المفتاح الرسمي والتدفق المفتوح",
+        src_5_desc: "المرجعية الأوروبية الأحدث عالمياً لبيانات ERA5 و AgERA5. تدعم المنظومة إدخال مفتاح الاعتماد الشخصي (CDS API Key) مع دعم التدفق السريع دون مفتاح (Zero-Auth Fallback)، وتوافق تام مع تحميل شرائح NetCDF وتحويلها لنقاط شبكية.",
+        mod_tag: "الحزم المناخية الـ 19",
+        mod_heading: "استعراض الحزم الـ 19 والمؤشرات العلمية",
+        mod_subheading: "تغطي المنظومة 19 حزمة علمية مستقلة يمكن تفعيلها منفردة أو مجتمعة لإنتاج مئات الطبقات المناخية المشتقة.",
+        filter_all: "الكل (19)",
+        filter_thermal: "الحرارة والسطح",
+        filter_hydro: "الأمطار والرطوبة",
+        filter_wind: "الرياح والضغط",
+        filter_bio: "البيومناخ والجفاف",
+        filter_solar: "الإشعاع والشمس",
+        filter_trends: "الاتجاهات والشذوذ",
+        tool_tag: "هيكلية أدوات مِرصاد",
+        tool_heading: "هيكلية وأدوات منظومة مِرصاد",
+        tool_subheading: "تتضمن المنظومة أداتين متخصصتين تغطيان كافة سيناريوهات البيانات النقطية والشريطية، بالإضافة لمركز محطات الطقس.",
+        tool_point_desc: "الأداة النقطية الرئيسية (.pyt). تتولى استعلام المحطات والنقاط، سحب السلاسل الزمنية، تطبيق المعادلات وحساب المؤشرات، وإجراء الاستيفاء المكاني (IDW, Kriging, Spline)، وإنتاج خرائط متجهات الرياح والآيزوبار والتصدير لـ GDB و Shapefile و Excel.",
+        tool_raster_desc: "أداة سحب ومعالجة الراستر الشريطي. متخصصة في تنزيل شرائح NetCDF والبيانات الشبكية المقصوصة من ERA5 و Copernicus CDS، وتحويل البكسلات لنقاط تحليل رئيسية لإنتاج طبقات الراستر الموزونة مباشرة.",
+        tool_hub_desc: "مركز محطات الرصد الجوي المرجعية لجمهورية مصر العربية ومحيطها الإقليمي. قاعدة بيانات جغرافية جاهزة (.gdb) مع أرقام WMO الرسمية، المناسيب الطبوغرافية، وسجلات الرصد لاختبار الأطلس فوراً.",
+        setup_tag: "المتطلبات والتثبيت",
+        setup_heading: "متطلبات التشغيل وخطوات التثبيت خطوة بخطوة",
+        setup_subheading: "لا تتطلب المنظومة أي عمليات تثبيت معقدة عبر سطر الأوامر؛ فقط أضف صندوق الأدوات مباشرة داخل بيئة ArcGIS المفضلة لديك.",
+        req_software_title: "البيئة البرمجية المدعومة (Software Compatibility)",
+        req_hardware_title: "العتاد والتوصيل (Hardware & Network)",
+        step1_title: "تحميل المستودع",
+        step1_desc: "قم بتحميل حزمة المستودع كملف ZIP وفك الضغط في أي مجلد عمل محلي، أو استنساخ المستودع عبر Git.",
+        step2_title: "فتح نافذة ArcToolbox",
+        step2_desc: "في برنامج ArcMap أو ArcGIS Pro، افتح نافذة ArcToolbox أو متصفح الكتالوج (Catalog Window).",
+        step3_title: "إضافة صندوق الأدوات",
+        step3_desc: "انقر بزر الفأرة الأيمن واختر Add Toolbox، ثم حدد ملف `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.",
+        step4_title: "التشغيل الفوري",
+        step4_desc: "افتح الأداة، وحدد طبقة النقاط والموديولات المطلوبة ومجلد الحفظ، ثم اضغط OK لبدء التوليد الآلي!",
+        down_tag: "التحميلات والمستودع",
+        down_heading: "حزم التحميل ومحتويات المستودع الرسمي",
+        down_subheading: "كافة الأدوات والقواميس والملفات التوثيقية مفتوحة ومتاحة للتحميل المباشر والاستخدام الأكاديمي والمهني.",
+        down_pyt_desc: "صندوق الأدوات الرئيسي (.pyt) الجاهز للعمل داخل ArcMap 10.8 و ArcGIS Pro.",
+        down_dict_desc: "قاموس الحقول والمؤشرات باللغتين العربية والإنجليزية مع الوحدات الفيزيائية.",
+        down_color_desc: "دليل الـ 2,250 تدرج لوني وقواعد التصنيف الكارتوجرافي للطبقات.",
+        down_doc_desc: "الدليل العلمي الشامل ومقارنة مصادر البيانات ومعادلات المؤشرات.",
+        btn_download_file: "تحميل الملف",
+        clone_title: "الاستنساخ المباشر عبر سطر الأوامر:",
+        btn_copy: "نسخ",
+        dev_tag: "دليل المساهمة والتطوير",
+        dev_heading: "كيف تساهم وتطور في منظومة مِرصاد؟",
+        dev_subheading: "المنظومة مبنية بمعمارية معيارية تتيح لأي باحث أو مبرمج إضافة مؤشرات أو حزم مناخية جديدة بسهولة وأمان.",
+        dev_card1_title: "1. فصل النواة عن ArcPy",
+        dev_card1_desc: "تعتمد المنظومة على كتابة الدوال الرياضية والخوارزميات بلغة Pure Python القياسية أولاً، ثم ربطها مع ArcPy لتسهيل الاختبار خارج بيئة ArcGIS.",
+        dev_card2_title: "2. اتباع دليل المنهجية (Doc 06)",
+        dev_card2_desc: "يتوفر في مجلد `Documents/06_Methodology_Adding_New_Climate_Module` دليل تطبيقي خطوة بخطوة لكيفية تسجيل موديول جديد وتوليد تدرجاته اللونية.",
+        dev_card3_title: "3. سحب الفروع وإرسال PR",
+        dev_card3_desc: "نرحب بكافة المساهمات العلمية والأكاديمية عبر فتح Pull Request أو الإبلاغ عن أي استفسار أو مشكلة عبر نافذة GitHub Issues.",
+        author_role: "أخصائي نظم معلومات جغرافية وكارتوجرافي",
+        author_bio: "باحث ومطور متخصص في الجغرافيا المناخية الرقمية والنمذجة المكانية الآلية ونظم المعلومات الجغرافية. قام بتطوير منظومة مِرصاد (MIRSAD) لدعم الباحثين والجامعات ومراكز الأبحاث في جمهورية مصر العربية والوطن العربي بأدوات رصد واستيفاء كارتوجرافي بمعايير علمية دولية.",
+        btn_contact: "تواصل مع المطور",
+        credits_title: "مصادر البيانات الرسمية المعتمدة:",
+        footer_signature: "تطوير أحمد إبراهيم (Ahmad Ibrahim) • صُممت لخدمة البحث العلمي الجغرافي والكارتوجرافي"
+      },
+      en: {
+        nav_tagline: "MIRSAD Digital Climate Atlas Platform",
+        nav_about: "About",
+        nav_sources: "5 Sources",
+        nav_modules: "19 Modules",
+        nav_tools: "Tools Suite",
+        nav_setup: "Setup Guide",
+        nav_downloads: "Downloads",
+        nav_author: "Author",
+        hero_badge: "Comprehensive Release 2.0 • 100% Compatible with ArcMap 10.8 & Pro",
+        hero_title_1: "MIRSAD Platform",
+        hero_title_2: "Intelligent Cartographic Engine for Digital Climate Atlases",
+        hero_desc: "Advanced ArcGIS Python Toolbox (.pyt) for spatial climatology. Automates contiguous time-series extraction (1901-Present), calculates 37+ WMO & FAO-56 scientific indicators, performs spatial interpolation, and generates clipped GeoTIFF rasters, vector wind arrows, and isobars with 2,250 curated cartographic color ramps.",
+        hero_btn_download: "Download Toolbox (.pyt)",
+        hero_btn_github: "View on GitHub",
+        hero_btn_modules: "Explore 19 Modules",
+        badge_res_title: "Peak Land Resolution",
+        badge_zero_title: "Guaranteed Continuity",
+        metric_modules: "Modular Climate Packages",
+        metric_sources: "Authoritative Data Sources",
+        metric_ramps: "Cartographic Color Ramps",
+        metric_stations: "Egypt Weather Stations",
+        metric_indicators: "Verified Climate Indicators",
+        metric_free: "Open Source (MIT)",
+        about_tag: "ABOUT MIRSAD PLATFORM",
+        about_heading: "What is MIRSAD and What Value Does it Deliver?",
+        about_subheading: "Engineered to overcome historical roadblocks in applied spatial climatology by condensing weeks of manual extraction, calculation, and cartographic symbology into a single click.",
+        val_card1_title: "Saving Hundreds of Research Hours",
+        val_card1_desc: "Full automated download, normalization, and multi-decadal time-series aggregation (daily, monthly, seasonal, annual) from 1901 to present without custom one-off scripts.",
+        val_card2_title: "100% Pure Offline Mode",
+        val_card2_desc: "Native support for air-gapped workstations and secure networks. Feed the engine pre-computed points or Excel tables to generate rasters and cartographic maps instantly.",
+        val_card3_title: "WMO & FAO-56 Compliance",
+        val_card3_desc: "Rigorous international formulation for reference evapotranspiration (Penman-Monteith ET0), aridity indices (De Martonne & UNEP), and human bioclimatic stress (HI & WBGT).",
+        val_card4_title: "Full Cartographic Outputs",
+        val_card4_desc: "Produces real clipped GeoTIFF rasters, sea-level isobars, circular vector wind arrows (atan2), geodatabases (GDB), shapefiles, and formatted Excel sheets.",
+        val_card5_title: "2,250 Curated Color Ramps",
+        val_card5_desc: "Over 45 tailored .style files covering 25 statistical classification tiers (from 2 to 32 classes), adhering to international national atlas cartographic design standards.",
+        val_card6_title: "Automated QA & Gap-Filling",
+        val_card6_desc: "Smart multi-tiered QA checks that detect station sensor maintenance blackouts and backfill gaps via hybrid reanalysis models, guaranteeing zero empty pixels.",
+        src_tag: "5 AUTHORITATIVE CLIMATE SOURCES",
+        src_heading: "The 5 Integrated Climate Data Sources",
+        src_subheading: "Seamlessly uniting physical station telemetry, European & American atmospheric reanalyses, and satellite radiometers for uncompromising scientific rigor.",
+        src_badge_default: "Default Engine",
+        src_1_title: "Hybrid Climate Engine (Default)",
+        src_1_sub: "Real Telemetry + Auto Gap-Filling + Satellite Fusion",
+        src_1_desc: "The recommended choice for complete atlas generation. Blends ground sensor readings with satellite observations and reanalysis to ensure 100% gap-free raster surfaces.",
+        src_2_title: "NOAA ISD Ground Station Archive",
+        src_2_sub: "Pure Physical Ground Sensor Readings",
+        src_2_desc: "Physical ground truth directly from thermometers, barometers, and anemometers across 14,000+ stations worldwide. Fully certified for legal and official forensic reports.",
+        src_3_title: "NASA POWER Agroclimatology",
+        src_3_sub: "Global Gold Standard for Solar Radiation & UV",
+        src_3_desc: "Satellite-derived fluxes from CERES and FLASHFlux combined with MERRA-2. Ideal for renewable energy, UV index assessments, and agrometeorological crop water balance.",
+        src_4_title: "Open-Meteo ERA5 / ERA5-Land",
+        src_4_sub: "Ultra High-Resolution Topo-Corrected Reanalysis",
+        src_4_desc: "The highest global land reanalysis resolution (~9 km), adjusted for elevation lapses and complex terrain, with multi-layer soil moisture down to 255 cm.",
+        src_5_title: "Copernicus Climate Data Store (CDS)",
+        src_5_sub: "Official ECMWF / C3S Source with API Key & Zero-Auth Streaming",
+        src_5_desc: "The European flagship authority for ERA5 and AgERA5. Fully supports user CDS API Key authentication with automatic zero-auth fallback streaming and NetCDF tiling.",
+        mod_tag: "THE 19 CLIMATE MODULES",
+        mod_heading: "Interactive 19 Climate Packages Showcase",
+        mod_subheading: "Covering 19 distinct physical and bioclimatic domains that can be executed independently or in concert to produce hundreds of thematic map layers.",
+        filter_all: "All (19)",
+        filter_thermal: "Thermal & Surface",
+        filter_hydro: "Precip & Humidity",
+        filter_wind: "Wind & Pressure",
+        filter_bio: "Bioclimatic & Aridity",
+        filter_solar: "Radiation & Solar",
+        filter_trends: "Trends & Anomalies",
+        tool_tag: "MIRSAD TOOLS SUITE",
+        tool_heading: "Dual Tool Architecture & Station Hub",
+        tool_subheading: "Offering complementary workflows for station points, regional raster tiling, and a comprehensive ready-to-use Egyptian meteorological hub.",
+        tool_point_desc: "Primary point & station toolbox (.pyt). Handles API queries, time series aggregation, scientific formulas, spatial interpolation (IDW, Kriging, Spline), isobars, and GDB export.",
+        tool_raster_desc: "High-throughput raster tiling tool. Specializes in NetCDF extraction and tile clipping from ERA5 and Copernicus CDS, converting grid cells into weighted points.",
+        tool_hub_desc: "Verified meteorological hub for Egypt and surrounding territories. Pre-packaged geodatabase (.gdb) featuring 73 stations with official WMO IDs and elevation coordinates.",
+        setup_tag: "SYSTEM REQUIREMENTS & SETUP",
+        setup_heading: "System Requirements & 4-Step Quick Setup",
+        setup_subheading: "Zero complicated command-line installations. Simply plug the Python Toolbox directly into your favorite ArcGIS environment.",
+        req_software_title: "Software Compatibility",
+        req_hardware_title: "Hardware & Network Specs",
+        step1_title: "Download Repository",
+        step1_desc: "Download the project as a ZIP archive and extract it locally, or clone the repository via Git.",
+        step2_title: "Open ArcToolbox",
+        step2_desc: "In ArcMap or ArcGIS Pro, launch ArcToolbox or navigate to the Catalog Window.",
+        step3_title: "Add Python Toolbox",
+        step3_desc: "Right-click and select Add Toolbox, then pick `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.",
+        step4_title: "Execute & Generate",
+        step4_desc: "Open the tool, select your station points, choose modules, set output directory, and click OK!",
+        down_tag: "DOWNLOADS & PACKAGES",
+        down_heading: "Official Release Packages & Downloads",
+        down_subheading: "All toolboxes, data dictionaries, and scientific documentation are completely open and available for instant download.",
+        down_pyt_desc: "Main ArcGIS Python Toolbox (.pyt) ready for ArcMap 10.8 and ArcGIS Pro.",
+        down_dict_desc: "Bilingual English/Arabic field dictionary with scientific units and abbreviations.",
+        down_color_desc: "Complete 2,250 color ramps decision guide and statistical classification rules.",
+        down_doc_desc: "Comprehensive scientific manual, source comparisons, and mathematical formulas.",
+        btn_download_file: "Download File",
+        clone_title: "Direct Command-Line Clone:",
+        btn_copy: "Copy",
+        dev_tag: "CONTRIBUTING & METHODOLOGY",
+        dev_heading: "How to Contribute & Extend MIRSAD?",
+        dev_subheading: "Constructed with modular architecture allowing researchers and engineers to introduce new climate indicators with safety and ease.",
+        dev_card1_title: "1. Core & ArcPy Separation",
+        dev_card1_desc: "Algorithms and math formulas are isolated in Pure Python functions first, allowing rapid unit testing independent of heavy GIS runtimes.",
+        dev_card2_title: "2. Methodology Guide (Doc 06)",
+        dev_card2_desc: "Follow `Documents/06_Methodology_Adding_New_Climate_Module` for step-by-step instructions on registering indicators and generating symbologies.",
+        dev_card3_title: "3. Fork & Pull Requests",
+        dev_card3_desc: "We welcome academic and professional contributions via GitHub Pull Requests or reporting issues on our GitHub tracker.",
+        author_role: "GIS Specialist & Cartographer",
+        author_bio: "Researcher and developer specializing in digital spatial climatology, automated spatial modeling, and GIS. Developed MIRSAD to equip researchers, universities, and planning institutions with international-grade climate atlas generators.",
+        btn_contact: "Contact Developer",
+        credits_title: "Authoritative Data Citations:",
+        footer_signature: "Developed by Ahmad Ibrahim • Dedicated to Advancing Spatial Climate Science"
+      }
+    };
+
+    // -----------------------------------------------------------------------
+    // 3. LANGUAGE SWITCHER LOGIC
+    // -----------------------------------------------------------------------
+    let currentLang = localStorage.getItem('mirsad_lang') || 'ar';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('mirsad_lang', lang);
+
+      const html = document.documentElement;
+      const body = document.body;
+      const langText = document.getElementById('langText');
+
+      if (lang === 'ar') {
+        html.setAttribute('lang', 'ar');
+        html.setAttribute('dir', 'rtl');
+        body.classList.remove('lang-en');
+        langText.textContent = 'English';
+      } else {
+        html.setAttribute('lang', 'en');
+        html.setAttribute('dir', 'ltr');
+        body.classList.add('lang-en');
+        langText.textContent = 'العربية';
+      }
+
+      // Update all static i18n text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang] && i18n[lang][key]) {
+          el.innerHTML = i18n[lang][key];
+        }
+      });
+
+      // Update placeholders
+      const searchInput = document.getElementById('moduleSearchInput');
+      if (searchInput) {
+        searchInput.placeholder = lang === 'ar' ? 'ابحث باسم الموديول أو الرمز...' : 'Search module by name or code...';
+      }
+
+      // Re-render modules cards
+      renderModules();
+    }
+
+    document.getElementById('langToggleBtn').addEventListener('click', () => {
+      setLanguage(currentLang === 'ar' ? 'en' : 'ar');
+    });
+
+    // -----------------------------------------------------------------------
+    // 4. MODULES RENDERER & INTERACTIVE FILTER
+    // -----------------------------------------------------------------------
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    function renderModules() {
+      const container = document.getElementById('modulesContainer');
+      if (!container) return;
+
+      const filtered = modulesData.filter(m => {
+        const matchesCat = activeCategory === 'all' || m.cat === activeCategory;
+        const q = searchQuery.toLowerCase().trim();
+        const matchesQuery = !q || 
+          m.id.toLowerCase().includes(q) ||
+          m.title_ar.toLowerCase().includes(q) ||
+          m.title_en.toLowerCase().includes(q) ||
+          m.formula_ar.toLowerCase().includes(q) ||
+          m.formula_en.toLowerCase().includes(q);
+        return matchesCat && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500">
+            <i class="fa-solid fa-filter-circle-xmark text-3xl mb-3"></i>
+            <p class="text-sm font-semibold">${currentLang === 'ar' ? 'لا توجد حزم تطابق شروط البحث' : 'No modules match your query'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => {
+        const title = currentLang === 'ar' ? m.title_ar : m.title_en;
+        const desc = currentLang === 'ar' ? m.desc_ar : m.desc_en;
+        const formula = currentLang === 'ar' ? m.formula_ar : m.formula_en;
+
+        let iconClass = 'fa-temperature-high text-ocean-400';
+        if (m.cat === 'hydro') iconClass = 'fa-cloud-rain text-brand-400';
+        if (m.cat === 'wind') iconClass = 'fa-wind text-cyan-400';
+        if (m.cat === 'bio') iconClass = 'fa-heart-pulse text-pink-400';
+        if (m.cat === 'solar') iconClass = 'fa-sun text-solar-400';
+        if (m.cat === 'trends') iconClass = 'fa-chart-line text-purple-400';
+
+        return `
+          <div class="glass-card p-5 rounded-2xl border-slate-800 hover:border-ocean-500/40 transition duration-300 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[10px] font-mono text-ocean-300 font-bold font-inter">${m.id}</span>
+                <i class="fa-solid ${iconClass} text-lg"></i>
+              </div>
+              <h4 class="text-base font-extrabold text-white mb-1 group-hover:text-ocean-300 transition-colors">${title}</h4>
+              <p class="text-xs text-slate-400 leading-relaxed mb-3">${desc}</p>
+            </div>
+            
+            <div class="pt-3 border-t border-slate-800/80 space-y-1.5 font-inter text-[11px]">
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Unit:</span>
+                <span class="text-brand-300 font-semibold font-mono">${m.unit}</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Formula:</span>
+                <span class="text-slate-300 font-mono text-[10px] truncate max-w-[170px]" title="${formula}">${formula}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Category Tabs Event
+    document.querySelectorAll('#moduleCategoryTabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#moduleCategoryTabs button').forEach(b => {
+          b.classList.remove('bg-ocean-500', 'text-white');
+          b.classList.add('bg-slate-800', 'text-slate-300');
+        });
+        btn.classList.add('bg-ocean-500', 'text-white');
+        btn.classList.remove('bg-slate-800', 'text-slate-300');
+
+        activeCategory = btn.getAttribute('data-cat');
+        renderModules();
+      });
+    });
+
+    // Search Input Event
+    const searchInput = document.getElementById('moduleSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderModules();
+      });
+    }
+
+    // -----------------------------------------------------------------------
+    // 5. COPY GIT CLONE COMMAND
+    // -----------------------------------------------------------------------
+    const copyBtn = document.getElementById('copyGitCloneBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const cmd = 'git clone https://github.com/ahmadibrahim4geo/MIRSAD.git';
+        navigator.clipboard.writeText(cmd).then(() => {
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = `<i class="fa-solid fa-check text-brand-400"></i> <span>${currentLang === 'ar' ? 'تم النسخ!' : 'Copied!'}</span>`;
+          setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+          }, 2000);
+        });
+      });
+    }
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    // Initial Execution
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(currentLang);
+    });
+  </script>
+
+</body>
+</html>

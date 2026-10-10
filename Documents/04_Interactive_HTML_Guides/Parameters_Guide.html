@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل براميترات الأداة</title>
+<style>
+:root{--primary:#1B365D;--bg:#F1F5F9;--card:#fff;--border:#CBD5E1;--muted:#64748B}
+*{box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);margin:0;color:#0F172A}
+header{background:linear-gradient(135deg,#1B365D,#2A528A);color:#fff;padding:26px}
+header a{color:#FBD38D;font-weight:bold}
+.wrap{max-width:1200px;margin:0 auto;padding:20px}
+.toolbar{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap}
+.toolbar input,.toolbar select{padding:10px 14px;border:2px solid var(--border);border-radius:8px;font-size:1rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.card h3{margin:0 0 4px;color:var(--primary);font-size:1.02rem}
+.meta{color:var(--muted);font-size:0.82rem;margin-bottom:8px}
+.desc{font-size:0.9rem;white-space:pre-wrap}
+.vals{font-size:0.82rem;color:#334155;margin-top:6px}
+code{background:#F1F5F9;padding:1px 6px;border-radius:4px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1B365D;color:#fff;padding:10px 18px;border-radius:6px;display:none;z-index:9999}
+#backTop{display:none;position:fixed;bottom:24px;right:24px;z-index:9998;padding:10px 14px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>دليل براميترات أداة الأطلس المناخي</h1>
+<p>65 براميتر — مولد تلقائياً من كود الأداة</p>
+<p><a href="Parameters_Guide_EN.html">English Edition</a></p>
+</div></header>
+<div class="wrap">
+<div class="toolbar">
+<input id="q" placeholder="ابحث باسم البراميتر..." onkeyup="applyFilter()" style="flex:1">
+<select id="cat" onchange="applyFilter()"><option value="">كل الفئات</option><option value=""></option><option value="Climate Modules & Models">Climate Modules & Models</option><option value="Data Source">Data Source</option><option value="Interpolation Parameters">Interpolation Parameters</option><option value="Maintenance & Cache">Maintenance & Cache</option><option value="Map Options">Map Options</option><option value="Measurement Units & Standards">وحدات القياس والمعايير</option><option value="Output Options">خيارات المخرجات</option><option value="Post-Processing">Post-Processing</option><option value="Pre-Processing">Pre-Processing</option><option value="Pressure Contour">Pressure Contour</option><option value="Raster Reclassification">Raster Reclassification</option><option value="Time Window">النافذة الزمنية</option><option value="Variable & Field Selection">اختيار المتغيرات والحقول</option></select>
+</div>
+<p id="count"></p>
+<div id="cards"><div class="card" data-cat="" data-search="Operation Mode Operation_Mode GPString ">
+            <h3>Operation Mode</h3>
+            <div class="meta"><code>Operation_Mode</code> &bull; GPString &bull; </div>
+            <div class="desc">REQUIRED. Choose operation mode:\n</div><div class='vals'>Default: <code>"Download &amp; Generate Atlas (Full Pipeline) [Default]"</code></div></div>
+<div class="card" data-cat="" data-search="Execution Workflow Mode Execution_Workflow_Mode GPString ">
+            <h3>Execution Workflow Mode</h3>
+            <div class="meta"><code>Execution_Workflow_Mode</code> &bull; GPString &bull; </div>
+            <div class="desc">DOWNLOAD MODE ONLY. Choose workflow execution architecture:\n</div><div class='vals'>Default: <code>"Batch Mode: Download All Then Process [Recommended]"</code></div></div>
+<div class="card" data-cat="" data-search="Input Point Features Input_Point_Features GPFeatureLayer ">
+            <h3>Input Point Features</h3>
+            <div class="meta"><code>Input_Point_Features</code> &bull; GPFeatureLayer &bull; </div>
+            <div class="desc"></div><div class='vals'>Values: <code>Point</code></div></div>
+<div class="card" data-cat="" data-search="Precalculated Point Layer(s) (Offline Mode) Precalculated_Point_Layers GPFeatureLayer ">
+            <h3>Precalculated Point Layer(s) (Offline Mode) <b>(multi-value)</b></h3>
+            <div class="meta"><code>Precalculated_Point_Layers</code> &bull; GPFeatureLayer &bull; </div>
+            <div class="desc"></div><div class='vals'>Values: <code>Point</code>, <code>Multipoint</code></div></div>
+<div class="card" data-cat="" data-search="Study Area Mask (optional polygon) Study_Area_Mask GPFeatureLayer ">
+            <h3>Study Area Mask (optional polygon)</h3>
+            <div class="meta"><code>Study_Area_Mask</code> &bull; GPFeatureLayer &bull; </div>
+            <div class="desc">OPTIONAL but recommended. Polygon used to set processing extent/mask,  clip final rasters, and generate wind vectors/isobars.</div><div class='vals'>Values: <code>Polygon</code></div></div>
+<div class="card" data-cat="" data-search="Study Area Name (Optional) Study_Area_Name GPString ">
+            <h3>Study Area Name (Optional)</h3>
+            <div class="meta"><code>Study_Area_Name</code> &bull; GPString &bull; </div>
+            <div class="desc"></div><div class='vals'>Default: <code>None</code></div></div>
+<div class="card" data-cat="" data-search="Output Folder Workspace Output_Workspace DEFolder ">
+            <h3>Output Folder Workspace</h3>
+            <div class="meta"><code>Output_Workspace</code> &bull; DEFolder &bull; </div>
+            <div class="desc">REQUIRED. Output folder workspace. A File Geodatabase  'Climate_Database.gdb' is created inside automatically.</div></div>
+<div class="card" data-cat="" data-search="Output Spatial Reference Output_Spatial_Reference GPSpatialReference ">
+            <h3>Output Spatial Reference</h3>
+            <div class="meta"><code>Output_Spatial_Reference</code> &bull; GPSpatialReference &bull; </div>
+            <div class="desc">OPTIONAL. Target coordinate system for all outputs.  DEFAULT: same as input points.</div></div>
+<div class="card" data-cat="Measurement Units &amp; Standards" data-search="Measurement Units System Measurement_Units_System GPString Measurement Units &amp; Standards">
+            <h3>Measurement Units System</h3>
+            <div class="meta"><code>Measurement_Units_System</code> &bull; GPString &bull; وحدات القياس والمعايير</div>
+            <div class="desc">Select the measurement units system for atlas outputs.\n</div><div class='vals'>Default: <code>"Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]"</code></div></div>
+<div class="card" data-cat="Measurement Units &amp; Standards" data-search="Temperature Unit Temperature_Unit GPString Measurement Units &amp; Standards">
+            <h3>Temperature Unit</h3>
+            <div class="meta"><code>Temperature_Unit</code> &bull; GPString &bull; وحدات القياس والمعايير</div>
+            <div class="desc"></div><div class='vals'>Default: <code>"Celsius (°C) [Default]"</code></div></div>
+<div class="card" data-cat="Measurement Units &amp; Standards" data-search="Precipitation Unit Precipitation_Unit GPString Measurement Units &amp; Standards">
+            <h3>Precipitation Unit</h3>
+            <div class="meta"><code>Precipitation_Unit</code> &bull; GPString &bull; وحدات القياس والمعايير</div>
+            <div class="desc"></div><div class='vals'>Default: <code>"Millimeters (mm) [Default]"</code></div></div>
+<div class="card" data-cat="Measurement Units &amp; Standards" data-search="Pressure Unit Pressure_Unit GPString Measurement Units &amp; Standards">
+            <h3>Pressure Unit</h3>
+            <div class="meta"><code>Pressure_Unit</code> &bull; GPString &bull; وحدات القياس والمعايير</div>
+            <div class="desc"></div><div class='vals'>Default: <code>"Hectopascals (hPa) [Default]"</code></div></div>
+<div class="card" data-cat="Measurement Units &amp; Standards" data-search="Wind Speed Unit Wind_Speed_Unit GPString Measurement Units &amp; Standards">
+            <h3>Wind Speed Unit</h3>
+            <div class="meta"><code>Wind_Speed_Unit</code> &bull; GPString &bull; وحدات القياس والمعايير</div>
+            <div class="desc"></div><div class='vals'>Default: <code>"Meters per second (m/s) [Default]"</code></div></div>
+<div class="card" data-cat="Measurement Units &amp; Standards" data-search="Solar Radiation Unit Solar_Radiation_Unit GPString Measurement Units &amp; Standards">
+            <h3>Solar Radiation Unit</h3>
+            <div class="meta"><code>Solar_Radiation_Unit</code> &bull; GPString &bull; وحدات القياس والمعايير</div>
+            <div class="desc"></div><div class='vals'>Default: <code>"Kilowatt-hours per square meter per day (kWh/m2/day) [Default]"</code></div></div>
+<div class="card" data-cat="Output Options" data-search="Export Shapefiles (Optional) Export_Shapefiles GPBoolean Output Options">
+            <h3>Export Shapefiles (Optional)</h3>
+            <div class="meta"><code>Export_Shapefiles</code> &bull; GPBoolean &bull; خيارات المخرجات</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Output Options" data-search="Create Arabic-Alias Database Copy (Optional) Create_Arabic_Database GPBoolean Output Options">
+            <h3>Create Arabic-Alias Database Copy (Optional)</h3>
+            <div class="meta"><code>Create_Arabic_Database</code> &bull; GPBoolean &bull; خيارات المخرجات</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Data Source" data-search="Climate Data Source Climate_Data_Source GPString Data Source">
+            <h3>Climate Data Source</h3>
+            <div class="meta"><code>Climate_Data_Source</code> &bull; GPString &bull; Data Source</div>
+            <div class="desc">REQUIRED. Data provider for all climate queries.</div><div class='vals'>Values: <code>NASA POWER API</code>, <code>Open-Meteo Historical API (ERA5 Reanalysis)</code></div><div class='vals'>Default: <code>"NASA POWER API"</code></div></div>
+<div class="card" data-cat="Data Source" data-search="Open-Meteo Reanalysis Model OpenMeteo_Model GPString Data Source">
+            <h3>Open-Meteo Reanalysis Model</h3>
+            <div class="meta"><code>OpenMeteo_Model</code> &bull; GPString &bull; Data Source</div>
+            <div class="desc">OPEN-METEO ONLY. Atmospheric reanalysis model.</div><div class='vals'>Default: <code>"ERA5-Land (Highest Resolution ~9 km / 0.1 deg) [Recommended]"</code></div></div>
+<div class="card" data-cat="Time Window" data-search="Time Mode Time_Mode GPString Time Window">
+            <h3>Time Mode</h3>
+            <div class="meta"><code>Time_Mode</code> &bull; GPString &bull; النافذة الزمنية</div>
+            <div class="desc">REQUIRED. 'Single Year' queries January-December of one year.  'Year Range' computes multi-year climatological normals.  'Custom Date Range' queries specific start/end dates via calendar or text.</div><div class='vals'>Values: <code>Single Year</code>, <code>Year Range</code>, <code>Custom Date Range</code></div><div class='vals'>Default: <code>"Single Year"</code></div></div>
+<div class="card" data-cat="Time Window" data-search="Single Year (type any year) Single_Year GPLong Time Window">
+            <h3>Single Year (type any year)</h3>
+            <div class="meta"><code>Single_Year</code> &bull; GPLong &bull; النافذة الزمنية</div>
+            <div class="desc">Type any year you need (free entry, no list).</div><div class='vals'>Default: <code>2024</code></div></div>
+<div class="card" data-cat="Time Window" data-search="Start Year (type any year) Start_Year GPLong Time Window">
+            <h3>Start Year (type any year)</h3>
+            <div class="meta"><code>Start_Year</code> &bull; GPLong &bull; النافذة الزمنية</div>
+            <div class="desc">Type the first year of the period (free entry, no list).</div><div class='vals'>Default: <code>2015</code></div></div>
+<div class="card" data-cat="Time Window" data-search="End Year (type any year) End_Year GPLong Time Window">
+            <h3>End Year (type any year)</h3>
+            <div class="meta"><code>End_Year</code> &bull; GPLong &bull; النافذة الزمنية</div>
+            <div class="desc">Type the last year of the period (free entry, no list).</div><div class='vals'>Default: <code>2024</code></div></div>
+<div class="card" data-cat="Time Window" data-search="Start Date Start_Date GPDate Time Window">
+            <h3>Start Date</h3>
+            <div class="meta"><code>Start_Date</code> &bull; GPDate &bull; النافذة الزمنية</div>
+            <div class="desc">CUSTOM DATE RANGE ONLY. Pick from the built-in calendar</div><div class='vals'>Default: <code>"01/01/2024"</code></div></div>
+<div class="card" data-cat="Time Window" data-search="End Date End_Date GPDate Time Window">
+            <h3>End Date</h3>
+            <div class="meta"><code>End_Date</code> &bull; GPDate &bull; النافذة الزمنية</div>
+            <div class="desc">CUSTOM DATE RANGE ONLY. Pick from the built-in calendar</div><div class='vals'>Default: <code>"31/12/2024"</code></div></div>
+<div class="card" data-cat="Time Window" data-search="Temporal Resolution Temporal_Resolution GPString Time Window">
+            <h3>Temporal Resolution</h3>
+            <div class="meta"><code>Temporal_Resolution</code> &bull; GPString &bull; النافذة الزمنية</div>
+            <div class="desc"></div><div class='vals'>Values: <code>Monthly</code>, <code>Daily</code></div><div class='vals'>Default: <code>"Monthly"</code></div></div>
+<div class="card" data-cat="Time Window" data-search="Gap Fill Method Gap_Fill_Method GPString Time Window">
+            <h3>Gap Fill Method</h3>
+            <div class="meta"><code>Gap_Fill_Method</code> &bull; GPString &bull; النافذة الزمنية</div>
+            <div class="desc"></div><div class='vals'>Values: <code>Climatological Month Mean (Recommended)</code>, <code>Linear + Boundary Interpolation</code>, <code>Spatial Nearest Neighbor Fallback</code>, <code>No Fill (skip missing)</code></div><div class='vals'>Default: <code>"Climatological Month Mean (Recommended)"</code></div></div>
+<div class="card" data-cat="" data-search="Download &amp; Save Point Data Only (Skip Rasters &amp; Atlas) Download_Only GPBoolean ">
+            <h3>Download &amp; Save Point Data Only (Skip Rasters &amp; Atlas)</h3>
+            <div class="meta"><code>Download_Only</code> &bull; GPBoolean &bull; </div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Climate Modules &amp; Models" data-search="Climate Modules &amp; Models Climate_Modules GPString Climate Modules &amp; Models">
+            <h3>Climate Modules &amp; Models <b>(multi-value)</b></h3>
+            <div class="meta"><code>Climate_Modules</code> &bull; GPString &bull; Climate Modules &amp; Models</div>
+            <div class="desc">Select primary climate modules and applied bioclimatic models to compute and export.</div><div class='vals'>Default: <code>None</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Temporal Scope / Seasons Temporal_Scope GPString Variable &amp; Field Selection">
+            <h3>Temporal Scope / Seasons <b>(multi-value)</b></h3>
+            <div class="meta"><code>Temporal_Scope</code> &bull; GPString &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc">TEMPORAL MATRIX SCOPE. Select which temporal scopes and seasons to compute and map</div><div class='vals'>Values: <code>Annual</code>, <code>Winter</code>, <code>Spring</code>, <code>Summer</code>, <code>Autumn</code></div><div class='vals'>Default: <code>"Annual;Winter;Spring;Summer;Autumn"</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Generate Monthly Climatology Rasters (Jan-Dec) Generate_Monthly_Rasters GPBoolean Variable &amp; Field Selection">
+            <h3>Generate Monthly Climatology Rasters (Jan-Dec)</h3>
+            <div class="meta"><code>Generate_Monthly_Rasters</code> &bull; GPBoolean &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Save Daily Time Series (Daily sheet) Save_Daily_Series GPBoolean Variable &amp; Field Selection">
+            <h3>Save Daily Time Series (Daily sheet)</h3>
+            <div class="meta"><code>Save_Daily_Series</code> &bull; GPBoolean &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Wind Chill Full Suite for Cold Regions (Seasons+Ranges+Monthly) Extended_WC_Seasons GPBoolean Variable &amp; Field Selection">
+            <h3>Wind Chill Full Suite for Cold Regions (Seasons+Ranges+Monthly)</h3>
+            <div class="meta"><code>Extended_WC_Seasons</code> &bull; GPBoolean &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Monthly Ranges - Interannual Variability per Month Monthly_Ranges GPBoolean Variable &amp; Field Selection">
+            <h3>Monthly Ranges - Interannual Variability per Month</h3>
+            <div class="meta"><code>Monthly_Ranges</code> &bull; GPBoolean &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Heat Index Monthly Means (Opt-in Suite) Extended_HI_Months GPBoolean Variable &amp; Field Selection">
+            <h3>Heat Index Monthly Means (Opt-in Suite)</h3>
+            <div class="meta"><code>Extended_HI_Months</code> &bull; GPBoolean &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Field Filter Scope Field_Filter_Scope GPString Variable &amp; Field Selection">
+            <h3>Field Filter Scope</h3>
+            <div class="meta"><code>Field_Filter_Scope</code> &bull; GPString &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc">REQUIRED. Controls which variables, seasons, and indicators are computed and exported.</div><div class='vals'>Default: <code>"Full Suite (Annual + Seasonal + Monthly) [Recommended]"</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Variables Selection (Checklist) Selected_Fields GPString Variable &amp; Field Selection">
+            <h3>Variables Selection (Checklist) <b>(multi-value)</b></h3>
+            <div class="meta"><code>Selected_Fields</code> &bull; GPString &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc">VARIABLES SELECTION. Interactive checklist of climate variables and indicators to compute.  All fields for the selected Climate Modules are included by default.  Check or uncheck individual variables as needed, or use the Filter Scope above to filter by seasons/periods.</div><div class='vals'>Default: <code>None</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Included Summary Periods Included_Aggregations GPString Variable &amp; Field Selection">
+            <h3>Included Summary Periods <b>(multi-value)</b></h3>
+            <div class="meta"><code>Included_Aggregations</code> &bull; GPString &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc">PERIOD FILTER ONLY. Choose summary levels to generate.  'Annual Summaries': annual means and totals.</div><div class='vals'>Values: <code>Annual Summaries</code>, <code>Seasonal Summaries</code>, <code>Detailed Monthly Climatology (Jan-Dec)</code>, <code>Extreme &amp; Bioclimatic Indices</code></div><div class='vals'>Default: <code>"Annual Summaries;Seasonal Summaries;Extreme &amp; Bioclimatic Indices"</code></div></div>
+<div class="card" data-cat="Variable &amp; Field Selection" data-search="Included Seasons Included_Seasons GPString Variable &amp; Field Selection">
+            <h3>Included Seasons <b>(multi-value)</b></h3>
+            <div class="meta"><code>Included_Seasons</code> &bull; GPString &bull; اختيار المتغيرات والحقول</div>
+            <div class="desc">SEASONS FILTER ONLY. Select which seasons to generate.</div><div class='vals'>Values: <code>Winter (DJF)</code>, <code>Spring (MAM)</code>, <code>Summer (JJA)</code>, <code>Autumn (SON)</code></div><div class='vals'>Default: <code>"Winter (DJF);Spring (MAM);Summer (JJA);Autumn (SON)"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Interpolation Method Interpolation_Method GPString Interpolation Parameters">
+            <h3>Interpolation Method</h3>
+            <div class="meta"><code>Interpolation_Method</code> &bull; GPString &bull; Interpolation Parameters</div>
+            <div class="desc"></div><div class='vals'>Values: <code>IDW</code>, <code>Ordinary Kriging</code>, <code>Spline</code>, <code>Natural Neighbor</code></div><div class='vals'>Default: <code>"IDW"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="IDW Curve Profile IDW_Curve_Profile GPString Interpolation Parameters">
+            <h3>IDW Curve Profile</h3>
+            <div class="meta"><code>IDW_Curve_Profile</code> &bull; GPString &bull; Interpolation Parameters</div>
+            <div class="desc"></div><div class='vals'>Values: <code>Gentle / Smooth (Power 1.2)</code>, <code>Standard Quadratic (Power 2.0)</code>, <code>Regional Broad (Power 0.7)</code>, <code>Custom Power</code></div><div class='vals'>Default: <code>"Gentle / Smooth (Power 1.2)"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="IDW Power IDW_Power GPDouble Interpolation Parameters">
+            <h3>IDW Power</h3>
+            <div class="meta"><code>IDW_Power</code> &bull; GPDouble &bull; Interpolation Parameters</div>
+            <div class="desc">IDW ONLY. Power parameter. DEFAULT 1.2 for smooth, seamless climate surfaces without artificial bullseyes.</div><div class='vals'>Default: <code>1.2</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="IDW Search Radius Type IDW_Search_Type GPString Interpolation Parameters">
+            <h3>IDW Search Radius Type</h3>
+            <div class="meta"><code>IDW_Search_Type</code> &bull; GPString &bull; Interpolation Parameters</div>
+            <div class="desc">IDW ONLY. 'Variable' (default): expand search. 'Fixed': fixed radius.</div><div class='vals'>Values: <code>Variable</code>, <code>Fixed</code></div><div class='vals'>Default: <code>"Variable"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="IDW Number of Points IDW_Num_Points GPLong Interpolation Parameters">
+            <h3>IDW Number of Points</h3>
+            <div class="meta"><code>IDW_Num_Points</code> &bull; GPLong &bull; Interpolation Parameters</div>
+            <div class="desc">IDW ONLY. Number of neighbouring points. DEFAULT 12.</div><div class='vals'>Default: <code>12</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="IDW Maximum Distance (metres, optional) IDW_Max_Distance GPDouble Interpolation Parameters">
+            <h3>IDW Maximum Distance (metres, optional)</h3>
+            <div class="meta"><code>IDW_Max_Distance</code> &bull; GPDouble &bull; Interpolation Parameters</div>
+            <div class="desc">IDW ONLY, OPTIONAL. Caps the search neighbourhood in metres.</div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Kriging Semivariogram Model Krig_Model GPString Interpolation Parameters">
+            <h3>Kriging Semivariogram Model</h3>
+            <div class="meta"><code>Krig_Model</code> &bull; GPString &bull; Interpolation Parameters</div>
+            <div class="desc">KRIGING ONLY. DEFAULT Spherical.</div><div class='vals'>Values: <code>Spherical</code>, <code>Circular</code>, <code>Exponential</code>, <code>Gaussian</code></div><div class='vals'>Default: <code>"Spherical"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Kriging Type Krig_Type GPString Interpolation Parameters">
+            <h3>Kriging Type</h3>
+            <div class="meta"><code>Krig_Type</code> &bull; GPString &bull; Interpolation Parameters</div>
+            <div class="desc">KRIGING ONLY. 'Ordinary' (default) or 'Universal'.</div><div class='vals'>Values: <code>Ordinary</code>, <code>Universal</code></div><div class='vals'>Default: <code>"Ordinary"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Kriging Number of Points Krig_Num_Points GPLong Interpolation Parameters">
+            <h3>Kriging Number of Points</h3>
+            <div class="meta"><code>Krig_Num_Points</code> &bull; GPLong &bull; Interpolation Parameters</div>
+            <div class="desc">KRIGING ONLY. DEFAULT 12.</div><div class='vals'>Default: <code>12</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Spline Type Spline_Type GPString Interpolation Parameters">
+            <h3>Spline Type</h3>
+            <div class="meta"><code>Spline_Type</code> &bull; GPString &bull; Interpolation Parameters</div>
+            <div class="desc"></div><div class='vals'>Values: <code>Tension</code>, <code>Regularized</code></div><div class='vals'>Default: <code>"Tension"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Spline Weight Spline_Weight GPDouble Interpolation Parameters">
+            <h3>Spline Weight</h3>
+            <div class="meta"><code>Spline_Weight</code> &bull; GPDouble &bull; Interpolation Parameters</div>
+            <div class="desc"></div><div class='vals'>Default: <code>5.0</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Spline Number of Points Spline_Num_Points GPLong Interpolation Parameters">
+            <h3>Spline Number of Points</h3>
+            <div class="meta"><code>Spline_Num_Points</code> &bull; GPLong &bull; Interpolation Parameters</div>
+            <div class="desc">SPLINE ONLY. Number of neighbouring points used for interpolation. DEFAULT 12.</div><div class='vals'>Default: <code>12</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Base Cell Size (Meters) [Default: 500 Meters] Base_Cell_Size GPLinearUnit Interpolation Parameters">
+            <h3>Base Cell Size (Meters) [Default: 500 Meters]</h3>
+            <div class="meta"><code>Base_Cell_Size</code> &bull; GPLinearUnit &bull; Interpolation Parameters</div>
+            <div class="desc">REQUIRED. Cell size for all rasters in Meters or Kilometers.  Default: 500 Meters. NOTE: fine cells improve appearance only;</div><div class='vals'>Default: <code>"500 Meters"</code></div></div>
+<div class="card" data-cat="Interpolation Parameters" data-search="Wind Vector Spacing / Cell Size (Meters) Wind_Factor_Cell_Size GPLinearUnit Interpolation Parameters">
+            <h3>Wind Vector Spacing / Cell Size (Meters)</h3>
+            <div class="meta"><code>Wind_Factor_Cell_Size</code> &bull; GPLinearUnit &bull; Interpolation Parameters</div>
+            <div class="desc">OPTIONAL. Independent coarser spacing for wind arrow points  in Meters or Kilometers. Default: 25000 Meters.  Enabled only when Wind module is selected.</div><div class='vals'>Default: <code>"25000 Meters"</code></div></div>
+<div class="card" data-cat="Raster Reclassification" data-search="Enable Raster Reclassification Enable_Raster_Reclass GPBoolean Raster Reclassification">
+            <h3>Enable Raster Reclassification</h3>
+            <div class="meta"><code>Enable_Raster_Reclass</code> &bull; GPBoolean &bull; Raster Reclassification</div>
+            <div class="desc"></div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Raster Reclassification" data-search="Number of Classes Reclass_Classes_Count GPLong Raster Reclassification">
+            <h3>Number of Classes</h3>
+            <div class="meta"><code>Reclass_Classes_Count</code> &bull; GPLong &bull; Raster Reclassification</div>
+            <div class="desc"></div><div class='vals'>Default: <code>7</code></div></div>
+<div class="card" data-cat="Raster Reclassification" data-search="Classification Method Reclass_Method GPString Raster Reclassification">
+            <h3>Classification Method</h3>
+            <div class="meta"><code>Reclass_Method</code> &bull; GPString &bull; Raster Reclassification</div>
+            <div class="desc">RECLASS ONLY. Statistical classification method to partition raster continuous values.</div><div class='vals'>Values: <code>Natural Breaks (Jenks)</code>, <code>Equal Interval</code>, <code>Equal Area (Quantile)</code>, <code>Geometric Interval</code>, <code>Standard Deviation</code></div><div class='vals'>Default: <code>"Natural Breaks (Jenks)"</code></div></div>
+<div class="card" data-cat="Pressure Contour" data-search="Create PSL Isobar Contour (Optional) Create_Isobars GPBoolean Pressure Contour">
+            <h3>Create PSL Isobar Contour (Optional)</h3>
+            <div class="meta"><code>Create_Isobars</code> &bull; GPBoolean &bull; Pressure Contour</div>
+            <div class="desc">OPTIONAL. Creates isobar polylines from pressure rasters  when a pressure module is selected.</div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Pressure Contour" data-search="Pressure Contour Scheme (Optional) Pressure_Interval_Scheme GPString Pressure Contour">
+            <h3>Pressure Contour Scheme (Optional)</h3>
+            <div class="meta"><code>Pressure_Interval_Scheme</code> &bull; GPString &bull; Pressure Contour</div>
+            <div class="desc">ISOBARS ONLY. Contour interval preset.</div><div class='vals'>Values: <code>Global Standard (4 mbar)</code>, <code>Local Detailed (2 mbar)</code>, <code>Custom Interval</code></div><div class='vals'>Default: <code>"Global Standard (4 mbar)"</code></div></div>
+<div class="card" data-cat="Pressure Contour" data-search="Custom Pressure Step (mbar) (Optional) Custom_Pressure_Step GPDouble Pressure Contour">
+            <h3>Custom Pressure Step (mbar) (Optional)</h3>
+            <div class="meta"><code>Custom_Pressure_Step</code> &bull; GPDouble &bull; Pressure Contour</div>
+            <div class="desc">ISOBARS ONLY, CUSTOM SCHEME ONLY. Step in mbar/hPa. Must be &gt; 0.</div><div class='vals'>Default: <code>4.0</code></div></div>
+<div class="card" data-cat="Post-Processing" data-search="Apply Focal Smoothing Focal_Smoothing GPBoolean Post-Processing">
+            <h3>Apply Focal Smoothing</h3>
+            <div class="meta"><code>Focal_Smoothing</code> &bull; GPBoolean &bull; Post-Processing</div>
+            <div class="desc">OPTIONAL. Smooths interpolated rasters with Focal Statistics.</div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Post-Processing" data-search="Focal Statistic Focal_Statistic GPString Post-Processing">
+            <h3>Focal Statistic</h3>
+            <div class="meta"><code>Focal_Statistic</code> &bull; GPString &bull; Post-Processing</div>
+            <div class="desc">FOCAL ONLY. DEFAULT MEAN.</div><div class='vals'>Values: <code>MEAN</code>, <code>MEDIAN</code>, <code>MINIMUM</code>, <code>MAXIMUM</code>, <code>STD</code></div><div class='vals'>Default: <code>"MEAN"</code></div></div>
+<div class="card" data-cat="Post-Processing" data-search="Focal Neighborhood (cells) Focal_Neighborhood GPLong Post-Processing">
+            <h3>Focal Neighborhood (cells)</h3>
+            <div class="meta"><code>Focal_Neighborhood</code> &bull; GPLong &bull; Post-Processing</div>
+            <div class="desc">FOCAL ONLY. Square neighbourhood in cells (3 = 3x3). DEFAULT 3.</div><div class='vals'>Default: <code>3</code></div></div>
+<div class="card" data-cat="Pre-Processing" data-search="Point Tolerance (0 = off) Point_Tolerance GPLinearUnit Pre-Processing">
+            <h3>Point Tolerance (0 = off)</h3>
+            <div class="meta"><code>Point_Tolerance</code> &bull; GPLinearUnit &bull; Pre-Processing</div>
+            <div class="desc"></div><div class='vals'>Default: <code>"0 Meters"</code></div></div>
+<div class="card" data-cat="Map Options" data-search="Add Results To Current Map Add_To_Map GPBoolean Map Options">
+            <h3>Add Results To Current Map</h3>
+            <div class="meta"><code>Add_To_Map</code> &bull; GPBoolean &bull; Map Options</div>
+            <div class="desc">OPTIONAL (default OFF). Safely adds final layers to the current map sequentially.</div><div class='vals'>Default: <code>False</code></div></div>
+<div class="card" data-cat="Map Options" data-search="Map Add Modules (elements to add) Map_Add_Modules GPString Map Options">
+            <h3>Map Add Modules (elements to add) <b>(multi-value)</b></h3>
+            <div class="meta"><code>Map_Add_Modules</code> &bull; GPString &bull; Map Options</div>
+            <div class="desc">ADD-TO-MAP ONLY. Choose which elements to add to the map.</div><div class='vals'>Default: <code>None</code></div></div>
+<div class="card" data-cat="Maintenance &amp; Cache" data-search="Purge Intermediate Cache Purge_Cache GPBoolean Maintenance &amp; Cache">
+            <h3>Purge Intermediate Cache</h3>
+            <div class="meta"><code>Purge_Cache</code> &bull; GPBoolean &bull; Maintenance &amp; Cache</div>
+            <div class="desc"></div><div class='vals'>Default: <code>True</code></div></div></div>
+</div>
+<div id="toast"></div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#9650;</button>
+<script>
+function applyFilter(){
+  var q=document.getElementById('q').value.toLowerCase();
+  var ce=document.getElementById('cat'); var c=ce?ce.value:'';
+  var n=0,total=0;
+  document.querySelectorAll('#cards .card').forEach(function(el){
+    total++;
+    var ok=(el.getAttribute('data-search')||'').toLowerCase().includes(q);
+    if(c) ok=ok&&el.getAttribute('data-cat')===c;
+    el.style.display=ok?'block':'none';
+    if(ok)n++;
+  });
+  document.getElementById('count').innerText=n+' / '+total;
+}
+document.addEventListener('DOMContentLoaded',applyFilter);
+window.addEventListener('scroll',function(){var b=document.getElementById('backTop');if(b)b.style.display=(window.scrollY>600)?'block':'none';});
+</script>
+</body>
+</html>
