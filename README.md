@@ -1,5 +1,8 @@
 # MIRSAD (مِرصاد) — Climate Atlas & Meteorological Database Platform
 ## Multi-source Integrated Reanalysis & Surface Atlas Database
+
+<img src="assets/mirsad-favicon.svg" alt="مِرصاد | MIRSAD — folded map logo" width="96" height="96">
+
 ### منظومة مِرصاد لتوليد الأطالس المناخية وقواعد البيانات الجغرافية المعتمدة لبرنامجي ArcGIS Pro و ArcMap 10.8
 
 [![Platform: MIRSAD](https://img.shields.io/badge/Platform-MIRSAD%20(مِرصاد)-0284c7.svg?style=for-the-badge)](https://github.com/ahmadibrahim4geo)
