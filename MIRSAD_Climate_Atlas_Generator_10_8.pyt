@@ -7869,9 +7869,10 @@ class PowerClimateAtlasGenerator(object):
 
     def _export_daily_gdb_table(self, gdb_path, short, daily_pkg, msg, warn):
         """Exports daily time series records into a standalone File Geodatabase Table."""
-        if not HAS_ARCPY or not daily_pkg or not daily_pkg.get("rows"):
+        if not _HAS_ARCPY or not daily_pkg or not daily_pkg.get("rows"):
             return
         tbl_name = "%s_Daily" % short
+
         tbl_path = os.path.join(gdb_path, tbl_name)
         try:
             if arcpy.Exists(tbl_path):
