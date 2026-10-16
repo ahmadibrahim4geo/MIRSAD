@@ -266,6 +266,14 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                 "• 'Open-Meteo Historical API': High-resolution ERA5-Land reanalysis (~9 km resolution, 1940-Present)."
             )
 
+        p_dly = core_pdict.get("Save_Daily_Series")
+        if p_dly:
+            p_dly.displayName = "Save Daily Time Series (Daily Sheet + CSV + GDB Table)"
+            p_dly.description = (
+                "When enabled (with Daily temporal resolution), saves the complete daily time series "
+                "into a dedicated 'Daily' sheet in the Excel workbook, an open CSV file, and a table inside the Geodatabase."
+            )
+
         station_params = [
             p_st_mode, p_st_region, p_st_country,
             p_st_poly, p_st_supp, p_st_buffer, p_st_custom, p_st_local
@@ -278,6 +286,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         ]
 
         return station_params + filtered_core
+
 
     def updateParameters(self, parameters):
         pdict = dict((p.name, p) for p in parameters)
@@ -830,7 +839,17 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                     else:
                         val = val_text = "Download & Generate Atlas (Full Pipeline) [Default]"
 
+                # Guarantee Daily time series persistence when Temporal is Daily
+                elif p_name == "Save_Daily_Series":
+                    p_temp_check = pdict.get("Temporal_Resolution")
+                    temp_txt = p_temp_check.valueAsText if p_temp_check else ""
+                    if "Daily" in temp_txt or "يومي" in temp_txt:
+                        if val is not False:
+                            val = True
+                            val_text = "true"
+
                 core_parameters.append(_ParamProxy(p_name, val, val_text))
+
 
             # Add injected feature layers as proxies
             core_parameters.append(_ParamProxy("Input_Point_Features", station_shp, station_shp))
@@ -1046,7 +1065,17 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
         if p_bcell:
             p_bcell.displayName = "حجم الخلية الأساسي لأسطح الراستر (بالأمتار)"
 
+        # 19. Save_Daily_Series
+        p_dly = pdict.get("Save_Daily_Series")
+        if p_dly:
+            p_dly.displayName = "حفظ السلاسل الزمنية اليومية (شيت Daily + ملف CSV + قاعدة البيانات)"
+            p_dly.description = (
+                "حفظ السلسلة الزمنية اليومية الكاملة لمحطات الرصد الجوي في شيت منفصل (Daily) "
+                "في مصنف إكسل، وملف CSV مستقل، وجدول متكامل داخل قاعدة البيانات الجغرافية."
+            )
+
         return params
+
 
     def updateParameters(self, parameters):
         pdict = dict((p.name, p) for p in parameters)

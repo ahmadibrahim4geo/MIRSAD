@@ -3839,35 +3839,71 @@ def _mark_dropped(v, dropped):
 
 
 def om_parse_response(data, daily_vars, hourly_vars):
-    """Map an Open-Meteo response to canonical monthly dicts + daily precip."""
+    """Map an Open-Meteo response to canonical monthly dicts + complete daily series."""
     monthly, daily_raw = {}, {}
     daily = data.get("daily", {}) or {}
     hourly = data.get("hourly", {}) or {}
     dates = daily.get("time", []) or []
+
+    # 1. Process daily variables
     for v in daily_vars:
         canon = OM_CANON.get(v, v)
         mode = "sum" if v in OM_SUM_VARS else "mean"
-        monthly[canon] = om_group_daily(dates, daily.get(v, []), mode)
-    htimes = hourly.get("time", []) or []
-    for v in hourly_vars:
-        canon = OM_CANON.get(v, v)
-        monthly[canon] = om_group_hourly(htimes, hourly.get(v, []))
-    if "precipitation_sum" in daily_vars:
-        praw = {}
-        for d, val in zip(dates, daily.get("precipitation_sum", []) or []):
+        vals = daily.get(v, []) or []
+        monthly[canon] = om_group_daily(dates, vals, mode)
+        # Parse complete daily time series for this variable
+        draw = {}
+        for d, val in zip(dates, vals):
             if val is None:
                 continue
             try:
                 f = float(val)
             except Exception:
                 continue
-            if f == f:
+            if f == f:  # not NaN
                 try:
-                    praw[(int(d[0:4]), int(d[5:7]), int(d[8:10]))] = f
+                    draw[(int(d[0:4]), int(d[5:7]), int(d[8:10]))] = f
                 except Exception:
                     pass
-        daily_raw["PRECTOTCORR"] = praw
+        if draw:
+            daily_raw[canon] = draw
+            if canon != v:
+                daily_raw[v] = draw
+
+    # 2. Process hourly variables and aggregate to daily when missing
+    htimes = hourly.get("time", []) or []
+    for v in hourly_vars:
+        canon = OM_CANON.get(v, v)
+        hvals = hourly.get(v, []) or []
+        monthly[canon] = om_group_hourly(htimes, hvals)
+        if canon not in daily_raw and htimes and hvals:
+            day_accum = {}
+            for t_str, val in zip(htimes, hvals):
+                if val is None:
+                    continue
+                try:
+                    fv = float(val)
+                except Exception:
+                    continue
+                if fv == fv:
+                    try:
+                        ymd = (int(t_str[0:4]), int(t_str[5:7]), int(t_str[8:10]))
+                        day_accum.setdefault(ymd, []).append(fv)
+                    except Exception:
+                        pass
+            if day_accum:
+                mode = "sum" if v in OM_SUM_VARS else "mean"
+                draw = {}
+                for ymd, vlist in day_accum.items():
+                    if vlist:
+                        draw[ymd] = sum(vlist) if mode == "sum" else (sum(vlist) / float(len(vlist)))
+                if draw:
+                    daily_raw[canon] = draw
+                    if canon != v:
+                        daily_raw[v] = draw
+
     return monthly, daily_raw
+
 
 
 def fetch_openmeteo_point(lat, lon, y0, y1, modules, timeout=60, retries=3,
@@ -5641,8 +5677,21 @@ class PowerClimateAtlasGenerator(object):
                     pdict["Custom_Pressure_Step"].value = 4.0
                 elif show_iso:
                     pdict["Custom_Pressure_Step"].value = 2.0
-                pdict["Custom_Pressure_Step"].enabled = False
+        # Daily time series persistence control
+        p_temp = pdict.get("Temporal_Resolution")
+        p_dly = pdict.get("Save_Daily_Series")
+        if p_temp and p_dly:
+            t_val = p_temp.valueAsText or "Monthly"
+            is_daily = bool(t_val and ("Daily" in t_val or "يومي" in t_val))
+            p_dly.enabled = is_daily
+            if is_daily:
+                if not p_dly.altered:
+                    p_dly.value = True
+            else:
+                p_dly.value = False
+
         return
+
 
     def updateMessages(self, parameters):
         try:
@@ -6459,11 +6508,13 @@ class PowerClimateAtlasGenerator(object):
             sa_avail = False
             if not download_only:
                 try:
-                    arcpy.CheckOutExtension("Spatial")
+                    if not hasattr(arcpy, "mp"):
+                        arcpy.CheckOutExtension("Spatial")
                     sa_avail = True
                 except Exception:
                     sa_avail = False
                     warn("Spatial Analyst unavailable: raster interpolation skipped.")
+
 
             if is_offline:
                 msg("Offline Mode: merging precalculated point layer(s) ...")
@@ -6809,6 +6860,12 @@ class PowerClimateAtlasGenerator(object):
                                 warn("Daily table skipped for '%s': %s" % (m, str(ex_d)[:150]))
                         self._export_excel(fc, os.path.join(paths["vec"], short + ".xls"), msg, warn,
                                            daily=daily_pkg, module_name=m)
+                        if daily_pkg:
+                            try:
+                                self._export_daily_gdb_table(gdb_path, short, daily_pkg, msg, warn)
+                            except Exception as ex_gt:
+                                warn("Daily GDB table skipped for '%s': %s" % (m, ex_gt))
+
 
                         elem_rasters = []
                         t_mod_interp_elapsed = 0.0
@@ -7199,9 +7256,14 @@ class PowerClimateAtlasGenerator(object):
             raise
         finally:
             try:
-                arcpy.CheckInExtension("Spatial")
+                # In ArcGIS Pro, checking in extension inside background geoprocessing causes
+                # IAoInitialize / CheckInLicenseExtension null pointer dereference (0xC0000005 in ucrtbase.dll!strcpy).
+                # Only check in extension in desktop ArcMap (10.x).
+                if not hasattr(arcpy, "mp"):
+                    arcpy.CheckInExtension("Spatial")
             except Exception:
                 pass
+
 
     def _add_to_map(self, registry, wind_fcs, map_modules, msg, warn):
         """Add chosen elements to the CURRENT ArcMap data frame, one group layer
@@ -7629,18 +7691,39 @@ class PowerClimateAtlasGenerator(object):
                 pass
 
     def _build_daily_table(self, results, params):
-        """Long-format daily series for the Daily sheet: {"params": [...], "rows": [...]}.
+        """Long-format daily series for the Daily sheet: {"params": [...], "header": [...], "rows": [...]}.
 
-        Rows: [oid, source_id, YYYY-MM-DD, v1, ...] sorted by oid then date.
+        Rows: [oid, sid, st_id, st_nm, ctry, lat, lon, YYYY-MM-DD, v1, ...] sorted by oid then date.
         Missing daily values are left blank (never -999-filled). Returns None
         when no daily data is present."""
-        if not results or not params:
+        if not results:
             return None
-        have = [p for p in params
-                if any(isinstance((rec.get("daily_raw", {}) or {}).get(p), dict)
-                       and (rec.get("daily_raw", {}) or {})[p] for rec in results)]
+
+        # Discover all available variables across results
+        available_keys = set()
+        for rec in results:
+            draw = rec.get("daily_raw", {}) or {}
+            for k, v in draw.items():
+                if isinstance(v, dict) and v:
+                    available_keys.add(k)
+
+        if not available_keys:
+            return None
+
+        # Identify matching parameters: canonical NASA param, Open-Meteo param, or any available
+        have = []
+        for p in (params or []):
+            if p in available_keys and p not in have:
+                have.append(p)
+            else:
+                for k in available_keys:
+                    if OM_CANON.get(k) == p and k not in have:
+                        have.append(k)
+        if not have:
+            have = sorted(list(available_keys))
         if not have:
             return None
+
         out_rows = []
         for rec in results:
             draw = rec.get("daily_raw", {}) or {}
@@ -7648,6 +7731,11 @@ class PowerClimateAtlasGenerator(object):
                 continue
             oid = rec.get("oid")
             sid = rec.get("Source_ID", rec.get("source_id", oid))
+            st_id = rec.get("Station_ID", rec.get("station_id", sid))
+            st_nm = rec.get("Station_Nm", rec.get("station_name", rec.get("Name", "")))
+            ctry = rec.get("Country_Cd", rec.get("country", rec.get("Country", "")))
+            lat = rec.get("lat")
+            lon = rec.get("lon")
             by_date = {}
             for p in have:
                 for ymd, v in (draw.get(p) or {}).items():
@@ -7665,10 +7753,12 @@ class PowerClimateAtlasGenerator(object):
                         continue
                     by_date.setdefault(ds, {})[p] = round(fv, 3)
             for ds in sorted(by_date):
-                out_rows.append([oid, sid, ds] + [by_date[ds].get(p) for p in have])
+                out_rows.append([oid, sid, st_id, st_nm, ctry, lat, lon, ds] + [by_date[ds].get(p) for p in have])
         if not out_rows:
             return None
-        return {"params": have, "rows": out_rows}
+        header = ["OBJECTID", "Source_ID", "Station_ID", "Station_Name", "Country", "Latitude", "Longitude", "Date"] + have
+        return {"params": have, "header": header, "rows": out_rows}
+
 
     def _export_excel(self, fc, xls_path, msg, warn, daily=None, module_name=None):
         try:
@@ -7698,22 +7788,25 @@ class PowerClimateAtlasGenerator(object):
             # Optional third sheet: daily time series (opt-in, Daily temporal only).
             # Month sheet is always kept; daily never replaces it.
             if daily and daily.get("rows"):
-                d_header = ["OBJECTID", "Source_ID", "Date"] + list(daily.get("params", []))
+                d_header = daily.get("header") or (["OBJECTID", "Source_ID", "Date"] + list(daily.get("params", [])))
                 d_rows = daily["rows"]
                 if len(d_rows) <= 60000:
                     sheets_to_write.append(("Daily", d_header, d_rows, False))
                 else:
-                    csv_path = os.path.splitext(xls_path)[0] + "_daily.csv"
-                    try:
-                        import csv as _csv
-                        with open(csv_path, "w", newline="") as _fh:
-                            _w = _csv.writer(_fh)
-                            _w.writerow(d_header)
-                            _w.writerows(d_rows)
-                        warn("Daily sheet skipped (rows=%d exceed .xls capacity); wrote %s instead."
-                             % (len(d_rows), csv_path))
-                    except Exception as ex_csv:
-                        warn("Daily export failed: %s" % ex_csv)
+                    msg("Daily sheet in Excel skipped (rows=%d exceed .xls 65k limit); full CSV and GDB tables saved instead." % len(d_rows))
+
+                # ALWAYS export complete daily timeseries CSV so data is completely retained regardless of row limits
+                csv_path = os.path.splitext(xls_path)[0] + "_daily.csv"
+                try:
+                    import csv as _csv
+                    with open(csv_path, "w", newline="", encoding="utf-8-sig") as _fh:
+                        _w = _csv.writer(_fh)
+                        _w.writerow(d_header)
+                        _w.writerows(d_rows)
+                    msg("Saved Daily Timeseries CSV: %s (%d records)" % (csv_path, len(d_rows)))
+                except Exception as ex_csv:
+                    warn("Daily CSV export failed: %s" % ex_csv)
+
 
             # Dedicated Source Data Provenance sheet for this element
             try:
@@ -7773,6 +7866,44 @@ class PowerClimateAtlasGenerator(object):
     def _export_csv(self, fc, csv_path, msg, warn, module_name=None):
         xls_path = os.path.splitext(csv_path)[0] + ".xls"
         return self._export_excel(fc, xls_path, msg, warn, module_name=module_name)
+
+    def _export_daily_gdb_table(self, gdb_path, short, daily_pkg, msg, warn):
+        """Exports daily time series records into a standalone File Geodatabase Table."""
+        if not HAS_ARCPY or not daily_pkg or not daily_pkg.get("rows"):
+            return
+        tbl_name = "%s_Daily" % short
+        tbl_path = os.path.join(gdb_path, tbl_name)
+        try:
+            if arcpy.Exists(tbl_path):
+                try:
+                    arcpy.management.Delete(tbl_path)
+                except Exception:
+                    pass
+            arcpy.management.CreateTable(gdb_path, tbl_name)
+
+            arcpy.management.AddField(tbl_path, "Source_ID", "LONG")
+            arcpy.management.AddField(tbl_path, "Station_ID", "TEXT", field_length=30)
+            arcpy.management.AddField(tbl_path, "Station_Name", "TEXT", field_length=120)
+            arcpy.management.AddField(tbl_path, "Country", "TEXT", field_length=20)
+            arcpy.management.AddField(tbl_path, "Point_Lat", "DOUBLE")
+            arcpy.management.AddField(tbl_path, "Point_Lon", "DOUBLE")
+            arcpy.management.AddField(tbl_path, "Obs_Date", "TEXT", field_length=15)
+
+            params = daily_pkg.get("params", [])
+            for p in params:
+                arcpy.management.AddField(tbl_path, p, "DOUBLE", field_alias=p)
+
+            cur_fields = ["Source_ID", "Station_ID", "Station_Name", "Country", "Point_Lat", "Point_Lon", "Obs_Date"] + params
+            with arcpy.da.InsertCursor(tbl_path, cur_fields) as cur:
+                for r in daily_pkg["rows"]:
+                    # r: [oid, sid, st_id, st_nm, ctry, lat, lon, ds] + [vals]
+                    row_data = [r[1], str(r[2] or ""), str(r[3] or ""), str(r[4] or ""), r[5], r[6], str(r[7] or "")] + list(r[8:])
+                    cur.insertRow(row_data)
+            cnt = int(arcpy.management.GetCount(tbl_path)[0])
+            msg("Saved Geodatabase Daily Table: %s (%d records)" % (tbl_name, cnt))
+        except Exception as ex:
+            warn("Could not export daily table to GDB: %s" % ex)
+
 
     def _interp_surface(self, in_points, field, cell, method, iopts=None, kopts=None):
         iopts = iopts or {"power": 1.2, "search": "Variable", "npoints": 12, "maxdist": None,
