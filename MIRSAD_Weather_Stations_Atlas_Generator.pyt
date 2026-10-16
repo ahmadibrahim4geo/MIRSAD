@@ -71,6 +71,17 @@ class Toolbox(object):
         self.tools = [WeatherStationsAtlasGenerator, WeatherStationsAtlasGeneratorAR]
 
 
+class _ParamProxy(object):
+    """Immutable parameter proxy that forwards values to core engine without altering host COM parameters."""
+    def __init__(self, name, value, value_as_text=None):
+        self.name = name
+        self.value = value
+        self.valueAsText = value_as_text if value_as_text is not None else (str(value) if value is not None else "")
+
+    def __repr__(self):
+        return "_ParamProxy(%s, %r)" % (self.name, self.value)
+
+
 # ==============================================================================
 # TOOL 1: ENGLISH PRIMARY TOOL (Pure English Interface)
 # ==============================================================================
@@ -84,7 +95,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             "computes climatological normals and bioclimatic indicators, builds geodatabase feature classes, "
             "exports Excel workbooks, and generates lossless continuous raster surfaces."
         )
-        self.canRunInBackground = False
+        self.canRunInBackground = True
 
     def getParameterInfo(self):
         core_params = _core.PowerClimateAtlasGenerator.getParameterInfo(self)
@@ -706,7 +717,18 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
 
         try:
             # 1. Resolve Weather Stations
-            st_mode = pdict["Station_Selection_Mode"].valueAsText
+            raw_mode = pdict["Station_Selection_Mode"].valueAsText or ""
+            if "استقطاع" in raw_mode or "Spatial" in raw_mode:
+                st_mode = "Spatial Intersect by Study Area Boundary (Polygon Clip)"
+            elif "أكواد" in raw_mode or "Custom" in raw_mode:
+                st_mode = "Custom Station IDs (Manual Entry / From Explorer)"
+            elif "محلية" in raw_mode or "Local" in raw_mode:
+                st_mode = "Local Saved Station Layer (Shapefile / Geodatabase)"
+            elif "العالمية" in raw_mode or "Global" in raw_mode:
+                st_mode = "Global Network (Worldwide - Caution: High Station Count)"
+            else:
+                st_mode = "Select by Country (National Network)"
+
             st_reg = pdict.get("Region_Filter").valueAsText if pdict.get("Region_Filter") else "Arab League Countries (22 Nations)"
             st_ctry = pdict.get("Select_Country").valueAsText if pdict.get("Select_Country") else "Egypt (EG)"
             study_poly = pdict.get("Study_Area_Polygon").valueAsText if (pdict.get("Study_Area_Polygon") and pdict["Study_Area_Polygon"].valueAsText) else None
@@ -779,47 +801,46 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             station_shp = os.path.join(scratch_dir, "Target_Weather_Stations.shp")
             self._write_stations_shapefile(all_target_points, station_shp)
 
-            # 3. Construct Core Execution Parameters List with Synthetic Injections
-            param_input_pts = arcpy.Parameter(
-                displayName="Input Point Features",
-                name="Input_Point_Features",
-                datatype="GPFeatureLayer",
-                parameterType="Optional",
-                direction="Input"
-            )
-            param_input_pts.value = station_shp
+            # 3. Construct Core Execution Parameters using pure-python proxies
+            # This completely avoids mutating ArcGIS Pro's live C++ COM parameters,
+            # preventing Access Violation (0xC0000005) crashes when tools finish in both English and Arabic.
+            core_parameters = []
+            for p in parameters:
+                if p.name in ("Input_Point_Features", "Study_Area_Mask", "Supplementary_Points"):
+                    continue
+                p_name = p.name
+                val = p.value
+                val_text = p.valueAsText or ""
 
-            core_parameters = [p for p in parameters if p.name not in ("Input_Point_Features", "Study_Area_Mask", "Supplementary_Points")]
-            core_parameters.append(param_input_pts)
+                # Canonicalize Data Source for core engine
+                if p_name == "Climate_Data_Source":
+                    if "Hybrid" in val_text or "هجين" in val_text:
+                        val = val_text = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
+                    elif "NOAA" in val_text or "أرشيف" in val_text:
+                        val = val_text = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
+                    elif "Open-Meteo" in val_text or "أوبن" in val_text:
+                        val = val_text = "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
+                    else:
+                        val = val_text = "NASA POWER API (Agroclimatology / MERRA-2)"
 
+                # Canonicalize Operation Mode for core engine
+                elif p_name == "Operation_Mode":
+                    if "Interpolate" in val_text or "استيفاء" in val_text or "Offline" in val_text:
+                        val = val_text = "Interpolate & Map Existing Data (Offline Mode - No Internet)"
+                    else:
+                        val = val_text = "Download & Generate Atlas (Full Pipeline) [Default]"
+
+                core_parameters.append(_ParamProxy(p_name, val, val_text))
+
+            # Add injected feature layers as proxies
+            core_parameters.append(_ParamProxy("Input_Point_Features", station_shp, station_shp))
             if study_poly:
-                param_mask = arcpy.Parameter(
-                    displayName="Study Area Mask",
-                    name="Study_Area_Mask",
-                    datatype="GPFeatureLayer",
-                    parameterType="Optional",
-                    direction="Input"
-                )
-                param_mask.value = study_poly
-                core_parameters.append(param_mask)
+                core_parameters.append(_ParamProxy("Study_Area_Mask", study_poly, study_poly))
 
-            # 4. Handle Climate_Data_Source mapping for the core engine
-            p_csrc = pdict.get("Climate_Data_Source")
-            csrc_val = p_csrc.valueAsText if p_csrc else "NASA POWER API (Agroclimatology / MERRA-2)"
-            orig_source_name = csrc_val
+            p_csrc_raw = pdict.get("Climate_Data_Source").valueAsText if pdict.get("Climate_Data_Source") else ""
+            messages.addMessage("[2/5] Initializing Climate Engine with Data Source: %s" % p_csrc_raw)
 
-            if "Hybrid" in csrc_val:
-                p_csrc.value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
-            elif "NOAA" in csrc_val:
-                p_csrc.value = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
-            elif "Open-Meteo" in csrc_val:
-                p_csrc.value = "Open-Meteo Historical API (ERA5 Reanalysis)"
-            else:
-                p_csrc.value = "NASA POWER API"
-
-            messages.addMessage("[2/5] Initializing Climate Engine with Data Source: %s" % orig_source_name)
-
-            # 5. Invoke Core Calculation & Mapping Engine
+            # 4. Invoke Core Calculation & Mapping Engine
             _core.PowerClimateAtlasGenerator.execute(self, core_parameters, messages)
 
             # 6. Enrich Resulting GDB Feature Classes with Station Metadata
@@ -850,7 +871,7 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
             "وتنزيل السلاسل الزمنية المناخية من وكالة ناسا (NASA POWER) أو المركز الأوروبي (Open-Meteo ERA5) أو الأرصاد المباشرة، "
             "وحساب المعدلات المناخية والمؤشرات الحيوية، وبناء قواعد البيانات الجغرافية وجداول إكسل، وإنتاج أسطح الراستر المستمرة فائقة الدقة."
         )
-        self.canRunInBackground = False
+        self.canRunInBackground = True
 
     def getParameterInfo(self):
         params = WeatherStationsAtlasGenerator.getParameterInfo(self)
@@ -1089,38 +1110,5 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
         _core.PowerClimateAtlasGenerator.updateParameters(self, parameters)
 
     def execute(self, parameters, messages):
-        pdict = dict((p.name, p) for p in parameters)
-
-        # Normalize Arabic selections back to English canonical values
-        mode_val = pdict["Station_Selection_Mode"].valueAsText or ""
-        if "الدولة" in mode_val:
-            pdict["Station_Selection_Mode"].value = "Select by Country (National Network)"
-        elif "استقطاع" in mode_val:
-            pdict["Station_Selection_Mode"].value = "Spatial Intersect by Study Area Boundary (Polygon Clip)"
-        elif "أكواد" in mode_val:
-            pdict["Station_Selection_Mode"].value = "Custom Station IDs (Manual Entry / From Explorer)"
-        elif "محلية" in mode_val:
-            pdict["Station_Selection_Mode"].value = "Local Saved Station Layer (Shapefile / Geodatabase)"
-        elif "العالمية" in mode_val:
-            pdict["Station_Selection_Mode"].value = "Global Network (Worldwide - Caution: High Station Count)"
-
-        # Normalize Provider
-        src_val = pdict.get("Climate_Data_Source").valueAsText if pdict.get("Climate_Data_Source") else ""
-        if "هجين" in src_val or "Hybrid" in src_val:
-            pdict["Climate_Data_Source"].value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
-        elif "أرشيف" in src_val or "NOAA" in src_val:
-            pdict["Climate_Data_Source"].value = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
-        elif "أوبن" in src_val or "Open-Meteo" in src_val:
-            pdict["Climate_Data_Source"].value = "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
-        else:
-            pdict["Climate_Data_Source"].value = "NASA POWER API (Agroclimatology / MERRA-2)"
-
-        # Normalize Operation Mode
-        op_val = pdict.get("Operation_Mode").valueAsText if pdict.get("Operation_Mode") else ""
-        if "تنزيل" in op_val or "Download" in op_val:
-            pdict["Operation_Mode"].value = "Download & Generate Atlas (Full Pipeline) [Default]"
-        elif "استيفاء" in op_val or "Interpolate" in op_val:
-            pdict["Operation_Mode"].value = "Interpolate & Map Existing Data (Offline Mode)"
-
-        # Delegate execution to English master engine
+        # Delegate execution directly to master engine without mutating any host parameters
         WeatherStationsAtlasGenerator.execute(self, parameters, messages)
