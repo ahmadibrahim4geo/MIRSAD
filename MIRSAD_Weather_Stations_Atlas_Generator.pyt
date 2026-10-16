@@ -605,24 +605,26 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             shp_name = os.path.basename(out_shp)
             if arcpy.Exists(out_shp):
                 try:
-                    arcpy.Delete_management(out_shp)
+                    arcpy.management.Delete(out_shp)
                 except Exception:
                     pass
             wgs = arcpy.SpatialReference(4326)
-            arcpy.CreateFeatureclass_management(out_dir, shp_name, "POINT", spatial_reference=wgs)
-            arcpy.AddField_management(out_shp, "Station_ID", "TEXT", field_length=20)
-            arcpy.AddField_management(out_shp, "Name", "TEXT", field_length=100)
-            arcpy.AddField_management(out_shp, "Country", "TEXT", field_length=10)
-            arcpy.AddField_management(out_shp, "Elev_m", "DOUBLE")
-            arcpy.AddField_management(out_shp, "Source_ID", "LONG")
-            arcpy.AddField_management(out_shp, "Point_Type", "TEXT", field_length=30)
+            arcpy.management.CreateFeatureclass(out_dir, shp_name, "POINT", spatial_reference=wgs)
+            arcpy.management.AddField(out_shp, "Station_ID", "TEXT", field_length=20)
+            arcpy.management.AddField(out_shp, "Station_Nm", "TEXT", field_length=100)
+            arcpy.management.AddField(out_shp, "Country_Cd", "TEXT", field_length=10)
+            arcpy.management.AddField(out_shp, "Elev_m", "DOUBLE")
+            arcpy.management.AddField(out_shp, "Source_ID", "LONG")
+            arcpy.management.AddField(out_shp, "Point_Type", "TEXT", field_length=30)
 
-            fields = ["SHAPE@XY", "Station_ID", "Name", "Country", "Elev_m", "Source_ID", "Point_Type"]
+            fields = ["SHAPE@XY", "Station_ID", "Station_Nm", "Country_Cd", "Elev_m", "Source_ID", "Point_Type"]
             with arcpy.da.InsertCursor(out_shp, fields) as cur:
                 for idx, s in enumerate(stations):
                     xy = (s["Lon"], s["Lat"])
                     pt_type = "Supplementary Point" if s.get("Is_Supplementary") else "Ground Station"
-                    cur.insertRow([xy, s["Station_ID"], s["Name"][:100], s["Country"], float(s.get("Elev_m", 0.0)), idx + 1, pt_type])
+                    st_name = (s.get("Name") or s.get("Station_Nm") or "")[:100]
+                    st_ctry = (s.get("Country") or s.get("Country_Cd") or "")[:10]
+                    cur.insertRow([xy, s["Station_ID"], st_name, st_ctry, float(s.get("Elev_m", 0.0)), idx + 1, pt_type])
         else:
             import pyogrio
             from shapely.geometry import Point
@@ -631,8 +633,8 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             for idx, s in enumerate(stations):
                 data.append({
                     "Station_ID": s["Station_ID"],
-                    "Name": s["Name"],
-                    "Country": s["Country"],
+                    "Station_Nm": (s.get("Name") or s.get("Station_Nm") or "")[:100],
+                    "Country_Cd": (s.get("Country") or s.get("Country_Cd") or "")[:10],
                     "Elev_m": float(s.get("Elev_m", 0.0)),
                     "Source_ID": idx + 1,
                     "Point_Type": "Supplementary Point" if s.get("Is_Supplementary") else "Ground Station",
@@ -654,6 +656,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             return
 
         station_lookup = dict((idx + 1, s) for idx, s in enumerate(stations))
+        saved_ws = arcpy.env.workspace
         try:
             arcpy.env.workspace = gdb_target
             fcs = arcpy.ListFeatureClasses() or []
@@ -661,32 +664,42 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                 existing_fields = [f.name for f in arcpy.ListFields(fc)]
                 if "Source_ID" not in existing_fields:
                     continue
+                # If Station_Nm is already present from shapefile creation, skip schema modifications
+                if "Station_Nm" in existing_fields and "Station_ID" in existing_fields:
+                    continue
 
                 if "Station_ID" not in existing_fields:
-                    arcpy.AddField_management(fc, "Station_ID", "TEXT", field_length=20)
+                    arcpy.management.AddField(fc, "Station_ID", "TEXT", field_length=20)
                 if "Station_Nm" not in existing_fields:
-                    arcpy.AddField_management(fc, "Station_Nm", "TEXT", field_length=100)
+                    arcpy.management.AddField(fc, "Station_Nm", "TEXT", field_length=100)
                 if "Country_Cd" not in existing_fields:
-                    arcpy.AddField_management(fc, "Country_Cd", "TEXT", field_length=10)
+                    arcpy.management.AddField(fc, "Country_Cd", "TEXT", field_length=10)
                 if "Elev_Meters" not in existing_fields:
-                    arcpy.AddField_management(fc, "Elev_Meters", "DOUBLE")
+                    arcpy.management.AddField(fc, "Elev_Meters", "DOUBLE")
                 if "Point_Type" not in existing_fields:
-                    arcpy.AddField_management(fc, "Point_Type", "TEXT", field_length=30)
+                    arcpy.management.AddField(fc, "Point_Type", "TEXT", field_length=30)
 
                 update_fields = ["Source_ID", "Station_ID", "Station_Nm", "Country_Cd", "Elev_Meters", "Point_Type"]
-                with arcpy.da.UpdateCursor(fc, update_fields) as cur:
+                cur = None
+                try:
+                    cur = arcpy.da.UpdateCursor(fc, update_fields)
                     for row in cur:
                         sid = row[0]
                         sdata = station_lookup.get(sid)
                         if sdata:
                             row[1] = sdata.get("Station_ID", "")
-                            row[2] = sdata.get("Name", "")[:100]
-                            row[3] = sdata.get("Country", "")
+                            row[2] = (sdata.get("Name") or sdata.get("Station_Nm") or "")[:100]
+                            row[3] = (sdata.get("Country") or sdata.get("Country_Cd") or "")[:10]
                             row[4] = float(sdata.get("Elev_m", 0.0))
                             row[5] = "Supplementary Point" if sdata.get("Is_Supplementary") else "Ground Station"
                             cur.updateRow(row)
+                finally:
+                    if cur:
+                        del cur
         except Exception:
             pass
+        finally:
+            arcpy.env.workspace = saved_ws
 
     def execute(self, parameters, messages):
         pdict = dict((p.name, p) for p in parameters)
@@ -820,11 +833,9 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             raise
         finally:
             try:
-                arcpy.ClearWorkspaceCache_management()
+                arcpy.env.workspace = None
             except Exception:
                 pass
-            import gc
-            gc.collect()
 
 
 # ==============================================================================

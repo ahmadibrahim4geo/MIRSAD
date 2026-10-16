@@ -9486,7 +9486,14 @@ class PowerClimateAtlasGenerator(object):
         try:
             arcpy.ClearEnvironment("mask")
             arcpy.ClearEnvironment("extent")
-            arcpy.ResetEnvironments()
+            arcpy.ClearEnvironment("cellSize")
+            arcpy.ClearEnvironment("outputCoordinateSystem")
+            arcpy.ClearEnvironment("parallelProcessingFactor")
+            arcpy.ClearEnvironment("compression")
+            arcpy.ClearEnvironment("tileSize")
+            arcpy.ClearEnvironment("pyramid")
+            arcpy.ClearEnvironment("rasterStatistics")
+            arcpy.ClearEnvironment("scratchWorkspace")
         except Exception:
             pass
         if scratch and purge:
