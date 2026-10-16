@@ -48,15 +48,21 @@
 منظومة **مِرصاد (MIRSAD - Multi-source Integrated Reanalysis & Surface Atlas Database)** هي منصة برمجية وجغرافية متطورة وشاملة صُممت وهُندست لتوفير حل متكامل لأتمتة إنشاء الأطالس المناخية الإقليمية والوطنية، واستخراج وتحليل البيانات متعددة العقود ونمذجة أسطح الراستر المناخية بدقة علمية وفيزيائية فائقة.
 
 تتكامل داخل المنظومة أربعة مصادر رئيسية للمعلومات المناخية:
-1. **شبكة محطات الأرصاد الأرضية المعتمدة (In-Situ Ground Weather Stations)**: تضم 28,095 محطة عالمية معتمدة من NOAA ISD و WMO (منها 87 محطة رسمية في مصر، وكافة محطات الوطن العربي وقارات العالم).
+1. **شبكة محطات الأرصاد الأرضية المعتمدة (In-Situ Ground Weather Stations)**: تضم 28,066 محطة عالمية معتمدة من NOAA ISD و WMO (منها 944 محطة معتمدة ومطهرة بالكامل في الوطن العربي، و 73 محطة في مصر).
 2. **نماذج إعادة التحليل الجوي عالية الدقة (High-Resolution Reanalysis)**: نموذج ERA5-Land الأوروبي بدقة ~9 كم (Open-Meteo API).
 3. **النماذج الفضائية وشبكات إعادة التحليل العالمية**: نماذج NASA POWER MERRA-2 للإشعاع والحرارة والضغط، ونموذج CERES للإشعاع الشمسي.
 4. **النموذج الهجين الذكي (Hybrid Ground Truth & Satellite Gap-Filling)**: دمج الأرصاد الأرضية الحقيقية مع الاستكمال التلقائي للفجوات من الأقمار الصناعية ونماذج إعادة التحليل.
 
-تتكون المنظومة من 3 أدوات رئيسية تعمل بتناغم تام:
-1. **أداة محطات الأرصاد الأرضية (`NOAA_WMO_Weather_Stations_Atlas_Generator.pyt`)**: لجلب وفلترة المحطات الأرضية المعتمدة وطنياً وإقليمياً وعالمياً وتوليد أطالسها المناخية.
-2. **صندوق أدوات معالم المناخ (`MIRSAD_Climate_Atlas_Generator_10_8.pyt`)**: لإدارة الاتصال السحابي، وسحب السلاسل الزمنية، وحساب المؤشرات والموديلات الحيوية لطبقات النقاط وبناء قواعد البيانات الجغرافية (`File Geodatabase`).
+تتكون المنظومة من 4 أدوات وركائز رئيسية تعمل بتناغم تام:
+1. **صندوق أدوات محطات الأرصاد الأرضية (`MIRSAD_Weather_Stations_Atlas_Generator.pyt`)**:
+   - يضم نسختين مستقلتين داخل نفس الصندوق: أداة باللغة الإنجليزية الخالصة (`WeatherStationsAtlasGenerator`) وأداة مطابقة كاملة باللغة العربية (`WeatherStationsAtlasGeneratorAR`).
+   - واجهة واضحة ومباشرة لاختيار المحطات دون أي طي أو إخفاء (Unclipped Station Selection).
+   - تصفية فورية لـ 28,066 محطة عالمية (منها 944 محطة عربية خالية تماماً من الشذوذ الجغرافي).
+   - دعم نقاط مسح إضافية اختيارية (`Supplementary Survey Points`) لتكثيف البيانات في المناطق الصحراوية والنائية ودمجها لحظياً مع المحطات.
+   - معمارية متقدمة مضادة للانهيار: عزل المعالجة المتوازية (`parallelProcessingFactor = "0"` لمنع أخطاء Spatial Analyst)، والتنظيف الإجباري لكائنات الراستر من الذاكرة، وتفريغ دوري لمساحة العمل (`ClearWorkspaceCache`).
+2. **صندوق أدوات معالم المناخ النقطي (`MIRSAD_Climate_Atlas_Generator_10_8.pyt`)**: لإدارة الاتصال السحابي، وسحب السلاسل الزمنية، وحساب المؤشرات والموديلات الحيوية لطبقات النقاط وبناء قواعد البيانات الجغرافية (`File Geodatabase`).
 3. **محرك الأطلس الراستري (`raster_atlas_generator.py`)**: المحرك الحسابي المتقدم للاستيفاء المكاني للأسطح المناخية المستمرة (Spatial Interpolation via IDW, Kriging, Spline, Natural Neighbor)، والتقطيع على الماسك، وبناء خطوط الضغط المتساوي (Isobars)، وحساب شبكات متجهات الرياح، وتطبيق أحدث تقنيات الضغط بدون أي فقدان للبيانات.
+4. **مركز محطات الطقس والمستكشفات المكانية (`Weather_Stations_Hub/`)**: قاعدة بيانات جغرافية (`Weather_Stations_Directory.gdb`) وشيب فايل مع كود WMO والمناسيب، بالإضافة لخرائط ويب تفاعلية مستقلة (`HTML Explorers`) لاستعراض والبحث الفوري في المحطات عبر المتصفح.
 
 ---
 
@@ -234,12 +240,14 @@
 #### التشغيل داخل ArcGIS Pro:
 1. افتح مشروعك في **ArcGIS Pro**.
 2. من لوحة الكتالوج (**Catalog Pane**)، اضغط بزر الفأرة الأيمن على **Toolboxes** واختر **Add Toolbox**.
-3. توجه لمجلد المشروع واختر الملف: `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
-4. افتح أداة **NASA POWER Climate Atlas Generator**، وحدد نمط التشغيل (Online أو Offline)، ثم حدد طبقة النقاط ومضلع منطقة الدراسة، واضغط **Run**.
+3. توجه لمجلد المشروع واختر أحد صناديق الأدوات:
+   - `MIRSAD_Weather_Stations_Atlas_Generator.pyt`: لتوليد أطلس محطات الرصد الأرضية (تضم أداة بالإنجليزية وأداة بالعربية `(AR)`).
+   - `MIRSAD_Climate_Atlas_Generator_10_8.pyt`: لتوليد أطلس المناخ النقطي لكافة مصادر البيانات وإعادة التحليل.
+4. افتح الأداة المطلوبة، وحدد خيارات المحطات أو النقاط ومجلد الحفظ، واضغط **Run**.
 
 #### التشغيل داخل ArcMap 10.8:
 1. افتح نافذة **ArcToolbox**.
-2. اضغط بزر الفأرة الأيمن واختر **Add Toolbox...** وحدد `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
+2. اضغط بزر الفأرة الأيمن واختر **Add Toolbox...** وحدد `MIRSAD_Weather_Stations_Atlas_Generator.pyt` أو `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
 3. انقر نقراً مزدوجاً لفتح الأداة، واختر المعاملات، واضغط **OK**.
 
 ---
@@ -258,15 +266,21 @@ Repository: [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim
 The **MIRSAD** platform automates the acquisition, quality control, climatological calculations, spatial interpolation, and standardized cartographic rendering of multi-decadal historical climate records and future projections directly inside Esri GIS environments.
 
 ### Four Integrated Data Source Tiers:
-1. **Certified Ground Weather Stations**: In-situ observations from 28,095 NOAA ISD & WMO stations worldwide.
+1. **Certified Ground Weather Stations**: In-situ observations from 28,066 NOAA ISD & WMO stations worldwide (including 944 verified Arab League stations with zero geographic outliers, and 73 stations in Egypt).
 2. **High-Resolution Reanalysis**: ECMWF ERA5-Land (~9 km native resolution via Open-Meteo API).
 3. **Global Satellite & Reanalysis Grids**: NASA POWER MERRA-2 atmospheric model and CERES solar radiation.
 4. **Hybrid Intelligent Engine**: Direct observational ground-truth with automated satellite and reanalysis gap-filling.
 
 ### Core Toolbox Components:
-1. **`NOAA_WMO_Weather_Stations_Atlas_Generator.pyt`**: MIRSAD ground weather stations harvesting, boundary-based filtering, and climatological atlas generator.
-2. **`MIRSAD_Climate_Atlas_Generator_10_8.pyt`**: MIRSAD multi-source point climate atlas and bioclimatic indicators modeling engine.
+1. **`MIRSAD_Weather_Stations_Atlas_Generator.pyt`**: MIRSAD Ground Weather Stations Climate Atlas Generator.
+   - Dual interface tools: Pure English GUI (`WeatherStationsAtlasGenerator`) and Native Arabic GUI (`WeatherStationsAtlasGeneratorAR`).
+   - Clean, unclipped station selection interface (Continent -> Country -> Station Filtering).
+   - Instant filtering across 28,066 global stations and 944 certified Arab League stations.
+   - Support for optional **Supplementary Survey Points** to densify desert and unmonitored areas.
+   - Anti-crash execution safeguards (`parallelProcessingFactor = "0"` isolation, COM raster cleanup, automatic workspace memory release).
+2. **`MIRSAD_Climate_Atlas_Generator_10_8.pyt`**: MIRSAD multi-source point climate atlas and bioclimatic indicators modeling engine (66 parameters, Online/Offline modes).
 3. **`raster_atlas_generator.py`**: MIRSAD high-performance spatial interpolation engine (IDW, Kriging, Spline, Natural Neighbor), focal smoothing, mask clipping, isobar contours, wind vector fields, and lossless LZW raster compression.
+4. **`Weather_Stations_Hub/`**: Pre-packaged File Geodatabase (`Weather_Stations_Directory.gdb`), Shapefiles, and standalone interactive Web HTML Map Explorers.
 
 ---
 
@@ -368,12 +382,14 @@ The platform enforces a strict **1:1 unified naming convention** connecting UI p
 ## 🚀 Getting Started & Verification
 
 ### Running in ArcGIS Pro
-1. Add `MIRSAD_Climate_Atlas_Generator_10_8.pyt` via **Catalog -> Toolboxes -> Add Toolbox**.
-2. Select your operation mode, assign your station layer and study area mask, and click **Run**.
+1. Add toolboxes via **Catalog -> Toolboxes -> Add Toolbox**:
+   - `MIRSAD_Weather_Stations_Atlas_Generator.pyt`: Dedicated Ground Weather Stations Atlas Generator (features pure English GUI and companion Arabic `(AR)` GUI).
+   - `MIRSAD_Climate_Atlas_Generator_10_8.pyt`: Multi-source Point Spatial Climate Atlas Generator.
+2. Open the tool, configure your station selections or input points, set your output folder, and click **Run**.
 
 ### Running in ArcMap 10.8
-1. Open ArcToolbox -> Right-click -> **Add Toolbox...** -> Select `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
-2. Launch the tool, configure parameters, and execute.
+1. Open ArcToolbox -> Right-click -> **Add Toolbox...** -> Select `MIRSAD_Weather_Stations_Atlas_Generator.pyt` or `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.
+2. Launch the desired tool, configure parameters, and execute.
 
 ---
 

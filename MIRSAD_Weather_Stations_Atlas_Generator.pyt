@@ -2,9 +2,9 @@
 """NOAA / WMO Ground Weather Stations Climate Atlas Generator.
 Native Dual Compatibility for ArcGIS Pro (Python 3) & ArcMap 10.8 (Python 2.7).
 
-Author: Ahmad Ibrahim (أحمد إبراهيم)
+Author: Ahmad Ibrahim
 Email: ahmadibrahim.geo@gmail.com
-Version: 2.0 (October 2026) - Enterprise Carbon-Copy Edition
+Version: 2.1 (October 2026) - Enterprise Edition with English & Arabic Tool Suite
 """
 import os
 import sys
@@ -14,6 +14,7 @@ import csv
 import io
 import datetime
 import time
+import traceback
 
 TOOLBOX_DIR = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.join(TOOLBOX_DIR, "scripts")
@@ -30,7 +31,6 @@ try:
     HAS_ARCPY = hasattr(arcpy, "da") and hasattr(arcpy, "Parameter")
 except ImportError:
     HAS_ARCPY = False
-
 
 
 def _load_core_module():
@@ -55,8 +55,8 @@ try:
     from country_continent_registry import COUNTRY_REGISTRY, get_country_info
 except Exception:
     COUNTRY_REGISTRY = {}
-    def get_country_info(code):
-        return (code, "", "Other", False)
+    def get_country_info(code, lat=None, lon=None):
+        return (code, code, "Other", False)
 
 
 class Toolbox(object):
@@ -68,9 +68,12 @@ class Toolbox(object):
             "Stations Ingestion, Climatological Processing, and Spatial Interpolation "
             "using certified NOAA ISD and WMO Global Networks under the MIRSAD platform."
         )
-        self.tools = [WeatherStationsAtlasGenerator]
+        self.tools = [WeatherStationsAtlasGenerator, WeatherStationsAtlasGeneratorAR]
 
 
+# ==============================================================================
+# TOOL 1: ENGLISH PRIMARY TOOL (Pure English Interface)
+# ==============================================================================
 class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
     def __init__(self):
         super(WeatherStationsAtlasGenerator, self).__init__() if hasattr(super(WeatherStationsAtlasGenerator, self), '__init__') else _core.PowerClimateAtlasGenerator.__init__(self)
@@ -88,7 +91,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         core_pdict = dict((p.name, p) for p in core_params)
 
         # ------------------------------------------------------------------
-        # Category 1: Station Selection & Study Area (Top Inputs)
+        # Top Inputs: Station Selection & Supplementary Points (Open / Visible)
         # ------------------------------------------------------------------
         p_st_mode = arcpy.Parameter(
             displayName="Station Selection Mode",
@@ -106,7 +109,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             "Local Saved Station Layer (Shapefile / Geodatabase)"
         ]
         p_st_mode.value = "Select by Country (National Network)"
-        p_st_mode.category = "Station Selection & Study Area"
         p_st_mode.description = (
             "Choose how weather stations are chosen:\n"
             "• 'Select by Country (National Network)': filters certified NOAA/WMO stations by country or region.\n"
@@ -136,7 +138,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             "Antarctica"
         ]
         p_st_region.value = "Arab League Countries (22 Nations)"
-        p_st_region.category = "Station Selection & Study Area"
         p_st_region.description = "First-tier spatial filter to narrow down country list."
 
         p_st_country = arcpy.Parameter(
@@ -173,7 +174,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             "Djibouti (DJ)"
         ]
         p_st_country.value = "[All Arab League Countries (ARAB)]"
-        p_st_country.category = "Station Selection & Study Area"
         p_st_country.description = "Second-tier national network filter or aggregate scope (e.g. All Arab League, All Asian)."
 
         p_st_poly = arcpy.Parameter(
@@ -184,10 +184,23 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             direction="Input"
         )
         p_st_poly.filter.list = ["Polygon"]
-        p_st_poly.category = "Station Selection & Study Area"
         p_st_poly.description = (
             "OPTIONAL polygon feature layer. Used to spatially clip weather stations, "
             "define the processing extent/mask, and clip output rasters."
+        )
+
+        p_st_supp = arcpy.Parameter(
+            displayName="Supplementary Survey Points (Optional - To Densify Data-Sparse Areas)",
+            name="Supplementary_Points",
+            datatype="GPFeatureLayer",
+            parameterType="Optional",
+            direction="Input"
+        )
+        p_st_supp.filter.list = ["Point", "Multipoint"]
+        p_st_supp.description = (
+            "OPTIONAL point feature layer (shapefile or geodatabase feature class). Custom sampling points "
+            "(e.g., in unmonitored desert regions or project sites) will be automatically merged with the "
+            "selected certified weather stations to enhance spatial interpolation coverage."
         )
 
         p_st_buffer = arcpy.Parameter(
@@ -198,7 +211,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             direction="Input"
         )
         p_st_buffer.value = True
-        p_st_buffer.category = "Station Selection & Study Area"
         p_st_buffer.description = (
             "When polygon clipping is active, includes stations within a 30 km halo outside the boundary "
             "to prevent edge degradation and distortion during spatial interpolation."
@@ -211,7 +223,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             parameterType="Optional",
             direction="Input"
         )
-        p_st_custom.category = "Station Selection & Study Area"
         p_st_custom.description = "OPTIONAL. Enter semicolon-separated USAF station codes (e.g. 623660;624140;623180)."
 
         p_st_local = arcpy.Parameter(
@@ -222,7 +233,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             direction="Input"
         )
         p_st_local.filter.list = ["Point", "Multipoint"]
-        p_st_local.category = "Station Selection & Study Area"
         p_st_local.description = "OPTIONAL. Load a pre-existing weather stations shapefile or GDB feature class."
 
         # ------------------------------------------------------------------
@@ -245,32 +255,18 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                 "• 'Open-Meteo Historical API': High-resolution ERA5-Land reanalysis (~9 km resolution, 1940-Present)."
             )
 
-        # Hide manual Input_Point_Features in favor of Station Selectors
-        if "Input_Point_Features" in core_pdict:
-            core_pdict["Input_Point_Features"].parameterType = "Optional"
-            core_pdict["Input_Point_Features"].enabled = False
-
-        # Hide legacy Study_Area_Mask in favor of Study_Area_Polygon
-        if "Study_Area_Mask" in core_pdict:
-            core_pdict["Study_Area_Mask"].parameterType = "Optional"
-            core_pdict["Study_Area_Mask"].enabled = False
-
         station_params = [
             p_st_mode, p_st_region, p_st_country,
-            p_st_poly, p_st_buffer, p_st_custom, p_st_local
+            p_st_poly, p_st_supp, p_st_buffer, p_st_custom, p_st_local
         ]
 
+        # Completely exclude Input_Point_Features and Study_Area_Mask from GUI
         filtered_core = [
             p for p in core_params
-            if p.name not in ("Input_Point_Features", "Study_Area_Mask")
+            if p.name not in ("Input_Point_Features", "Study_Area_Mask", "Precalculated_Point_Layers")
         ]
 
-        hidden_core = [
-            core_pdict["Input_Point_Features"],
-            core_pdict["Study_Area_Mask"]
-        ]
-
-        return station_params + filtered_core + hidden_core
+        return station_params + filtered_core
 
     def updateParameters(self, parameters):
         pdict = dict((p.name, p) for p in parameters)
@@ -413,11 +409,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                 p_ctry.filter.list = ["[All Countries Worldwide (WORLD)]"]
                 p_ctry.value = "[All Countries Worldwide (WORLD)]"
 
-        # Sync Study_Area_Mask with Study_Area_Polygon
-        p_mask = pdict.get("Study_Area_Mask")
-        if p_mask and p_poly:
-            p_mask.value = p_poly.value
-
         # Open-Meteo Model enable/disable sync with Climate_Data_Source
         p_src = pdict.get("Climate_Data_Source")
         p_om_m = pdict.get("OpenMeteo_Model")
@@ -472,22 +463,15 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                         lon = float(xy[0]) if xy else float(rdict.get("Lon", 0.0))
                         name_val = str(rdict.get("Name", "Station"))
                         ctry = str(rdict.get("Country", "")).strip().upper()
-                        if ctry in ("IS", "IL", "GZ", "WE") or (ctry == "PS" and not (lat < 15.0 and lon > 100.0)):
-                            ctry = "PS"
-                            c_nm = "Palestine"
-                            cont = "Asia"
-                            is_ar = True
-                        else:
-                            c_nm = str(rdict.get("Country_Nm", ctry))
-                            cont = str(rdict.get("Continent", "Other"))
-                            is_ar = bool(rdict.get("Is_Arab", False))
+                        
+                        en_name, ar_name, cont, is_arab = get_country_info(ctry, lat, lon)
                         stations.append({
                             "Station_ID": str(rdict.get("Station_ID", "")),
                             "Name": name_val,
                             "Country": ctry,
-                            "Country_Nm": c_nm,
+                            "Country_Nm": en_name,
                             "Continent": cont,
-                            "Is_Arab": is_ar,
+                            "Is_Arab": is_arab,
                             "Lat": lat,
                             "Lon": lon,
                             "Elev_m": float(rdict.get("Elev_m", 0.0))
@@ -508,15 +492,9 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                         lat = float(r[6])
                         lon = float(r[7])
                         ctry = str(r[2]).strip().upper()
-                        if ctry in ("IS", "IL", "GZ", "WE") or (ctry == "PS" and not (lat < 15.0 and lon > 100.0)):
-                            ctry = "PS"
-                            c_nm = "Palestine"
-                            cont = "Asia"
-                            is_ar = True
-                        else:
-                            c_nm = str(r[3])
-                            cont = str(r[4])
-                            is_ar = bool(r[5])
+                        c_nm = str(r[3])
+                        cont = str(r[4])
+                        is_ar = bool(r[5])
                         stations.append({
                             "Station_ID": str(r[0]),
                             "Name": name_val,
@@ -529,66 +507,23 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                             "Elev_m": float(r[8])
                         })
             else:
-                # Standalone fallback (geopandas or pyogrio)
                 try:
                     import geopandas as gpd
                     df = gpd.read_file(shp_target)
                     for _, r in df.iterrows():
-                        name_val = str(r["Name"])
-                        lat = float(r["Lat"])
-                        lon = float(r["Lon"])
-                        ctry = str(r["Country"]).strip().upper()
-                        if ctry in ("IS", "IL", "GZ", "WE") or (ctry == "PS" and not (lat < 15.0 and lon > 100.0)):
-                            ctry = "PS"
-                            c_nm = "Palestine"
-                            cont = "Asia"
-                            is_ar = True
-                        else:
-                            c_nm = str(r.get("Country_Nm", ctry))
-                            cont = str(r.get("Continent", "Other"))
-                            is_ar = bool(r.get("Is_Arab", False))
                         stations.append({
                             "Station_ID": str(r["Station_ID"]),
-                            "Name": name_val,
-                            "Country": ctry,
-                            "Country_Nm": c_nm,
-                            "Continent": cont,
-                            "Is_Arab": is_ar,
-                            "Lat": lat,
-                            "Lon": lon,
-                            "Elev_m": float(r["Elev_m"])
+                            "Name": str(r["Name"]),
+                            "Country": str(r["Country"]).strip().upper(),
+                            "Country_Nm": str(r.get("Country_Nm", "")),
+                            "Continent": str(r.get("Continent", "Other")),
+                            "Is_Arab": bool(r.get("Is_Arab", False)),
+                            "Lat": float(r["Lat"]),
+                            "Lon": float(r["Lon"]),
+                            "Elev_m": float(r.get("Elev_m", 0.0))
                         })
                 except Exception:
-                    try:
-                        import pyogrio
-                        df = pyogrio.read_dataframe(shp_target)
-                        for _, r in df.iterrows():
-                            name_val = str(r["Name"])
-                            lat = float(r["Lat"])
-                            lon = float(r["Lon"])
-                            ctry = str(r["Country"]).strip().upper()
-                            if ctry in ("IS", "IL", "GZ", "WE") or (ctry == "PS" and not (lat < 15.0 and lon > 100.0)):
-                                ctry = "PS"
-                                c_nm = "Palestine"
-                                cont = "Asia"
-                                is_ar = True
-                            else:
-                                c_nm = str(r.get("Country_Nm", ctry))
-                                cont = str(r.get("Continent", "Other"))
-                                is_ar = bool(r.get("Is_Arab", False))
-                            stations.append({
-                                "Station_ID": str(r["Station_ID"]),
-                                "Name": name_val,
-                                "Country": ctry,
-                                "Country_Nm": c_nm,
-                                "Continent": cont,
-                                "Is_Arab": is_ar,
-                                "Lat": lat,
-                                "Lon": lon,
-                                "Elev_m": float(r["Elev_m"])
-                            })
-                    except Exception:
-                        pass
+                    pass
 
         return stations
 
@@ -599,7 +534,12 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
 
         if mode == "Select by Country (National Network)":
             if target_country == "ARAB":
-                return [s for s in all_stations if s.get("Is_Arab")]
+                # Strict Arab League spatial bounding envelope:
+                # Comoros (~ -12.13) to Syria/Tunisia (~ 37.5), Mauritania (~ -17.1) to Oman (~ 60.0)
+                return [
+                    s for s in all_stations
+                    if s.get("Is_Arab") and (-15.0 <= s.get("Lat", 0.0) <= 38.5) and (-18.0 <= s.get("Lon", 0.0) <= 61.0)
+                ]
             elif target_country in ("WORLD", "ALL"):
                 return all_stations
             elif target_country in ("AFRICA", "ASIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA", "OCEANIA", "ANTARCTICA"):
@@ -634,7 +574,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             poly_sr = desc.spatialReference
             wgs = arcpy.SpatialReference(4326)
 
-            # Build union geometry of mask polygon
             poly_geom = None
             with arcpy.da.SearchCursor(study_poly, ["SHAPE@"]) as cur:
                 for row in cur:
@@ -649,7 +588,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             if not poly_geom:
                 return stations
 
-            # Buffer geometry if requested (30 km halo in degrees ~ 0.27 deg)
             search_geom = poly_geom.buffer(0.27) if inc_buf else poly_geom
 
             selected = []
@@ -666,7 +604,10 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             out_dir = os.path.dirname(out_shp)
             shp_name = os.path.basename(out_shp)
             if arcpy.Exists(out_shp):
-                arcpy.Delete_management(out_shp)
+                try:
+                    arcpy.Delete_management(out_shp)
+                except Exception:
+                    pass
             wgs = arcpy.SpatialReference(4326)
             arcpy.CreateFeatureclass_management(out_dir, shp_name, "POINT", spatial_reference=wgs)
             arcpy.AddField_management(out_shp, "Station_ID", "TEXT", field_length=20)
@@ -674,14 +615,15 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             arcpy.AddField_management(out_shp, "Country", "TEXT", field_length=10)
             arcpy.AddField_management(out_shp, "Elev_m", "DOUBLE")
             arcpy.AddField_management(out_shp, "Source_ID", "LONG")
+            arcpy.AddField_management(out_shp, "Point_Type", "TEXT", field_length=30)
 
-            fields = ["SHAPE@XY", "Station_ID", "Name", "Country", "Elev_m", "Source_ID"]
+            fields = ["SHAPE@XY", "Station_ID", "Name", "Country", "Elev_m", "Source_ID", "Point_Type"]
             with arcpy.da.InsertCursor(out_shp, fields) as cur:
                 for idx, s in enumerate(stations):
                     xy = (s["Lon"], s["Lat"])
-                    cur.insertRow([xy, s["Station_ID"], s["Name"][:100], s["Country"], s["Elev_m"], idx + 1])
+                    pt_type = "Supplementary Point" if s.get("Is_Supplementary") else "Ground Station"
+                    cur.insertRow([xy, s["Station_ID"], s["Name"][:100], s["Country"], float(s.get("Elev_m", 0.0)), idx + 1, pt_type])
         else:
-            # Standalone fallback using pyogrio
             import pyogrio
             from shapely.geometry import Point
             import geopandas as gpd
@@ -691,8 +633,9 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                     "Station_ID": s["Station_ID"],
                     "Name": s["Name"],
                     "Country": s["Country"],
-                    "Elev_m": s["Elev_m"],
+                    "Elev_m": float(s.get("Elev_m", 0.0)),
                     "Source_ID": idx + 1,
+                    "Point_Type": "Supplementary Point" if s.get("Is_Supplementary") else "Ground Station",
                     "geometry": Point(s["Lon"], s["Lat"])
                 })
             gdf = gpd.GeoDataFrame(data, crs="EPSG:4326")
@@ -701,13 +644,18 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
     def _enrich_station_metadata(self, out_ws, stations):
         if not HAS_ARCPY:
             return
-        gdb_path = os.path.join(out_ws, "Climate_Database.gdb")
-        if not arcpy.Exists(gdb_path):
+        gdb_target = None
+        if os.path.exists(out_ws):
+            for item in os.listdir(out_ws):
+                if item.startswith("Climate_Database") and item.endswith(".gdb"):
+                    gdb_target = os.path.join(out_ws, item)
+                    break
+        if not gdb_target or not arcpy.Exists(gdb_target):
             return
 
         station_lookup = dict((idx + 1, s) for idx, s in enumerate(stations))
         try:
-            arcpy.env.workspace = gdb_path
+            arcpy.env.workspace = gdb_target
             fcs = arcpy.ListFeatureClasses() or []
             for fc in fcs:
                 existing_fields = [f.name for f in arcpy.ListFields(fc)]
@@ -722,8 +670,10 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                     arcpy.AddField_management(fc, "Country_Cd", "TEXT", field_length=10)
                 if "Elev_Meters" not in existing_fields:
                     arcpy.AddField_management(fc, "Elev_Meters", "DOUBLE")
+                if "Point_Type" not in existing_fields:
+                    arcpy.AddField_management(fc, "Point_Type", "TEXT", field_length=30)
 
-                update_fields = ["Source_ID", "Station_ID", "Station_Nm", "Country_Cd", "Elev_Meters"]
+                update_fields = ["Source_ID", "Station_ID", "Station_Nm", "Country_Cd", "Elev_Meters", "Point_Type"]
                 with arcpy.da.UpdateCursor(fc, update_fields) as cur:
                     for row in cur:
                         sid = row[0]
@@ -733,6 +683,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                             row[2] = sdata.get("Name", "")[:100]
                             row[3] = sdata.get("Country", "")
                             row[4] = float(sdata.get("Elev_m", 0.0))
+                            row[5] = "Supplementary Point" if sdata.get("Is_Supplementary") else "Ground Station"
                             cur.updateRow(row)
         except Exception:
             pass
@@ -740,65 +691,425 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
     def execute(self, parameters, messages):
         pdict = dict((p.name, p) for p in parameters)
 
-        # 1. Resolve Weather Stations
-        st_mode = pdict["Station_Selection_Mode"].valueAsText
-        st_reg = pdict.get("Region_Filter").valueAsText if pdict.get("Region_Filter") else "Arab League Countries (22 Nations)"
-        st_ctry = pdict.get("Select_Country").valueAsText if pdict.get("Select_Country") else "Egypt (EG)"
-        study_poly = pdict.get("Study_Area_Polygon").valueAsText if (pdict.get("Study_Area_Polygon") and pdict["Study_Area_Polygon"].valueAsText) else None
-        inc_buf = bool(pdict.get("Include_Buffer_Stations").value) if (pdict.get("Include_Buffer_Stations") and pdict["Include_Buffer_Stations"].value is not None) else True
-        custom_ids = pdict.get("Custom_Station_IDs").valueAsText if pdict.get("Custom_Station_IDs") else ""
-        local_layer = pdict.get("Local_Station_Features").valueAsText if (pdict.get("Local_Station_Features") and pdict["Local_Station_Features"].valueAsText) else None
+        try:
+            # 1. Resolve Weather Stations
+            st_mode = pdict["Station_Selection_Mode"].valueAsText
+            st_reg = pdict.get("Region_Filter").valueAsText if pdict.get("Region_Filter") else "Arab League Countries (22 Nations)"
+            st_ctry = pdict.get("Select_Country").valueAsText if pdict.get("Select_Country") else "Egypt (EG)"
+            study_poly = pdict.get("Study_Area_Polygon").valueAsText if (pdict.get("Study_Area_Polygon") and pdict["Study_Area_Polygon"].valueAsText) else None
+            supp_layer = pdict.get("Supplementary_Points").valueAsText if (pdict.get("Supplementary_Points") and pdict["Supplementary_Points"].valueAsText) else None
+            inc_buf = bool(pdict.get("Include_Buffer_Stations").value) if (pdict.get("Include_Buffer_Stations") and pdict["Include_Buffer_Stations"].value is not None) else True
+            custom_ids = pdict.get("Custom_Station_IDs").valueAsText if pdict.get("Custom_Station_IDs") else ""
+            local_layer = pdict.get("Local_Station_Features").valueAsText if (pdict.get("Local_Station_Features") and pdict["Local_Station_Features"].valueAsText) else None
 
-        target_country = self._parse_target_country(st_ctry, st_reg)
+            target_country = self._parse_target_country(st_ctry, st_reg)
 
-        messages.addMessage("================================================================================")
-        messages.addMessage("MIRSAD (مِرصاد) - NOAA / WMO GROUND WEATHER STATIONS CLIMATE ATLAS GENERATOR")
-        messages.addMessage("Multi-source Integrated Reanalysis & Surface Atlas Database Platform")
-        messages.addMessage("================================================================================")
-        messages.addMessage("[1/5] Resolving Weather Station Network (Mode: %s) ..." % st_mode)
-        resolved_stations = self._resolve_stations(st_mode, target_country, study_poly, inc_buf, custom_ids, local_layer)
+            messages.addMessage("================================================================================")
+            messages.addMessage("MIRSAD - NOAA / WMO GROUND WEATHER STATIONS CLIMATE ATLAS GENERATOR")
+            messages.addMessage("Multi-source Integrated Reanalysis & Surface Atlas Database Platform")
+            messages.addMessage("================================================================================")
+            messages.addMessage("[1/5] Resolving Weather Station Network (Mode: %s) ..." % st_mode)
+            resolved_stations = self._resolve_stations(st_mode, target_country, study_poly, inc_buf, custom_ids, local_layer)
 
-        if not resolved_stations:
-            raise RuntimeError("No weather stations matched the selected scope/boundary. Please check your filter or polygon.")
+            # Ingest Optional Supplementary Points
+            supp_stations = []
+            if supp_layer and arcpy.Exists(supp_layer):
+                messages.addMessage("      -> Ingesting Supplementary Survey Points to densify sampling network ...")
+                try:
+                    desc_supp = arcpy.Describe(supp_layer)
+                    supp_sr = desc_supp.spatialReference
+                    wgs = arcpy.SpatialReference(4326)
+                    with arcpy.da.SearchCursor(supp_layer, ["SHAPE@XY", "OID@"]) as cur:
+                        for idx, row in enumerate(cur):
+                            xy = row[0]
+                            oid = row[1]
+                            if supp_sr.factoryCode != 4326:
+                                pt_geom = arcpy.PointGeometry(arcpy.Point(xy[0], xy[1]), supp_sr).projectAs(wgs)
+                                pt_lon = pt_geom.firstPoint.X
+                                pt_lat = pt_geom.firstPoint.Y
+                            else:
+                                pt_lon = xy[0]
+                                pt_lat = xy[1]
 
-        messages.addMessage("      -> Successfully resolved %d certified ground stations." % len(resolved_stations))
+                            supp_stations.append({
+                                "Station_ID": "SUPP_%04d" % (idx + 1),
+                                "Name": "Auxiliary Point %d (OID %s)" % (idx + 1, oid),
+                                "Country": target_country if target_country not in ("ARAB", "WORLD") else "SUPP",
+                                "Country_Nm": "Supplementary Survey",
+                                "Continent": "Other",
+                                "Is_Arab": True,
+                                "Lat": float(pt_lat),
+                                "Lon": float(pt_lon),
+                                "Elev_m": 0.0,
+                                "Is_Supplementary": True
+                            })
+                    messages.addMessage("      -> Successfully added %d supplementary sampling points." % len(supp_stations))
+                except Exception as ex_supp:
+                    messages.addWarning("Could not ingest supplementary points: %s" % ex_supp)
 
-        # 2. Build Scratch Feature Class for Stations
-        out_ws = pdict["Output_Workspace"].valueAsText
-        if not os.path.exists(out_ws):
-            os.makedirs(out_ws)
-        scratch_dir = os.path.join(out_ws, "scratch")
-        if not os.path.exists(scratch_dir):
-            os.makedirs(scratch_dir)
+            all_target_points = resolved_stations + supp_stations
 
-        station_shp = os.path.join(scratch_dir, "Target_Weather_Stations.shp")
-        self._write_stations_shapefile(resolved_stations, station_shp)
+            if not all_target_points:
+                raise RuntimeError("No weather stations or supplementary points matched the selected scope/boundary. Please check your filter or polygon.")
 
-        # Map to Input_Point_Features & Study_Area_Mask
-        pdict["Input_Point_Features"].value = station_shp
-        if study_poly:
-            pdict["Study_Area_Mask"].value = study_poly
+            messages.addMessage("      -> Successfully verified %d certified ground stations and %d auxiliary points (Total: %d locations)."
+                                % (len(resolved_stations), len(supp_stations), len(all_target_points)))
 
-        # 3. Handle Climate_Data_Source mapping for the core engine
+            # 2. Build Scratch Feature Class for Stations
+            out_ws = pdict["Output_Workspace"].valueAsText
+            if not os.path.exists(out_ws):
+                os.makedirs(out_ws)
+            scratch_dir = os.path.join(out_ws, "scratch")
+            if not os.path.exists(scratch_dir):
+                os.makedirs(scratch_dir)
+
+            station_shp = os.path.join(scratch_dir, "Target_Weather_Stations.shp")
+            self._write_stations_shapefile(all_target_points, station_shp)
+
+            # 3. Construct Core Execution Parameters List with Synthetic Injections
+            param_input_pts = arcpy.Parameter(
+                displayName="Input Point Features",
+                name="Input_Point_Features",
+                datatype="GPFeatureLayer",
+                parameterType="Optional",
+                direction="Input"
+            )
+            param_input_pts.value = station_shp
+
+            core_parameters = [p for p in parameters if p.name not in ("Input_Point_Features", "Study_Area_Mask", "Supplementary_Points")]
+            core_parameters.append(param_input_pts)
+
+            if study_poly:
+                param_mask = arcpy.Parameter(
+                    displayName="Study Area Mask",
+                    name="Study_Area_Mask",
+                    datatype="GPFeatureLayer",
+                    parameterType="Optional",
+                    direction="Input"
+                )
+                param_mask.value = study_poly
+                core_parameters.append(param_mask)
+
+            # 4. Handle Climate_Data_Source mapping for the core engine
+            p_csrc = pdict.get("Climate_Data_Source")
+            csrc_val = p_csrc.valueAsText if p_csrc else "NASA POWER API (Agroclimatology / MERRA-2)"
+            orig_source_name = csrc_val
+
+            if "Hybrid" in csrc_val:
+                p_csrc.value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
+            elif "NOAA" in csrc_val:
+                p_csrc.value = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
+            elif "Open-Meteo" in csrc_val:
+                p_csrc.value = "Open-Meteo Historical API (ERA5 Reanalysis)"
+            else:
+                p_csrc.value = "NASA POWER API"
+
+            messages.addMessage("[2/5] Initializing Climate Engine with Data Source: %s" % orig_source_name)
+
+            # 5. Invoke Core Calculation & Mapping Engine
+            _core.PowerClimateAtlasGenerator.execute(self, core_parameters, messages)
+
+            # 6. Enrich Resulting GDB Feature Classes with Station Metadata
+            messages.addMessage("[5/5] Finalizing Ground Station Metadata & Master Directory ...")
+            self._enrich_station_metadata(out_ws, all_target_points)
+            messages.addMessage("All ground weather station atlas operations completed successfully!")
+
+        except Exception as ex:
+            messages.addErrorMessage("MIRSAD EXECUTION ERROR: %s" % str(ex))
+            messages.addErrorMessage(traceback.format_exc())
+            raise
+        finally:
+            try:
+                arcpy.ClearWorkspaceCache_management()
+            except Exception:
+                pass
+            import gc
+            gc.collect()
+
+
+# ==============================================================================
+# TOOL 2: ARABIC COMPANION TOOL (النسخة العربية الكاملة)
+# ==============================================================================
+class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
+    def __init__(self):
+        super(WeatherStationsAtlasGeneratorAR, self).__init__() if hasattr(super(WeatherStationsAtlasGeneratorAR, self), '__init__') else WeatherStationsAtlasGenerator.__init__(self)
+        self.label = "MIRSAD: Ground Weather Stations Climate Atlas Generator (AR)"
+        self.description = (
+            "أداة مِرصاد الجغرافية لاستخلاص محطات الأرصاد الجوية السطحية المعتمدة عالمياً (NOAA ISD & WMO)، "
+            "وتنزيل السلاسل الزمنية المناخية من وكالة ناسا (NASA POWER) أو المركز الأوروبي (Open-Meteo ERA5) أو الأرصاد المباشرة، "
+            "وحساب المعدلات المناخية والمؤشرات الحيوية، وبناء قواعد البيانات الجغرافية وجداول إكسل، وإنتاج أسطح الراستر المستمرة فائقة الدقة."
+        )
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        params = WeatherStationsAtlasGenerator.getParameterInfo(self)
+        pdict = dict((p.name, p) for p in params)
+
+        # 1. Station_Selection_Mode
+        p_mode = pdict.get("Station_Selection_Mode")
+        if p_mode:
+            p_mode.displayName = "نمط اختيار محطات الأرصاد الجوية"
+            p_mode.filter.list = [
+                "اختيار بالدولة (الشبكة الوطنية المعتمدة)",
+                "استقطاع مكاني بمضلع حدود منطقة الدراسة",
+                "أكواد محطات مخصصة (إدخال يدوي / من المستكشف)",
+                "الشبكة العالمية الموحدة (حول العالم - تنبيه: عدد كبير)",
+                "طبقة محطات محلية محفوظة (شيب فايل / قاعدة بيانات)"
+            ]
+            p_mode.value = "اختيار بالدولة (الشبكة الوطنية المعتمدة)"
+            p_mode.description = (
+                "اختر طريقة تحديد محطات الرصد الجوي:\n"
+                "• 'اختيار بالدولة (الشبكة الوطنية)': تصفية المحطات المعتمدة حسب الدولة أو الإقليم.\n"
+                "• 'استقطاع مكاني بمضلع الحدود': اقتطاع المحطات الواقعة داخل مضلع دراستك (+ نطاق عازل اختياري).\n"
+                "• 'أكواد محطات مخصصة': إدخال أكواد USAF/WMO لمحطات محددة مباشرة.\n"
+                "• 'الشبكة العالمية الموحدة': معالجة المحطات حول العالم.\n"
+                "• 'طبقة محطات محلية محفوظة': استدعاء طبقة محطات محفوظة مسبقاً من جهازك."
+            )
+
+        # 2. Region_Filter
+        p_reg = pdict.get("Region_Filter")
+        if p_reg:
+            p_reg.displayName = "نطاق الإقليم الجغرافي / القارة"
+            p_reg.filter.list = [
+                "دول الوطن العربي (22 دولة)",
+                "جميع دول العالم (قاعدة البيانات المفتوحة)",
+                "أفريقيا",
+                "آسيا",
+                "أوروبا",
+                "أمريكا الشمالية",
+                "أمريكا الجنوبية",
+                "أوقيانوسيا",
+                "القارة القطبية الجنوبية"
+            ]
+            p_reg.value = "دول الوطن العربي (22 دولة)"
+            p_reg.description = "مرشح مكاني للمستوى الأول لتضييق نطاق قائمة الدول."
+
+        # 3. Select_Country
+        p_ctry = pdict.get("Select_Country")
+        if p_ctry:
+            p_ctry.displayName = "اختيار الدولة / النطاق الوطني"
+            p_ctry.filter.list = [
+                "[جميع دول الوطن العربي (ARAB)]",
+                "فلسطين (PS)",
+                "مصر (EG)",
+                "المملكة العربية السعودية (SA)",
+                "الجزائر (AG)",
+                "المغرب (MO)",
+                "العراق (IZ)",
+                "السودان (SU)",
+                "سلطنة عُمان (MU)",
+                "ليبيا (LY)",
+                "تونس (TS)",
+                "الكويت (KU)",
+                "سوريا (SY)",
+                "الصومال (SO)",
+                "الأردن (JO)",
+                "الإمارات العربية المتحدة (AE)",
+                "قطر (QA)",
+                "اليمن (YM)",
+                "موريتانيا (MR)",
+                "جزر القمر (CN)",
+                "البحرين (BA)",
+                "لبنان (LE)",
+                "جيبوتي (DJ)"
+            ]
+            p_ctry.value = "[جميع دول الوطن العربي (ARAB)]"
+            p_ctry.description = "مرشح الشبكة الوطنية للمستوى الثاني أو النطاق الإقليمي الشامل."
+
+        # 4. Study_Area_Polygon
+        p_poly = pdict.get("Study_Area_Polygon")
+        if p_poly:
+            p_poly.displayName = "مضلع حدود منطقة الدراسة (قناع / استقطاع اختياري)"
+            p_poly.description = "طبقة مضلعات اختيارية. تُستخدم لقص محطات الأرصاد وتحديد قناع الامتداد وقص أسطح الراستر النهائية."
+
+        # 5. Supplementary_Points
+        p_supp = pdict.get("Supplementary_Points")
+        if p_supp:
+            p_supp.displayName = "نقاط رفع إضافية داعمة (اختيارية - لتكثيف المناطق الفارغة)"
+            p_supp.description = "طبقة نقاط اختيارية (شيب فايل أو قاعدة بيانات). تُستخدم لإضافة مواقع رفع خاصة (مثل المناطق الصحراوية أو مواقع المشاريع الخالية من المحطات) لدمجها تلقائياً مع محطات الأرصاد ورفع دقة الاستيفاء."
+
+        # 6. Include_Buffer_Stations
+        p_buf = pdict.get("Include_Buffer_Stations")
+        if p_buf:
+            p_buf.displayName = "تضمين محطات النطاق العازل المجاورة (حرم 30 كم لدقة الاستيفاء)"
+            p_buf.description = "عند تفعيل القص بالمضلع، يتم تضمين المحطات الواقعة ضمن مسافة 30 كم خارج الحدود لمنع تشوه الحواف أثناء الاستيفاء المكاني."
+
+        # 7. Custom_Station_IDs
+        p_cust = pdict.get("Custom_Station_IDs")
+        if p_cust:
+            p_cust.displayName = "أكواد المحطات المخصصة (أكواد USAF مفصولة بفاصلة منقوطة)"
+            p_cust.description = "اختياري. أدخل أكواد محطات USAF مفصولة بفاصلة منقوطة (مثال: 623660;624140;623180)."
+
+        # 8. Local_Station_Features
+        p_loc = pdict.get("Local_Station_Features")
+        if p_loc:
+            p_loc.displayName = "طبقة محطات محلية محفوظة (شيب فايل أو فيتشر كلاس)"
+            p_loc.description = "اختياري. استدعاء طبقة محطات محفوظة مسبقاً بصيغة Shapefile أو File Geodatabase."
+
+        # 9. Climate_Data_Source
         p_csrc = pdict.get("Climate_Data_Source")
-        csrc_val = p_csrc.valueAsText if p_csrc else "NASA POWER API (Agroclimatology / MERRA-2)"
-        orig_source_name = csrc_val
+        if p_csrc:
+            p_csrc.displayName = "مصدر البيانات المناخية ومحرك المعالجة"
+            p_csrc.filter.list = [
+                "نظام هجين: أرصاد محطات NOAA + سد فجوات NASA/ERA5 (Hybrid) [موصى به]",
+                "أرشيف الأرصاد السطحية المباشرة من محطات NOAA ISD / GHCN",
+                "واجهة ناسا باور المناخية الزراعية (NASA POWER API / MERRA-2)",
+                "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
+            ]
+            p_csrc.value = "نظام هجين: أرصاد محطات NOAA + سد فجوات NASA/ERA5 (Hybrid) [موصى به]"
+            p_csrc.description = "اختر مزود البيانات المناخية لمحطات الرصد الجوي."
 
-        if "Hybrid" in csrc_val:
-            p_csrc.value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
-        elif "NOAA" in csrc_val:
-            p_csrc.value = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
-        elif "Open-Meteo" in csrc_val:
-            p_csrc.value = "Open-Meteo Historical API (ERA5 Reanalysis)"
+        # 10. Operation_Mode
+        p_op = pdict.get("Operation_Mode")
+        if p_op:
+            p_op.displayName = "نمط سير العمل والتشغيل"
+            p_op.filter.list = [
+                "تنزيل البيانات وإنتاج الأطلس كاملاً (المسار الشامل) [الافتراضي]",
+                "استيفاء ورسم الخرائط لبيانات موجودة مسبقاً (وضع أوفلاين)"
+            ]
+            p_op.value = "تنزيل البيانات وإنتاج الأطلس كاملاً (المسار الشامل) [الافتراضي]"
+
+        # 11. Execution_Workflow_Mode
+        p_wf = pdict.get("Execution_Workflow_Mode")
+        if p_wf:
+            p_wf.displayName = "نمط تنفيذ المعالجة وتدفق المهام"
+            p_wf.filter.list = [
+                "نمط الدفعات: تنزيل كافة البيانات أولاً ثم المعالجة [موصى به]",
+                "نمط تتابعي: معالجة عنصر بعنصر"
+            ]
+            p_wf.value = "نمط الدفعات: تنزيل كافة البيانات أولاً ثم المعالجة [موصى به]"
+
+        # 12. Download_Only
+        p_dl = pdict.get("Download_Only")
+        if p_dl:
+            p_dl.displayName = "تنزيل وحفظ بيانات النقاط فقط (تخطي الراسترات والأطلس)"
+
+        # 13. Study_Area_Name
+        p_sname = pdict.get("Study_Area_Name")
+        if p_sname:
+            p_sname.displayName = "اسم منطقة الدراسة (اختياري - لتسمية الطبقات)"
+
+        # 14. Output_Workspace
+        p_ows = pdict.get("Output_Workspace")
+        if p_ows:
+            p_ows.displayName = "مجلد مساحة عمل المخرجات الرئيسي"
+
+        # 15. Output_Spatial_Reference
+        p_osr = pdict.get("Output_Spatial_Reference")
+        if p_osr:
+            p_osr.displayName = "نظام الإسناد المكاني للمخرجات (Spatial Reference)"
+
+        # 16. Units
+        p_unit = pdict.get("Measurement_Units_System")
+        if p_unit:
+            p_unit.displayName = "نظام وحدات القياس (متري Metric / إمبراطوري Imperial)"
+
+        # 17. Interpolation_Method
+        p_interp = pdict.get("Interpolation_Method")
+        if p_interp:
+            p_interp.displayName = "طريقة الاستيفاء المكاني للراستر"
+
+        # 18. Base_Cell_Size
+        p_bcell = pdict.get("Base_Cell_Size")
+        if p_bcell:
+            p_bcell.displayName = "حجم الخلية الأساسي لأسطح الراستر (بالأمتار)"
+
+        return params
+
+    def updateParameters(self, parameters):
+        pdict = dict((p.name, p) for p in parameters)
+
+        st_mode = pdict.get("Station_Selection_Mode")
+        mode_val = st_mode.valueAsText if st_mode else ""
+
+        p_reg = pdict.get("Region_Filter")
+        p_ctry = pdict.get("Select_Country")
+        p_custom = pdict.get("Custom_Station_IDs")
+        p_local = pdict.get("Local_Station_Features")
+        p_buf = pdict.get("Include_Buffer_Stations")
+
+        if "الدولة" in mode_val or "Country" in mode_val:
+            if p_reg: p_reg.enabled = True
+            if p_ctry: p_ctry.enabled = True
+            if p_custom: p_custom.enabled = False
+            if p_local: p_local.enabled = False
+            if p_buf: p_buf.enabled = False
+        elif "استقطاع" in mode_val or "Intersect" in mode_val:
+            if p_reg: p_reg.enabled = False
+            if p_ctry: p_ctry.enabled = False
+            if p_custom: p_custom.enabled = False
+            if p_local: p_local.enabled = False
+            if p_buf: p_buf.enabled = True
+        elif "أكواد" in mode_val or "Custom" in mode_val:
+            if p_reg: p_reg.enabled = False
+            if p_ctry: p_ctry.enabled = False
+            if p_custom: p_custom.enabled = True
+            if p_local: p_local.enabled = False
+            if p_buf: p_buf.enabled = False
+        elif "محلية" in mode_val or "Local" in mode_val:
+            if p_reg: p_reg.enabled = False
+            if p_ctry: p_ctry.enabled = False
+            if p_custom: p_custom.enabled = False
+            if p_local: p_local.enabled = True
+            if p_buf: p_buf.enabled = False
+        elif "العالمية" in mode_val or "Global" in mode_val:
+            if p_reg: p_reg.enabled = False
+            if p_ctry: p_ctry.enabled = False
+            if p_custom: p_custom.enabled = False
+            if p_local: p_local.enabled = False
+            if p_buf: p_buf.enabled = False
+
+        # Populate countries in Arabic
+        if p_reg and p_ctry:
+            reg_val = p_reg.valueAsText or ""
+            if "العربي" in reg_val or "Arab" in reg_val:
+                p_ctry.filter.list = [
+                    "[جميع دول الوطن العربي (ARAB)]",
+                    "فلسطين (PS)", "مصر (EG)", "المملكة العربية السعودية (SA)", "الجزائر (AG)", "المغرب (MO)",
+                    "العراق (IZ)", "السودان (SU)", "سلطنة عُمان (MU)", "ليبيا (LY)", "تونس (TS)",
+                    "الكويت (KU)", "سوريا (SY)", "الصومال (SO)", "الأردن (JO)",
+                    "الإمارات العربية المتحدة (AE)", "قطر (QA)", "اليمن (YM)",
+                    "موريتانيا (MR)", "جزر القمر (CN)", "البحرين (BA)",
+                    "لبنان (LE)", "جيبوتي (DJ)"
+                ]
+                if not p_ctry.valueAsText or p_ctry.valueAsText not in p_ctry.filter.list:
+                    p_ctry.value = "[جميع دول الوطن العربي (ARAB)]"
+
+        _core.PowerClimateAtlasGenerator.updateParameters(self, parameters)
+
+    def execute(self, parameters, messages):
+        pdict = dict((p.name, p) for p in parameters)
+
+        # Normalize Arabic selections back to English canonical values
+        mode_val = pdict["Station_Selection_Mode"].valueAsText or ""
+        if "الدولة" in mode_val:
+            pdict["Station_Selection_Mode"].value = "Select by Country (National Network)"
+        elif "استقطاع" in mode_val:
+            pdict["Station_Selection_Mode"].value = "Spatial Intersect by Study Area Boundary (Polygon Clip)"
+        elif "أكواد" in mode_val:
+            pdict["Station_Selection_Mode"].value = "Custom Station IDs (Manual Entry / From Explorer)"
+        elif "محلية" in mode_val:
+            pdict["Station_Selection_Mode"].value = "Local Saved Station Layer (Shapefile / Geodatabase)"
+        elif "العالمية" in mode_val:
+            pdict["Station_Selection_Mode"].value = "Global Network (Worldwide - Caution: High Station Count)"
+
+        # Normalize Provider
+        src_val = pdict.get("Climate_Data_Source").valueAsText if pdict.get("Climate_Data_Source") else ""
+        if "هجين" in src_val or "Hybrid" in src_val:
+            pdict["Climate_Data_Source"].value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
+        elif "أرشيف" in src_val or "NOAA" in src_val:
+            pdict["Climate_Data_Source"].value = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
+        elif "أوبن" in src_val or "Open-Meteo" in src_val:
+            pdict["Climate_Data_Source"].value = "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
         else:
-            p_csrc.value = "NASA POWER API"
+            pdict["Climate_Data_Source"].value = "NASA POWER API (Agroclimatology / MERRA-2)"
 
-        messages.addMessage("[2/5] Initializing Climate Engine with Data Source: %s" % orig_source_name)
+        # Normalize Operation Mode
+        op_val = pdict.get("Operation_Mode").valueAsText if pdict.get("Operation_Mode") else ""
+        if "تنزيل" in op_val or "Download" in op_val:
+            pdict["Operation_Mode"].value = "Download & Generate Atlas (Full Pipeline) [Default]"
+        elif "استيفاء" in op_val or "Interpolate" in op_val:
+            pdict["Operation_Mode"].value = "Interpolate & Map Existing Data (Offline Mode)"
 
-        # 4. Invoke Core Calculation & Mapping Engine
-        _core.PowerClimateAtlasGenerator.execute(self, parameters, messages)
-
-        # 5. Enrich Resulting GDB Feature Classes with Station Metadata
-        messages.addMessage("[5/5] Finalizing Ground Station Metadata & Master Directory ...")
-        self._enrich_station_metadata(out_ws, resolved_stations)
-        messages.addMessage("All ground weather station atlas operations completed successfully!")
+        # Delegate execution to English master engine
+        WeatherStationsAtlasGenerator.execute(self, parameters, messages)

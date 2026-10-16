@@ -68,13 +68,32 @@ try:
                 if abs(lat) > 90.0 or abs(lon) > 180.0:
                     continue
 
+                # Filter out test/bogus stations
+                if "BOGUS" in name.upper() or usaf in ("406010", "406150", "406850", "401700"):
+                    continue
+
+                # Coordinate corrections for inverted sign typos in source records
+                if usaf == "749497" or ("SALE" in name.upper() and "MOROCCO" in name.upper()):
+                    lat = abs(lat)  # Rabat-Salé Airport, Morocco (+34.050)
+                if usaf == "404710" or (name.strip().upper() == "SUR" and ctry in ("MU", "OM")):
+                    lat = abs(lat)  # Sur, Oman (+22.583)
+
                 # Sovereign Unification: All stations in Palestine (IS, IL, GZ, WE, PS)
                 if ctry in ("IS", "IL", "GZ", "WE") or (ctry == "PS" and not (lat < 15.0 and lon > 100.0)):
+                    if lat > 40.0 or lon < 25.0:
+                        continue  # Test station in Europe
                     ctry = "PS"
                 elif ctry == "PS" and (lat < 15.0 and lon > 100.0):
                     ctry = "PW"
 
                 en_name, ar_name, cont, is_arab = get_country_info(ctry, lat, lon)
+                if ctry in ("CN", "KM") and not is_arab:
+                    ctry = "CH"
+                if ctry in ("BA", "BH") and not is_arab:
+                    ctry = "BK"
+                if ctry in ("IZ", "IQ") and not is_arab:
+                    ctry = "GM"
+
                 s_dict = {
                     "Station_ID": usaf,
                     "WBAN": wban,
@@ -103,19 +122,40 @@ except Exception as ex:
 if not loaded_online and os.path.exists(shp_global_path):
     gdf_exist = gpd.read_file(shp_global_path)
     for _, r in gdf_exist.iterrows():
+        name = str(r["Name"])
+        usaf = str(r["Station_ID"])
+        if "BOGUS" in name.upper() or usaf in ("406010", "406150", "406850", "401700"):
+            continue
         ctry = str(r.get("Country", "")).strip()
         lat = float(r["Lat"])
         lon = float(r["Lon"])
         elev = float(r.get("Elev_m", 0.0))
+
+        # Coordinate corrections for inverted sign typos
+        if usaf == "749497" or ("SALE" in name.upper() and "MOROCCO" in name.upper()):
+            lat = abs(lat)
+        if usaf == "404710" or (name.strip().upper() == "SUR" and ctry in ("MU", "OM")):
+            lat = abs(lat)
+
         if ctry in ("IS", "IL", "GZ", "WE") or (ctry == "PS" and not (lat < 15.0 and lon > 100.0)):
+            if lat > 40.0 or lon < 25.0:
+                continue
             ctry = "PS"
         elif ctry == "PS" and (lat < 15.0 and lon > 100.0):
             ctry = "PW"
+
         en_name, ar_name, cont, is_arab = get_country_info(ctry, lat, lon)
+        if ctry in ("CN", "KM") and not is_arab:
+            ctry = "CH"
+        if ctry in ("BA", "BH") and not is_arab:
+            ctry = "BK"
+        if ctry in ("IZ", "IQ") and not is_arab:
+            ctry = "GM"
+
         s_dict = {
-            "Station_ID": str(r["Station_ID"]),
+            "Station_ID": usaf,
             "WBAN": str(r.get("WBAN", "99999")),
-            "Name": str(r["Name"]),
+            "Name": name,
             "Country": ctry,
             "Country_Nm": en_name,
             "Country_Ar": ar_name,

@@ -224,7 +224,7 @@
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-map text-brand-400 mr-1 ml-1"></i> ArcMap 10.8 & Pro</span>
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-satellite text-solar-400 mr-1 ml-1"></i> 5 Reanalysis Sources</span>
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-palette text-pink-400 mr-1 ml-1"></i> 2,250 Color Ramps</span>
-            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-location-dot text-emerald-400 mr-1 ml-1"></i> 73 Egypt Stations Hub</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-location-dot text-emerald-400 mr-1 ml-1"></i> 28,066+ Certified Stations (944 Arab League)</span>
           </div>
 
         </div>
@@ -288,8 +288,8 @@
         </div>
 
         <div class="p-4 rounded-xl glass-card border-slate-800">
-          <p class="text-3xl font-black text-purple-400 font-inter">73</p>
-          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_stations">محطة رصد بمصر</p>
+          <p class="text-3xl font-black text-purple-400 font-inter">28,066+</p>
+          <p class="text-xs font-bold text-slate-300 mt-1" data-i18n="metric_stations">محطة رصد معتمدة (944 عربية)</p>
         </div>
 
         <div class="p-4 rounded-xl glass-card border-slate-800">
@@ -766,29 +766,46 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 7. DUAL TOOLS SUITE ARCHITECTURE -->
+  <!-- 7. FOUR-TOOL INTEGRATED ARCHITECTURE -->
   <!-- ========================================================================= -->
   <section id="tools" class="py-20 bg-slate-900/40 border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
         <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="tool_tag">MIRSAD TOOLS SUITE</h2>
-        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="tool_heading">هيكلية وأدوات منظومة مِرصاد</h3>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="tool_heading">ترسانة أدوات منظومة مِرصاد</h3>
         <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="tool_subheading">
-          تتضمن المنظومة أداتين متخصصتين تغطيان كافة سيناريوهات البيانات النقطية والشريطية، بالإضافة لمركز محطات الطقس.
+          تتضمن المنظومة أربع أدوات وركائز متكاملة تغطي محطات الرصد الأرضية، معالجة وتحليل النقاط، استيفاء الراستر الشريطي، وقواعد البيانات الجغرافية.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
-        <!-- Tool 1: Point Generator -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between">
+        <!-- Tool 1: Ground Weather Stations Generator -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-emerald-500/50 transition duration-300">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-tower-broadcast"></i>
+            </div>
+            <span class="text-xs font-bold text-emerald-400 font-inter">Dual EN/AR • 28,066 Stations</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">Ground Weather Stations Atlas Generator</h4>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_ground_desc">
+              صندوق أدوات متكامل (.pyt) يضم نسختين مستقلتين بالإنجليزية الخالصة وبالعربية (AR). يتيح فلترة 28,066 محطة عالمية (منها 944 محطة عربية معتمدة ومطهرة)، ودعم نقاط مسح إضافية اختيارية لتكثيف البيانات بالمناطق الصحراوية، مع معمارية مضادة للانهيار في ArcMap و Pro.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 font-inter">
+            <span>Entry: MIRSAD_Weather_Stations_Atlas_Generator.pyt</span>
+          </div>
+        </div>
+
+        <!-- Tool 2: Point Generator -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-ocean-500/50 transition duration-300">
           <div>
             <div class="w-12 h-12 rounded-xl bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-xl mb-4">
               <i class="fa-solid fa-location-crosshairs"></i>
             </div>
-            <span class="text-xs font-bold text-ocean-400 font-inter">66 Parameters</span>
-            <h4 class="text-lg font-bold text-white mt-1 mb-2">MIRSAD: Spatial Climate Atlas Generator</h4>
+            <span class="text-xs font-bold text-ocean-400 font-inter">66 Parameters • Online/Offline</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">Spatial Climate Atlas Generator</h4>
             <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_point_desc">
               الأداة النقطية الرئيسية (`.pyt`). تتولى استعلام المحطات والنقاط، سحب السلاسل الزمنية، تطبيق المعادلات وحساب المؤشرات، وإجراء الاستيفاء المكاني (IDW, Kriging, Spline)، وإنتاج خرائط متجهات الرياح والآيزوبار والتصدير لـ GDB و Shapefile و Excel.
             </p>
@@ -798,14 +815,14 @@
           </div>
         </div>
 
-        <!-- Tool 2: Raster Generator -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between">
+        <!-- Tool 3: Raster Generator -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-brand-500/50 transition duration-300">
           <div>
             <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-xl mb-4">
               <i class="fa-solid fa-border-all"></i>
             </div>
-            <span class="text-xs font-bold text-brand-400 font-inter">34 Parameters</span>
-            <h4 class="text-lg font-bold text-white mt-1 mb-2">MIRSAD: Raster Data Climate Atlas Generator</h4>
+            <span class="text-xs font-bold text-brand-400 font-inter">34 Parameters • NetCDF & Tiling</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">Raster Data Climate Atlas Generator</h4>
             <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_raster_desc">
               أداة سحب ومعالجة الراستر الشريطي. متخصصة في تنزيل شرائح NetCDF والبيانات الشبكية المقصوصة من ERA5 و Copernicus CDS، وتحويل البكسلات لنقاط تحليل رئيسية لإنتاج طبقات الراستر الموزونة مباشرة.
             </p>
@@ -815,20 +832,20 @@
           </div>
         </div>
 
-        <!-- Tool 3: Stations Hub -->
-        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between">
+        <!-- Tool 4: Stations Hub & Explorers -->
+        <div class="glass-card p-6 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-solar-500/50 transition duration-300">
           <div>
             <div class="w-12 h-12 rounded-xl bg-solar-500/20 text-solar-400 flex items-center justify-center text-xl mb-4">
-              <i class="fa-solid fa-tower-broadcast"></i>
+              <i class="fa-solid fa-map-location-dot"></i>
             </div>
-            <span class="text-xs font-bold text-solar-400 font-inter">73 Verified Stations</span>
-            <h4 class="text-lg font-bold text-white mt-1 mb-2">Weather Stations Hub</h4>
+            <span class="text-xs font-bold text-solar-400 font-inter">28,066 Global • 944 Arab • 73 Egypt</span>
+            <h4 class="text-lg font-bold text-white mt-1 mb-2">Weather Stations Hub & Explorers</h4>
             <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_hub_desc">
-              مركز محطات الرصد الجوي المرجعية لجمهورية مصر العربية ومحيطها الإقليمي. قاعدة بيانات جغرافية جاهزة (.gdb) مع أرقام WMO الرسمية، المناسيب الطبوغرافية، وسجلات الرصد لاختبار الأطلس فوراً.
+              مركز محطات الرصد الجوي المرجعية عالمياً وعربياً ومحلياً. قاعدة بيانات جغرافية (.gdb) وشيب فايل مع كود WMO والمناسيب، بالإضافة لخرائط HTML تفاعلية تتيح استكشاف المحطات والبحث الفوري في المتصفح.
             </p>
           </div>
           <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 font-inter">
-            <span>Entry: Weather_Stations_Directory.gdb</span>
+            <span>Entry: Weather_Stations_Directory.gdb & HTML</span>
           </div>
         </div>
 
@@ -952,15 +969,29 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-12">
         
-        <!-- Item 1: PYT Toolbox -->
-        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+        <!-- Item 1: Ground Weather Stations PYT -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-emerald-500/40 transition">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-tower-broadcast"></i>
+            </div>
+            <h5 class="text-sm font-bold text-white mb-1">Weather Stations Toolbox</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_ground_pyt_desc">صندوق أدوات محطات الأرصاد الأرضية (.pyt) بواجهتين مستقلتين (English & العربية AR) وأمان ضد انهيار الذاكرة.</p>
+          </div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/MIRSAD_Weather_Stations_Atlas_Generator.pyt" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold text-center transition">
+            <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
+          </a>
+        </div>
+
+        <!-- Item 2: Core PYT Toolbox -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-ocean-500/40 transition">
           <div>
             <div class="w-10 h-10 rounded-lg bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-lg mb-3">
               <i class="fa-solid fa-toolbox"></i>
             </div>
-            <h5 class="text-sm font-bold text-white mb-1">MIRSAD Python Toolbox</h5>
+            <h5 class="text-sm font-bold text-white mb-1">Spatial Atlas Toolbox</h5>
             <p class="text-xs text-slate-400 mb-3" data-i18n="down_pyt_desc">صندوق الأدوات الرئيسي (.pyt) الجاهز للعمل داخل ArcMap 10.8 و ArcGIS Pro.</p>
           </div>
           <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/MIRSAD_Climate_Atlas_Generator_10_8.pyt" class="w-full py-2 rounded-lg bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-bold text-center transition">
@@ -968,8 +999,22 @@
           </a>
         </div>
 
-        <!-- Item 2: Excel Dictionary -->
-        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+        <!-- Item 3: Weather Stations Hub & Explorers -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-solar-500/40 transition">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-solar-500/20 text-solar-400 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <h5 class="text-sm font-bold text-white mb-1">Stations Hub & Explorers</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_hub_desc">قاعدة البيانات الجغرافية (.gdb) والشيب فايل والخرائط التفاعلية لـ 28,066 محطة عالمية و 944 محطة عربية.</p>
+          </div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/Weather_Stations_Hub/HTML_Explorers/Global_Weather_Stations_Map.html" target="_blank" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold text-center transition">
+            <i class="fa-solid fa-earth-americas mr-1 ml-1"></i> <span data-i18n="btn_view_explorer">فتح المستكشف</span>
+          </a>
+        </div>
+
+        <!-- Item 4: Excel Dictionary -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-brand-500/40 transition">
           <div>
             <div class="w-10 h-10 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center text-lg mb-3">
               <i class="fa-solid fa-file-excel"></i>
@@ -982,30 +1027,16 @@
           </a>
         </div>
 
-        <!-- Item 3: Color Guide -->
-        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+        <!-- Item 5: Color Guide & Classification -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-pink-500/40 transition">
           <div>
-            <div class="w-10 h-10 rounded-lg bg-solar-500/20 text-solar-400 flex items-center justify-center text-lg mb-3">
+            <div class="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center text-lg mb-3">
               <i class="fa-solid fa-palette"></i>
             </div>
-            <h5 class="text-sm font-bold text-white mb-1">Color Ramps Guide (.xlsx)</h5>
+            <h5 class="text-sm font-bold text-white mb-1">Classification Guide (.xlsx)</h5>
             <p class="text-xs text-slate-400 mb-3" data-i18n="down_color_desc">دليل الـ 2,250 تدرج لوني وقواعد التصنيف الكارتوجرافي للطبقات.</p>
           </div>
           <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/Documents/02_Excel_Classification_and_Dictionaries/Climate_Atlas_Classification_Guide.xlsx" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold text-center transition">
-            <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
-          </a>
-        </div>
-
-        <!-- Item 4: Word & PDF Manual -->
-        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
-          <div>
-            <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg mb-3">
-              <i class="fa-solid fa-file-word"></i>
-            </div>
-            <h5 class="text-sm font-bold text-white mb-1">Scientific Guide (.docx)</h5>
-            <p class="text-xs text-slate-400 mb-3" data-i18n="down_doc_desc">الدليل العلمي الشامل ومقارنة مصادر البيانات ومعادلات المؤشرات.</p>
-          </div>
-          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/raw/main/Documents/05_Climate_Data_Sources_Directory/Climate_Data_Sources_Comparison_Guide.docx" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold text-center transition">
             <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_file">تحميل الملف</span>
           </a>
         </div>
@@ -1419,7 +1450,7 @@
         metric_modules: "حزمة مناخية موديولية",
         metric_sources: "مصادر بيانات معتمدة",
         metric_ramps: "تدرج لوني كارتوجرافي",
-        metric_stations: "محطة رصد بمصر",
+        metric_stations: "محطة رصد معتمدة (944 عربية)",
         metric_indicators: "مؤشراً علمياً مسجلاً",
         metric_free: "مفتوح المصدر (MIT)",
         about_tag: "عن منظومة مِرصاد",
@@ -1476,12 +1507,13 @@
         filter_bio: "البيومناخ والجفاف",
         filter_solar: "الإشعاع والشمس",
         filter_trends: "الاتجاهات والشذوذ",
-        tool_tag: "هيكلية أدوات مِرصاد",
-        tool_heading: "هيكلية وأدوات منظومة مِرصاد",
-        tool_subheading: "تتضمن المنظومة أداتين متخصصتين تغطيان كافة سيناريوهات البيانات النقطية والشريطية، بالإضافة لمركز محطات الطقس.",
+        tool_tag: "ترسانة أدوات مِرصاد",
+        tool_heading: "ترسانة أدوات منظومة مِرصاد",
+        tool_subheading: "تتضمن المنظومة أربع أدوات وركائز متكاملة تغطي محطات الرصد الأرضية، معالجة وتحليل النقاط، استيفاء الراستر الشريطي، وقواعد البيانات الجغرافية.",
+        tool_ground_desc: "صندوق أدوات متكامل (.pyt) يضم نسختين مستقلتين بالإنجليزية الخالصة وبالعربية (AR). يتيح فلترة 28,066 محطة عالمية (منها 944 محطة عربية معتمدة ومطهرة)، ودعم نقاط مسح إضافية اختيارية لتكثيف البيانات بالمناطق الصحراوية، مع معمارية مضادة للانهيار في ArcMap و Pro.",
         tool_point_desc: "الأداة النقطية الرئيسية (.pyt). تتولى استعلام المحطات والنقاط، سحب السلاسل الزمنية، تطبيق المعادلات وحساب المؤشرات، وإجراء الاستيفاء المكاني (IDW, Kriging, Spline)، وإنتاج خرائط متجهات الرياح والآيزوبار والتصدير لـ GDB و Shapefile و Excel.",
         tool_raster_desc: "أداة سحب ومعالجة الراستر الشريطي. متخصصة في تنزيل شرائح NetCDF والبيانات الشبكية المقصوصة من ERA5 و Copernicus CDS، وتحويل البكسلات لنقاط تحليل رئيسية لإنتاج طبقات الراستر الموزونة مباشرة.",
-        tool_hub_desc: "مركز محطات الرصد الجوي المرجعية لجمهورية مصر العربية ومحيطها الإقليمي. قاعدة بيانات جغرافية جاهزة (.gdb) مع أرقام WMO الرسمية، المناسيب الطبوغرافية، وسجلات الرصد لاختبار الأطلس فوراً.",
+        tool_hub_desc: "مركز محطات الرصد الجوي المرجعية عالمياً وعربياً ومحلياً. قاعدة بيانات جغرافية (.gdb) وشيب فايل مع كود WMO والمناسيب، بالإضافة لخرائط HTML تفاعلية تتيح استكشاف المحطات والبحث الفوري في المتصفح.",
         setup_tag: "المتطلبات والتثبيت",
         setup_heading: "متطلبات التشغيل وخطوات التثبيت خطوة بخطوة",
         setup_subheading: "لا تتطلب المنظومة أي عمليات تثبيت معقدة عبر سطر الأوامر؛ فقط أضف صندوق الأدوات مباشرة داخل بيئة ArcGIS المفضلة لديك.",
@@ -1492,17 +1524,20 @@
         step2_title: "فتح نافذة ArcToolbox",
         step2_desc: "في برنامج ArcMap أو ArcGIS Pro، افتح نافذة ArcToolbox أو متصفح الكتالوج (Catalog Window).",
         step3_title: "إضافة صندوق الأدوات",
-        step3_desc: "انقر بزر الفأرة الأيمن واختر Add Toolbox، ثم حدد ملف `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.",
+        step3_desc: "انقر بزر الفأرة الأيمن واختر Add Toolbox، ثم حدد ملف `MIRSAD_Climate_Atlas_Generator_10_8.pyt` أو `MIRSAD_Weather_Stations_Atlas_Generator.pyt`.",
         step4_title: "التشغيل الفوري",
         step4_desc: "افتح الأداة، وحدد طبقة النقاط والموديولات المطلوبة ومجلد الحفظ، ثم اضغط OK لبدء التوليد الآلي!",
         down_tag: "التحميلات والمستودع",
         down_heading: "حزم التحميل ومحتويات المستودع الرسمي",
         down_subheading: "كافة الأدوات والقواميس والملفات التوثيقية مفتوحة ومتاحة للتحميل المباشر والاستخدام الأكاديمي والمهني.",
+        down_ground_pyt_desc: "صندوق أدوات محطات الأرصاد الأرضية (.pyt) بواجهتين مستقلتين (English & العربية AR) وأمان ضد انهيار الذاكرة.",
         down_pyt_desc: "صندوق الأدوات الرئيسي (.pyt) الجاهز للعمل داخل ArcMap 10.8 و ArcGIS Pro.",
+        down_hub_desc: "قاعدة البيانات الجغرافية (.gdb) والشيب فايل والخرائط التفاعلية لـ 28,066 محطة عالمية و 944 محطة عربية.",
         down_dict_desc: "قاموس الحقول والمؤشرات باللغتين العربية والإنجليزية مع الوحدات الفيزيائية.",
         down_color_desc: "دليل الـ 2,250 تدرج لوني وقواعد التصنيف الكارتوجرافي للطبقات.",
         down_doc_desc: "الدليل العلمي الشامل ومقارنة مصادر البيانات ومعادلات المؤشرات.",
         btn_download_file: "تحميل الملف",
+        btn_view_explorer: "فتح المستكشف",
         clone_title: "الاستنساخ المباشر عبر سطر الأوامر:",
         btn_copy: "نسخ",
         dev_tag: "دليل المساهمة والتطوير",
@@ -1546,7 +1581,7 @@
         metric_modules: "Modular Climate Packages",
         metric_sources: "Authoritative Data Sources",
         metric_ramps: "Cartographic Color Ramps",
-        metric_stations: "Egypt Weather Stations",
+        metric_stations: "Certified Stations (944 Arab)",
         metric_indicators: "Verified Climate Indicators",
         metric_free: "Open Source (MIT)",
         about_tag: "ABOUT MIRSAD PLATFORM",
@@ -1604,11 +1639,12 @@
         filter_solar: "Radiation & Solar",
         filter_trends: "Trends & Anomalies",
         tool_tag: "MIRSAD TOOLS SUITE",
-        tool_heading: "Dual Tool Architecture & Station Hub",
-        tool_subheading: "Offering complementary workflows for station points, regional raster tiling, and a comprehensive ready-to-use Egyptian meteorological hub.",
+        tool_heading: "MIRSAD Comprehensive Tools Suite",
+        tool_subheading: "Four integrated tools and components covering in-situ ground weather stations, point-based time series modeling, raster grid interpolation, and geospatial station hubs.",
+        tool_ground_desc: "Dedicated ground station toolbox (.pyt) featuring dual pure English and native Arabic (AR) interfaces. Enables filtering 28,066 global stations (including 944 verified Arab League stations), supplementary survey points to densify desert areas, and anti-crash memory architecture.",
         tool_point_desc: "Primary point & station toolbox (.pyt). Handles API queries, time series aggregation, scientific formulas, spatial interpolation (IDW, Kriging, Spline), isobars, and GDB export.",
         tool_raster_desc: "High-throughput raster tiling tool. Specializes in NetCDF extraction and tile clipping from ERA5 and Copernicus CDS, converting grid cells into weighted points.",
-        tool_hub_desc: "Verified meteorological hub for Egypt and surrounding territories. Pre-packaged geodatabase (.gdb) featuring 73 stations with official WMO IDs and elevation coordinates.",
+        tool_hub_desc: "Global, regional, and national weather station directory. Ready File Geodatabase (.gdb) and Shapefiles with WMO IDs and elevations, plus interactive web HTML map explorers for instant station discovery.",
         setup_tag: "SYSTEM REQUIREMENTS & SETUP",
         setup_heading: "System Requirements & 4-Step Quick Setup",
         setup_subheading: "Zero complicated command-line installations. Simply plug the Python Toolbox directly into your favorite ArcGIS environment.",
@@ -1619,17 +1655,20 @@
         step2_title: "Open ArcToolbox",
         step2_desc: "In ArcMap or ArcGIS Pro, launch ArcToolbox or navigate to the Catalog Window.",
         step3_title: "Add Python Toolbox",
-        step3_desc: "Right-click and select Add Toolbox, then pick `MIRSAD_Climate_Atlas_Generator_10_8.pyt`.",
+        step3_desc: "Right-click and select Add Toolbox, then pick `MIRSAD_Climate_Atlas_Generator_10_8.pyt` or `MIRSAD_Weather_Stations_Atlas_Generator.pyt`.",
         step4_title: "Execute & Generate",
         step4_desc: "Open the tool, select your station points, choose modules, set output directory, and click OK!",
         down_tag: "DOWNLOADS & PACKAGES",
         down_heading: "Official Release Packages & Downloads",
         down_subheading: "All toolboxes, data dictionaries, and scientific documentation are completely open and available for instant download.",
+        down_ground_pyt_desc: "Ground Weather Stations Toolbox (.pyt) with dual independent interfaces (English & Arabic AR) and anti-crash memory engine.",
         down_pyt_desc: "Main ArcGIS Python Toolbox (.pyt) ready for ArcMap 10.8 and ArcGIS Pro.",
+        down_hub_desc: "Geodatabase (.gdb), Shapefiles, and interactive HTML explorers for 28,066 global and 944 Arab stations.",
         down_dict_desc: "Bilingual English/Arabic field dictionary with scientific units and abbreviations.",
         down_color_desc: "Complete 2,250 color ramps decision guide and statistical classification rules.",
         down_doc_desc: "Comprehensive scientific manual, source comparisons, and mathematical formulas.",
         btn_download_file: "Download File",
+        btn_view_explorer: "Open Explorer",
         clone_title: "Direct Command-Line Clone:",
         btn_copy: "Copy",
         dev_tag: "CONTRIBUTING & METHODOLOGY",

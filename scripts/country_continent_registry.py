@@ -34,6 +34,7 @@ COUNTRY_REGISTRY = {
     "SO": ("Somalia", "جمهورية الصومال الفيدرالية", "Africa", True),
     "DJ": ("Djibouti", "جمهورية جيبوتي", "Africa", True),
     "CN": ("Comoros", "جمهورية جزر القمر الاتحادية", "Africa", True),
+    "KM": ("Comoros", "جمهورية جزر القمر الاتحادية", "Africa", True),
     "PS": ("Palestine", "دولة فلسطين", "Asia", True),
     "GZ": ("Palestine", "دولة فلسطين", "Asia", True),
     "WE": ("Palestine", "دولة فلسطين", "Asia", True),
@@ -347,18 +348,54 @@ COUNTRY_REGISTRY = {
 }
 
 def get_country_info(code, lat=None, lon=None):
-    """Retrieve (en_name, ar_name, continent, is_arab) for code, with sovereign normalization."""
+    """Retrieve (en_name, ar_name, continent, is_arab) for code, with sovereign normalization and spatial disambiguation."""
     if not code or str(code).strip() in ("", "nan", "None"):
         return ("International Waters / Marine Buoys", "المياه الدولية وعوامات الرصد البحرية", "Oceans", False)
     code_up = str(code).strip().upper()
-    # Sovereign Unification: All weather stations in Palestine (IS, IL, GZ, WE, PS)
-    if code_up in ("IS", "IL", "GZ", "WE"):
-        return ("Palestine", "دولة فلسطين", "Asia", True)
-    if code_up == "PS":
+    
+    # 1. Sovereign Unification & Palestine vs Europe/Pacific
+    if code_up in ("IS", "IL", "GZ", "WE", "PS"):
         # Check if coordinates belong to Palau in the Pacific (lat ~7, lon ~134)
         if lat is not None and lon is not None and (lat < 15.0 and lon > 100.0):
             return ("Palau", "بالاو", "Oceania", False)
+        # Check if bogus test station in Europe (e.g. Germany lat ~52, lon ~7)
+        if lat is not None and lon is not None and (lat > 40.0 or lon < 20.0):
+            return ("Germany", "ألمانيا", "Europe", False)
         return ("Palestine", "دولة فلسطين", "Asia", True)
+
+    # 2. Comoros (KM / CN) vs China (CN / CH)
+    if code_up in ("CN", "KM"):
+        # Comoros is in the Mozambique Channel: Lat approx -11.0 to -13.5, Lon 43.0 to 45.5
+        if lat is not None and lon is not None:
+            if (-20.0 < lat < -5.0) and (40.0 < lon < 50.0):
+                return ("Comoros", "جمهورية جزر القمر الاتحادية", "Africa", True)
+            else:
+                return ("China", "جمهورية الصين الشعبية", "Asia", False)
+        # Default fallback if coordinates missing (FIPS CN in Arab League registry is Comoros)
+        return ("Comoros", "جمهورية جزر القمر الاتحادية", "Africa", True)
+
+    # 3. Bahrain (BA / BH) vs Bosnia (BA / BK) vs Belize (BH)
+    if code_up in ("BA", "BH"):
+        # Belize is in Central America: Lon < 0 (approx -87 to -89)
+        if lon is not None and lon < 0:
+            return ("Belize", "بليز", "North America", False)
+        # Bosnia & Herzegovina is in SE Europe: Lat > 35
+        if lat is not None and lat > 35.0:
+            return ("Bosnia and Herzegovina", "البوسنة والهرسك", "Europe", False)
+        # Bahrain is in the Persian Gulf: Lat ~ 25.5 to 26.5, Lon ~ 50.0 to 51.0
+        if lat is not None and lon is not None:
+            if (24.0 < lat < 28.0) and (49.0 < lon < 52.0):
+                return ("Bahrain", "مملكة البحرين", "Asia", True)
+        if code_up == "BA":
+            return ("Bahrain", "مملكة البحرين", "Asia", True)
+        return ("Belize", "بليز", "North America", False)
+
+    # 4. Iraq (IZ / IQ) test stations in Europe
+    if code_up in ("IZ", "IQ"):
+        if lat is not None and lat > 45.0:
+            return ("Germany", "ألمانيا", "Europe", False)
+        return ("Iraq", "جمهورية العراق", "Asia", True)
+
     if code_up in COUNTRY_REGISTRY:
         return COUNTRY_REGISTRY[code_up]
     return (code_up, code_up, "Other", False)
