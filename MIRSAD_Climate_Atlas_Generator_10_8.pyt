@@ -364,7 +364,7 @@ MODULE_PARAMS = {
     "Precipitation": ["PRECTOTCORR"],
     "Sea Level Pressure": ["SLP"],
     "Surface Pressure": ["PS"],
-    "Wind": ["WS10M", "WD10M"],
+    "Wind": ["WS10M", "WS10M_MAX", "WD10M"],
     "Relative Humidity": ["RH2M"],
     "Dew Point": ["T2MDEW"],
     "Solar Radiation": ["ALLSKY_SFC_SW_DWN"],
@@ -3670,7 +3670,7 @@ OM_BASE = "https://archive-api.open-meteo.com/v1/archive"
 OM_DAILY_BY_MODULE = {
     "Temperature": ["temperature_2m_mean", "temperature_2m_max", "temperature_2m_min"],
     "Precipitation": ["precipitation_sum"],
-    "Wind": ["wind_direction_10m_dominant"],
+    "Wind": ["wind_speed_10m_max", "wind_direction_10m_dominant"],
     "Solar Radiation": ["shortwave_radiation_sum"],
     "UV Index": ["uv_index_max"],
     "Heat Index": ["temperature_2m_mean", "temperature_2m_max"],
@@ -3689,7 +3689,7 @@ OM_DAILY_BY_MODULE = {
 OM_HOURLY_BY_MODULE = {
     "Sea Level Pressure": ["pressure_msl"],
     "Surface Pressure": ["surface_pressure"],
-    "Temperature": ["dew_point_2m"],
+    "Temperature": ["dew_point_2m", "relative_humidity_2m"],
     "Wind": ["wind_speed_10m"],
     "Relative Humidity": ["relative_humidity_2m"],
     "Dew Point": ["dew_point_2m"],
@@ -3703,7 +3703,8 @@ OM_HOURLY_BY_MODULE = {
 OM_CANON = {
     "temperature_2m_mean": "T2M", "temperature_2m_max": "T2M_MAX",
     "temperature_2m_min": "T2M_MIN", "precipitation_sum": "PRECTOTCORR",
-    "wind_speed_10m": "WS10M", "wind_direction_10m_dominant": "WD10M",
+    "wind_speed_10m": "WS10M", "wind_speed_10m_max": "WS10M_MAX",
+    "wind_direction_10m_dominant": "WD10M",
     "pressure_msl": "SLP", "surface_pressure": "PS",
     "relative_humidity_2m": "RH2M", "dew_point_2m": "T2MDEW",
     "shortwave_radiation_sum": "ALLSKY_SFC_SW_DWN",
@@ -3851,6 +3852,8 @@ def om_parse_response(data, daily_vars, hourly_vars):
         mode = "sum" if v in OM_SUM_VARS else "mean"
         vals = daily.get(v, []) or []
         monthly[canon] = om_group_daily(dates, vals, mode)
+        if canon != v:
+            monthly[v] = monthly[canon]
         # Parse complete daily time series for this variable
         draw = {}
         for d, val in zip(dates, vals):
@@ -3876,6 +3879,8 @@ def om_parse_response(data, daily_vars, hourly_vars):
         canon = OM_CANON.get(v, v)
         hvals = hourly.get(v, []) or []
         monthly[canon] = om_group_hourly(htimes, hvals)
+        if canon != v:
+            monthly[v] = monthly[canon]
         if canon not in daily_raw and htimes and hvals:
             day_accum = {}
             for t_str, val in zip(htimes, hvals):
@@ -5993,6 +5998,9 @@ class PowerClimateAtlasGenerator(object):
             generate_monthly_rasters = bool(p_gmr.value) if (p_gmr and p_gmr.value is not None) else False
             p_dly = pdict.get("Save_Daily_Series")
             save_daily = bool(p_dly.value) if (p_dly and p_dly.value is not None) else False
+            if temporal and ("Daily" in temporal or "يومي" in temporal):
+                if p_dly is None or p_dly.value is None or (not p_dly.altered and not save_daily):
+                    save_daily = True
             p_wcx = pdict.get("Extended_WC_Seasons")
             wc_extended = bool(p_wcx.value) if (p_wcx and p_wcx.value is not None) else False
             p_mr = pdict.get("Monthly_Ranges")
@@ -6855,7 +6863,7 @@ class PowerClimateAtlasGenerator(object):
                         daily_pkg = None
                         if save_daily and temporal == "Daily":
                             try:
-                                daily_pkg = self._build_daily_table(results, list(MODULE_PARAMS.get(m, [])))
+                                daily_pkg = self._build_daily_table(results, list(MODULE_PARAMS.get(m, [])), module_name=m)
                             except Exception as ex_d:
                                 warn("Daily table skipped for '%s': %s" % (m, str(ex_d)[:150]))
                         self._export_excel(fc, os.path.join(paths["vec"], short + ".xls"), msg, warn,
@@ -7690,7 +7698,7 @@ class PowerClimateAtlasGenerator(object):
             except Exception:
                 pass
 
-    def _build_daily_table(self, results, params):
+    def _build_daily_table(self, results, params, module_name=None):
         """Long-format daily series for the Daily sheet: {"params": [...], "header": [...], "rows": [...]}.
 
         Rows: [oid, sid, st_id, st_nm, ctry, lat, lon, YYYY-MM-DD, v1, ...] sorted by oid then date.
@@ -7698,6 +7706,152 @@ class PowerClimateAtlasGenerator(object):
         when no daily data is present."""
         if not results:
             return None
+
+        # Compute derived daily indicators if module is a derived bioclimatic element
+        if module_name:
+            norm_m = CANONICAL_DERIVED_MAP.get(module_name, module_name)
+            extra_derived_col = {
+                "Heat Index": "Heat_Index",
+                "Wind Chill": "Wind_Chill",
+                "Evapotranspiration": "ET0_Hargreaves",
+                "Hargreaves PET": "ET0_Hargreaves",
+                "De Martonne Aridity": "De_Martonne_Index",
+                "Water Deficit": "Water_Deficit",
+                "UNEP Aridity": "UNEP_Aridity_Index"
+            }.get(norm_m)
+
+            for rec in results:
+                draw = rec.get("daily_raw", {}) or {}
+                if not draw:
+                    continue
+                pt_lat = rec.get("lat", 0.0)
+
+                if norm_m == "Heat Index":
+                    t_dict = draw.get("T2M_MAX") or draw.get("T2M") or {}
+                    rh_dict = draw.get("RH2M") or {}
+                    if t_dict and rh_dict:
+                        hi_daily = {}
+                        for ymd, t_val in t_dict.items():
+                            rh_val = rh_dict.get(ymd)
+                            if t_val is not None and rh_val is not None:
+                                hi_val = heat_index_c(t_val, rh_val)
+                                if hi_val is not None:
+                                    hi_daily[ymd] = round(hi_val, 2)
+                        if hi_daily:
+                            draw["Heat_Index"] = hi_daily
+
+                elif norm_m == "Wind Chill":
+                    t_dict = draw.get("T2M") or {}
+                    ws_dict = draw.get("WS10M") or {}
+                    if t_dict and ws_dict:
+                        wc_daily = {}
+                        for ymd, t_val in t_dict.items():
+                            ws_val = ws_dict.get(ymd)
+                            if t_val is not None and ws_val is not None:
+                                wc_val = windchill_c(t_val, ws_val)
+                                if wc_val is not None:
+                                    wc_daily[ymd] = round(wc_val, 2)
+                        if wc_daily:
+                            draw["Wind_Chill"] = wc_daily
+
+                elif norm_m in ("Evapotranspiration", "Hargreaves PET"):
+                    t_dict = draw.get("T2M") or {}
+                    tx_dict = draw.get("T2M_MAX") or {}
+                    tn_dict = draw.get("T2M_MIN") or {}
+                    if t_dict and tx_dict and tn_dict:
+                        et_daily = {}
+                        for ymd, t_val in t_dict.items():
+                            tx_val = tx_dict.get(ymd)
+                            tn_val = tn_dict.get(ymd)
+                            if t_val is not None and tx_val is not None and tn_val is not None:
+                                try:
+                                    ra_m = extraterrestrial_radiation_ra(pt_lat, int(ymd[1]))
+                                    tdiff = max(0.0, float(tx_val) - float(tn_val))
+                                    pet_d = max(0.0, 0.0023 * ra_m * (float(t_val) + 17.8) * math.sqrt(tdiff))
+                                    et_daily[ymd] = round(pet_d, 2)
+                                except Exception:
+                                    pass
+                        if et_daily:
+                            draw["ET0_Hargreaves"] = et_daily
+
+                elif norm_m == "De Martonne Aridity":
+                    t_dict = draw.get("T2M") or {}
+                    p_dict = draw.get("PRECTOTCORR") or {}
+                    if t_dict and p_dict:
+                        dm_daily = {}
+                        for ymd, t_val in t_dict.items():
+                            p_val = p_dict.get(ymd)
+                            if t_val is not None and p_val is not None:
+                                try:
+                                    t_f, p_f = float(t_val), float(p_val)
+                                    dm_val = round((p_f * 365.25) / (t_f + 10.0), 2) if (t_f + 10.0) > 0.01 else 0.0
+                                    dm_daily[ymd] = dm_val
+                                except Exception:
+                                    pass
+                        if dm_daily:
+                            draw["De_Martonne_Index"] = dm_daily
+
+                elif norm_m == "Water Deficit":
+                    p_dict = draw.get("PRECTOTCORR") or {}
+                    et_dict = draw.get("ET0_Hargreaves") or {}
+                    if not et_dict:
+                        t_dict = draw.get("T2M") or {}
+                        tx_dict = draw.get("T2M_MAX") or {}
+                        tn_dict = draw.get("T2M_MIN") or {}
+                        if t_dict and tx_dict and tn_dict:
+                            for ymd, t_val in t_dict.items():
+                                tx_val = tx_dict.get(ymd)
+                                tn_val = tn_dict.get(ymd)
+                                if t_val is not None and tx_val is not None and tn_val is not None:
+                                    try:
+                                        ra_m = extraterrestrial_radiation_ra(pt_lat, int(ymd[1]))
+                                        tdiff = max(0.0, float(tx_val) - float(tn_val))
+                                        et_dict[ymd] = max(0.0, 0.0023 * ra_m * (float(t_val) + 17.8) * math.sqrt(tdiff))
+                                    except Exception:
+                                        pass
+                            if et_dict:
+                                draw["ET0_Hargreaves"] = et_dict
+                    if p_dict and et_dict:
+                        wd_daily = {}
+                        for ymd, p_val in p_dict.items():
+                            et_val = et_dict.get(ymd)
+                            if p_val is not None and et_val is not None:
+                                wd_daily[ymd] = round(float(p_val) - float(et_val), 2)
+                        if wd_daily:
+                            draw["Water_Deficit"] = wd_daily
+
+                elif norm_m == "UNEP Aridity":
+                    p_dict = draw.get("PRECTOTCORR") or {}
+                    et_dict = draw.get("ET0_Hargreaves") or {}
+                    if not et_dict:
+                        t_dict = draw.get("T2M") or {}
+                        tx_dict = draw.get("T2M_MAX") or {}
+                        tn_dict = draw.get("T2M_MIN") or {}
+                        if t_dict and tx_dict and tn_dict:
+                            for ymd, t_val in t_dict.items():
+                                tx_val = tx_dict.get(ymd)
+                                tn_val = tn_dict.get(ymd)
+                                if t_val is not None and tx_val is not None and tn_val is not None:
+                                    try:
+                                        ra_m = extraterrestrial_radiation_ra(pt_lat, int(ymd[1]))
+                                        tdiff = max(0.0, float(tx_val) - float(tn_val))
+                                        et_dict[ymd] = max(0.0, 0.0023 * ra_m * (float(t_val) + 17.8) * math.sqrt(tdiff))
+                                    except Exception:
+                                        pass
+                            if et_dict:
+                                draw["ET0_Hargreaves"] = et_dict
+                    if p_dict and et_dict:
+                        ai_daily = {}
+                        for ymd, p_val in p_dict.items():
+                            et_val = et_dict.get(ymd)
+                            if p_val is not None and et_val is not None:
+                                ai_val = round(float(p_val) / float(et_val), 3) if float(et_val) > 0.01 else 0.0
+                                ai_daily[ymd] = ai_val
+                        if ai_daily:
+                            draw["UNEP_Aridity_Index"] = ai_daily
+
+            if extra_derived_col and params and extra_derived_col not in params:
+                params.append(extra_derived_col)
 
         # Discover all available variables across results
         available_keys = set()
@@ -7798,11 +7952,7 @@ class PowerClimateAtlasGenerator(object):
                 # ALWAYS export complete daily timeseries CSV so data is completely retained regardless of row limits
                 csv_path = os.path.splitext(xls_path)[0] + "_daily.csv"
                 try:
-                    import csv as _csv
-                    with open(csv_path, "w", newline="", encoding="utf-8-sig") as _fh:
-                        _w = _csv.writer(_fh)
-                        _w.writerow(d_header)
-                        _w.writerows(d_rows)
+                    write_csv(csv_path, d_header, d_rows)
                     msg("Saved Daily Timeseries CSV: %s (%d records)" % (csv_path, len(d_rows)))
                 except Exception as ex_csv:
                     warn("Daily CSV export failed: %s" % ex_csv)
@@ -7891,14 +8041,27 @@ class PowerClimateAtlasGenerator(object):
             arcpy.management.AddField(tbl_path, "Obs_Date", "TEXT", field_length=15)
 
             params = daily_pkg.get("params", [])
+            clean_params = []
             for p in params:
-                arcpy.management.AddField(tbl_path, p, "DOUBLE", field_alias=p)
+                cp = arcpy.ValidateFieldName(p, gdb_path) if _HAS_ARCPY else re.sub(r"[^a-zA-Z0-9_]", "_", p)
+                clean_params.append(cp)
+                arcpy.management.AddField(tbl_path, cp, "DOUBLE", field_alias=p)
 
-            cur_fields = ["Source_ID", "Station_ID", "Station_Name", "Country", "Point_Lat", "Point_Lon", "Obs_Date"] + params
+            cur_fields = ["Source_ID", "Station_ID", "Station_Name", "Country", "Point_Lat", "Point_Lon", "Obs_Date"] + clean_params
             with arcpy.da.InsertCursor(tbl_path, cur_fields) as cur:
                 for r in daily_pkg["rows"]:
                     # r: [oid, sid, st_id, st_nm, ctry, lat, lon, ds] + [vals]
-                    row_data = [r[1], str(r[2] or ""), str(r[3] or ""), str(r[4] or ""), r[5], r[6], str(r[7] or "")] + list(r[8:])
+                    cleaned_vals = []
+                    for v in r[8:]:
+                        if v is None or v == "":
+                            cleaned_vals.append(None)
+                        else:
+                            try:
+                                fv = float(v)
+                                cleaned_vals.append(fv if fv == fv else None)
+                            except Exception:
+                                cleaned_vals.append(None)
+                    row_data = [r[1], str(r[2] or ""), str(r[3] or ""), str(r[4] or ""), r[5], r[6], str(r[7] or "")] + cleaned_vals
                     cur.insertRow(row_data)
             cnt = int(arcpy.management.GetCount(tbl_path)[0])
             msg("Saved Geodatabase Daily Table: %s (%d records)" % (tbl_name, cnt))
