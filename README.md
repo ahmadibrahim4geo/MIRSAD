@@ -10,7 +10,7 @@
 [![Python Version](https://img.shields.io/badge/Python-3.x%20%7C%202.7-3776ab.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Data Sources](https://img.shields.io/badge/Data%20Sources-NASA%20POWER%20%7C%20ERA5%20%7C%20NOAA%20ISD%20%7C%20WMO-blue.svg)](https://power.larc.nasa.gov/)
-[![Modular Architecture](https://img.shields.io/badge/Elements-18%20Modular%20Layers-darkgreen.svg)](#٣-العناصر-والمؤشرات-المناخية-الـ-18-الموديلية-والربط-الموحد-11-unified-mapping)
+[![Modular Architecture](https://img.shields.io/badge/Elements-19%20Modular%20Layers-darkgreen.svg)](#٣-العناصر-والمؤشرات-المناخية-الـ-19-الموديلية-والربط-الموحد-11-unified-mapping)
 
 > **اسم المنظومة الرسمي:** **مِرصاد (MIRSAD)** — *Multi-source Integrated Reanalysis & Surface Atlas Database*  
 > **إعداد وتطوير:** **أحمد إبراهيم (Ahmad Ibrahim)**  
@@ -20,11 +20,24 @@
 
 ---
 
+## تحديث 16 أكتوبر 2026 | October 16, 2026 Update
+
+- **اختيار محطات متعددة حسب الدولة:** اختر وضع «اختيار محطات محددة من الدولة (اختيار متعدد)»، ثم الدولة ومحطة واحدة أو أكثر بالأسماء وأكواد USAF/WBAN. الاختيار الفارغ يمنع التشغيل، وتغيير الدولة يستبعد الاختيارات السابقة. متاح في الواجهتين العربية والإنجليزية. [دليل الاستخدام](Documents/STATION_MULTI_SELECTION_2026_10_16_AR.md).
+- **جودة البيانات:** المطر الناقص لا يتحول إلى صفر، والمجاميع تحتاج فترات مكتملة، والمؤشرات لا تعتمد على مدخلات مفترضة أو اتجاهات ثابتة. المطابقة المكانية تتحمل إعادة ترقيم OID. [تفاصيل الإصلاحات](Documents/DATA_QUALITY_FIXES_2026_10_16_AR.md).
+- **راستر الشهريات:** خيار `Generate_Monthly_Rasters` في أداة الراستر يدعم الأوفلاين من حقول شهرية موجودة، لفترة سنتين فأكثر. المتوسطات الشهرية ونطاقاتها مستقلة. الدعم الشهري الأونلاين لأداة الراستر غير مكتمل.
+- **المصادر المنفذة:** NASA POWER وOpen-Meteo لأداتي النقاط والمحطات؛ NASA POWER Regional لأداة الراستر. تنزيل NOAA Direct والدمج الهجين وCDS غير منفذ حاليًا. اختيار محطة يحدد موقع الاستعلام؛ نوع البيانات يحدده المصدر.
+- **التثبيت:** حمّل [الحزمة كاملة](https://github.com/ahmadibrahim4geo/MIRSAD/archive/refs/heads/main.zip)، واحتفظ بمجلدي `utils/` و`Weather_Stations_Hub/` والمحرك الرئيسي بجوار صناديق الأدوات. ملف `.pyt` منفرد لا يتضمن الاعتماديات.
+- **التحقق:** 15 اختبارًا جديدًا لاختيار المحطات نجحت على Python 2.7 و3. اختبارات ArcPy المحاكية لا تؤكد التشغيل الأصلي؛ عائق تثبيت ArcGIS المحلي موثق في [تقرير التشغيل](Documents/RUNTIME_FIXES_2026_10_16_AR.md).
+
+**English:** Select **Select Specific Stations by Country (Multiple Selection)**, choose a country, then one or more named stations. Empty or stale selections never broaden into a whole-country run. Monthly rasters in the raster tool currently require **Offline** mode, existing monthly fields and a span of at least two years. NASA POWER and Open-Meteo are implemented for point/station-location queries; the online raster pipeline uses NASA POWER Regional. NOAA Direct, Hybrid and CDS downloads are not implemented. Download the complete repository, keep its folder structure, and update positional script calls or saved ModelBuilder tools for the new station parameter. Python 2.7/3 regressions pass; native ArcGIS validation remains dependent on a healthy installation.
+
+---
+
 ## 📌 الفهرس السريع | Quick Navigation
 - [🇪🇬 دليل الاستخدام والتوثيق الشامل باللغة العربية](#-دليل-الاستخدام-والتوثيق-الشامل-باللغة-العربية)
   - [١. ما هي منظومة أطلس المناخ؟](#١-ما-هي-منظومة-أطلس-المناخ؟)
   - [٢. التوافقية المزدوجة التامة (ArcGIS Pro & ArcMap 10.8)](#٢-التوافقية-المزدوجة-التامة-arcgis-pro--arcmap-108)
-  - [٣. العناصر والمؤشرات المناخية الـ 18 الموديلية والربط الموحد (1:1 Unified Mapping)](#٣-العناصر-والمؤشرات-المناخية-الـ-18-الموديلية-والربط-الموحد-11-unified-mapping)
+  - [٣. العناصر والمؤشرات المناخية الـ 19 الموديلية والربط الموحد (1:1 Unified Mapping)](#٣-العناصر-والمؤشرات-المناخية-الـ-19-الموديلية-والربط-الموحد-11-unified-mapping)
   - [٤. نمطا التشغيل الرئيسيان (Online & Offline) وسلوك التخطي الذكي](#٤-نمطا-التشغيل-الرئيسيان-online--offline-وسلوك-التخطي-الذكي)
   - [٥. تقنية الضغط القوي فائق الأداء للراستر (Lossless LZW Block Tiling)](#٥-تقنية-الضغط-القوي-فائق-الأداء-للراستر-lossless-lzw-block-tiling)
   - [٦. المعالجة المكانية غير الهدامة والماسك وأسهم الرياح](#٦-المعالجة-المكانية-غير-الهدامة-والماسك-وأسهم-الرياح)
@@ -33,7 +46,7 @@
 - [🇬🇧 English Documentation](#-english-documentation)
   - [Overview & Architecture](#-overview--architecture)
   - [Dual Platform Support (ArcGIS Pro 3.x & Desktop 10.8)](#-dual-platform-support-arcgis-pro-3x--desktop-108)
-  - [The 18 Modular Climate Layers & 1:1 Standardized Architecture](#-the-18-modular-climate-layers--11-standardized-architecture)
+  - [The 19 Modular Climate Layers & 1:1 Standardized Architecture](#-the-19-modular-climate-layers--11-standardized-architecture)
   - [Online Pipeline vs. Offline Precalculated Mode](#-online-pipeline-vs-offline-precalculated-mode)
   - [High-Efficiency Lossless Raster Compression](#-high-efficiency-lossless-raster-compression)
   - [Non-Destructive Spatial Masking & Vector Dynamics](#-non-destructive-spatial-masking--vector-dynamics)
@@ -48,18 +61,18 @@
 منظومة **مِرصاد (MIRSAD - Multi-source Integrated Reanalysis & Surface Atlas Database)** هي منصة برمجية وجغرافية متطورة وشاملة صُممت وهُندست لتوفير حل متكامل لأتمتة إنشاء الأطالس المناخية الإقليمية والوطنية، واستخراج وتحليل البيانات متعددة العقود ونمذجة أسطح الراستر المناخية بدقة علمية وفيزيائية فائقة.
 
 تتكامل داخل المنظومة أربعة مصادر رئيسية للمعلومات المناخية:
-1. **شبكة محطات الأرصاد الأرضية المعتمدة (In-Situ Ground Weather Stations)**: تضم 28,066 محطة عالمية معتمدة من NOAA ISD و WMO (منها 944 محطة معتمدة ومطهرة بالكامل في الوطن العربي، و 73 محطة في مصر).
+1. **دليل محطات الأرصاد:** مواقع وأكواد 28,066 محطة NOAA ISD/WMO حول العالم، منها 86 محطة في مصر. اختيار الموقع لا يعني تنزيل أرصاد NOAA المباشرة؛ مصدر البيانات يحدده إعداد المصدر.
 2. **نماذج إعادة التحليل الجوي عالية الدقة (High-Resolution Reanalysis)**: نموذج ERA5-Land الأوروبي بدقة ~9 كم (Open-Meteo API).
 3. **النماذج الفضائية وشبكات إعادة التحليل العالمية**: نماذج NASA POWER MERRA-2 للإشعاع والحرارة والضغط، ونموذج CERES للإشعاع الشمسي.
-4. **النموذج الهجين الذكي (Hybrid Ground Truth & Satellite Gap-Filling)**: دمج الأرصاد الأرضية الحقيقية مع الاستكمال التلقائي للفجوات من الأقمار الصناعية ونماذج إعادة التحليل.
+4. **التكامل الهجين وNOAA Direct:** مراجع للتطوير؛ التنزيل المباشر لهذه الخيارات غير منفذ حاليًا.
 
 تتكون المنظومة من 4 أدوات وركائز رئيسية تعمل بتناغم تام:
 1. **صندوق أدوات محطات الأرصاد الأرضية (`MIRSAD_Weather_Stations_Atlas_Generator.pyt`)**:
    - يضم نسختين مستقلتين داخل نفس الصندوق: أداة باللغة الإنجليزية الخالصة (`WeatherStationsAtlasGenerator`) وأداة مطابقة كاملة باللغة العربية (`WeatherStationsAtlasGeneratorAR`).
-   - واجهة واضحة ومباشرة لاختيار المحطات دون أي طي أو إخفاء (Unclipped Station Selection).
+   - اختيار دولة ثم محطة واحدة أو عدة محطات بالأسماء وأكواد USAF/WBAN، مع الحفاظ على أوضاع الشبكة الكاملة والأكواد اليدوية والطبقات المحلية.
    - تصفية فورية لـ 28,066 محطة عالمية (منها 944 محطة عربية خالية تماماً من الشذوذ الجغرافي).
    - دعم نقاط مسح إضافية اختيارية (`Supplementary Survey Points`) لتكثيف البيانات في المناطق الصحراوية والنائية ودمجها لحظياً مع المحطات.
-   - معمارية متقدمة مضادة للانهيار: عزل المعالجة المتوازية (`parallelProcessingFactor = "0"` لمنع أخطاء Spatial Analyst)، والتنظيف الإجباري لكائنات الراستر من الذاكرة، وتفريغ دوري لمساحة العمل (`ClearWorkspaceCache`).
+   - حماية إعدادات ArcGIS وإدارة ترخيص Spatial Analyst وتقليل تخصيصات الراستر الكبيرة؛ لا تمثل اختبارات Python ضمانًا لعدم انهيار المضيف.
 2. **صندوق أدوات معالم المناخ النقطي (`MIRSAD_Climate_Atlas_Generator_10_8.pyt`)**: لإدارة الاتصال السحابي، وسحب السلاسل الزمنية، وحساب المؤشرات والموديلات الحيوية لطبقات النقاط وبناء قواعد البيانات الجغرافية (`File Geodatabase`).
 3. **محرك الأطلس الراستري (`raster_atlas_generator.py`)**: المحرك الحسابي المتقدم للاستيفاء المكاني للأسطح المناخية المستمرة (Spatial Interpolation via IDW, Kriging, Spline, Natural Neighbor)، والتقطيع على الماسك، وبناء خطوط الضغط المتساوي (Isobars)، وحساب شبكات متجهات الرياح، وتطبيق أحدث تقنيات الضغط بدون أي فقدان للبيانات.
 4. **مركز محطات الطقس والمستكشفات المكانية (`Weather_Stations_Hub/`)**: قاعدة بيانات جغرافية (`Weather_Stations_Directory.gdb`) وشيب فايل مع كود WMO والمناسيب، بالإضافة لخرائط ويب تفاعلية مستقلة (`HTML Explorers`) لاستعراض والبحث الفوري في المحطات عبر المتصفح.
@@ -67,7 +80,7 @@
 ---
 
 ### ٢. التوافقية المزدوجة التامة (ArcGIS Pro & ArcMap 10.8)
-تمت ترقية المنظومة بالكامل لتعمل بكفاءة مطلقة واستقرار تام عبر بيئتي عمل Esri:
+تستهدف المنظومة بيئتي Esri التاليتين، مع اختبارات توافق Python 2.7 و3. التحقق الأصلي يحتاج تثبيت ArcGIS سليمًا:
 * **ArcGIS Pro (إصدارات 2.x و 3.x)** تحت بيئة **Python 3**:
   - معالجة متقدمة لترميز النصوص بدون أخطاء `unicode()` أو `str.decode()`.
   - توافق كامل لمصفوفات `dict.values()` ككائنات قابلة للتكرار (Iterators/Views).
@@ -79,32 +92,35 @@
 
 ---
 
-### ٣. العناصر والمؤشرات المناخية الـ 18 الموديلية والربط الموحد (1:1 Unified Mapping)
+### ٣. العناصر والمؤشرات المناخية الـ 19 الموديلية والربط الموحد (1:1 Unified Mapping)
 تمت إعادة هيكلة المنظومة بالكامل لتعتمد معيار **الربط الموحد بنسبة 1:1** بين اسم العنصر في واجهة الأداة (`Climate Modules & Models`)، واسم طبقة المعالم داخل قاعدة البيانات (`Feature Class`)، واسم المجلد المخصص لمخرجات الراستر (`Output Raster Folder`).
 
-تتكون المنظومة من **18 عنصراً وموديولاً مناخياً وبيومناخياً مستقلاً**:
+تتكون المنظومة من **19 حزمة مناخية وبيومناخية مستقلة**:
 
-| رقم | اسم العنصر في واجهة الأداة | اسم طبقة المعالم (Feature Class) | اسم مجلد الراستر (Raster Folder) | عدد المؤشرات | تفصيل المؤشرات (سنوي/فصلي + شهري) | الوحدة الفيزيائية |
-|:---:|---|---|---|:---:|---|:---:|
-| **01** | `Temperature` | `01_Temperature` | `01_Temperature` | **23** | 11 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | °C |
-| **02** | `Precipitation` | `02_Precipitation` | `02_Precipitation` | **20** | 8 سنوي وفصلي + 12 شهري تراكمي | mm, mm/month |
-| **03** | `Sea Level Pressure` | `03_Sea_Level_Pressure` | `03_Sea_Level_Pressure` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | hPa / mbar |
-| **04** | `Surface Pressure` | `04_Surface_Pressure` | `04_Surface_Pressure` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | hPa / mbar |
-| **05** | `Wind` | `05_Wind` | `05_Wind` | **39** | 15 سنوي وفصلي ومعدل شهري + 24 شهري (سرعة + اتجاه) | m/s, degrees (°) |
-| **06** | `Relative Humidity` | `06_Relative_Humidity` | `06_Relative_Humidity` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | % |
-| **07** | `Dew Point` | `07_Dew_Point` | `07_Dew_Point` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | °C |
-| **08** | `Solar Radiation` | `08_Solar_Radiation` | `08_Solar_Radiation` | **20** | 8 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | kWh/m²/day |
-| **09** | `UV Index` | `09_UV_Index` | `09_UV_Index` | **20** | 8 سنوي وفصلي ومعدل شهري ومدى + 12 شهري مناخي | مؤشر (0–16+) |
-| **10** | `Cloud Cover` | `10_Cloud_Cover` | `10_Cloud_Cover` | **19** | 7 سنوي وفصلي ومعدل شهري + 12 شهري مناخي | % |
-| **11** | `Heat Index` | `11_Heat_Index` | `11_Heat_Index` | **8** | 8 مؤشرات سنوية وفصلية (ربيع/خريف/مدى فصلي مضافة) | °C |
-| **12** | `Wind Chill` | `12_Wind_Chill` | `12_Wind_Chill` | **2 + 17*** | شتوي وسنوي افتراضياً (*+3 فصول ومديين و12 شهري بتوجل المناطق الباردة) | °C |
-| **13** | `De Martonne Aridity` | `13_De_Martonne_Aridity` | `13_De_Martonne_Aridity` | **1** | مؤشر جفاف سنوي لدي مارتون | مؤشر لا بُعدي |
-| **14** | `Evapotranspiration` | `14_Evapotranspiration` | `14_Evapotranspiration` | **22** | 10 سنوي وفصلي ومعدل شهري + 12 شهري FAO-56 | mm, mm/month |
-| **15** | `UNEP Aridity` | `15_UNEP_Aridity` | `15_UNEP_Aridity` | **1** | مؤشر قحولة سنوي لبرنامج الأمم المتحدة | نسبة |
-| **16** | `Water Deficit` | `16_Water_Deficit` | `16_Water_Deficit` | **1** | عجز وموازنة مائية سنوية | mm/year |
-| **17** | `Dry Months` | `17_Dry_Months` | `17_Dry_Months` | **1** | عدد شهور الجفاف البيولوجي | شهور (0–12) |
-| **18** | `Trends & Baseline Anomalies` | `18_Trends_And_Anomalies` | `18_Trends_And_Anomalies` | **9** | اتجاهات وشذوذ خط الأساس 1991–2020 | °C/decade, mm/decade, % |
-| **الإجمالي** | **18 عنصراً وموديولاً** | **18 Feature Class** | **18 مجلد راستر** | **279** | **123 مؤشراً سنوياً وفصلياً ومعدلاً شهرياً + 156 متوسطاً شهرياً** | — |
+| رقم | الحزمة | Feature Class | مجلد الراستر | الحقول المسجلة |
+|:---:|---|---|---|:---:|
+| 01 | `Temperature` | `Temperature` | `01_Temperature` | 34 |
+| 02 | `Land Surface Temperature` | `Land_Surface_Temperature` | `02_Land_Surface_Temperature` | 35 |
+| 03 | `Precipitation` | `Precipitation` | `03_Precipitation` | 30 |
+| 04 | `Sea Level Pressure` | `Sea_Level_Pressure` | `04_Sea_Level_Pressure` | 30 |
+| 05 | `Surface Pressure` | `Surface_Pressure` | `05_Surface_Pressure` | 30 |
+| 06 | `Wind` | `Wind` | `06_Wind` | 49 |
+| 07 | `Relative Humidity` | `Relative_Humidity` | `07_Relative_Humidity` | 30 |
+| 08 | `Dew Point` | `Dew_Point` | `08_Dew_Point` | 30 |
+| 09 | `Solar Radiation` | `Solar_Radiation` | `09_Solar_Radiation` | 31 |
+| 10 | `UV Index` | `UV_Index` | `10_UV_Index` | 30 |
+| 11 | `Cloud Cover` | `Cloud_Cover` | `11_Cloud_Cover` | 30 |
+| 12 | `Heat Index` | `Heat_Index` | `12_Heat_Index` | 19 |
+| 13 | `Wind Chill` | `Wind_Chill` | `13_Wind_Chill` | 18 |
+| 14 | `De Martonne Aridity` | `De_Martonne_Aridity` | `14_De_Martonne_Aridity` | 1 |
+| 15 | `Evapotranspiration` | `Evapotranspiration` | `15_Evapotranspiration` | 31 |
+| 16 | `UNEP Aridity` | `UNEP_Aridity` | `16_UNEP_Aridity` | 1 |
+| 17 | `Water Deficit` | `Water_Deficit` | `17_Water_Deficit` | 1 |
+| 18 | `Dry Months` | `Dry_Months` | `18_Dry_Months` | 1 |
+| 19 | `Trends & Anomalies` | `Trends_And_Anomalies` | `19_Trends_And_Anomalies` | 90 |
+| **الإجمالي** | **19** | **19** | **19** | **521** |
+
+> الحقول المسجلة تشمل الخيارات الإضافية؛ المخرجات الفعلية تعتمد على الإعدادات وتوفر البيانات. مع 13 حقلًا إداريًا يصبح الكتالوج 534 عمودًا.
 
 > **حقول اختيارية (Opt-in، مطفية افتراضياً):** +17 حقل WC للمناطق الباردة + 132 حقل مدى شهري (`<Prefix>_<Month>_Range`) + 12 حقل HI شهري — لا تظهر في المخرجات الافتراضية.
 > **ملاحظة الهيكلية الانسيابية (Streamlined Schema):** تم تقاعد الحقول الزائدة المكررة حسابياً (13 حقل `_Month_Mean` و 14 حقل `_Seasonal_Range`) من المخرجات والراسترات الافتراضية لمنع التكرار الحسابي، مع الإبقاء الصارم على `Annual_Mean` و `Annual_Range` ومؤشري التطرف البيومناخي (`T_Max_Summer_Month_Mean` و `T_Min_Winter_Month_Mean`).
@@ -114,7 +130,7 @@
 #### 🌟 تفصيل المؤشرات المستحدثة والموحدة:
 
 ##### 1. البخر والنتح (Evapotranspiration - ET):
-* **التسمية والرمز**: تم اعتماد مسمى **البخر والنتح (Evapotranspiration)** واختصاره داخل الأداة بـ **`ET`**، ويُنشأ في مجلد وطبقة مستقلة: `14_Evapotranspiration`.
+* **التسمية والرمز**: تم اعتماد مسمى **البخر والنتح (Evapotranspiration)** واختصاره داخل الأداة بـ **`ET`**، ويُنشأ في مجلد وطبقة مستقلة: `15_Evapotranspiration`.
 * **الأساس العلمي والمنهجية**: يعتمد المؤشر كلياً على معادلة **هارجريفز-ساماني (Hargreaves & Samani, 1985)** والمعتمدة رسمياً لدى منظمة الأغذية والزراعة للأمم المتحدة (**FAO**) في الدليل الإرشادي للري والصرف رقم 56 (**FAO Irrigation and Drainage Paper No. 56**)، وهي الصيغة المثلى لحساب البخر والنتح المرجعي ($ET_o$) من بيانات درجات الحرارة والإشعاع الشمسي الفلكي خارج الغلاف الجوي ($R_a$):
   $$ET_o = 0.0023 \cdot R_a \cdot (T_{mean} + 17.8) \cdot \sqrt{T_{max} - T_{min}} \cdot \text{Days}$$
 * **المؤشرات الثمانية على المستويين السنوي والفصلي**:
@@ -129,7 +145,7 @@
   * **التوافق العكسي**: يتم تصدير الحقل الرديف `PET_Hargreaves_Annual` تلقائياً لضمان استمرارية تشغيل أي مشاريع أو أدوات تحليلية سابقة.
 
 ##### 2. استقلال نقطة الندى (Dew Point):
-* تم إفراد **نقطة الندى** كعنصر رئيسي مستقل تماماً تحت الرقم **07** (`07_Dew_Point`) بـ 6 مؤشرات متكاملة:
+* تم إفراد **نقطة الندى** كعنصر رئيسي مستقل تماماً تحت الرقم **07** (`08_Dew_Point`) بـ 6 مؤشرات متكاملة:
   - `Td_Annual_Mean`: المتوسط السنوي لنقطة الندى (°C).
   - `Td_Winter_Mean`: متوسط نقطة الندى لشتاء (DJF).
   - `Td_Spring_Mean`: متوسط نقطة الندى لربيع (MAM).
@@ -266,15 +282,15 @@ Repository: [NASA-POWER-Climate-Atlas-Generator](https://github.com/ahmadibrahim
 The **MIRSAD** platform automates the acquisition, quality control, climatological calculations, spatial interpolation, and standardized cartographic rendering of multi-decadal historical climate records and future projections directly inside Esri GIS environments.
 
 ### Four Integrated Data Source Tiers:
-1. **Certified Ground Weather Stations**: In-situ observations from 28,066 NOAA ISD & WMO stations worldwide (including 944 verified Arab League stations with zero geographic outliers, and 73 stations in Egypt).
+1. **Station Directory**: Locations and identifiers for 28,066 NOAA ISD/WMO stations worldwide, including 86 in Egypt. Select station locations by country and name; the selected provider determines the climate data source.
 2. **High-Resolution Reanalysis**: ECMWF ERA5-Land (~9 km native resolution via Open-Meteo API).
 3. **Global Satellite & Reanalysis Grids**: NASA POWER MERRA-2 atmospheric model and CERES solar radiation.
-4. **Hybrid Intelligent Engine**: Direct observational ground-truth with automated satellite and reanalysis gap-filling.
+4. **Hybrid and NOAA Direct**: Design references; direct downloads for these choices are not implemented.
 
 ### Core Toolbox Components:
 1. **`MIRSAD_Weather_Stations_Atlas_Generator.pyt`**: MIRSAD Ground Weather Stations Climate Atlas Generator.
    - Dual interface tools: Pure English GUI (`WeatherStationsAtlasGenerator`) and Native Arabic GUI (`WeatherStationsAtlasGeneratorAR`).
-   - Clean, unclipped station selection interface (Continent -> Country -> Station Filtering).
+   - Region -> Country -> Multiple named stations, with USAF/WBAN identifiers and validation against empty or stale selections.
    - Instant filtering across 28,066 global stations and 944 certified Arab League stations.
    - Support for optional **Supplementary Survey Points** to densify desert and unmonitored areas.
    - Anti-crash execution safeguards (`parallelProcessingFactor = "0"` isolation, COM raster cleanup, automatic workspace memory release).
@@ -292,30 +308,34 @@ Engineered with dual Python 2/3 cross-compatibility:
 
 ---
 
-## 🗺️ The 18 Modular Climate Layers & 1:1 Standardized Architecture
+## 🗺️ The 19 Modular Climate Layers & 1:1 Standardized Architecture
 
-The platform enforces a strict **1:1 unified naming convention** connecting UI parameters, geodatabase feature classes, and raster output folders across all **18 discrete thematic modules**:
+The platform enforces a strict **1:1 unified naming convention** connecting UI parameters, geodatabase feature classes, and raster output folders across all **19 thematic modules**:
 
-| # | Parameter Name (UI) | Feature Class Name | Raster Folder | Indicators | Units |
-|:---:|---|---|---|:---:|:---:|
-| **01** | `Temperature` | `01_Temperature` | `01_Temperature` | 10 | °C |
-| **02** | `Precipitation` | `02_Precipitation` | `02_Precipitation` | 8 | mm |
-| **03** | `Sea Level Pressure` | `03_Sea_Level_Pressure` | `03_Sea_Level_Pressure` | 6 | hPa / mbar |
-| **04** | `Surface Pressure` | `04_Surface_Pressure` | `04_Surface_Pressure` | 6 | hPa / mbar |
-| **05** | `Wind` | `05_Wind` | `05_Wind` | 13 | m/s, degrees (°) |
-| **06** | `Relative Humidity` | `06_Relative_Humidity` | `06_Relative_Humidity` | 6 | % |
-| **07** | `Dew Point` | `07_Dew_Point` | `07_Dew_Point` | 6 | °C |
-| **08** | `Solar Radiation` | `08_Solar_Radiation` | `08_Solar_Radiation` | 7 | kWh/m²/day, kWh/m²/year |
-| **09** | `UV Index` | `09_UV_Index` | `09_UV_Index` | 6 | Index (0–15+) |
-| **10** | `Cloud Cover` | `10_Cloud_Cover` | `10_Cloud_Cover` | 6 | % |
-| **11** | `Heat Index` | `11_Heat_Index` | `11_Heat_Index` | 8 | °C |
-| **12** | `Wind Chill` | `12_Wind_Chill` | `12_Wind_Chill` | 2 (+17 opt-in) | °C |
-| **13** | `De Martonne Aridity` | `13_De_Martonne_Aridity` | `13_De_Martonne_Aridity` | 1 | Dimensionless Index |
-| **14** | `Evapotranspiration` | `14_Evapotranspiration` | `14_Evapotranspiration` | 8 | mm/year, mm/month, mm |
-| **15** | `UNEP Aridity` | `15_UNEP_Aridity` | `15_UNEP_Aridity` | 1 | Ratio |
-| **16** | `Water Deficit` | `16_Water_Deficit` | `16_Water_Deficit` | 1 | mm/year |
-| **17** | `Dry Months` | `17_Dry_Months` | `17_Dry_Months` | 1 | Months (0–12) |
-| **18** | `Trends & Baseline Anomalies` | `18_Trends_And_Anomalies` | `18_Trends_And_Anomalies` | 9 | °C/decade, mm/decade, % |
+| # | Module | Feature Class | Raster Folder | Registered Fields |
+|:---:|---|---|---|:---:|
+| 01 | `Temperature` | `Temperature` | `01_Temperature` | 34 |
+| 02 | `Land Surface Temperature` | `Land_Surface_Temperature` | `02_Land_Surface_Temperature` | 35 |
+| 03 | `Precipitation` | `Precipitation` | `03_Precipitation` | 30 |
+| 04 | `Sea Level Pressure` | `Sea_Level_Pressure` | `04_Sea_Level_Pressure` | 30 |
+| 05 | `Surface Pressure` | `Surface_Pressure` | `05_Surface_Pressure` | 30 |
+| 06 | `Wind` | `Wind` | `06_Wind` | 49 |
+| 07 | `Relative Humidity` | `Relative_Humidity` | `07_Relative_Humidity` | 30 |
+| 08 | `Dew Point` | `Dew_Point` | `08_Dew_Point` | 30 |
+| 09 | `Solar Radiation` | `Solar_Radiation` | `09_Solar_Radiation` | 31 |
+| 10 | `UV Index` | `UV_Index` | `10_UV_Index` | 30 |
+| 11 | `Cloud Cover` | `Cloud_Cover` | `11_Cloud_Cover` | 30 |
+| 12 | `Heat Index` | `Heat_Index` | `12_Heat_Index` | 19 |
+| 13 | `Wind Chill` | `Wind_Chill` | `13_Wind_Chill` | 18 |
+| 14 | `De Martonne Aridity` | `De_Martonne_Aridity` | `14_De_Martonne_Aridity` | 1 |
+| 15 | `Evapotranspiration` | `Evapotranspiration` | `15_Evapotranspiration` | 31 |
+| 16 | `UNEP Aridity` | `UNEP_Aridity` | `16_UNEP_Aridity` | 1 |
+| 17 | `Water Deficit` | `Water_Deficit` | `17_Water_Deficit` | 1 |
+| 18 | `Dry Months` | `Dry_Months` | `18_Dry_Months` | 1 |
+| 19 | `Trends & Anomalies` | `Trends_And_Anomalies` | `19_Trends_And_Anomalies` | 90 |
+| **Total** | **19** | **19** | **19** | **521** |
+
+> Registered fields include opt-in suites. Actual outputs depend on settings and available inputs. Including 13 administrative fields, the catalogue contains 534 columns.
 
 ### Scientific Focus: Evapotranspiration (ET)
 - **Methodological Origin**: Implements the globally recognized **FAO-56 Hargreaves-Samani method** (Hargreaves & Samani, 1985), estimating reference evapotranspiration ($ET_o$) using extraterrestrial solar radiation ($R_a$), mean temperature, and diurnal temperature range:

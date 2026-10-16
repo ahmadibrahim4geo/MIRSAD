@@ -6,6 +6,8 @@ Author: Ahmad Ibrahim
 Email: ahmadibrahim.geo@gmail.com
 Version: 2.1 (October 2026) - Enterprise Edition with English & Arabic Tool Suite
 """
+from __future__ import unicode_literals
+
 import os
 import sys
 import math
@@ -25,6 +27,21 @@ HUB_DIR = os.path.join(TOOLBOX_DIR, "Weather_Stations_Hub")
 SHP_HUB_GLOBAL = os.path.join(HUB_DIR, "Shapefiles", "Global_Weather_Stations.shp")
 SHP_HUB_EGYPT = os.path.join(HUB_DIR, "Shapefiles", "Egypt_Weather_Stations.shp")
 GDB_HUB = os.path.join(HUB_DIR, "Geodatabase", "Weather_Stations_Directory.gdb")
+SPECIFIC_STATIONS_MODE = "Select Specific Stations by Country (Multiple Selection)"
+
+
+def _specific_stations_mode(text):
+    return "Specific Stations" in (text or "") or "محطات محددة" in (text or "")
+
+
+def _selected_station_values(parameter):
+    if parameter is None:
+        return []
+    values = getattr(parameter, "values", None)
+    if not isinstance(values, (list, tuple)):
+        values = (parameter.valueAsText or "").split(";")
+    return [_core._excel_text(v).strip().strip("'\"") for v in values
+            if v is not None and _core._excel_text(v).strip().strip("'\"")]
 
 try:
     import arcpy
@@ -50,6 +67,7 @@ def _load_core_module():
 
 
 _core = _load_core_module()
+from utils.station_catalogue import load_catalogue, station_choices
 
 try:
     from country_continent_registry import COUNTRY_REGISTRY, get_country_info
@@ -73,13 +91,15 @@ class Toolbox(object):
 
 class _ParamProxy(object):
     """Immutable parameter proxy that forwards values to core engine without altering host COM parameters."""
-    def __init__(self, name, value, value_as_text=None):
+    def __init__(self, name, value, value_as_text=None, altered=False):
         self.name = name
         self.value = value
-        self.valueAsText = value_as_text if value_as_text is not None else (str(value) if value is not None else "")
+        self.valueAsText = value_as_text if value_as_text is not None else _core._excel_text(value)
+        self.altered = altered
 
     def __repr__(self):
-        return "_ParamProxy(%s, %r)" % (self.name, self.value)
+        text = "_ParamProxy(%s, %r)" % (self.name, self.value)
+        return text.encode("utf-8") if _core.PY27 else text
 
 
 # ==============================================================================
@@ -117,7 +137,8 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             "Spatial Intersect by Study Area Boundary (Polygon Clip)",
             "Custom Station IDs (Manual Entry / From Explorer)",
             "Global Network (Worldwide - Caution: High Station Count)",
-            "Local Saved Station Layer (Shapefile / Geodatabase)"
+            "Local Saved Station Layer (Shapefile / Geodatabase)",
+            SPECIFIC_STATIONS_MODE
         ]
         p_st_mode.value = "Select by Country (National Network)"
         p_st_mode.description = (
@@ -127,6 +148,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             "• 'Custom Station IDs': specify USAF/WMO station IDs directly.\n"
             "• 'Global Network': process all global stations worldwide.\n"
             "• 'Local Saved Station Layer': load a pre-saved station feature layer from disk."
+            "\n• 'Select Specific Stations by Country': choose a country, then one or more named stations."
         )
 
         p_st_region = arcpy.Parameter(
@@ -186,6 +208,19 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         ]
         p_st_country.value = "[All Arab League Countries (ARAB)]"
         p_st_country.description = "Second-tier national network filter or aggregate scope (e.g. All Arab League, All Asian)."
+
+        p_st_selected = arcpy.Parameter(
+            displayName="Select Station(s) from Country (Multiple Selection)",
+            name="Selected_Stations", datatype="GPString",
+            parameterType="Optional", direction="Input")
+        p_st_selected.multiValue = True
+        p_st_selected.filter.type = "ValueList"
+        p_st_selected.filter.list = []
+        p_st_selected.enabled = False
+        p_st_selected.description = (
+            "In 'Select Specific Stations by Country' mode, choose one or more stations. "
+            "Labels show station name, USAF/WBAN codes and country. Only the selected stations "
+            "are processed; an empty selection never processes the whole country.")
 
         p_st_poly = arcpy.Parameter(
             displayName="Study Area Boundary Polygon (Optional Mask / Clip)",
@@ -257,13 +292,12 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                 "NASA POWER API (Agroclimatology / MERRA-2)",
                 "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
             ]
-            p_csrc.value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
+            p_csrc.value = "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
             p_csrc.description = (
                 "Select meteorological data provider for the weather stations:\n"
-                "• 'Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling' [Default]: Uses certified ground station observations with automatic satellite and reanalysis gap-filling for 100% data completeness.\n"
-                "• 'NOAA ISD / GHCN Direct Station Ground Observations Archive': Direct official observational records from NOAA NCEI ground instruments.\n"
+                "• 'Hybrid' and 'NOAA Direct': Direct observation downloads are not implemented; these choices report a validation error.\n"
                 "• 'NASA POWER API': Gridded global agroclimatology (solar radiation, temperature, precipitation, 1981-Present).\n"
-                "• 'Open-Meteo Historical API': High-resolution ERA5-Land reanalysis (~9 km resolution, 1940-Present)."
+                "• 'Open-Meteo Historical API' [Default]: ERA5 reanalysis sampled at station locations."
             )
 
         p_dly = core_pdict.get("Save_Daily_Series")
@@ -275,14 +309,14 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             )
 
         station_params = [
-            p_st_mode, p_st_region, p_st_country,
+            p_st_mode, p_st_region, p_st_country, p_st_selected,
             p_st_poly, p_st_supp, p_st_buffer, p_st_custom, p_st_local
         ]
 
         # Completely exclude Input_Point_Features and Study_Area_Mask from GUI
         filtered_core = [
             p for p in core_params
-            if p.name not in ("Input_Point_Features", "Study_Area_Mask", "Precalculated_Point_Layers")
+            if p.name not in ("Input_Point_Features", "Study_Area_Mask")
         ]
 
         return station_params + filtered_core
@@ -297,12 +331,13 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
 
         p_reg = pdict.get("Region_Filter")
         p_ctry = pdict.get("Select_Country")
+        original_country = p_ctry.valueAsText if p_ctry else ""
         p_custom = pdict.get("Custom_Station_IDs")
         p_local = pdict.get("Local_Station_Features")
         p_poly = pdict.get("Study_Area_Polygon")
         p_buf = pdict.get("Include_Buffer_Stations")
 
-        if mode_val == "Select by Country (National Network)":
+        if mode_val == "Select by Country (National Network)" or _specific_stations_mode(mode_val):
             if p_reg: p_reg.enabled = True
             if p_ctry: p_ctry.enabled = True
             if p_custom: p_custom.enabled = False
@@ -334,7 +369,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             if p_buf: p_buf.enabled = False
 
         # Dynamic population of Country Filter based on Region_Filter
-        if p_reg and p_ctry:
+        if p_reg and p_ctry and not _specific_stations_mode(mode_val):
             reg_val = p_reg.valueAsText or "Arab League Countries"
             if "Arab" in reg_val:
                 p_ctry.filter.list = [
@@ -437,11 +472,112 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             p_om_m.enabled = ("Open-Meteo" in src_text or "Hybrid" in src_text)
 
         # Call core updateParameters for units, temporal filters, interpolation, etc.
+        self._update_station_choices(pdict, original_country)
         _core.PowerClimateAtlasGenerator.updateParameters(self, parameters)
 
+    def _station_catalogue(self):
+        shp = SHP_HUB_GLOBAL if os.path.exists(SHP_HUB_GLOBAL) else SHP_HUB_EGYPT
+        return load_catalogue(os.path.splitext(shp)[0] + ".dbf")
+
+    def _update_station_choices(self, pdict, original_country):
+        p_selected = pdict.get("Selected_Stations")
+        if p_selected is None:
+            return
+        mode = pdict.get("Station_Selection_Mode")
+        operation = pdict.get("Operation_Mode")
+        active = (_specific_stations_mode(mode.valueAsText if mode else "") and
+                  not _core.is_offline_mode(operation.valueAsText if operation else ""))
+        p_selected.enabled = active
+        if not active:
+            p_selected.filter.list = []
+            return
+        p_country, p_region = pdict.get("Select_Country"), pdict.get("Region_Filter")
+        if p_country is None:
+            return
+        region = p_region.valueAsText if p_region else ""
+        region_names = {
+            "دول الوطن العربي (22 دولة)": "Arab", "أفريقيا": "Africa", "آسيا": "Asia",
+            "أوروبا": "Europe", "أمريكا الشمالية": "North America",
+            "أمريكا الجنوبية": "South America", "أوقيانوسيا": "Oceania",
+            "القارة القطبية الجنوبية": "Antarctica"}
+        region = region_names.get(region, region)
+        arabic = isinstance(self, WeatherStationsAtlasGeneratorAR)
+        try:
+            catalogue = self._station_catalogue()
+            country_labels = {}
+            for code, stations in catalogue.items():
+                first = stations[0]
+                en, ar, continent, is_arab = get_country_info(code, first["Lat"], first["Lon"])
+                if "Arab" in region:
+                    include = is_arab
+                elif region in ("Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica"):
+                    include = continent == region
+                else:
+                    include = True
+                if include:
+                    country_labels[code] = "%s (%s)" % (_core._excel_text(ar if arabic else en), code)
+            p_country.filter.list = sorted(country_labels.values())
+            target = self._parse_target_country(original_country, region)
+            chosen_country = country_labels.get(target)
+            if (p_country.valueAsText or None) != chosen_country:
+                p_country.value = chosen_country
+            options = station_choices(catalogue.get(target, [])) if target in country_labels else {}
+            labels = sorted(options)
+            if list(p_selected.filter.list) != labels:
+                p_selected.filter.list = labels
+            previous = _selected_station_values(p_selected)
+            retained = [value for value in previous if value in options]
+            if retained != previous:
+                p_selected.values = retained
+            p_selected.enabled = bool(options)
+            self._station_picker_error = None
+        except Exception as ex:
+            p_selected.filter.list = []
+            self._station_picker_error = _core._excel_text(ex)
+
+    def updateMessages(self, parameters):
+        _core.PowerClimateAtlasGenerator.updateMessages(self, parameters)
+        pdict = dict((p.name, p) for p in parameters)
+        p_selected = pdict.get("Selected_Stations")
+        if p_selected is None:
+            return
+        for parameter in (p_selected, pdict.get("Select_Country")):
+            try:
+                parameter.clearMessage()
+            except Exception:
+                pass
+        p_op, p_mode = pdict.get("Operation_Mode"), pdict.get("Station_Selection_Mode")
+        if (_core.is_offline_mode(p_op.valueAsText if p_op else "") or
+                not _specific_stations_mode(p_mode.valueAsText if p_mode else "")):
+            return
+        arabic = isinstance(self, WeatherStationsAtlasGeneratorAR)
+        values = _selected_station_values(p_selected)
+        p_country = pdict.get("Select_Country")
+        if getattr(self, "_station_picker_error", None):
+            error = ("تعذر قراءة دليل المحطات المحلي: " if arabic else "Could not read the local station directory: ") + self._station_picker_error
+        elif p_country is None or not p_country.valueAsText:
+            error = "اختر دولة أولاً، ثم محطة واحدة أو أكثر." if arabic else "Choose a country, then one or more stations."
+            if p_country is not None:
+                p_country.setErrorMessage(error)
+        elif not values:
+            error = "اختر محطة واحدة أو أكثر؛ الاختيار الفارغ لا يشغّل شبكة الدولة كاملة." if arabic else "Select one or more stations; an empty selection does not process the whole country."
+        elif any(value not in p_selected.filter.list for value in values):
+            error = "أعد اختيار المحطات من قائمة الدولة الحالية." if arabic else "Reselect stations from the current country's list."
+        else:
+            return
+        p_selected.setErrorMessage(error)
+
     def _parse_target_country(self, ctry_str, reg_str):
+        ctry_str = _core._excel_text(ctry_str)
         if not ctry_str:
             return "ARAB" if ("Arab" in (reg_str or "")) else "WORLD"
+        # Read the explicit country code before names such as "Saudi Arabia",
+        # which otherwise match the aggregate "ARAB" scope.
+        if "(" in ctry_str and ")" in ctry_str:
+            code = ctry_str.split("(")[1].split(")")[0].strip().upper()
+            if code in ("IS", "IL", "GZ", "WE", "PS"):
+                return "PS"
+            return code
         c_up = ctry_str.upper()
         if "ARAB" in c_up:
             return "ARAB"
@@ -461,11 +597,6 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             return "OCEANIA"
         if "PALESTINE" in c_up or "(PS)" in c_up:
             return "PS"
-        if "(" in ctry_str and ")" in ctry_str:
-            code = ctry_str.split("(")[1].split(")")[0].strip().upper()
-            if code in ("IS", "IL", "GZ", "WE", "PS"):
-                return "PS"
-            return code
         return ctry_str.strip().upper()
 
     def _load_all_stations(self, local_layer=None):
@@ -481,7 +612,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                         xy = row[-1]
                         lat = float(xy[1]) if xy else float(rdict.get("Lat", 0.0))
                         lon = float(xy[0]) if xy else float(rdict.get("Lon", 0.0))
-                        name_val = str(rdict.get("Name", "Station"))
+                        name_val = _core._excel_text(rdict.get("Name", "Station"))
                         ctry = str(rdict.get("Country", "")).strip().upper()
                         
                         en_name, ar_name, cont, is_arab = get_country_info(ctry, lat, lon)
@@ -508,7 +639,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                 fields = ["Station_ID", "Name", "Country", "Country_Nm", "Continent", "Is_Arab", "Lat", "Lon", "Elev_m", "SHAPE@XY"]
                 with arcpy.da.SearchCursor(shp_target, fields) as cur:
                     for r in cur:
-                        name_val = str(r[1])
+                        name_val = _core._excel_text(r[1])
                         lat = float(r[6])
                         lon = float(r[7])
                         ctry = str(r[2]).strip().upper()
@@ -533,7 +664,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                     for _, r in df.iterrows():
                         stations.append({
                             "Station_ID": str(r["Station_ID"]),
-                            "Name": str(r["Name"]),
+                            "Name": _core._excel_text(r["Name"]),
                             "Country": str(r["Country"]).strip().upper(),
                             "Country_Nm": str(r.get("Country_Nm", "")),
                             "Continent": str(r.get("Continent", "Other")),
@@ -547,7 +678,22 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
 
         return stations
 
-    def _resolve_stations(self, mode, target_country, study_poly, inc_buf, custom_ids, local_layer=None):
+    def _resolve_stations(self, mode, target_country, study_poly, inc_buf, custom_ids, local_layer=None,
+                          selected_stations=None):
+        if _specific_stations_mode(mode):
+            options = station_choices(self._station_catalogue().get(target_country, []))
+            seen = set()
+            unique = []
+            for value in selected_stations or []:
+                if value not in seen:
+                    seen.add(value)
+                    unique.append(value)
+            selected_stations = unique
+            if not selected_stations:
+                raise RuntimeError("Select one or more stations before running this mode.")
+            if any(value not in options for value in selected_stations):
+                raise RuntimeError("Selected stations do not match the current country/directory; reselect them.")
+            return [dict(options[value]) for value in selected_stations]
         all_stations = self._load_all_stations(local_layer)
         if not all_stations:
             return []
@@ -721,13 +867,31 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         finally:
             arcpy.env.workspace = saved_ws
 
+    @_core.preserve_arcpy_environment
     def execute(self, parameters, messages):
         pdict = dict((p.name, p) for p in parameters)
 
         try:
+            p_op = pdict.get("Operation_Mode")
+            if p_op and _core.is_offline_mode(p_op.valueAsText):
+                # Offline input already carries indicators; do not replace it
+                # with newly selected station locations lacking climate fields.
+                core_parameters = [
+                    _ParamProxy(p.name, p.value, p.valueAsText,
+                                altered=bool(getattr(p, "altered", False)))
+                    for p in parameters
+                ]
+                p_poly = pdict.get("Study_Area_Polygon")
+                if p_poly and p_poly.valueAsText:
+                    core_parameters.append(_ParamProxy("Study_Area_Mask", p_poly.value, p_poly.valueAsText))
+                _core.PowerClimateAtlasGenerator.execute(self, core_parameters, messages)
+                return
+
             # 1. Resolve Weather Stations
             raw_mode = pdict["Station_Selection_Mode"].valueAsText or ""
-            if "استقطاع" in raw_mode or "Spatial" in raw_mode:
+            if _specific_stations_mode(raw_mode):
+                st_mode = SPECIFIC_STATIONS_MODE
+            elif "استقطاع" in raw_mode or "Spatial" in raw_mode:
                 st_mode = "Spatial Intersect by Study Area Boundary (Polygon Clip)"
             elif "أكواد" in raw_mode or "Custom" in raw_mode:
                 st_mode = "Custom Station IDs (Manual Entry / From Explorer)"
@@ -753,7 +917,12 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             messages.addMessage("Multi-source Integrated Reanalysis & Surface Atlas Database Platform")
             messages.addMessage("================================================================================")
             messages.addMessage("[1/5] Resolving Weather Station Network (Mode: %s) ..." % st_mode)
-            resolved_stations = self._resolve_stations(st_mode, target_country, study_poly, inc_buf, custom_ids, local_layer)
+            if _specific_stations_mode(st_mode):
+                resolved_stations = self._resolve_stations(
+                    st_mode, target_country, study_poly, inc_buf, custom_ids, local_layer,
+                    selected_stations=_selected_station_values(pdict.get("Selected_Stations")))
+            else:
+                resolved_stations = self._resolve_stations(st_mode, target_country, study_poly, inc_buf, custom_ids, local_layer)
 
             # Ingest Optional Supplementary Points
             supp_stations = []
@@ -839,6 +1008,12 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                     else:
                         val = val_text = "Download & Generate Atlas (Full Pipeline) [Default]"
 
+                elif p_name == "Execution_Workflow_Mode":
+                    if "Sequential" in val_text or "تتابعي" in val_text:
+                        val = val_text = "Sequential Mode: Element by Element"
+                    else:
+                        val = val_text = "Batch Mode: Download All Then Process [Recommended]"
+
                 # Guarantee Daily time series persistence when Temporal is Daily
                 elif p_name == "Save_Daily_Series":
                     p_temp_check = pdict.get("Temporal_Resolution")
@@ -848,7 +1023,8 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                             val = True
                             val_text = "true"
 
-                core_parameters.append(_ParamProxy(p_name, val, val_text))
+                core_parameters.append(_ParamProxy(p_name, val, val_text,
+                                                   altered=bool(getattr(p, "altered", False))))
 
 
             # Add injected feature layers as proxies
@@ -868,7 +1044,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             messages.addMessage("All ground weather station atlas operations completed successfully!")
 
         except Exception as ex:
-            messages.addErrorMessage("MIRSAD EXECUTION ERROR: %s" % str(ex))
+            messages.addErrorMessage("MIRSAD EXECUTION ERROR: %s" % _core._excel_text(ex))
             messages.addErrorMessage(traceback.format_exc())
             raise
         finally:
@@ -905,7 +1081,8 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
                 "استقطاع مكاني بمضلع حدود منطقة الدراسة",
                 "أكواد محطات مخصصة (إدخال يدوي / من المستكشف)",
                 "الشبكة العالمية الموحدة (حول العالم - تنبيه: عدد كبير)",
-                "طبقة محطات محلية محفوظة (شيب فايل / قاعدة بيانات)"
+                "طبقة محطات محلية محفوظة (شيب فايل / قاعدة بيانات)",
+                "اختيار محطات محددة من الدولة (اختيار متعدد)"
             ]
             p_mode.value = "اختيار بالدولة (الشبكة الوطنية المعتمدة)"
             p_mode.description = (
@@ -915,6 +1092,7 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
                 "• 'أكواد محطات مخصصة': إدخال أكواد USAF/WMO لمحطات محددة مباشرة.\n"
                 "• 'الشبكة العالمية الموحدة': معالجة المحطات حول العالم.\n"
                 "• 'طبقة محطات محلية محفوظة': استدعاء طبقة محطات محفوظة مسبقاً من جهازك."
+                "\n• 'اختيار محطات محددة من الدولة': اختر الدولة، ثم محطة واحدة أو أكثر من القائمة."
             )
 
         # 2. Region_Filter
@@ -967,6 +1145,14 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
             p_ctry.value = "[جميع دول الوطن العربي (ARAB)]"
             p_ctry.description = "مرشح الشبكة الوطنية للمستوى الثاني أو النطاق الإقليمي الشامل."
 
+        p_selected = pdict.get("Selected_Stations")
+        if p_selected:
+            p_selected.displayName = "اختر المحطات من الدولة (اختيار متعدد)"
+            p_selected.description = (
+                "في وضع اختيار محطات محددة من الدولة، اختر محطة واحدة أو أكثر. "
+                "تعرض القائمة اسم المحطة وأكواد USAF/WBAN والدولة. تُعالج المحطات المختارة فقط؛ "
+                "الاختيار الفارغ لا يشغّل شبكة الدولة كاملة.")
+
         # 4. Study_Area_Polygon
         p_poly = pdict.get("Study_Area_Polygon")
         if p_poly:
@@ -1007,8 +1193,8 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
                 "واجهة ناسا باور المناخية الزراعية (NASA POWER API / MERRA-2)",
                 "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
             ]
-            p_csrc.value = "نظام هجين: أرصاد محطات NOAA + سد فجوات NASA/ERA5 (Hybrid) [موصى به]"
-            p_csrc.description = "اختر مزود البيانات المناخية لمحطات الرصد الجوي."
+            p_csrc.value = "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
+            p_csrc.description = "بيانات إعادة التحليل عند مواقع المحطات. تنزيل أرصاد NOAA المباشرة والدمج الهجين غير منفذين حاليًا وسيظهر خطأ عند اختيارهما."
 
         # 10. Operation_Mode
         p_op = pdict.get("Operation_Mode")
@@ -1085,6 +1271,7 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
 
         p_reg = pdict.get("Region_Filter")
         p_ctry = pdict.get("Select_Country")
+        original_country = p_ctry.valueAsText if p_ctry else ""
         p_custom = pdict.get("Custom_Station_IDs")
         p_local = pdict.get("Local_Station_Features")
         p_buf = pdict.get("Include_Buffer_Stations")
@@ -1121,7 +1308,7 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
             if p_buf: p_buf.enabled = False
 
         # Populate countries in Arabic
-        if p_reg and p_ctry:
+        if p_reg and p_ctry and not _specific_stations_mode(mode_val):
             reg_val = p_reg.valueAsText or ""
             if "العربي" in reg_val or "Arab" in reg_val:
                 p_ctry.filter.list = [
@@ -1136,6 +1323,7 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
                 if not p_ctry.valueAsText or p_ctry.valueAsText not in p_ctry.filter.list:
                     p_ctry.value = "[جميع دول الوطن العربي (ARAB)]"
 
+        self._update_station_choices(pdict, original_country)
         _core.PowerClimateAtlasGenerator.updateParameters(self, parameters)
 
     def execute(self, parameters, messages):

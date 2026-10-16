@@ -271,7 +271,10 @@ check("WC toggle strip default", _stripped == ["WC_Winter_Mean", "WC_Annual_Mean
 d = tool._build_daily_table(
     [{"oid": 1, "Source_ID": 7, "daily_raw": {"T2M": {(2024, 1, 1): 20.5, (2024, 1, 2): 21.0}}}],
     ["T2M"])
-check("daily table builder", d is not None and d["params"] == ["T2M"] and d["rows"] == [[1, 7, "2024-01-01", 20.5], [1, 7, "2024-01-02", 21.0]], d)
+check("daily table builder", d is not None and d["params"] == ["T2M"]
+      and d["header"] == ["OBJECTID", "Source_ID", "Station_ID", "Station_Name", "Country", "Latitude", "Longitude", "Date", "T2M"]
+      and d["rows"] == [[1, 7, 7, "", "", None, None, "2024-01-01", 20.5],
+                        [1, 7, 7, "", "", None, None, "2024-01-02", 21.0]], d)
 check("daily table none w/o data", tool._build_daily_table([{"oid": 1, "daily_raw": {}}], ["T2M"]) is None)
 # Monthly interannual ranges (opt-in, default OFF)
 _mm = {(2020, 1): 10.0, (2021, 1): 14.0, (2022, 1): 12.0, (2020, 7): 30.0, (2021, 7): 31.0}

@@ -23,6 +23,9 @@ import time
 import calendar
 import datetime as _dt
 
+from utils.arcgis_runtime import preserve_arcpy_environment, SpatialLicense, provider_error
+from utils.climate_quality import merge_point_layers, coordinates, derive_from_fields, IDENTITY_FIELDS
+
 PY27 = sys.version_info[0] == 2
 
 # Python 2/3 compat aliases (RHS only evaluated in the taken branch, so no NameError).
@@ -1219,7 +1222,7 @@ def is_missing(v):
     except Exception:
         return True
     try:
-        if math.isnan(f):
+        if math.isnan(f) or math.isinf(f):
             return True
     except Exception:
         pass
@@ -1910,10 +1913,11 @@ class RasterDataClimateAtlasGenerator(object):
     def __init__(self):
         self.label = "MIRSAD: Gridded & Raster Climate Atlas Generator"
         self.description = (
-            "MIRSAD Platform: Downloads gridded/raster climate data (NASA POWER, Open-Meteo ERA5, "
-            "NASA Earthdata, NASA Giovanni) across Layer 1 (Download Extent), converts cells into 32-bit Float "
+            "MIRSAD Platform: Downloads NASA POWER regional climate data "
+            "across Layer 1 (Download Extent), converts cells into 32-bit Float "
             "points in Project_Data.gdb with full seasonal & annual indicators, interpolates (IDW/Kriging/Spline), "
-            "and clips using Layer 2 (Study Area Mask). Also runs fully offline using existing point layers."
+            "and clips using Layer 2 (Study Area Mask). Also runs offline using existing point layers. "
+            "Other listed providers have no direct implementation and report a validation error."
         )
         self.category = ""
 
@@ -2027,6 +2031,9 @@ class RasterDataClimateAtlasGenerator(object):
         ]
         p2.value = "NASA POWER Regional Grid"
         p2.category = "Data Provider & Authentication"
+        p2.description = ("NASA POWER Regional Grid is the implemented online source. "
+                          "Other listed choices report an error; no substitute data is downloaded. "
+                          "Use Offline mode for existing data from any source.")
 
         p3 = arcpy.Parameter(
             displayName="NASA Earthdata Username",
@@ -2418,6 +2425,16 @@ class RasterDataClimateAtlasGenerator(object):
             "Megajoules/m2/day (MJ/m2/day), Watt-hours/m2/day (Wh/m2/day), or Calories/cm2/day (cal/cm2/day, Langley)."
         )
 
+        p_monthly_rasters = arcpy.Parameter(
+            displayName="Generate Monthly Climatology Rasters (Offline, Jan-Dec)",
+            name="Generate_Monthly_Rasters", datatype="GPBoolean",
+            parameterType="Optional", direction="Input")
+        p_monthly_rasters.value = False
+        p_monthly_rasters.category = "Time Window"
+        p_monthly_rasters.description = (
+            "Interpolate existing monthly climatology fields in Offline mode (at least 2 years). "
+            "Monthly surfaces use a shared color stretch and are saved in Month/.")
+
         return [
             p_mode, p_wf_mode, p_precalc, p0, p1, p_study_name,
             p2, p3, p4, p_cds_key,
@@ -2426,7 +2443,8 @@ class RasterDataClimateAtlasGenerator(object):
             p_mods,
             p_interp, p_cell, p_wind_cell,
             p_exp_indiv, p_ws, p_sr,
-            p_unit_sys, p_unit_temp, p_unit_precip, p_unit_press, p_unit_wind, p_unit_solar
+            p_unit_sys, p_unit_temp, p_unit_precip, p_unit_press, p_unit_wind, p_unit_solar,
+            p_monthly_rasters
         ]
 
     def updateParameters(self, parameters):
@@ -2478,6 +2496,8 @@ class RasterDataClimateAtlasGenerator(object):
         p_pre = pdict.get("Precalculated_Point_Layers")
         if p_pre:
             p_pre.enabled = is_offline
+        if pdict.get("Generate_Monthly_Rasters"):
+            pdict["Generate_Monthly_Rasters"].enabled = is_offline
 
         p_ext = pdict.get("Download_Extent_Layer")
         if p_ext:
@@ -2528,6 +2548,17 @@ class RasterDataClimateAtlasGenerator(object):
         p_op = pdict.get("Operation_Mode")
         op_text = p_op.valueAsText if p_op else "Download Gridded Data & Generate Atlas (Full Pipeline) [Default]"
         is_offline = bool(op_text and "Offline" in op_text)
+
+        p_provider = pdict.get("Climate_Data_Source")
+        if p_provider:
+            try:
+                p_provider.clearMessage()
+            except Exception:
+                pass
+            if not is_offline:
+                problem = provider_error(p_provider.valueAsText, raster=True)
+                if problem:
+                    p_provider.setErrorMessage(problem)
 
         if is_offline:
             p_pre = pdict.get("Precalculated_Point_Layers")
@@ -2612,7 +2643,15 @@ class RasterDataClimateAtlasGenerator(object):
                             % (SUBMODEL_DEPS[res_s]["short"], ", ".join(missing_mods))
                         )
 
+    @preserve_arcpy_environment
     def execute(self, parameters, messages):
+        spatial_license = SpatialLicense(arcpy)
+        try:
+            return self._execute(parameters, messages, spatial_license)
+        finally:
+            spatial_license.release()
+
+    def _execute(self, parameters, messages, spatial_license):
         t0 = time.time()
         def msg(m):
             arcpy.AddMessage(m)
@@ -2642,6 +2681,10 @@ class RasterDataClimateAtlasGenerator(object):
         in_clip_layer = _get_text("Final_Clip_Layer")
         study_area_name = _get_text("Study_Area_Name", "").strip()
         source = _get_text("Climate_Data_Source", "NASA POWER Regional Grid")
+        if not is_offline:
+            problem = provider_error(source, raster=True)
+            if problem:
+                raise RuntimeError(problem)
         edl_user = _get_text("Earthdata_Username")
         edl_pass = _get_text("Earthdata_Password")
         cds_key = _get_text("CDS_API_Key")
@@ -2757,6 +2800,8 @@ class RasterDataClimateAtlasGenerator(object):
             wind_cell_size = 25000.0
         export_indiv_shp = bool(_get_val("Export_Individual_Shapefiles", False))
         _want_monthly = bool(_get_val("Generate_Monthly_Rasters", False))
+        if _want_monthly and not is_offline:
+            raise RuntimeError("Monthly raster generation requires precalculated monthly fields in Offline mode.")
         wc_extended = bool(_get_val("Extended_WC_Seasons", False))
         if wc_extended:
             msg("Extended Wind Chill full suite ENABLED (cold regions): seasonal/range/monthly means will be published.")
@@ -2820,7 +2865,7 @@ class RasterDataClimateAtlasGenerator(object):
         # 2. Check Spatial Analyst Extension
         if not _HAS_SA:
             raise RuntimeError("ArcGIS Spatial Analyst extension is required for raster interpolation.")
-        arcpy.CheckOutExtension("Spatial")
+        spatial_license.acquire()
         arcpy.env.overwriteOutput = True
         try:
             arcpy.env.compression = "LZW"
@@ -3097,7 +3142,6 @@ class RasterDataClimateAtlasGenerator(object):
         try:
             import shutil
             shutil.rmtree(scratch_dir, ignore_errors=True)
-            arcpy.management.Delete("in_memory")
         except Exception:
             pass
 
@@ -3196,8 +3240,8 @@ class RasterDataClimateAtlasGenerator(object):
         # Dedicated Source Data Folder with Provenance Workbooks and Documentation
         try:
             export_source_data_folder(
-                out_root, None, climate_modules, source, om_model=source,
-                y0=y0, y1=y1, temporal="Monthly", msg=msg, warn=warn)
+                out_root, None, ordered_modules, source, om_model=source,
+                y0=start_yr, y1=end_yr, temporal="Monthly", msg=msg, warn=warn)
         except Exception as ex_sd:
             warn("Could not export Source Data folder: %s" % ex_sd)
 
@@ -3205,11 +3249,6 @@ class RasterDataClimateAtlasGenerator(object):
         msg("POWER Raster Climate Atlas Generation Complete in %.1f seconds." % elapsed)
         msg("Output workspace: %s" % out_root)
         msg("=" * 70)
-        try:
-            arcpy.CheckInExtension("Spatial")
-        except Exception:
-            pass
-
     # -----------------------------------------------------------------------
     # Helper: Generate Spatial Tiles for Regional Queries
     # -----------------------------------------------------------------------
@@ -3375,9 +3414,6 @@ class RasterDataClimateAtlasGenerator(object):
             if os.path.isfile(nc_tile):
                 try: os.remove(nc_tile)
                 except Exception: pass
-        try: arcpy.management.Delete("in_memory")
-        except Exception: pass
-
         try:
             arcpy.DeleteIdentical_management(pts_fc, ["Shape"])
         except Exception:
@@ -3512,117 +3548,37 @@ class RasterDataClimateAtlasGenerator(object):
                 except Exception:
                     pass
 
-        t_map = {}
-        temp_fc = element_layers.get("Temperature") or intermediate_points.get("Temperature")
-        if temp_fc and arcpy.Exists(temp_fc):
-            t_fld = "T_Annual_Mean" if "T_Annual_Mean" in [f.name for f in arcpy.ListFields(temp_fc)] else "T_AnnMean"
-            with arcpy.da.SearchCursor(temp_fc, ["POINT_X", "POINT_Y", t_fld]) as cur:
-                for r in cur:
-                    t_map[(round(r[0], 4), round(r[1], 4))] = r[2]
-
-        p_map = {}
-        precip_fc = element_layers.get("Precipitation") or intermediate_points.get("Precipitation")
-        if precip_fc and arcpy.Exists(precip_fc):
-            fc_flds = [f.name for f in arcpy.ListFields(precip_fc)]
-            if "R_Month_Mean" in fc_flds or "R_MonMean" in fc_flds:
-                p_fld = "R_Annual_Mean" if "R_Annual_Mean" in fc_flds else "R_AnnMean"
-            elif "R_Annual_Total" in fc_flds or "R_AnnTot" in fc_flds:
-                p_fld = "R_Annual_Total" if "R_Annual_Total" in fc_flds else "R_AnnTot"
-            elif "R_Annual_Mean" in fc_flds:
-                p_fld = "R_Annual_Mean"
-            elif "R_AnnMean" in fc_flds:
-                p_fld = "R_AnnMean"
-            else:
-                p_fld = "Precip_Annual_Sum"
-            with arcpy.da.SearchCursor(precip_fc, ["POINT_X", "POINT_Y", p_fld]) as cur:
-                for r in cur:
-                    p_map[(round(r[0], 4), round(r[1], 4))] = r[2]
-
-        rh_map = {}
-        rh_fc = element_layers.get("Relative Humidity") or intermediate_points.get("Relative Humidity")
-        if rh_fc and arcpy.Exists(rh_fc):
-            rh_fld = "RH_Annual_Mean" if "RH_Annual_Mean" in [f.name for f in arcpy.ListFields(rh_fc)] else "RH_AnMean"
-            with arcpy.da.SearchCursor(rh_fc, ["POINT_X", "POINT_Y", rh_fld]) as cur:
-                for r in cur:
-                    rh_map[(round(r[0], 4), round(r[1], 4))] = r[2]
-
-        w_map = {}
-        wind_fc = element_layers.get("Wind") or intermediate_points.get("Wind")
-        if wind_fc and arcpy.Exists(wind_fc):
-            w_fld = "W_Spd_Annual_Mean" if "W_Spd_Annual_Mean" in [f.name for f in arcpy.ListFields(wind_fc)] else "WSp_AnMean"
-            with arcpy.da.SearchCursor(wind_fc, ["POINT_X", "POINT_Y", w_fld]) as cur:
-                for r in cur:
-                    w_map[(round(r[0], 4), round(r[1], 4))] = r[2]
-
+        # Use actual matched prerequisite attributes. A climatological row
+        # cannot supply fabricated monthly extremes or a trend time series.
+        from POWER_Climate_Atlas_Generator_10_8 import windchill_c
+        wgs_sr = arcpy.SpatialReference(4326)
+        source_layers = [primary_fc]
+        for module in req_modules:
+            source_fc = element_layers.get(module) or intermediate_points.get(module)
+            if source_fc and arcpy.Exists(source_fc) and source_fc not in source_layers:
+                source_layers.append(source_fc)
+        records, point_index = merge_point_layers(
+            arcpy, primary_fc, source_layers, wgs_sr, REV_SHP_MAP, SHP_FIELD_MAP, warn)
+        for record in records:
+            record["fields"] = derive_from_fields(
+                record["fields"], heat_index_c, humidex_c, wbgt_shade_c, windchill_c)
         fld_names = [f[0] for f in indicator_fields]
-        with arcpy.da.UpdateCursor(pts_fc, ["POINT_X", "POINT_Y"] + fld_names) as cur:
+        join_ids = [f.name for f in arcpy.ListFields(pts_fc) if f.name in IDENTITY_FIELDS]
+        missing = set()
+        with arcpy.da.UpdateCursor(pts_fc, ["SHAPE@"] + join_ids + fld_names) as cur:
             for row in cur:
-                ckey = (round(row[0], 4), round(row[1], 4))
-                t = t_map.get(ckey, 20.0)
-                p = p_map.get(ckey, 50.0)
-                rh = rh_map.get(ckey, 50.0)
-                w = w_map.get(ckey, 3.0)
-                lat = row[1]
-                for f_idx, (fld, _lbl) in enumerate(indicator_fields):
-                    val = None
-                    if fld == "DM_Aridity_Annual":
-                        denom = (t + 10.0) if t is not None else 30.0
-                        val = (p / denom) if denom > 0.01 else 0.0
-                    elif fld in ("PET_Hargreaves_Annual", "ET_Annual_Mean"):
-                        ra = extraterrestrial_radiation_ra(lat, 7)
-                        val = 0.0023 * ra * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 365.25
-                    elif fld == "ET_Annual_Range":
-                        ra_jul = extraterrestrial_radiation_ra(lat, 7)
-                        ra_jan = extraterrestrial_radiation_ra(lat, 1)
-                        val = abs(0.0023 * (ra_jul - ra_jan) * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 30.5)
-                    elif fld == "ET_Winter_Mean":
-                        ra_w = extraterrestrial_radiation_ra(lat, 1)
-                        val = 0.0023 * ra_w * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 90.25
-                    elif fld == "ET_Spring_Mean":
-                        ra_sp = extraterrestrial_radiation_ra(lat, 4)
-                        val = 0.0023 * ra_sp * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 92.0
-                    elif fld == "ET_Summer_Mean":
-                        ra_su = extraterrestrial_radiation_ra(lat, 7)
-                        val = 0.0023 * ra_su * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 92.0
-                    elif fld == "ET_Autumn_Mean":
-                        ra_au = extraterrestrial_radiation_ra(lat, 10)
-                        val = 0.0023 * ra_au * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 91.0
-                    elif fld == "UNEP_Aridity_Annual":
-                        ra = extraterrestrial_radiation_ra(lat, 7)
-                        pet = 0.0023 * ra * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 365.25
-                        val = (p / pet) if pet > 0.01 else 0.0
-                    elif fld == "Water_Deficit_Annual":
-                        ra = extraterrestrial_radiation_ra(lat, 7)
-                        pet = 0.0023 * ra * ((t if t is not None else 20.0) + 17.8) * math.sqrt(10.0) * 365.25
-                        val = p - pet
-                    elif fld == "Dry_Months_Count":
-                        val = 12 if (p is not None and t is not None and p < (2.0 * t)) else 0
-                    elif fld == "HI_Summer_Mean":
-                        val = heat_index_c(t, rh)
-                    elif fld == "HI_Winter_Mean":
-                        val = humidex_c(t, rh)
-                    elif fld == "HI_Annual_Mean":
-                        val = heat_index_c(t, rh)
-                    elif fld == "HI_Annual_Range":
-                        hi_s = heat_index_c(t, rh) or 0.0
-                        hi_w = humidex_c(t, rh) or 0.0
-                        val = abs(hi_s - hi_w)
-                    elif fld == "WBGT_Summer_Mean":
-                        val = wbgt_shade_c(t, rh)
-                    elif fld == "WC_Winter_Mean":
-                        val = wind_chill_c(t, w)
-                    elif fld == "WC_Annual_Mean":
-                        val = wind_chill_c(t, w)
-                    elif fld == "T_Annual_Trend_Decade":
-                        val = 0.25
-                    elif fld == "R_Annual_Trend_Decade":
-                        val = -1.5
-                    elif fld.startswith(("T_Anom", "T_Annual_An")):
-                        val = 0.8
-                    elif fld.startswith(("R_Anom", "R_Annual_An")):
-                        val = -5.0 if not fld.endswith("Pct") else -10.0
-                    row[2 + f_idx] = round(val, 3) if val is not None else None
+                lat, lon = coordinates(row[0], wgs_sr)
+                idx = point_index.match(lat, lon, dict(zip(join_ids, row[1:1 + len(join_ids)])))
+                values = records[idx]["fields"] if idx is not None else {}
+                for f_idx, fld in enumerate(fld_names):
+                    val = values.get(fld)
+                    row[1 + len(join_ids) + f_idx] = val
+                    if val is None:
+                        missing.add(fld)
                 cur.updateRow(row)
+        if missing:
+            warn("%s: left %d indicator(s) NULL where required observations/time series were unavailable."
+                 % (mod, len(missing)))
 
         return pts_fc, indicator_fields
 
@@ -3683,196 +3639,17 @@ class RasterDataClimateAtlasGenerator(object):
         tmp_is_temp = (tmp_base != base_layer)
 
         try:
-            point_records = []
-            coord_to_idx = {}
-            oid_to_idx = {}
-            base_desc = arcpy.Describe(tmp_base)
-            oid_field = base_desc.OIDFieldName
-
-            with arcpy.da.SearchCursor(tmp_base, [oid_field, "SHAPE@"]) as cur:
-                idx = 0
-                for row in cur:
-                    oid_val = row[0]
-                    geom = row[1]
-                    lat, lon = None, None
-                    try:
-                        if geom:
-                            pt_wgs = geom.projectAs(wgs_sr)
-                            lat, lon = float(pt_wgs.centroid.Y), float(pt_wgs.centroid.X)
-                    except Exception:
-                        pass
-                    ckey = (round(lat, 4), round(lon, 4)) if (lat is not None and lon is not None) else None
-                    rec = {
-                        "oid": oid_val,
-                        "geom": geom,
-                        "lat": lat,
-                        "lon": lon,
-                        "fields": {}
-                    }
-                    point_records.append(rec)
-                    if ckey:
-                        coord_to_idx[ckey] = idx
-                        coord_to_idx[(round(lat, 3), round(lon, 3))] = idx
-                    oid_to_idx[oid_val] = idx
-                    idx += 1
-
-            msg("  Base geometry: %d points from '%s'" % (len(point_records), os.path.basename(base_layer)))
-
-            # Read attributes from all input layers
-            for lyr in layer_paths:
-                lyr_desc = arcpy.Describe(lyr)
-                lyr_oid = lyr_desc.OIDFieldName
-                all_fields = [f.name for f in arcpy.ListFields(lyr)
-                              if f.type not in ("Geometry", "Raster", "Blob")]
-                val_fields = [f for f in all_fields if f != lyr_oid]
-
-                with arcpy.da.SearchCursor(lyr, [lyr_oid, "SHAPE@"] + val_fields) as cur:
-                    for row in cur:
-                        l_oid = row[0]
-                        l_geom = row[1]
-                        l_lat, l_lon = None, None
-                        try:
-                            if l_geom:
-                                pt_w = l_geom.projectAs(wgs_sr)
-                                l_lat, l_lon = float(pt_w.centroid.Y), float(pt_w.centroid.X)
-                        except Exception:
-                            pass
-                        ckey = (round(l_lat, 4), round(l_lon, 4)) if (l_lat is not None and l_lon is not None) else None
-                        match_idx = coord_to_idx.get(ckey)
-                        if match_idx is None and l_lat is not None and l_lon is not None:
-                            match_idx = coord_to_idx.get((round(l_lat, 3), round(l_lon, 3)))
-                        if match_idx is None:
-                            match_idx = oid_to_idx.get(l_oid)
-
-                        if match_idx is not None and match_idx < len(point_records):
-                            target_fields = point_records[match_idx]["fields"]
-                            for fname, val in zip(val_fields, row[2:]):
-                                canonical = REV_SHP_MAP.get(fname, fname)
-                                if val is not None and not is_missing(val):
-                                    if canonical not in target_fields or target_fields[canonical] is None:
-                                        target_fields[canonical] = val
-                                    target_fields[fname] = val
-                                    shp_sh = SHP_FIELD_MAP.get(canonical)
-                                    if shp_sh:
-                                        target_fields[shp_sh] = val
+            point_records, point_index = merge_point_layers(
+                arcpy, tmp_base, layer_paths, wgs_sr, REV_SHP_MAP, SHP_FIELD_MAP, warn)
+            msg("  Base geometry: %d points" % len(point_records))
 
             # On-the-fly submodels derivation if missing
             if active_submodels:
-                msg("  Computing requested applied submodels on the fly...")
+                msg("Computing requested applied submodels from available offline inputs ...")
+                from POWER_Climate_Atlas_Generator_10_8 import windchill_c
                 for rec in point_records:
-                    f = rec["fields"]
-                    pt_lat = rec.get("lat") or 0.0
-
-                    t_val = (f.get("T_Annual_Mean") if f.get("T_Annual_Mean") is not None else
-                             (f.get("T_AnnMean") if f.get("T_AnnMean") is not None else f.get("T2M")))
-                    if f.get("R_Month_Mean") is not None or f.get("R_MonMean") is not None:
-                        p_val = (f.get("R_Annual_Mean") if f.get("R_Annual_Mean") is not None else f.get("R_AnnMean"))
-                    elif f.get("R_Annual_Total") is not None or f.get("R_AnnTot") is not None or f.get("R_AnnTotal") is not None:
-                        p_val = (f.get("R_Annual_Total") if f.get("R_Annual_Total") is not None else
-                                 (f.get("R_AnnTot") if f.get("R_AnnTot") is not None else f.get("R_AnnTotal")))
-                    else:
-                        p_val = (f.get("R_Annual_Mean") if f.get("R_Annual_Mean") is not None else
-                                 (f.get("R_AnnMean") if f.get("R_AnnMean") is not None else
-                                  (f.get("Precip_Annual_Sum") if f.get("Precip_Annual_Sum") is not None else f.get("PRECTOTCORR"))))
-                    tx_val = (f.get("T_Annual_Max_Mean") if f.get("T_Annual_Max_Mean") is not None else
-                              (f.get("T_MaxMean") if f.get("T_MaxMean") is not None else f.get("T2M_MAX")))
-                    if tx_val is None and t_val is not None:
-                        tx_val = float(t_val) + 5.0
-                    tn_val = (f.get("T_Annual_Min_Mean") if f.get("T_Annual_Min_Mean") is not None else
-                              (f.get("T_MinMean") if f.get("T_MinMean") is not None else f.get("T2M_MIN")))
-                    if tn_val is None and t_val is not None:
-                        tn_val = float(t_val) - 5.0
-                    rh_val = (f.get("RH_Summer_Mean") if f.get("RH_Summer_Mean") is not None else
-                              (f.get("RH_SuMean") if f.get("RH_SuMean") is not None else
-                               (f.get("RH_Annual_Mean") if f.get("RH_Annual_Mean") is not None else
-                                (f.get("RH_AnMean") if f.get("RH_AnMean") is not None else f.get("RH2M")))))
-                    t_spr_val = (f.get("T_Spring_Mean") if f.get("T_Spring_Mean") is not None else
-                                 (f.get("T_SpMean") if f.get("T_SpMean") is not None else t_val))
-                    rh_spr_val = (f.get("RH_Spring_Mean") if f.get("RH_Spring_Mean") is not None else
-                                  (f.get("RH_SpMean") if f.get("RH_SpMean") is not None else rh_val))
-                    t_aut_val = (f.get("T_Autumn_Mean") if f.get("T_Autumn_Mean") is not None else
-                                 (f.get("T_AuMean") if f.get("T_AuMean") is not None else t_val))
-                    rh_aut_val = (f.get("RH_Autumn_Mean") if f.get("RH_Autumn_Mean") is not None else
-                                  (f.get("RH_AuMean") if f.get("RH_AuMean") is not None else rh_val))
-
-                    if any("De Martonne" in s for s in active_submodels):
-                        if f.get("DM_Aridity_Annual") is None and t_val is not None and p_val is not None:
-                            t_f, p_f = float(t_val), float(p_val)
-                            f["DM_Aridity_Annual"] = round(p_f / (t_f + 10.0), 2) if (t_f + 10.0) > 0.01 else 0.0
-
-                    if any("Hargreaves" in s or "Evapotranspiration" in s or "UNEP" in s or "Water Deficit" in s for s in active_submodels):
-                        if (f.get("ET_Annual_Mean") is None or f.get("PET_Hargreaves_Annual") is None) and t_val is not None and tx_val is not None and tn_val is not None:
-                            t_f, tx_f, tn_f = float(t_val), float(tx_val), float(tn_val)
-                            tdiff = max(0.0, tx_f - tn_f)
-                            days_in_m = [31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-                            m_pet = []
-                            for m in range(1, 13):
-                                ra_m = extraterrestrial_radiation_ra(pt_lat, m)
-                                pet_m = max(0.0, 0.0023 * ra_m * (t_f + 17.8) * math.sqrt(tdiff) * days_in_m[m - 1])
-                                m_pet.append(pet_m)
-                            pet_ann = sum(m_pet)
-                            et_win = m_pet[11] + m_pet[0] + m_pet[1]
-                            et_spr = m_pet[2] + m_pet[3] + m_pet[4]
-                            et_sum = m_pet[5] + m_pet[6] + m_pet[7]
-                            et_aut = m_pet[8] + m_pet[9] + m_pet[10]
-                            et_seas = [et_win, et_spr, et_sum, et_aut]
-
-                            f["ET_Annual_Mean"] = round(pet_ann, 1)
-                            f["ET_Annual_Range"] = round(max(m_pet) - min(m_pet), 1) if m_pet else 0.0
-                            f["ET_Winter_Mean"] = round(et_win, 1)
-                            f["ET_Spring_Mean"] = round(et_spr, 1)
-                            f["ET_Summer_Mean"] = round(et_sum, 1)
-                            f["ET_Autumn_Mean"] = round(et_aut, 1)
-                            f["PET_Hargreaves_Annual"] = round(pet_ann, 1)
-                            # Monthly ET means ride on the same proxy series
-                            _m_en = ("January", "February", "March", "April", "May", "June",
-                                     "July", "August", "September", "October", "November",
-                                     "December")
-                            for _mi, _mn in enumerate(_m_en, 1):
-                                if f.get("ET_%s_Mean" % _mn) is None and len(m_pet) >= _mi:
-                                    f["ET_%s_Mean" % _mn] = round(m_pet[_mi - 1], 1)
-
-                    if any("UNEP" in s for s in active_submodels):
-                        pet_val = f.get("ET_Annual_Mean") if f.get("ET_Annual_Mean") is not None else f.get("PET_Hargreaves_Annual")
-                        if f.get("UNEP_Aridity_Annual") is None and p_val is not None and pet_val is not None:
-                            pet_f = float(pet_val)
-                            f["UNEP_Aridity_Annual"] = round(float(p_val) / pet_f, 3) if pet_f > 0.01 else 0.0
-
-                    if any("Water Deficit" in s for s in active_submodels):
-                        pet_val = f.get("ET_Annual_Mean") if f.get("ET_Annual_Mean") is not None else f.get("PET_Hargreaves_Annual")
-                        if f.get("Water_Deficit_Annual") is None and p_val is not None and pet_val is not None:
-                            f["Water_Deficit_Annual"] = round(float(p_val) - float(pet_val), 1)
-
-                    if any("Walter-Lieth" in s for s in active_submodels):
-                        if f.get("Dry_Months_Count") is None and p_val is not None and t_val is not None:
-                            p_f, t_f = float(p_val), float(t_val)
-                            if p_f < 2.0 * t_f * 12.0:
-                                f["Dry_Months_Count"] = int(min(12, max(1, 12.0 * (1.0 - (p_f / max(1.0, 24.0 * t_f))))))
-                            else:
-                                f["Dry_Months_Count"] = 0
-
-                    if any("Heat Index" in s for s in active_submodels):
-                        if f.get("HI_Summer_Mean") is None and t_val is not None and rh_val is not None:
-                            hi = heat_index_c(float(t_val), float(rh_val))
-                            if hi is not None:
-                                f["HI_Summer_Mean"] = round(hi, 2)
-                                f["HI_Annual_Mean"] = round(hi, 2)
-                        if f.get("HI_Winter_Mean") is None and t_val is not None and rh_val is not None:
-                            hw = humidex_c(float(t_val), float(rh_val))
-                            if hw is not None:
-                                f["HI_Winter_Mean"] = round(hw, 2)
-                        if f.get("HI_Spring_Mean") is None and t_spr_val is not None and rh_spr_val is not None:
-                            hs = heat_index_c(float(t_spr_val), float(rh_spr_val))
-                            if hs is not None:
-                                f["HI_Spring_Mean"] = round(hs, 2)
-                        if f.get("HI_Autumn_Mean") is None and t_aut_val is not None and rh_aut_val is not None:
-                            ha = heat_index_c(float(t_aut_val), float(rh_aut_val))
-                            if ha is not None:
-                                f["HI_Autumn_Mean"] = round(ha, 2)
-                        if f.get("WBGT_Summer_Mean") is None and t_val is not None and rh_val is not None:
-                            wb = wbgt_shade_c(float(t_val), float(rh_val))
-                            if wb is not None:
-                                f["WBGT_Summer_Mean"] = round(wb, 2)
+                    rec["fields"] = derive_from_fields(
+                        rec["fields"], heat_index_c, humidex_c, wbgt_shade_c, windchill_c)
 
             # Build feature classes only for remaining unmapped modules
             for m in remaining_modules:
@@ -3901,10 +3678,12 @@ class RasterDataClimateAtlasGenerator(object):
 
                 # Populate attributes
                 oid_n = arcpy.Describe(pts_fc).OIDFieldName
-                with arcpy.da.UpdateCursor(pts_fc, [oid_n, "Point_ID", "POINT_X", "POINT_Y", "Data_Start", "Data_End", "Measurement_Unit"] + fld_names) as ucur:
+                join_ids = [f.name for f in arcpy.ListFields(pts_fc) if f.name in IDENTITY_FIELDS]
+                with arcpy.da.UpdateCursor(pts_fc, [oid_n, "Point_ID", "POINT_X", "POINT_Y", "Data_Start", "Data_End", "Measurement_Unit"] + fld_names + ["SHAPE@"] + join_ids) as ucur:
                     for row in ucur:
                         p_oid = row[0]
-                        p_idx = oid_to_idx.get(p_oid)
+                        lat_v, lon_v = coordinates(row[7 + len(fld_names)], wgs_sr)
+                        p_idx = point_index.match(lat_v, lon_v, dict(zip(join_ids, row[8 + len(fld_names):])))
                         rec_entry = point_records[p_idx] if (p_idx is not None and p_idx < len(point_records)) else {}
                         rec_fields = rec_entry.get("fields", {})
                         row[1] = p_oid
@@ -3945,6 +3724,9 @@ class RasterDataClimateAtlasGenerator(object):
 
     def _download_single_tile(self, source, param, min_lon, min_lat, max_lon, max_lat,
                               start_yr, end_yr, out_nc, user, pwd, msg, warn, cds_key=None):
+        problem = provider_error(source, raster=True)
+        if problem:
+            raise RuntimeError(problem)
         if "Copernicus" in source or "CDS" in source:
             # Copernicus Climate Data Store (ERA5 / AgERA5)
             headers = {"User-Agent": "MIRSAD-Climate-Atlas/1.0"}
@@ -4045,7 +3827,9 @@ class RasterDataClimateAtlasGenerator(object):
         makedirs_ok(mod_dir)
 
         # Filter indicators by Temporal Scope
-        active_ind_fields = [fld for fld in raw_ind_fields if get_field_temporal_scope(fld[0]) in t_scope_set]
+        active_ind_fields = [fld for fld in raw_ind_fields
+                             if get_field_temporal_scope(fld[0]) in t_scope_set
+                             or (is_monthly_field(fld[0]) and (monthly_enabled or monthly_ranges_on))]
         # Opt-in extended WC suite (default OFF keeps the clean Winter+Annual schema)
         if not wc_extended:
             _wc_ext = ("WC_Spring_Mean", "WC_Summer_Mean", "WC_Autumn_Mean",
@@ -4069,7 +3853,7 @@ class RasterDataClimateAtlasGenerator(object):
             return _fn.endswith("_Range") and is_monthly_field(_fn)
         active_ind_fields = [fld for fld in active_ind_fields
                              if (not is_monthly_field(fld[0]))
-                             or monthly_enabled
+                             or (monthly_enabled and not _is_mrange(fld[0]))
                              or (_is_mrange(fld[0]) and monthly_ranges_on)]
         if not active_ind_fields:
             warn("  ! No indicators for %s match the selected Temporal Scope (%s); skipping." % (

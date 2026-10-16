@@ -41,7 +41,8 @@ check("om hourly has pressure/humidity/cloud/wind/dewpoint",
 d2, h2 = mod.om_var_sets(["Temperature", "Heat Index"])
 check("temp+HI needs hourly RH+Dew for HI/Td", "relative_humidity_2m" in h2 and "dew_point_2m" in h2 and len(d2) == 3, (d2, h2))
 d_pure_t, h_pure_t = mod.om_var_sets(["Temperature"])
-check("pure temp needs hourly Dew", h_pure_t == ["dew_point_2m"] and len(d_pure_t) == 3, (d_pure_t, h_pure_t))
+# Temperature already requests both dew point and humidity in the engine.
+check("pure temp needs hourly Dew and RH", h_pure_t == ["dew_point_2m", "relative_humidity_2m"] and len(d_pure_t) == 3, (d_pure_t, h_pure_t))
 check("dewpoint canon T2MDEW", mod.OM_CANON.get("dew_point_2m") == "T2MDEW")
 d3, h3 = mod.om_var_sets(["Climate_Models"])
 check("models hourly has wind for WC", "wind_speed_10m" in h3 and "dew_point_2m" in h3, h3)
@@ -58,7 +59,7 @@ g = mod.om_group_daily(["2025-01-01", "2025-01-02", "2025-02-01"],
                        [10.0, None, 20.0], "mean")
 check("om daily mean skips null", g == {(2025, 1): 10.0, (2025, 2): 20.0}, g)
 g2 = mod.om_group_daily(["2025-01-01", "2025-01-02"], [2.0, 3.0], "sum")
-check("om daily sum", g2 == {(2025, 1): 5.0}, g2)
+check("om incomplete daily sum is null", g2 == {(2025, 1): None}, g2)
 g3 = mod.om_group_hourly(["2025-01-01T00:00", "2025-01-01T12:00", "2025-02-01T00:00"],
                          [1000.0, 1020.0, None])
 check("om hourly mean", g3 == {(2025, 1): 1010.0}, g3)
@@ -71,7 +72,7 @@ resp = {"daily": {"time": ["2025-01-01", "2025-01-02"],
 mth, draw = mod.om_parse_response(resp, ["temperature_2m_mean", "precipitation_sum"],
                                   ["pressure_msl"])
 check("om parse temp monthly", mth["T2M"] == {(2025, 1): 12.0}, mth.get("T2M"))
-check("om parse precip total", mth["PRECTOTCORR"] == {(2025, 1): 5.0},
+check("om parse incomplete precip total is null", mth["PRECTOTCORR"] == {(2025, 1): None},
       mth.get("PRECTOTCORR"))
 check("om parse pressure hPa kept", mth["SLP"] == {(2025, 1): 1015.0}, mth.get("SLP"))
 check("om daily_raw precip", draw["PRECTOTCORR"] == {(2025, 1, 1): 2.0, (2025, 1, 2): 3.0},
@@ -84,7 +85,7 @@ pf = mod.compute_point_fields({"PRECTOTCORR": mtot}, [2025], ["Precipitation"],
 check("om winter mean direct", abs(pf["R_Winter_Mean"] - 180.0) < 1e-9, pf["R_Winter_Mean"])
 pf2 = mod.compute_point_fields({"PRECTOTCORR": {(2025, 1): 2.0}}, [2025],
                                ["Precipitation"], "Monthly", precip_totals=False)
-check("nasa rate still x-days", pf2["R_Winter_Mean"] is not None and abs(
+check("nasa rate still x-days, incomplete winter null", pf2["R_Winter_Mean"] is None and abs(
     mod.monthly_precip_total_from_rate(2.0, 2025, 1) - 62.0) < 1e-9)
 
 # ---------------- 4. provider-aware dictionaries (no arcpy needed) ----------------

@@ -100,6 +100,9 @@ _this_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals(
 if _this_dir not in sys.path:
     sys.path.insert(0, _this_dir)
 
+from utils.arcgis_runtime import preserve_arcpy_environment, SpatialLicense, provider_error, is_offline_mode
+from utils.climate_quality import merge_point_layers, coordinates, derive_from_fields, IDENTITY_FIELDS
+
 try:
     from raster_atlas_generator import RasterDataClimateAtlasGenerator
 except Exception:
@@ -979,7 +982,7 @@ def is_missing(v):
     except Exception:
         return True
     try:
-        if math.isnan(f):
+        if math.isnan(f) or math.isinf(f):
             return True
     except Exception:
         pass
@@ -1080,18 +1083,18 @@ def seasonal_means_from_monthly(monthly):
 
 
 def seasonal_totals_from_monthly_totals(monthly_totals, years):
-    """Sum-type aggregation (precipitation)."""
+    """Mean of complete annual/seasonal totals, never partial-period sums."""
     per_year_annual = []
     per_year_season = dict((s, []) for s in SEASONS)
     for y in years:
         avals = [monthly_totals.get((y, m)) for m in range(1, 13)]
         avals = [float(v) for v in avals if not is_missing(v)]
-        if avals:
+        if len(avals) == 12:
             per_year_annual.append(sum(avals))
         for season, months in SEASONS.items():
             svals = [monthly_totals.get((y, m)) for m in months]
             svals = [float(v) for v in svals if not is_missing(v)]
-            if svals:
+            if len(svals) == len(months):
                 per_year_season[season].append(sum(svals))
 
     def _m(x):
@@ -1942,114 +1945,58 @@ def extraterrestrial_radiation_ra(lat_deg, month):
 
 
 def compute_drought_fields(m_tmean, m_tmax, m_tmin, m_precip, lat=0.0):
-    """Computes annual drought and aridity indicators:
-    - DM_Aridity_Annual: De Martonne Aridity Index = P / (T + 10)
-    - PET_Hargreaves_Annual: Annual Potential Evapotranspiration (Hargreaves-Samani, mm/year)
-    - UNEP_Aridity_Annual: UNEP Aridity Index = P / PET
-    - Water_Deficit_Annual: Annual Climatic Water Balance = P - PET (mm/year)
-    - Dry_Months_Count: Count of biologically dry months where P_month < 2 * T_month"""
+    """Compute existing drought indicators only from their available inputs.
+
+    Each ET month needs mean/max/min temperature. Annual totals and the dry
+    month count need 12 valid months; seasonal ET needs all three months.
+    Missing precipitation is never interpreted as zero. ET does not need rain.
+    """
     c_tmean = climat_monthly_means(m_tmean)
     c_tmax = climat_monthly_means(m_tmax)
     c_tmin = climat_monthly_means(m_tmin)
     c_precip = climat_monthly_means(m_precip)
-
-    # No single year exists at climatological scale, so February uses the
-    # long-term average month length (28.25 days) instead of a fixed 28 --
-    # otherwise every leap-day's PET is silently dropped.
     days_in_m = [31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    monthly_pet = []
-    monthly_p = []
-    monthly_t = []
-    dry_count = 0
-
-    # Total input absence must NOT yield plausible-looking numbers from the
-    # per-month fallbacks below (t=20C, p=0 would fake a hyper-arid site).
-    _has_any_input = any(
-        c_tmean.get(m) is not None or c_tmax.get(m) is not None
-        or c_tmin.get(m) is not None or c_precip.get(m) is not None
-        for m in range(1, 13)
-    )
-    if not _has_any_input:
-        return {
-            "DM_Aridity_Annual": None,
-            "PET_Hargreaves_Annual": None,
-            "UNEP_Aridity_Annual": None,
-            "Water_Deficit_Annual": None,
-            "Dry_Months_Count": None,
-        }
-
+    monthly_pet, monthly_p, monthly_t = [], [], []
     for m in range(1, 13):
-        t = c_tmean.get(m)
-        tx = c_tmax.get(m)
-        tn = c_tmin.get(m)
-        p = c_precip.get(m)
-
-        if t is None:
-            t = 20.0
-        if tx is None:
-            tx = t + 5.0
-        if tn is None:
-            tn = t - 5.0
-        if p is None:
-            p = 0.0
-
-        p = max(0.0, float(p))
-        t = float(t)
-        tx = float(tx)
-        tn = float(tn)
-
-        monthly_p.append(p)
+        t, tx, tn, p = c_tmean.get(m), c_tmax.get(m), c_tmin.get(m), c_precip.get(m)
         monthly_t.append(t)
+        monthly_p.append(max(0.0, p) if p is not None else None)
+        pet = None
+        if all(v is not None for v in (t, tx, tn)) and tx >= tn:
+            ra = extraterrestrial_radiation_ra(lat, m)
+            pet = max(0.0, 0.0023 * ra * (t + 17.8) * math.sqrt(tx - tn) * days_in_m[m - 1])
+        monthly_pet.append(pet)
 
-        ra = extraterrestrial_radiation_ra(lat, m)
-        tdiff = max(0.0, tx - tn)
-        pet_daily = 0.0023 * ra * (t + 17.8) * math.sqrt(tdiff)
-        pet_month = max(0.0, pet_daily * days_in_m[m - 1])
-        monthly_pet.append(pet_month)
+    p_annual = safe_sum(monthly_p, expected=12, min_frac=1.0)
+    t_annual = safe_mean(monthly_t) if all(v is not None for v in monthly_t) else None
+    pet_annual = safe_sum(monthly_pet, expected=12, min_frac=1.0)
+    pet_range = max(monthly_pet) - min(monthly_pet) if pet_annual is not None else None
+    dm_aridity = (p_annual / (t_annual + 10.0)
+                  if p_annual is not None and t_annual is not None and t_annual + 10.0 > 0.01 else None)
+    unep_aridity = (p_annual / pet_annual
+                    if p_annual is not None and pet_annual is not None and pet_annual > 0.01 else None)
+    deficit = p_annual - pet_annual if p_annual is not None and pet_annual is not None else None
+    dry_count = (sum(1 for p, t in zip(monthly_p, monthly_t) if p < 2.0 * t)
+                 if p_annual is not None and t_annual is not None else None)
 
-        if p < (2.0 * t):
-            dry_count += 1
+    def rounded(value, places):
+        return round(value, places) if value is not None else None
 
-    p_annual = sum(monthly_p)
-    t_annual = (sum(monthly_t) / 12.0) if monthly_t else 20.0
-    pet_annual = sum(monthly_pet)
-    pet_mean = pet_annual / 12.0
-    pet_range = (max(monthly_pet) - min(monthly_pet)) if monthly_pet else 0.0
-
-    # Seasonal ET totals (DJF, MAM, JJA, SON)
-    # monthly_pet indices: 0=Jan, 1=Feb, ... 11=Dec
-    et_win = monthly_pet[11] + monthly_pet[0] + monthly_pet[1]
-    et_spr = monthly_pet[2] + monthly_pet[3] + monthly_pet[4]
-    et_sum = monthly_pet[5] + monthly_pet[6] + monthly_pet[7]
-    et_aut = monthly_pet[8] + monthly_pet[9] + monthly_pet[10]
-    et_seasons = [et_win, et_spr, et_sum, et_aut]
-    et_sea_range = max(et_seasons) - min(et_seasons)
-
-    denom_dm = t_annual + 10.0
-    # De Martonne is undefined for denom <= 0 (polar edge t_annual <= -10C):
-    # None (not applicable) instead of 0.0 (which would misread as hyper-arid).
-    dm_aridity = (p_annual / denom_dm) if denom_dm > 0.01 else None
-    unep_aridity = (p_annual / pet_annual) if pet_annual > 0.01 else 0.0
-    water_deficit = p_annual - pet_annual
-
-    out_d = {
-        "DM_Aridity_Annual": round(dm_aridity, 2) if dm_aridity is not None else None,
-        "ET_Annual_Mean": round(pet_annual, 1),
-        "ET_Annual_Range": round(pet_range, 1),
-        "ET_Winter_Mean": round(et_win, 1),
-        "ET_Spring_Mean": round(et_spr, 1),
-        "ET_Summer_Mean": round(et_sum, 1),
-        "ET_Autumn_Mean": round(et_aut, 1),
-        "PET_Hargreaves_Annual": round(pet_annual, 1),
-        "UNEP_Aridity_Annual": round(unep_aridity, 3),
-        "Water_Deficit_Annual": round(water_deficit, 1),
-        "Dry_Months_Count": int(dry_count),
+    out = {
+        "DM_Aridity_Annual": rounded(dm_aridity, 2),
+        "ET_Annual_Mean": rounded(pet_annual, 1),
+        "ET_Annual_Range": rounded(pet_range, 1),
+        "PET_Hargreaves_Annual": rounded(pet_annual, 1),
+        "UNEP_Aridity_Annual": rounded(unep_aridity, 3),
+        "Water_Deficit_Annual": rounded(deficit, 1),
+        "Dry_Months_Count": dry_count,
     }
-    _months_en = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    for m_idx, m_name in enumerate(_months_en, 1):
-        out_d["ET_%s_Mean" % m_name] = round(monthly_pet[m_idx - 1], 1) if (monthly_pet and len(monthly_pet) >= m_idx) else None
-    return out_d
-
+    for season, months in SEASONS.items():
+        total = safe_sum([monthly_pet[m - 1] for m in months], expected=3, min_frac=1.0)
+        out["ET_%s_Mean" % season] = rounded(total, 1)
+    for m, name in enumerate(MONTH_NAMES_EN, 1):
+        out["ET_%s_Mean" % name] = rounded(monthly_pet[m - 1], 1)
+    return out
 
 # ---------------------------------------------------------------------------
 # Field dictionary (spec sections 5-13 + 16-17). Single source of truth.
@@ -3401,7 +3348,7 @@ def build_monthly_from_daily(parameter_dict, mean_params, sum_params, years):
                     _exp = calendar.monthrange(int(ym[0]), int(ym[1]))[1]
                 except Exception:
                     _exp = None
-                m[ym] = safe_sum(vals, expected=_exp)
+                m[ym] = safe_sum(vals, expected=_exp, min_frac=1.0)
             else:
                 m[ym] = safe_mean(vals)
         monthly[p] = m
@@ -3758,24 +3705,17 @@ def om_group_daily(dates, values, mode="mean"):
     """dates: [YYYY-MM-DD], values: [...] -> {(y,m): aggregated} skipping nulls."""
     by_month = {}
     for d, v in zip(dates or [], values or []):
-        if v is None:
-            continue
         try:
-            f = float(v)
+            day = _dt.date(int(d[0:4]), int(d[5:7]), int(d[8:10]))
         except Exception:
             continue
-        if f != f:  # NaN
-            continue
-        try:
-            ym = (int(d[0:4]), int(d[5:7]))
-        except Exception:
-            continue
-        by_month.setdefault(ym, []).append(f)
+        ym = (day.year, day.month)
+        by_month.setdefault(ym, {})[day.day] = None if is_missing(v) else float(v)
     out = {}
-    for ym, vals in by_month.items():
-        if not vals:
-            continue
-        out[ym] = sum(vals) if mode == "sum" else sum(vals) / len(vals)
+    for ym, days in by_month.items():
+        vals = list(days.values())
+        out[ym] = (safe_sum(vals, expected=month_days(*ym), min_frac=1.0)
+                   if mode == "sum" else safe_mean(vals))
     return out
 
 
@@ -4083,7 +4023,7 @@ def compute_point_fields(monthly, years, modules, temporal, daily_raw=None,
         res["R_Autumn_Mean"] = agg["Autumn"]
         _months_en = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         for m_idx, m_name in enumerate(_months_en, 1):
-            res["R_%s_Mean" % m_name] = round(clim_m.get(m_idx), 2) if clim_m.get(m_idx) is not None else 0.0
+            res["R_%s_Mean" % m_name] = round(clim_m.get(m_idx), 2) if clim_m.get(m_idx) is not None else None
     has_drought_mod = any(m in modules for m in [
         "De Martonne Aridity", "Evapotranspiration", "Hargreaves PET", "UNEP Aridity", "Water Deficit", "Dry Months",
         "Drought & Aridity", "Climate_Models"
@@ -4663,10 +4603,10 @@ class PowerClimateAtlasGenerator(object):
         p14.category = "Data Source"
         p14.description = ("REQUIRED. Data provider for all climate queries.\n"
                            "• 'NASA POWER API' [Default]: Gridded global agroclimatology & solar radiation (1981-Present).\n"
-                           "• 'Copernicus Climate Data Store (CDS / ERA5 / AgERA5)': Official ECMWF C3S reanalysis (~9 km, 1940-Present).\n"
-                           "• 'Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling': Ground observations with automated satellite and reanalysis gap-filling.\n"
                            "• 'Open-Meteo Historical API (ERA5 Reanalysis)': High-resolution numerical atmospheric reanalysis (~9 km, 1940-Present).\n"
-                           "• 'NOAA ISD / GHCN Direct Station Ground Observations Archive': Official ground station observational archive.")
+                           "• CDS, Hybrid, and NOAA Direct: Direct downloads are not implemented. "
+                           "These choices report an error instead of substituting another source; "
+                           "precalculated data can still be used in Offline mode.")
 
         p_om_model = arcpy.Parameter(
             displayName="Open-Meteo Reanalysis Model",
@@ -5369,7 +5309,7 @@ class PowerClimateAtlasGenerator(object):
         pdict = dict((p.name, p) for p in parameters)
         p_op = pdict.get("Operation_Mode")
         op_text = p_op.valueAsText if p_op else "Download & Generate Atlas (Full Pipeline) [Default]"
-        is_offline = bool(op_text and ("Offline" in op_text or "Existing" in op_text or op_text.startswith("Interpolate & Map Existing Data")))
+        is_offline = is_offline_mode(op_text)
 
         # --- Measurement Units synchronization ---
         p_usys = pdict.get("Measurement_Units_System")
@@ -5708,7 +5648,13 @@ class PowerClimateAtlasGenerator(object):
             pdict = dict((p.name, p) for p in parameters)
             p_op = pdict.get("Operation_Mode")
             op_text = p_op.valueAsText if p_op else "Download & Generate Atlas (Full Pipeline) [Default]"
-            is_offline = bool(op_text and op_text.startswith("Interpolate & Map Existing Data"))
+            is_offline = is_offline_mode(op_text)
+
+            p_provider = pdict.get("Climate_Data_Source")
+            if not is_offline and p_provider:
+                problem = provider_error(p_provider.valueAsText)
+                if problem:
+                    p_provider.setErrorMessage(problem)
 
             p_dl = pdict.get("Download_Only")
             dl_only = bool(p_dl.value) if (p_dl and p_dl.value is not None and not is_offline) else False
@@ -5905,6 +5851,7 @@ class PowerClimateAtlasGenerator(object):
         return
 
     # ---------------- execute ----------------
+    @preserve_arcpy_environment
     def execute(self, parameters, messages):
         if not _HAS_ARCPY:
             raise RuntimeError("This tool must run inside ArcMap (arcpy).")
@@ -5927,11 +5874,15 @@ class PowerClimateAtlasGenerator(object):
                 messages.addMessage("[WARNING] " + str(t))
 
         t_start = time.time()
+        overall_start_dt = now_str()
+        module_timings = {}
+        raster_timings = {}
+        spatial_license = SpatialLicense(arcpy)
         try:
             pdict = dict((p.name, p) for p in parameters)
             p_op = pdict.get("Operation_Mode")
             op_text = p_op.valueAsText if p_op else "Download & Generate Atlas (Full Pipeline) [Default]"
-            is_offline = bool(op_text and op_text.startswith("Interpolate & Map Existing Data"))
+            is_offline = is_offline_mode(op_text)
 
             p_dl0 = pdict.get("Download_Only")
             download_only = False if (is_offline or p_dl0 is None or p_dl0.value is None) else bool(p_dl0.value)
@@ -6052,6 +6003,10 @@ class PowerClimateAtlasGenerator(object):
                 "method": reclass_method
             }
             provider = pdict.get("Climate_Data_Source").valueAsText if pdict.get("Climate_Data_Source") else "NASA POWER API"
+            if not is_offline:
+                problem = provider_error(provider)
+                if problem:
+                    raise RuntimeError(problem)
             use_om = bool(provider.startswith("Open-Meteo") or "ERA5" in provider or "Hybrid" in provider or "Copernicus" in provider or "CDS" in provider)
             p_cds_k = pdict.get("CDS_API_Key")
             cds_key = p_cds_k.valueAsText if (p_cds_k and p_cds_k.valueAsText) else None
@@ -6407,9 +6362,35 @@ class PowerClimateAtlasGenerator(object):
             arcpy.ClearEnvironment("extent")
             arcpy.env.outputCoordinateSystem = out_sr
 
+            # Check BEFORE PolygonToRaster allocates a potentially huge mask.
+            try:
+                _desc_target = arcpy.Describe(mask if (mask and arcpy.Exists(mask)) else primary_in_point)
+                _ext = _desc_target.extent
+                _src_sr = _desc_target.spatialReference
+                if _src_sr.name != out_sr.name:
+                    _ext = arcpy.Polygon(arcpy.Array([
+                        _ext.lowerLeft, _ext.upperLeft, _ext.upperRight, _ext.lowerRight
+                    ]), _src_sr).projectAs(out_sr).extent
+                _w = float(_ext.XMax - _ext.XMin)
+                _h = float(_ext.YMax - _ext.YMin)
+                if _w > 0 and _h > 0 and eff_base > 0:
+                    _cells = (_w / eff_base) * (_h / eff_base)
+                    if not download_only and _cells > 50000000:
+                        _err_msg = (
+                            "Cell size %.4g produces approximately %.1f million cells "
+                            "(safety limit: 50 million). Increase Base Cell Size and re-run."
+                            % (base_cell, _cells / 1000000.0))
+                        arcpy.AddError(_err_msg)
+                        raise RuntimeError(_err_msg)
+            except RuntimeError:
+                raise
+            except Exception as ex_guard:
+                # Do not proceed to a native raster allocation with an unknown size.
+                raise RuntimeError("Could not validate raster dimensions: %s" % ex_guard)
+
             # --- PRE-RASTERIZE MASK: raster-on-raster ExtractByMask is 10-50x faster ---
             raster_mask = None
-            if mask and arcpy.Exists(mask):
+            if not download_only and mask and arcpy.Exists(mask):
                 try:
                     _rmask_path = os.path.join(scratch_dir, "mask_raster.tif")
                     if arcpy.Exists(_rmask_path):
@@ -6433,27 +6414,6 @@ class PowerClimateAtlasGenerator(object):
                 finally:
                     arcpy.ClearEnvironment("extent")
             arcpy.env.cellSize = eff_base
-            # --- guard: refuse rasters that would exhaust 32-bit ArcMap ---
-            try:
-                _desc_target = arcpy.Describe(mask) if (mask and arcpy.Exists(mask)) else arcpy.Describe(in_points)
-                _ext = _desc_target.extent
-                _w = float(_ext.XMax - _ext.XMin)
-                _h = float(_ext.YMax - _ext.YMin)
-                if _w > 0 and _h > 0 and eff_base > 0:
-                    _cells = (_w / eff_base) * (_h / eff_base)
-                    if _cells > 50000000:
-                        _unit_lbl = "degrees" if is_geo else "metres"
-                        _err_msg = (
-                            "Cell size %.4g %s produces approximately %.1f million cells (safety limit: 50 million). "
-                            "This would exhaust system memory and cause an unrecoverable freeze. "
-                            "Please increase the Base Cell Size parameter and re-run." % (
-                                base_cell, _unit_lbl, _cells / 1000000.0))
-                        arcpy.AddError(_err_msg)
-                        raise RuntimeError(_err_msg)
-            except RuntimeError:
-                raise
-            except Exception:
-                pass
             # --- ArcMap 10.x & CopyRaster deadlock guard: explicitly disable parallel processing ---
             # In 32-bit ArcMap, parallelProcessingFactor != 0 causes CopyRaster and Spatial Analyst
             # tools to deadlock indefinitely (BUG-000129060). Setting "0" enforces single-process.
@@ -6516,8 +6476,7 @@ class PowerClimateAtlasGenerator(object):
             sa_avail = False
             if not download_only:
                 try:
-                    if not hasattr(arcpy, "mp"):
-                        arcpy.CheckOutExtension("Spatial")
+                    spatial_license.acquire()
                     sa_avail = True
                 except Exception:
                     sa_avail = False
@@ -6622,10 +6581,6 @@ class PowerClimateAtlasGenerator(object):
                         ordered_modules, model=om_slug, start_date=start_date_str, end_date=end_date_str)
                     if _om_note:
                         warn(_om_note)
-
-                module_timings = {}
-                raster_timings = {}
-                overall_start_dt = now_str()
 
                 try:
                     for mi, m in enumerate(ordered_modules):
@@ -7260,17 +7215,10 @@ class PowerClimateAtlasGenerator(object):
             msg("=" * 70 + "\n")
         except Exception as ex:
             tb = traceback.format_exc()
-            messages.addErrorMessage("FAILED: %s\n%s" % (ex, tb))
+            messages.addErrorMessage(u"FAILED: %s\n%s" % (_excel_text(ex), _excel_text(tb)))
             raise
         finally:
-            try:
-                # In ArcGIS Pro, checking in extension inside background geoprocessing causes
-                # IAoInitialize / CheckInLicenseExtension null pointer dereference (0xC0000005 in ucrtbase.dll!strcpy).
-                # Only check in extension in desktop ArcMap (10.x).
-                if not hasattr(arcpy, "mp"):
-                    arcpy.CheckInExtension("Spatial")
-            except Exception:
-                pass
+            spatial_license.release()
 
 
     def _add_to_map(self, registry, wind_fcs, map_modules, msg, warn):
@@ -8408,241 +8356,16 @@ class PowerClimateAtlasGenerator(object):
 
         try:
             # 2. Extract geometries and coordinates from base layer
-            point_records = []
-            coord_to_idx = {}
-            oid_to_idx = {}
-            base_desc = arcpy.Describe(tmp_base)
-            oid_field = base_desc.OIDFieldName
-
-            with arcpy.da.SearchCursor(tmp_base, [oid_field, "SHAPE@"]) as cur:
-                idx = 0
-                for row in cur:
-                    oid_val = row[0]
-                    geom = row[1]
-                    lat, lon = None, None
-                    try:
-                        if geom:
-                            pt_wgs = geom.projectAs(wgs_sr)
-                            lat, lon = float(pt_wgs.centroid.Y), float(pt_wgs.centroid.X)
-                    except Exception:
-                        pass
-                    ckey = (round(lat, 4), round(lon, 4)) if (lat is not None and lon is not None) else None
-                    rec = {
-                        "oid": oid_val,
-                        "geom": geom,
-                        "lat": lat,
-                        "lon": lon,
-                        "fields": {}
-                    }
-                    point_records.append(rec)
-                    if ckey:
-                        coord_to_idx[ckey] = idx
-                        coord_to_idx[(round(lat, 3), round(lon, 3))] = idx
-                    oid_to_idx[oid_val] = idx
-                    idx += 1
-
-            msg("  Base geometry layer: %s (%d points)" % (os.path.basename(base_layer), len(point_records)))
-
-            # 3. Read attributes from all input layers and merge by coordinates / OID
-            for lyr in layer_paths:
-                lyr_desc = arcpy.Describe(lyr)
-                lyr_oid = lyr_desc.OIDFieldName
-                all_fields = [f.name for f in arcpy.ListFields(lyr)
-                              if f.type not in ("Geometry", "Raster", "Blob")]
-                val_fields = [f for f in all_fields if f != lyr_oid]
-
-                with arcpy.da.SearchCursor(lyr, [lyr_oid, "SHAPE@"] + val_fields) as cur:
-                    for row in cur:
-                        l_oid = row[0]
-                        l_geom = row[1]
-                        l_lat, l_lon = None, None
-                        try:
-                            if l_geom:
-                                pt_w = l_geom.projectAs(wgs_sr)
-                                l_lat, l_lon = float(pt_w.centroid.Y), float(pt_w.centroid.X)
-                        except Exception:
-                            pass
-                        ckey = (round(l_lat, 4), round(l_lon, 4)) if (l_lat is not None and l_lon is not None) else None
-                        match_idx = coord_to_idx.get(ckey)
-                        if match_idx is None and l_lat is not None and l_lon is not None:
-                            match_idx = coord_to_idx.get((round(l_lat, 3), round(l_lon, 3)))
-                        if match_idx is None:
-                            match_idx = oid_to_idx.get(l_oid)
-
-                        if match_idx is not None and match_idx < len(point_records):
-                            target_fields = point_records[match_idx]["fields"]
-                            for fname, val in zip(val_fields, row[2:]):
-                                canonical = REV_SHP_MAP.get(fname, fname)
-                                if val is not None and not is_missing(val):
-                                    if canonical not in target_fields or target_fields[canonical] is None:
-                                        target_fields[canonical] = val
-                                    target_fields[fname] = val
-                                    shp_sh = SHP_FIELD_MAP.get(canonical)
-                                    if shp_sh:
-                                        target_fields[shp_sh] = val
+            point_records, point_index = merge_point_layers(
+                arcpy, tmp_base, layer_paths, wgs_sr, REV_SHP_MAP, SHP_FIELD_MAP, warn)
+            msg("  Base geometry: %d points" % len(point_records))
 
             # 4. On-the-fly computation of active applied submodels if missing
             if active_submodels:
-                msg("Computing applied submodels for offline points ...")
+                msg("Computing requested applied submodels from available offline inputs ...")
                 for rec in point_records:
-                    f = rec["fields"]
-                    pt_lat = rec.get("lat") or 0.0
-
-                    t_val = (f.get("T_Annual_Mean") if f.get("T_Annual_Mean") is not None else
-                             (f.get("T_AnnMean") if f.get("T_AnnMean") is not None else f.get("T2M")))
-                    if f.get("R_Month_Mean") is not None or f.get("R_MonMean") is not None:
-                        p_val = (f.get("R_Annual_Mean") if f.get("R_Annual_Mean") is not None else f.get("R_AnnMean"))
-                    elif f.get("R_Annual_Total") is not None or f.get("R_AnnTot") is not None or f.get("R_AnnTotal") is not None:
-                        p_val = (f.get("R_Annual_Total") if f.get("R_Annual_Total") is not None else
-                                 (f.get("R_AnnTot") if f.get("R_AnnTot") is not None else f.get("R_AnnTotal")))
-                    else:
-                        p_val = (f.get("R_Annual_Mean") if f.get("R_Annual_Mean") is not None else
-                                 (f.get("R_AnnMean") if f.get("R_AnnMean") is not None else
-                                  (f.get("Precip_Annual_Sum") if f.get("Precip_Annual_Sum") is not None else f.get("PRECTOTCORR"))))
-                    tx_val = (f.get("T_Annual_Max_Mean") if f.get("T_Annual_Max_Mean") is not None else
-                              (f.get("T_MaxMean") if f.get("T_MaxMean") is not None else f.get("T2M_MAX")))
-                    if tx_val is None and t_val is not None:
-                        tx_val = float(t_val) + 5.0
-                    tn_val = (f.get("T_Annual_Min_Mean") if f.get("T_Annual_Min_Mean") is not None else
-                              (f.get("T_MinMean") if f.get("T_MinMean") is not None else f.get("T2M_MIN")))
-                    if tn_val is None and t_val is not None:
-                        tn_val = float(t_val) - 5.0
-                    rh_val = (f.get("RH_Summer_Mean") if f.get("RH_Summer_Mean") is not None else
-                              (f.get("RH_SuMean") if f.get("RH_SuMean") is not None else
-                               (f.get("RH_Annual_Mean") if f.get("RH_Annual_Mean") is not None else
-                                (f.get("RH_AnMean") if f.get("RH_AnMean") is not None else f.get("RH2M")))))
-                    t_win_val = (f.get("T_Winter_Mean") if f.get("T_Winter_Mean") is not None else
-                                 (f.get("T_WinMean") if f.get("T_WinMean") is not None else None))
-                    t_spr_val = (f.get("T_Spring_Mean") if f.get("T_Spring_Mean") is not None else
-                                 (f.get("T_SpMean") if f.get("T_SpMean") is not None else t_val))
-                    rh_spr_val = (f.get("RH_Spring_Mean") if f.get("RH_Spring_Mean") is not None else
-                                  (f.get("RH_SpMean") if f.get("RH_SpMean") is not None else rh_val))
-                    t_aut_val = (f.get("T_Autumn_Mean") if f.get("T_Autumn_Mean") is not None else
-                                 (f.get("T_AuMean") if f.get("T_AuMean") is not None else t_val))
-                    rh_aut_val = (f.get("RH_Autumn_Mean") if f.get("RH_Autumn_Mean") is not None else
-                                  (f.get("RH_AuMean") if f.get("RH_AuMean") is not None else rh_val))
-                    ws_win_val = (f.get("W_Spd_Winter_Mean") if f.get("W_Spd_Winter_Mean") is not None else
-                                  (f.get("WSp_WnMean") if f.get("WSp_WnMean") is not None else
-                                   (f.get("W_Spd_Annual_Mean") if f.get("W_Spd_Annual_Mean") is not None else
-                                    (f.get("WSp_AnMean") if f.get("WSp_AnMean") is not None else f.get("WS10M")))))
-                    ws_ann_val = (f.get("W_Spd_Annual_Mean") if f.get("W_Spd_Annual_Mean") is not None else
-                                  (f.get("WSp_AnMean") if f.get("WSp_AnMean") is not None else f.get("WS10M")))
-
-                    # De Martonne
-                    if any("De Martonne" in s for s in modules) or any("De Martonne" in s for s in active_submodels):
-                        if f.get("DM_Aridity_Annual") is None and t_val is not None and p_val is not None:
-                            t_f, p_f = float(t_val), float(p_val)
-                            f["DM_Aridity_Annual"] = round(p_f / (t_f + 10.0), 2) if (t_f + 10.0) > 0.01 else 0.0
-
-                    # Evapotranspiration (Hargreaves ET)
-                    if any(m in ("Evapotranspiration", "Hargreaves PET", "UNEP Aridity", "Water Deficit") for m in modules) or any("Evapotranspiration" in s or "Hargreaves" in s or "UNEP" in s or "Water Deficit" in s for s in active_submodels):
-                        if (f.get("ET_Annual_Mean") is None or f.get("PET_Hargreaves_Annual") is None) and t_val is not None and tx_val is not None and tn_val is not None:
-                            t_f, tx_f, tn_f = float(t_val), float(tx_val), float(tn_val)
-                            days_in_m = [31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-                            tdiff = max(0.0, tx_f - tn_f)
-                            m_pets = []
-                            for m_idx in range(1, 13):
-                                ra_m = extraterrestrial_radiation_ra(pt_lat, m_idx)
-                                m_pets.append(0.0023 * ra_m * (t_f + 17.8) * math.sqrt(tdiff) * days_in_m[m_idx - 1])
-                            pet_ann = sum(m_pets)
-                            pet_mean = pet_ann / 12.0
-                            pet_range = max(m_pets) - min(m_pets)
-                            et_win = m_pets[11] + m_pets[0] + m_pets[1]
-                            et_spr = m_pets[2] + m_pets[3] + m_pets[4]
-                            et_sum = m_pets[5] + m_pets[6] + m_pets[7]
-                            et_aut = m_pets[8] + m_pets[9] + m_pets[10]
-                            et_seasons = [et_win, et_spr, et_sum, et_aut]
-                            et_sea_range = max(et_seasons) - min(et_seasons)
-                            f["ET_Annual_Mean"] = round(max(0.0, pet_ann), 1)
-                            f["ET_Annual_Range"] = round(max(0.0, pet_range), 1)
-                            f["ET_Winter_Mean"] = round(max(0.0, et_win), 1)
-                            f["ET_Spring_Mean"] = round(max(0.0, et_spr), 1)
-                            f["ET_Summer_Mean"] = round(max(0.0, et_sum), 1)
-                            f["ET_Autumn_Mean"] = round(max(0.0, et_aut), 1)
-                            f["PET_Hargreaves_Annual"] = round(max(0.0, pet_ann), 1)
-
-                    # UNEP Aridity
-                    if any("UNEP" in s for s in modules) or any("UNEP" in s for s in active_submodels):
-                        pet_val = f.get("ET_Annual_Mean") if f.get("ET_Annual_Mean") is not None else f.get("PET_Hargreaves_Annual")
-                        if f.get("UNEP_Aridity_Annual") is None and p_val is not None and pet_val is not None:
-                            pet_f = float(pet_val)
-                            f["UNEP_Aridity_Annual"] = round(float(p_val) / pet_f, 3) if pet_f > 0.01 else 0.0
-
-                    # Water Deficit
-                    if any("Water Deficit" in s for s in modules) or any("Water Deficit" in s for s in active_submodels):
-                        pet_val = f.get("ET_Annual_Mean") if f.get("ET_Annual_Mean") is not None else f.get("PET_Hargreaves_Annual")
-                        if f.get("Water_Deficit_Annual") is None and p_val is not None and pet_val is not None:
-                            f["Water_Deficit_Annual"] = round(float(p_val) - float(pet_val), 1)
-
-                    # Walter-Lieth Dry Months
-                    if any(m in ("Dry Months", "Walter-Lieth") for m in modules) or any("Walter-Lieth" in s or "Dry Months" in s for s in active_submodels):
-                        if f.get("Dry_Months_Count") is None and p_val is not None and t_val is not None:
-                            p_f, t_f = float(p_val), float(t_val)
-                            if p_f < 2.0 * t_f * 12.0:
-                                f["Dry_Months_Count"] = int(min(12, max(1, 12.0 * (1.0 - (p_f / max(1.0, 24.0 * t_f))))))
-                            else:
-                                f["Dry_Months_Count"] = 0
-
-                    # Heat Index
-                    if any("Heat Index" in s for s in modules) or any("Heat Index" in s for s in active_submodels):
-                        if f.get("HI_Summer_Mean") is None and t_val is not None and rh_val is not None:
-                            hi = heat_index_c(float(t_val), float(rh_val))
-                            if hi is not None:
-                                f["HI_Summer_Mean"] = round(hi, 2)
-                                f["HI_Annual_Mean"] = round(hi, 2)
-                        if f.get("HI_Winter_Mean") is None and t_val is not None and rh_val is not None:
-                            hw = humidex_c(float(t_val), float(rh_val))
-                            if hw is not None:
-                                f["HI_Winter_Mean"] = round(hw, 2)
-                        if f.get("HI_Spring_Mean") is None and t_spr_val is not None and rh_spr_val is not None:
-                            hs = heat_index_c(float(t_spr_val), float(rh_spr_val))
-                            if hs is not None:
-                                f["HI_Spring_Mean"] = round(hs, 2)
-                        if f.get("HI_Autumn_Mean") is None and t_aut_val is not None and rh_aut_val is not None:
-                            ha = heat_index_c(float(t_aut_val), float(rh_aut_val))
-                            if ha is not None:
-                                f["HI_Autumn_Mean"] = round(ha, 2)
-                        if f.get("WBGT_Summer_Mean") is None and t_val is not None and rh_val is not None:
-                            wb = wbgt_shade_c(float(t_val), float(rh_val))
-                            if wb is not None:
-                                f["WBGT_Summer_Mean"] = round(wb, 2)
-                        # Opt-in monthly HI (proxies mirror the online monthly Rothfusz means)
-                        for _mi, _mn in enumerate(("January", "February", "March", "April", "May", "June",
-                                                  "July", "August", "September", "October", "November",
-                                                  "December"), 1):
-                            _hf = "HI_%s_Mean" % _mn
-                            if f.get(_hf) is None:
-                                _tv = f.get("T_%s_Mean" % _mn)
-                                _rv = f.get("RH_%s_Mean" % _mn)
-                                if _tv is not None and _rv is not None:
-                                    _hi = heat_index_c(float(_tv), float(_rv))
-                                    if _hi is not None:
-                                        f[_hf] = round(_hi, 2)
-
-                    # Wind Chill (offline: seasonal means stand in for monthly series)
-                    if any("Wind Chill" in s for s in modules) or any("Wind Chill" in s for s in active_submodels):
-                        if f.get("WC_Winter_Mean") is None and t_win_val is not None and ws_win_val is not None:
-                            wc = windchill_c(float(t_win_val), float(ws_win_val))
-                            if wc is not None:
-                                f["WC_Winter_Mean"] = round(wc, 2)
-                        if f.get("WC_Annual_Mean") is None and t_val is not None and ws_ann_val is not None:
-                            wc = windchill_c(float(t_val), float(ws_ann_val))
-                            if wc is not None:
-                                f["WC_Annual_Mean"] = round(wc, 2)
-                        # Opt-in extended seasons (proxies mirror the online seasonal means)
-                        for _fld, _tseas, _wseas in (
-                                ("WC_Spring_Mean", ("T_Spring_Mean", "T_SpMean"), ("W_Spd_Spring_Mean", "WSp_SpMean")),
-                                ("WC_Summer_Mean", ("T_Summer_Mean", "T_SuMean"), ("W_Spd_Summer_Mean", "WSp_SuMean")),
-                                ("WC_Autumn_Mean", ("T_Autumn_Mean", "T_AuMean"), ("W_Spd_Autumn_Mean", "WSp_AuMean"))):
-                            if f.get(_fld) is None:
-                                _tv = f.get(_tseas[0]) if f.get(_tseas[0]) is not None else f.get(_tseas[1], t_val)
-                                _wv = f.get(_wseas[0]) if f.get(_wseas[0]) is not None else f.get(_wseas[1], ws_ann_val)
-                                if _tv is not None and _wv is not None:
-                                    _wc = windchill_c(float(_tv), float(_wv))
-                                    if _wc is not None:
-                                        f[_fld] = round(_wc, 2)
-                        if f.get("WC_Annual_Range") is None and f.get("WC_Summer_Mean") is not None and f.get("WC_Winter_Mean") is not None:
-                            f["WC_Annual_Range"] = round(abs(float(f["WC_Summer_Mean"]) - float(f["WC_Winter_Mean"])), 2)
+                    rec["fields"] = derive_from_fields(
+                        rec["fields"], heat_index_c, humidex_c, wbgt_shade_c, windchill_c)
 
             # 5. Create primary element feature classes in GDB for remaining modules
             admin_names = [a[0] for a in ADMIN_FIELDS]
@@ -8677,7 +8400,8 @@ class PowerClimateAtlasGenerator(object):
                         field_type = "LONG" if wf == "Dry_Months_Count" else "DOUBLE"
                         arcpy.management.AddField(fc, wf, field_type, field_alias=wf)
                 oid_name = arcpy.Describe(fc).OIDFieldName
-                with arcpy.da.UpdateCursor(fc, [oid_name, "SHAPE@"] + admin_names + wanted) as ucur:
+                join_ids = [f.name for f in arcpy.ListFields(fc) if f.name in IDENTITY_FIELDS and f.name not in admin_names]
+                with arcpy.da.UpdateCursor(fc, [oid_name, "SHAPE@"] + admin_names + wanted + join_ids) as ucur:
                     for row in ucur:
                         pt_g = row[1]
                         lat_v, lon_v = None, None
@@ -8687,12 +8411,7 @@ class PowerClimateAtlasGenerator(object):
                                 lat_v, lon_v = float(p_wgs.centroid.Y), float(p_wgs.centroid.X)
                         except Exception:
                             pass
-                        ck = (round(lat_v, 4), round(lon_v, 4)) if (lat_v is not None and lon_v is not None) else None
-                        p_idx = coord_to_idx.get(ck)
-                        if p_idx is None and lat_v is not None and lon_v is not None:
-                            p_idx = coord_to_idx.get((round(lat_v, 3), round(lon_v, 3)))
-                        if p_idx is None:
-                            p_idx = oid_to_idx.get(row[0])
+                        p_idx = point_index.match(lat_v, lon_v, dict([(name, row[2 + admin_names.index(name)]) for name in IDENTITY_FIELDS if name in admin_names] + list(zip(join_ids, row[-len(join_ids):] if join_ids else []))))
                         rec_f = point_records[p_idx]["fields"] if (p_idx is not None and p_idx < len(point_records)) else {}
                         d_start_v = rec_f.get("Data_Start") or (admin_meta.get("data_start") if admin_meta else 0)
                         d_end_v = rec_f.get("Data_End") or (admin_meta.get("data_end") if admin_meta else 0)
@@ -8948,6 +8667,8 @@ class PowerClimateAtlasGenerator(object):
             arcpy.SetProgressorLabel("Interpolating raster [%d/%d]: %s (%s)..." % (i, len(todo), field, module))
             t_fld_start = time.time()
             msg("  -> [%d/%d] Processing column: %s (%s)..." % (i, len(todo), field, module))
+            surf = clipped = src_raster = None
+            lyr = None
             try:
                 # NOTE: each element interpolates from its own point layer
                 src_fc = (source_by_module or {}).get(module, master_fc)
@@ -9027,16 +8748,16 @@ class PowerClimateAtlasGenerator(object):
                         if effective_mask != mask and mask:
                             try:
                                 clipped = ExtractByMask(surf, mask)
-                            except Exception:
-                                clipped = surf
+                            except Exception as ex_mask:
+                                raise RuntimeError("Mask clipping failed; unmasked output was not published: %s" % ex_mask)
                         else:
                             # Fallback 2: save to scratch then mask
                             tmpu = os.path.join(scratch, "u_" + field + ".tif")
                             try:
                                 surf.save(tmpu)
                                 clipped = ExtractByMask(tmpu, effective_mask)
-                            except Exception:
-                                clipped = surf
+                            except Exception as ex_mask:
+                                raise RuntimeError("Mask clipping failed; unmasked output was not published: %s" % ex_mask)
                             finally:
                                 try:
                                     if arcpy.Exists(tmpu):
@@ -9097,7 +8818,6 @@ class PowerClimateAtlasGenerator(object):
                 except Exception:
                     pass
                 try:
-                    import gc
                     gc.collect()
                 except Exception:
                     pass
@@ -9130,6 +8850,15 @@ class PowerClimateAtlasGenerator(object):
                     msg("Raster: %s [raw float, LZW, continuous]" % rp)
             except Exception as ex:
                 warn("Raster %s failed: %s" % (field, ex))
+            finally:
+                # Release failed raster chains too, before the next indicator.
+                surf = clipped = src_raster = None
+                if lyr:
+                    try:
+                        arcpy.management.Delete(lyr)
+                    except Exception:
+                        pass
+                gc.collect()
         arcpy.ResetProgressor()
         return registry
 
