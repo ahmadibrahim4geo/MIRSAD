@@ -335,6 +335,38 @@ class RuntimeStability(unittest.TestCase):
         self.assertTrue(repr(p).startswith("_ParamProxy"))
         self.assertEqual(stations._ParamProxy("Study_Area_Name", u"مصر").valueAsText, u"مصر")
 
+    def test_daily_execute_accepts_legacy_proxy_and_respects_export_choice(self):
+        probe, fetch = core.probe_server, core.fetch_nasa_point
+        core.probe_server = lambda *a, **k: None
+        core.fetch_nasa_point = lambda lat, lon, y0, y1, params, **k: dict(
+            (p, {"20240101": 20.0, "20240102": 21.0}) for p in params)
+        cases = [
+            # Older station toolboxes forward values without ArcPy's altered flag.
+            (Bag(name="Save_Daily_Series", value=False, valueAsText="false"), True),
+            (stations._ParamProxy("Save_Daily_Series", False), True),
+            (stations._ParamProxy("Save_Daily_Series", False, altered=True), False),
+            (stations._ParamProxy("Save_Daily_Series", True, altered=True), True),
+        ]
+        try:
+            for daily_param, expected_daily in cases:
+                tool = self.prepare_core()
+                tool._extract_points = lambda *a: [{"oid": 1, "lat": 30.0, "lon": 31.0, "Source_ID": 1}]
+                tool._build_single_element_layer = lambda *a, **k: "01_Temperature"
+                daily_calls = []
+                tool._build_daily_table = lambda *a, **k: daily_calls.append(True)
+                params = self.core_params(tool,
+                    Operation_Mode="Download & Generate Atlas (Full Pipeline) [Default]",
+                    Execution_Workflow_Mode="Sequential Mode: Element by Element",
+                    Download_Only=True, Input_Point_Features="raw_points",
+                    Single_Year=2024, Temporal_Resolution="Daily")
+                params = [daily_param if p.name == "Save_Daily_Series" else p for p in params]
+                tool.execute(params, Messages())
+                self.assertEqual(bool(daily_calls), expected_daily)
+                self.assertEqual(len(self.logs), 1)
+                self.assertEqual(self.fake.env.__dict__, self.saved_env)
+        finally:
+            core.probe_server, core.fetch_nasa_point = probe, fetch
+
     def test_station_daily_and_arabic_workflow_reach_core_unchanged(self):
         tool = stations.WeatherStationsAtlasGeneratorAR()
         params = self.params(tool, Output_Workspace=self.tmp,

@@ -5950,7 +5950,8 @@ class PowerClimateAtlasGenerator(object):
             p_dly = pdict.get("Save_Daily_Series")
             save_daily = bool(p_dly.value) if (p_dly and p_dly.value is not None) else False
             if temporal and ("Daily" in temporal or "يومي" in temporal):
-                if p_dly is None or p_dly.value is None or (not p_dly.altered and not save_daily):
+                # Legacy station proxies do not carry ArcPy's UI alteration flag.
+                if p_dly is None or p_dly.value is None or (not getattr(p_dly, "altered", False) and not save_daily):
                     save_daily = True
             p_wcx = pdict.get("Extended_WC_Seasons")
             wc_extended = bool(p_wcx.value) if (p_wcx and p_wcx.value is not None) else False
