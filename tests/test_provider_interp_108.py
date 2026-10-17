@@ -100,6 +100,12 @@ if os.path.isdir(TMP):
     shutil.rmtree(TMP, ignore_errors=True)
 os.makedirs(TMP)
 def read_dict_csv(path):
+    excel_path = os.path.splitext(path)[0] + ".xls"
+    if os.path.isfile(excel_path):
+        import xlrd
+        sheet = xlrd.open_workbook(excel_path).sheet_by_index(0)
+        header = sheet.row_values(0)
+        return header, [dict(zip(header, sheet.row_values(index))) for index in range(1, sheet.nrows)]
     if sys.version_info[0] == 2:
         lines = open(path, "rb").read().decode("utf-8-sig").splitlines()
         rows = list(csv.reader([ln.encode("utf-8") for ln in lines]))

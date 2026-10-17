@@ -30,7 +30,10 @@ pyt_mod = mod
 class TestExcelAndArabicExport(unittest.TestCase):
 
     def setUp(self):
-        self.test_dir = tempfile.mkdtemp(prefix="test_excel_")
+        logdir = os.path.join(ROOT, "tests", "logs")
+        if not os.path.isdir(logdir):
+            os.makedirs(logdir)
+        self.test_dir = tempfile.mkdtemp(prefix="test_excel_", dir=logdir)
 
     def tearDown(self):
         if os.path.isdir(self.test_dir):
@@ -144,15 +147,14 @@ class TestExcelAndArabicExport(unittest.TestCase):
         self.assertGreater(os.path.getsize(xls_path), 1000)
 
         csv_path = os.path.join(source_dir, "Climate_Data_Sources_Provenance.csv")
-        self.assertTrue(os.path.isfile(csv_path), "Climate_Data_Sources_Provenance.csv missing")
-        with open(csv_path, "rb") as fh:
-            content = fh.read()
-            self.assertTrue(content.startswith(b"\xef\xbb\xbf"), "Provenance CSV missing UTF-8 BOM")
-            decoded = content.decode("utf-8")
-            self.assertIn("Cairo Intl", decoded)
-            self.assertIn("Jerusalem Airport", decoded)
-            self.assertIn("623660-99999", decoded)
-            self.assertIn("NOAA", decoded)
+        self.assertFalse(os.path.isfile(csv_path), "Successful Excel export must not create duplicate CSV")
+        import xlrd
+        book = xlrd.open_workbook(xls_path)
+        source = book.sheet_by_name("Source_Data")
+        values = [value for row in range(source.nrows) for value in source.row_values(row)]
+        self.assertIn("Cairo Intl", values)
+        self.assertIn("Jerusalem Airport", values)
+        self.assertIn("623660-99999", values)
 
         readme_en = os.path.join(source_dir, "README_Sources_Provenance.txt")
         self.assertTrue(os.path.isfile(readme_en), "README_Sources_Provenance.txt missing")

@@ -392,6 +392,40 @@ class RuntimeStability(unittest.TestCase):
         self.assertTrue(forwarded["Climate_Data_Source"].value.startswith("NASA POWER"))
         self.assertEqual(self.fake.env.__dict__, self.saved_env)
 
+    def test_yearly_option_reaches_download_pipeline_without_extra_requests(self):
+        probe, fetch = core.probe_server, core.fetch_nasa_point
+        core.probe_server = lambda *a, **k: None
+        requests = []
+        def cached_fetch(lat, lon, y0, y1, params, **kwargs):
+            requests.append((y0, y1))
+            return dict((p, dict(("%04d%02d01" % (year, month), float(year - 2000))
+                                 for year in range(y0, y1 + 1) for month in range(1, 13))) for p in params)
+        core.fetch_nasa_point = cached_fetch
+        try:
+            for workflow in ("Sequential Mode: Element by Element", "Batch Mode: Download All Then Process [Recommended]"):
+                for separate, end in ((True, 2024), (False, 2024), (True, 2023)):
+                    requests[:] = []
+                    tool = self.prepare_core()
+                    tool._extract_points = lambda *a: [{"oid": 1, "lat": 30.0, "lon": 31.0}]
+                    tool._build_single_element_layer = lambda *a, **k: "01_Temperature"
+                    exported = []
+                    tool._export_excel = lambda fc, path, *a, **k: exported.append((path, k))
+                    params = self.core_params(tool,
+                        Operation_Mode="Download & Generate Atlas (Full Pipeline) [Default]",
+                        Execution_Workflow_Mode=workflow, Download_Only=True,
+                        Input_Point_Features="raw_points", Temporal_Resolution="Daily",
+                        Time_Mode="Year Range", Start_Year=2023, End_Year=end,
+                        Export_Separate_Years=separate)
+                    tool.execute(params, Messages())
+                    self.assertEqual(requests, [(2023, end)])
+                    self.assertEqual(len(exported), 3 if separate and end == 2024 else 1)
+                    for path, options in exported[1:]:
+                        self.assertIn(os.sep + "Years" + os.sep, path)
+                        self.assertIsNotNone(options["daily"])
+                        self.assertIn("table", options)
+        finally:
+            core.probe_server, core.fetch_nasa_point = probe, fetch
+
     def test_station_defaults_use_an_implemented_source(self):
         for cls in (stations.WeatherStationsAtlasGenerator, stations.WeatherStationsAtlasGeneratorAR):
             pd = dict((p.name, p) for p in cls().getParameterInfo())

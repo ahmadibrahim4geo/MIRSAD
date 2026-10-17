@@ -2023,16 +2023,12 @@ class RasterDataClimateAtlasGenerator(object):
         )
         p2.filter.type = "ValueList"
         p2.filter.list = [
-            "NASA POWER Regional Grid",
-            "Copernicus Climate Data Store (CDS / ERA5 / AgERA5)",
-            "Open-Meteo ERA5 Grid",
-            "NASA Earthdata (MERRA-2 / GPM)",
-            "NASA Giovanni (GES DISC)"
+            "NASA POWER Regional Grid"
         ]
         p2.value = "NASA POWER Regional Grid"
         p2.category = "Data Provider & Authentication"
         p2.description = ("NASA POWER Regional Grid is the implemented online source. "
-                          "Other listed choices report an error; no substitute data is downloaded. "
+                          "Unimplemented providers are excluded from the list; old saved choices report an error. "
                           "Use Offline mode for existing data from any source.")
 
         p3 = arcpy.Parameter(
@@ -2518,9 +2514,11 @@ class RasterDataClimateAtlasGenerator(object):
             pdict["CDS_API_Key"].enabled = is_cds
 
         t_mode = pdict.get("Time_Mode").valueAsText if pdict.get("Time_Mode") else "Single Year"
-        single = (t_mode == "Single Year")
-        yr_range = (t_mode == "Year Range")
-        custom_range = (t_mode == "Custom Date Range")
+        if "Time_Mode" in pdict:
+            pdict["Time_Mode"].enabled = not is_offline
+        single = (t_mode == "Single Year" and not is_offline)
+        yr_range = (t_mode == "Year Range" and not is_offline)
+        custom_range = (t_mode == "Custom Date Range" and not is_offline)
 
         if "Single_Year" in pdict:
             pdict["Single_Year"].enabled = single
@@ -2544,21 +2542,21 @@ class RasterDataClimateAtlasGenerator(object):
         pdict = dict((p.name, p) for p in parameters) if (parameters and hasattr(parameters[0], 'name')) else {}
         if not pdict:
             return
+        for parameter in parameters:
+            try:
+                parameter.clearMessage()
+            except Exception:
+                pass
 
         p_op = pdict.get("Operation_Mode")
         op_text = p_op.valueAsText if p_op else "Download Gridded Data & Generate Atlas (Full Pipeline) [Default]"
         is_offline = bool(op_text and "Offline" in op_text)
 
         p_provider = pdict.get("Climate_Data_Source")
-        if p_provider:
-            try:
-                p_provider.clearMessage()
-            except Exception:
-                pass
-            if not is_offline:
-                problem = provider_error(p_provider.valueAsText, raster=True)
-                if problem:
-                    p_provider.setErrorMessage(problem)
+        if p_provider and not is_offline:
+            problem = provider_error(p_provider.valueAsText, raster=True)
+            if problem:
+                p_provider.setErrorMessage(problem)
 
         if is_offline:
             p_pre = pdict.get("Precalculated_Point_Layers")
@@ -2571,7 +2569,7 @@ class RasterDataClimateAtlasGenerator(object):
                 if p_ext:
                     p_ext.setErrorMessage("Download Extent Layer is required when downloading climate data.")
 
-        t_mode = pdict.get("Time_Mode").valueAsText if pdict.get("Time_Mode") else "Single Year"
+        t_mode = None if is_offline else (pdict.get("Time_Mode").valueAsText if pdict.get("Time_Mode") else "Single Year")
         if t_mode == "Single Year":
             s_yr = pdict.get("Single_Year").value if pdict.get("Single_Year") else None
             if not s_yr and pdict.get("Single_Year"):
@@ -2612,7 +2610,7 @@ class RasterDataClimateAtlasGenerator(object):
                 p_ed.setErrorMessage("End Date must be on or after Start Date.")
 
         c_size = pdict.get("Output_Cell_Size").value if pdict.get("Output_Cell_Size") else None
-        if c_size and c_size <= 0 and pdict.get("Output_Cell_Size"):
+        if c_size is not None and c_size <= 0 and pdict.get("Output_Cell_Size"):
             pdict["Output_Cell_Size"].setErrorMessage("Output cell size must be strictly positive.")
         elif c_size and c_size < 50.0 and pdict.get("Output_Cell_Size"):
             pdict["Output_Cell_Size"].setWarningMessage(

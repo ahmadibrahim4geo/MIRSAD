@@ -144,10 +144,10 @@ class StationMultipleSelection(unittest.TestCase):
                 tool._resolve_stations(stations.SPECIFIC_STATIONS_MODE, country, None,
                                        False, "", selected_stations=selected)
 
-    def test_picker_inactive_for_existing_modes_and_offline(self):
+    def test_picker_inactive_for_spatial_mode_and_offline(self):
         tool, params, pd = self.setup_tool()
         tool._station_catalogue = lambda: self.fail("Inactive picker must not read the catalogue")
-        pd["Station_Selection_Mode"].value = "Select by Country (National Network)"
+        pd["Station_Selection_Mode"].value = "Spatial Intersect by Study Area Boundary (Polygon Clip)"
         tool.updateParameters(params)
         self.assertFalse(pd["Selected_Stations"].enabled)
         pd["Station_Selection_Mode"].value = stations.SPECIFIC_STATIONS_MODE
@@ -157,11 +157,50 @@ class StationMultipleSelection(unittest.TestCase):
         self.assertFalse(pd["Selected_Stations"].enabled)
         self.assertIsNone(pd["Selected_Stations"].error)
 
+    def test_national_mode_allows_optional_station_subset_after_region_and_country(self):
+        for arabic, region, country in ((False, "Europe", "France (FR)"),
+                                        (True, "أوروبا", "فرنسا (FR)"),
+                                        (False, "Arab League Countries (22 Nations)", "Egypt (EG)"),
+                                        (True, "دول الوطن العربي (22 دولة)", "مصر (EG)")):
+            tool, params, pd = self.setup_tool(arabic)
+            pd["Station_Selection_Mode"].value = ("اختيار بالدولة (الشبكة الوطنية المعتمدة)" if arabic
+                                                    else "Select by Country (National Network)")
+            pd["Region_Filter"].value = region
+            pd["Select_Country"].value = country
+            tool.updateParameters(params)
+            self.assertTrue(pd["Selected_Stations"].enabled)
+            self.assertTrue(pd["Selected_Stations"].filter.list)
+            tool.updateMessages(params)
+            self.assertIsNone(pd["Selected_Stations"].error)
+            chosen = pd["Selected_Stations"].filter.list[:1]
+            result = tool._resolve_stations("Select by Country (National Network)",
+                "FR" if "(FR)" in country else "EG", None, False, "", selected_stations=chosen)
+            self.assertEqual(len(result), 1)
+            pd["Selected_Stations"].values = chosen
+            tool.updateParameters(params)
+            self.assertEqual(pd["Selected_Stations"].values, chosen)
+
+    def test_national_mode_keeps_aggregate_scopes_and_full_network_default(self):
+        tool, params, pd = self.setup_tool()
+        pd["Station_Selection_Mode"].value = "Select by Country (National Network)"
+        pd["Select_Country"].value = "[All Arab League Countries (ARAB)]"
+        tool.updateParameters(params)
+        self.assertEqual(pd["Select_Country"].valueAsText, "[All Arab League Countries (ARAB)]")
+        self.assertFalse(pd["Selected_Stations"].enabled)
+        tool.updateMessages(params)
+        self.assertIsNone(pd["Selected_Stations"].error)
+        tool._load_all_stations = lambda *a: self.catalogue["EG"] + self.catalogue["SA"]
+        result = tool._resolve_stations("Select by Country (National Network)", "EG", None, False, "")
+        self.assertEqual(len(result), 3)
+
     def test_execution_passes_only_selected_stations_to_core_in_both_languages(self):
         original = stations._core.PowerClimateAtlasGenerator.execute
         try:
-            for arabic in (False, True):
+            for arabic, national in ((False, False), (True, False), (False, True), (True, True)):
                 tool, params, pd = self.setup_tool(arabic)
+                if national:
+                    pd["Station_Selection_Mode"].value = ("اختيار بالدولة (الشبكة الوطنية المعتمدة)" if arabic
+                                                            else "Select by Country (National Network)")
                 tool.updateParameters(params)
                 chosen = pd["Selected_Stations"].filter.list[:2]
                 pd["Selected_Stations"].values = chosen

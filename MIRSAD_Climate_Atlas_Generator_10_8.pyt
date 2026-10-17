@@ -14,7 +14,7 @@ Tool: POWER Climate Atlas Generator
 - Reads an input point layer + optional study-area mask polygon.
 - Queries NASA POWER (Monthly/Daily) per point with retries + parallelism.
 - Computes annual/seasonal indicators with correct units.
-- Builds per-element point layers (GDB + SHP + CSV each), interpolated clipped rasters
+- Builds per-element point layers (GDB + optional SHP) and Excel tables, interpolated clipped rasters
   (GeoTIFF, written directly inside each element folder), wind vector layers,
   optional PSL isobars, bilingual data dictionaries and a processing log.
 
@@ -665,6 +665,32 @@ def write_master_excel_workbook(path, sheets_list):
     return True
 
 
+def export_excel_with_fallback(path, sheets, msg, warn):
+    """Keep every row in Excel; use CSV only when workbook creation fails."""
+    split_sheets = []
+    for name, header, rows, rtl in sheets:
+        for start in range(0, max(1, len(rows)), 60000):
+            suffix = "" if start == 0 else "_%d" % (start // 60000 + 1)
+            split_sheets.append((name[:31 - len(suffix)] + suffix, header,
+                                 rows[start:start + 60000], rtl))
+    try:
+        if not write_master_excel_workbook(path, split_sheets):
+            raise RuntimeError("The Excel writer (xlwt) is unavailable.")
+        msg("Excel: %s (sheets: %s)" % (path, ", ".join(s[0] for s in split_sheets)))
+        return True
+    except Exception as ex:
+        warn("Excel export failed (%s); saving complete CSV tables as a fallback: %s" % (path, ex))
+        for name, header, rows, rtl in sheets:
+            suffix = "" if name in ("Data", "Metadata", "Arabic_Dictionary") else "_" + name.lower()
+            csv_path = os.path.splitext(path)[0] + suffix + ".csv"
+            try:
+                write_csv(csv_path, header, rows)
+                msg("CSV fallback: %s (%d records)" % (csv_path, len(rows)))
+            except Exception as csv_ex:
+                warn("CSV fallback failed (%s): %s" % (csv_path, csv_ex))
+        return False
+
+
 # ---------------------------------------------------------------------------
 # Data Source & Model Provenance Metadata Core
 # ---------------------------------------------------------------------------
@@ -876,7 +902,7 @@ def export_source_data_folder(out_ws, pts_or_results, modules, provider, om_mode
     Creates the dedicated 'Source Data' folder in the output workspace
     and populates it with:
     1. Climate_Data_Sources_Provenance.xls (Multi-sheet Excel workbook)
-    2. Climate_Data_Sources_Provenance.csv (UTF-8 BOM CSV)
+    2. CSV tables only as a fallback if Excel cannot be written
     3. README_Sources_Provenance.txt (English technical guide)
     4. README_مصادر_البيانات_والنماذج.txt (Arabic technical guide)
     """
@@ -889,25 +915,10 @@ def export_source_data_folder(out_ws, pts_or_results, modules, provider, om_mode
         pts_or_results, modules, provider, om_model, gap_method, y0, y1, temporal
     )
 
-    # 1. Multi-sheet Excel workbook
+    # Multi-sheet Excel workbook, without duplicate CSV files on success.
     xls_path = os.path.join(source_dir, "Climate_Data_Sources_Provenance.xls")
-    try:
-        write_master_excel_workbook(xls_path, [prov_sheet, sum_sheet, ar_sum_sheet])
-        if msg:
-            msg("Source Data Excel: %s" % xls_path)
-    except Exception as ex:
-        if warn:
-            warn("Source Data Excel export warning: %s" % ex)
-
-    # 2. Universal UTF-8 BOM CSV
-    csv_path = os.path.join(source_dir, "Climate_Data_Sources_Provenance.csv")
-    try:
-        write_csv(csv_path, prov_sheet[1], prov_sheet[2])
-        if msg:
-            msg("Source Data CSV: %s" % csv_path)
-    except Exception as ex:
-        if warn:
-            warn("Source Data CSV export warning: %s" % ex)
+    export_excel_with_fallback(xls_path, [prov_sheet, sum_sheet, ar_sum_sheet],
+                               msg or (lambda text: None), warn or (lambda text: None))
 
     # 3. English Technical Guide
     txt_en_path = os.path.join(source_dir, "README_Sources_Provenance.txt")
@@ -4322,7 +4333,7 @@ class PowerClimateAtlasGenerator(object):
          converted to mbar/hPa, wind direction by circular (vector) mean, solar
          MJ/m2/day converted to kWh (mean vs annual total distinguished), UV and
          cloud means. Missing sentinels (-999) are excluded everywhere.
-       3. BUILD: per-element point layers (GDB + shapefile + CSV each), interpolated and
+       3. BUILD: per-element point layers (GDB + optional shapefile) and Excel tables, interpolated and
           study-area-clipped raw float rasters (GeoTIFF, LZW, directly inside each
           element folder), thinned wind arrow layers, optional PSL isobars, bilingual
           (Arabic/English) data dictionaries and a full processing log with QA.
@@ -4342,7 +4353,7 @@ class PowerClimateAtlasGenerator(object):
         self.description = (
             "MIRSAD Platform: Fetch multi-source climate data (NASA POWER, Open-Meteo ERA5, "
             "or Hybrid) for point features, compute annual/seasonal indicators with correct units, "
-            "and build an organized atlas package: per-element point layers (GDB/SHP/CSV each), "
+            "and build an organized atlas package: per-element point layers (GDB/optional SHP) and Excel tables, "
             "interpolated clipped rasters (GeoTIFF), wind vector layers, optional PSL isobars, "
             "bilingual data dictionaries and a processing log.")
         self.canRunInBackground = True
@@ -4594,10 +4605,7 @@ class PowerClimateAtlasGenerator(object):
         p14.filter.type = "ValueList"
         p14.filter.list = [
             "NASA POWER API",
-            "Copernicus Climate Data Store (CDS / ERA5 / AgERA5)",
-            "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
-            "Open-Meteo Historical API (ERA5 Reanalysis)",
-            "NOAA ISD / GHCN Direct Station Ground Observations Archive"
+            "Open-Meteo Historical API (ERA5 Reanalysis)"
         ]
         p14.value = "NASA POWER API"
         p14.category = "Data Source"
@@ -4605,7 +4613,7 @@ class PowerClimateAtlasGenerator(object):
                            "• 'NASA POWER API' [Default]: Gridded global agroclimatology & solar radiation (1981-Present).\n"
                            "• 'Open-Meteo Historical API (ERA5 Reanalysis)': High-resolution numerical atmospheric reanalysis (~9 km, 1940-Present).\n"
                            "• CDS, Hybrid, and NOAA Direct: Direct downloads are not implemented. "
-                           "These choices report an error instead of substituting another source; "
+                           "They are excluded from this list; old saved settings report an error instead of substituting another source. "
                            "precalculated data can still be used in Offline mode.")
 
         p_om_model = arcpy.Parameter(
@@ -4634,8 +4642,8 @@ class PowerClimateAtlasGenerator(object):
             parameterType="Optional",
             direction="Input")
         p_cds_key.category = "Data Source"
-        p_cds_key.description = ("COPERNICUS CDS ONLY. Optional Personal Access Token (API Key) from https://cds.climate.copernicus.eu. "
-                                 "If omitted, ERA5 data streams seamlessly via the high-speed gateway.")
+        p_cds_key.description = ("Legacy CDS credential field. Direct CDS downloads are not implemented. "
+                                 "NASA POWER and Open-Meteo do not require this key.")
 
         # ═══ Time Window ═══
         p3 = arcpy.Parameter(
@@ -4749,7 +4757,7 @@ class PowerClimateAtlasGenerator(object):
         p_dl.value = False
         p_dl.category = ""
         p_dl.description = ("OPTIONAL (default OFF). When checked, the tool downloads climate data and saves "
-                            "complete point feature classes (GDB, SHP, CSV) for each element, but skips "
+                            "complete point feature classes and Excel tables for each element, but skips "
                             "surface interpolation, raster creation, contours, and layer styling.")
 
         p8 = arcpy.Parameter(
@@ -4818,8 +4826,21 @@ class PowerClimateAtlasGenerator(object):
             "adds a third 'Daily' sheet (OBJECTID, Source_ID, Date, daily values) to each element .xls; "
             "the Month sheet is always kept (computed from daily). Opt-in because daily volumes grow fast "
             "(points x days); recommended for short periods / few points. Monthly (default) ignores it. "
-            "If rows exceed .xls capacity (~60000), a <Element>_daily.csv is written instead with a warning."
+            "Large daily series are split across Daily, Daily_2, etc., without dropping rows. "
+            "CSV is used only if Excel export fails."
         )
+
+        p_yearly_excel = arcpy.Parameter(
+            displayName="Export Separate Excel Workbook per Year (also keep combined workbook)",
+            name="Export_Separate_Years", datatype="GPBoolean",
+            parameterType="Optional", direction="Input")
+        p_yearly_excel.value = False
+        p_yearly_excel.category = "Variable & Field Selection"
+        p_yearly_excel.description = (
+            "For multi-year downloads, also export <Element>/Years/<Element>_<Year>.xls. "
+            "Recomputes each year's Data and Month summaries from that year's data using the same "
+            "units and gap filling; includes Source_Data and Daily sheets when daily saving is enabled. "
+            "Reuses downloaded data. Does not create separate yearly rasters or GIS databases.")
 
         p_wc_ext = arcpy.Parameter(
             displayName="Wind Chill Full Suite for Cold Regions (Seasons+Ranges+Monthly)",
@@ -5300,7 +5321,7 @@ class PowerClimateAtlasGenerator(object):
                 p13, p31, p32,
                 p25, p26, p27,
                 p23, p28,
-                p22]
+                p22, p_yearly_excel]
 
     def isLicensed(self):
         return True
@@ -5367,7 +5388,7 @@ class PowerClimateAtlasGenerator(object):
         if p_src:
             p_src.enabled = not is_offline
         src_text = p_src.valueAsText if p_src else "NASA POWER API"
-        use_om = bool(src_text and src_text.startswith("Open-Meteo"))
+        use_om = bool(src_text and "Open-Meteo" in src_text)
         use_cds = bool(src_text and ("Copernicus" in src_text or "CDS" in src_text))
         if "OpenMeteo_Model" in pdict:
             pdict["OpenMeteo_Model"].enabled = (not is_offline) and (use_om or use_cds)
@@ -5623,6 +5644,9 @@ class PowerClimateAtlasGenerator(object):
                 elif show_iso:
                     pdict["Custom_Pressure_Step"].value = 2.0
         # Daily time series persistence control
+        p_yearly = pdict.get("Export_Separate_Years")
+        if p_yearly:
+            p_yearly.enabled = not is_offline
         p_temp = pdict.get("Temporal_Resolution")
         p_dly = pdict.get("Save_Daily_Series")
         if p_temp and p_dly:
@@ -5831,10 +5855,11 @@ class PowerClimateAtlasGenerator(object):
 
             p_sch = pdict.get("Pressure_Interval_Scheme")
             _sch = p_sch.valueAsText if p_sch else ""
-            if _sch == "Custom Interval":
+            p_iso = pdict.get("Create_Isobars")
+            if _sch == "Custom Interval" and not dl_only and p_iso and p_iso.value:
                 p_cs = pdict.get("Custom_Pressure_Step")
                 _st = p_cs.value if p_cs else None
-                if _st is None or float(_st) <= 0:
+                if p_cs and getattr(p_cs, "enabled", True) and (_st is None or float(_st) <= 0):
                     if p_cs:
                         p_cs.setErrorMessage("Custom Interval needs a step > 0 mbar (e.g. 1.0).")
 
@@ -5948,6 +5973,8 @@ class PowerClimateAtlasGenerator(object):
             p_gmr = pdict.get("Generate_Monthly_Rasters")
             generate_monthly_rasters = bool(p_gmr.value) if (p_gmr and p_gmr.value is not None) else False
             p_dly = pdict.get("Save_Daily_Series")
+            p_yearly = pdict.get("Export_Separate_Years")
+            separate_years = bool(p_yearly.value) if p_yearly and not is_offline else False
             save_daily = bool(p_dly.value) if (p_dly and p_dly.value is not None) else False
             if temporal and ("Daily" in temporal or "يومي" in temporal):
                 # Legacy station proxies do not carry ArcPy's UI alteration flag.
@@ -6464,6 +6491,7 @@ class PowerClimateAtlasGenerator(object):
                 "y0": y0, "y1": y1, "temporal": temporal, "interp": interp_label,
                 "base_cell": base_cell, "wind_cell": wind_cell,
                 "data_start": col_data_start, "data_end": col_data_end,
+                "request_start": start_date_str, "request_end": end_date_str,
                 "units_by_module": units_by_module,
                 "unit_sys": unit_sys_text, "unit_temp": unit_temp_text,
                 "unit_precip": unit_precip_text, "unit_press": unit_press_text,
@@ -6824,6 +6852,11 @@ class PowerClimateAtlasGenerator(object):
                                 warn("Daily table skipped for '%s': %s" % (m, str(ex_d)[:150]))
                         self._export_excel(fc, os.path.join(paths["vec"], short + ".xls"), msg, warn,
                                            daily=daily_pkg, module_name=m)
+                        if separate_years and len(years) > 1:
+                            self._export_yearly_excel(
+                                results, years, m, os.path.join(out_ws, MODULE_FOLDER[m], "Years"),
+                                admin_meta, msg, warn, save_daily=save_daily,
+                                wanted_fields=w_fields, monthly_ranges=monthly_ranges_on)
                         if daily_pkg:
                             try:
                                 self._export_daily_gdb_table(gdb_path, short, daily_pkg, msg, warn)
@@ -6841,7 +6874,7 @@ class PowerClimateAtlasGenerator(object):
                                     if not mask:
                                         warn("Element '%s': mask unavailable, rasters skipped "
                                              "(no unclipped output published)." % m)
-                                        msg(">>> Element [%d/%d] %s completed: Point layer, Shapefile, CSV, Excel (rasters skipped). <<<\n"
+                                        msg(">>> Element [%d/%d] %s completed: Point layer and Excel tables (rasters skipped). <<<\n"
                                             % (mi + 1, len(ordered_modules), m))
                                         continue
                                 t_interp_start = time.time()
@@ -7104,6 +7137,7 @@ class PowerClimateAtlasGenerator(object):
                 "module_timings": module_timings,
                 "raster_timings": raster_timings,
                 "purge": purge, "add_to_map": add_to_map,
+                "export_separate_years": separate_years,
                 "tol_m": tol_m, "focal": focal, "dl_only": download_only,
                 "element_layers": element_fcs,
                 "iso": (iso_scheme, iso_step),
@@ -7863,14 +7897,86 @@ class PowerClimateAtlasGenerator(object):
         return {"params": have, "header": header, "rows": out_rows}
 
 
-    def _export_excel(self, fc, xls_path, msg, warn, daily=None, module_name=None):
-        try:
-            fields = [f.name for f in arcpy.ListFields(fc)
-                      if f.type not in ("Geometry", "Raster", "Blob")]
+    def _export_yearly_excel(self, results, years, module_name, folder, admin_meta,
+                             msg, warn, save_daily=False, wanted_fields=None,
+                             monthly_ranges=False):
+        """Recompute yearly summaries from cached observations, never range means."""
+        makedirs_ok(folder)
+        wanted = list(MODULE_FIELDS.get(module_name, []) if wanted_fields is None else wanted_fields)
+        fields = (["OBJECTID", "Station_ID", "Station_Nm", "Country_Cd", "Elev_Meters"] +
+                  [item[0] for item in ADMIN_FIELDS] + wanted)
+        temporal = admin_meta.get("temporal", "Monthly")
+        use_om = admin_meta.get("provider", "").startswith("Open-Meteo")
+        gap_method = admin_meta.get("gap_method", "climatological")
+        for year in years:
+            yearly_results = []
+            for rec in results:
+                # Values are copied before any derived indicators or imputation are applied.
+                monthly = dict((p, dict((date, value) for date, value in values.items()
+                                       if date[0] == year))
+                               for p, values in rec.get("monthly", {}).items())
+                daily_raw = dict((p, dict((date, value) for date, value in values.items()
+                                         if date[0] == year))
+                                 for p, values in rec.get("daily_raw", {}).items())
+                yearly = dict(rec, monthly=monthly, daily_raw=daily_raw, fields={},
+                              status="NO_DATA", error="No observations for this year.")
+                has_data = any(value is not None for values in monthly.values() for value in values.values())
+                if has_data:
+                    try:
+                        yearly["fields"] = compute_point_fields(
+                            monthly, [year], [module_name], temporal, daily_raw,
+                            use_om, gap_method, lat=rec.get("lat", 0.0),
+                            uv_source="om" if use_om else "nasa", monthly_ranges=monthly_ranges,
+                            **dict((key, admin_meta.get(key)) for key in
+                                   ("unit_temp", "unit_precip", "unit_press", "unit_wind", "unit_solar")))
+                        if any(value is not None for value in yearly["fields"].values()):
+                            yearly.update(status="OK", error="")
+                    except Exception as ex:
+                        yearly.update(status="FAILED", error=str(ex))
+                        warn("Year %d, %s, point %s: %s" % (year, module_name, rec.get("oid"), ex))
+                yearly_results.append(yearly)
+            if gap_method != "none":
+                spatial_impute_missing(yearly_results, [module_name])
+            meta = dict(admin_meta, y0=year, y1=year,
+                        data_start=max(admin_meta.get("request_start") or "%04d-01-01" % year,
+                                       "%04d-01-01" % year),
+                        data_end=min(admin_meta.get("request_end") or "%04d-12-31" % year,
+                                     "%04d-12-31" % year))
             rows = []
-            with arcpy.da.SearchCursor(fc, fields) as cur:
-                for r in cur:
-                    rows.append(list(r))
+            for rec in yearly_results:
+                values = dict(rec["fields"])
+                values.update(OBJECTID=rec.get("oid"), Source_ID=rec.get("oid"),
+                              Station_ID=rec.get("station_id", rec.get("Station_ID", "")),
+                              Station_Nm=rec.get("station_name", rec.get("Station_Nm", rec.get("Name", ""))),
+                              Country_Cd=rec.get("country", rec.get("Country_Cd", rec.get("Country", ""))),
+                              Elev_Meters=rec.get("elevation", rec.get("Elev_m")),
+                              Point_Lat=rec.get("lat"), Point_Lon=rec.get("lon"),
+                              Data_Start=meta["data_start"], Data_End=meta["data_end"], Temporal=temporal,
+                              Interp_Meth=meta.get("interp"), Cell_Size=meta.get("base_cell"),
+                              Wind_Cell=meta.get("wind_cell"),
+                              Measurement_Unit=meta.get("units_by_module", {}).get(module_name, ""),
+                              Status=rec["status"], Error_Msg=rec["error"])
+                rows.append([values.get(field) for field in fields])
+            daily = None
+            if save_daily and temporal == "Daily":
+                daily = self._build_daily_table(yearly_results, list(MODULE_PARAMS.get(module_name, [])),
+                                                 module_name=module_name)
+            short = MODULE_SHORT.get(module_name, module_name)
+            self._export_excel(None, os.path.join(folder, "%s_%d.xls" % (short, year)), msg, warn,
+                               daily=daily, module_name=module_name, table=(fields, rows), admin_meta=meta)
+
+    def _export_excel(self, fc, xls_path, msg, warn, daily=None, module_name=None,
+                      table=None, admin_meta=None):
+        try:
+            if table is None:
+                fields = [f.name for f in arcpy.ListFields(fc)
+                          if f.type not in ("Geometry", "Raster", "Blob")]
+                rows = []
+                with arcpy.da.SearchCursor(fc, fields) as cur:
+                    for r in cur:
+                        rows.append(list(r))
+            else:
+                fields, rows = table
             
             month_keywords = [
                 "January", "February", "March", "April", "May", "June",
@@ -7893,18 +7999,7 @@ class PowerClimateAtlasGenerator(object):
             if daily and daily.get("rows"):
                 d_header = daily.get("header") or (["OBJECTID", "Source_ID", "Date"] + list(daily.get("params", [])))
                 d_rows = daily["rows"]
-                if len(d_rows) <= 60000:
-                    sheets_to_write.append(("Daily", d_header, d_rows, False))
-                else:
-                    msg("Daily sheet in Excel skipped (rows=%d exceed .xls 65k limit); full CSV and GDB tables saved instead." % len(d_rows))
-
-                # ALWAYS export complete daily timeseries CSV so data is completely retained regardless of row limits
-                csv_path = os.path.splitext(xls_path)[0] + "_daily.csv"
-                try:
-                    write_csv(csv_path, d_header, d_rows)
-                    msg("Saved Daily Timeseries CSV: %s (%d records)" % (csv_path, len(d_rows)))
-                except Exception as ex_csv:
-                    warn("Daily CSV export failed: %s" % ex_csv)
+                sheets_to_write.append(("Daily", d_header, d_rows, False))
 
 
             # Dedicated Source Data Provenance sheet for this element
@@ -7914,7 +8009,7 @@ class PowerClimateAtlasGenerator(object):
                     base_name = os.path.splitext(os.path.basename(xls_path))[0]
                     mod_name = SHORT_TO_MODULE.get(base_name, base_name)
 
-                admin_m = getattr(self, "_admin_meta", {}) or {}
+                admin_m = admin_meta if admin_meta is not None else (getattr(self, "_admin_meta", {}) or {})
                 prov_meta = get_element_source_metadata(
                     mod_name,
                     admin_m.get("provider", "NASA POWER API"),
@@ -7929,7 +8024,8 @@ class PowerClimateAtlasGenerator(object):
                     "Latitude", "Longitude", "Elevation_m",
                     "Climate_Element", "Primary_Data_Source", "Atmospheric_Model_Sensor",
                     "Provider_URL", "Gap_Fill_Method_Applied", "Gap_Fill_Source",
-                    "Temporal_Coverage", "Spatial_Resolution", "Data_Quality_Status"
+                    "Temporal_Coverage", "Spatial_Resolution", "Data_Quality_Status",
+                    "Requested_Data_Start", "Requested_Data_End"
                 ]
                 elem_prov_rows = []
                 for idx, r in enumerate(rows):
@@ -7950,15 +8046,16 @@ class PowerClimateAtlasGenerator(object):
                         lat, lon, elev,
                         mod_name, prov_meta["primary_source"], prov_meta["model_used"],
                         prov_meta["provider_url"], prov_meta["gap_fill_method"], prov_meta["gap_fill_source"],
-                        prov_meta["temporal_coverage"], prov_meta["spatial_resolution"], prov_meta["quality_status"]
+                        prov_meta["temporal_coverage"], prov_meta["spatial_resolution"], prov_meta["quality_status"],
+                        admin_m.get("data_start", admin_m.get("y0")),
+                        admin_m.get("data_end", admin_m.get("y1"))
                     ])
 
                 sheets_to_write.append(("Source_Data", elem_prov_hdr, elem_prov_rows, False))
             except Exception as ex_p:
                 pass
             
-            write_master_excel_workbook(xls_path, sheets_to_write)
-            msg("Excel: %s (sheets: %s)" % (xls_path, ", ".join(s[0] for s in sheets_to_write)))
+            export_excel_with_fallback(xls_path, sheets_to_write, msg, warn)
         except Exception as ex:
             warn("Excel export failed: %s" % ex)
 
@@ -9233,21 +9330,14 @@ class PowerClimateAtlasGenerator(object):
                 "Statistic", "Unit", "Description_AR", "Description_EN", "Calculation",
                 "Source", "Notes"]
         p1_xls = os.path.join(vec_dir, "Metadata_Dictionary.xls")
-        write_excel_file(p1_xls, cols, [[r[c] for c in cols] for r in rows], sheet_name="Metadata", rtl=False)
-        p1_csv = os.path.join(vec_dir, "Metadata_Dictionary.csv")
-        write_csv(p1_csv, cols, [[r[c] for c in cols] for r in rows])
-        msg("Dictionary Excel & CSV: %s (%d fields)" % (p1_xls, len(rows)))
+        export_excel_with_fallback(p1_xls, [("Metadata", cols, [[r[c] for c in cols] for r in rows], False)],
+                                   msg, lambda text: msg("WARNING: " + text))
 
         ar_cols = ["Field_Name", "Name_AR", "Unit", "Description_AR", "Module", "Period"]
         p2_xls = os.path.join(vec_dir, "Field_Dictionary_Arabic.xls")
-        write_excel_file(p2_xls, ar_cols,
-                         [[r["Field_Name"], r["Name_AR"], r["Unit"],
-                           r["Description_AR"], r["Module"], r["Period"]] for r in rows], sheet_name="Arabic_Dictionary", rtl=True)
-        p2_csv = os.path.join(vec_dir, "Field_Dictionary_Arabic.csv")
-        write_csv(p2_csv, ar_cols,
-                  [[r["Field_Name"], r["Name_AR"], r["Unit"],
-                    r["Description_AR"], r["Module"], r["Period"]] for r in rows])
-        msg("Dictionary Excel & CSV (RTL): %s" % p2_xls)
+        export_excel_with_fallback(p2_xls, [("Arabic_Dictionary", ar_cols,
+                                   [[r[c] for c in ar_cols] for r in rows], True)],
+                                   msg, lambda text: msg("WARNING: " + text))
 
     def _run_qa(self, element_fcs, paths, modules, registry, results, msg, warn, wanted_fields_by_module=None):
         checks = []

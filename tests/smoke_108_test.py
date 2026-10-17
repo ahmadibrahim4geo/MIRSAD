@@ -114,10 +114,10 @@ for m, fc in elfcs.items():
     tool._export_csv(fc, os.path.join(paths["vec"], short + ".csv"),
                      messages.addMessage, messages.addWarningMessage)
     assert os.path.isfile(os.path.join(paths["shp"], short + ".shp")), short
-    assert os.path.isfile(os.path.join(paths["vec"], short + ".csv")), short
+    assert os.path.isfile(os.path.join(paths["vec"], short + ".xls")), short
 tool._write_dictionaries(paths["vec"], modules, messages.addMessage)
-assert os.path.isfile(os.path.join(paths["vec"], "Metadata_Dictionary.csv"))
-assert os.path.isfile(os.path.join(paths["vec"], "Field_Dictionary_Arabic.csv"))
+assert os.path.isfile(os.path.join(paths["vec"], "Metadata_Dictionary.xls"))
+assert os.path.isfile(os.path.join(paths["vec"], "Field_Dictionary_Arabic.xls"))
 
 arcpy.CheckOutExtension("Spatial")
 try:

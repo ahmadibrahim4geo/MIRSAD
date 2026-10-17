@@ -136,8 +136,7 @@ class TestWeatherStationsRegistry(unittest.TestCase):
         src_list = pdict["Climate_Data_Source"].filter.list
         self.assertTrue(any("NASA POWER" in s for s in src_list))
         self.assertTrue(any("Open-Meteo" in s for s in src_list))
-        self.assertTrue(any("NOAA ISD" in s for s in src_list))
-        self.assertTrue(any("Hybrid" in s for s in src_list))
+        self.assertFalse(any("NOAA ISD" in s or "Hybrid" in s for s in src_list))
 
         # Check Core Carbon-Copy Parameters Exist
         self.assertIn("Climate_Modules", pdict)

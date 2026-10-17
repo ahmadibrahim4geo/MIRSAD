@@ -78,6 +78,8 @@
 
 تظهر أسماء المحطات وأكواد **USAF/WBAN** والدولة لتمييز الأكواد المتكررة. الاختيار الفارغ يمنع التشغيل؛ تغيير الدولة يستبعد الاختيارات الخارجة عن قائمتها. تبقى أوضاع شبكة الدولة كاملة، والأكواد اليدوية، والطبقة المحلية متاحة. يمكن إضافة نقاط رفع داعمة إذا اختار المستخدم طبقتها صراحة.
 
+في وضع **«اختيار بالدولة (الشبكة الوطنية المعتمدة)»** تتاح قائمة المحطات أيضًا بعد اختيار الإقليم والدولة. اختيار محطات منها يعالج هذا الاختيار فقط؛ تركها فارغة يعالج شبكة الدولة كاملة. يظل شرط اختيار محطة واحدة على الأقل خاصًا بوضع **«اختيار محطات محددة»**. النطاقات الإقليمية الشاملة تبقى متاحة في وضع الشبكة.
+
 الدليل المرفق يحتوي على **28,066 سجل محطة عالميًا، منها 86 في مصر**. اختيار محطة يحدد موقع الاستعلام؛ **نوع البيانات يحدده المصدر**، ولا يعني تلقائيًا تنزيل أرصاد NOAA المباشرة.
 
 [دليل اختيار المحطات وتفاصيل التحقق](Documents/STATION_MULTI_SELECTION_2026_10_16_AR.md)
@@ -134,7 +136,9 @@
 | **Hybrid** | دمج وتنزيل هجين غير منفذ حاليًا |
 | **Copernicus CDS** | الاتصال والتنزيل المباشر غير منفذين حاليًا |
 
-الخيارات غير المنفذة تعرض رسالة واضحة، ولا تتحول تلقائيًا إلى مصدر آخر. ملفات المقارنة المصدرية تشرح المصادر وتصميم التكامل؛ حالة التنفيذ أعلاه هي المرجع للتشغيل الحالي.
+تقتصر قوائم التنزيل على المصادر المنفذة: NASA POWER وOpen-Meteo للنقاط والمحطات، وNASA POWER Regional Grid للراستر. إذا كانت إعدادات قديمة تحفظ Hybrid أو مصدرًا غير منفذ، تظهر علامة خطأ بجوار **Climate Data Source** حتى تختار مصدرًا مدعومًا؛ لا يتحول الاختيار تلقائيًا إلى مصدر آخر. ملفات المقارنة المصدرية تشرح المصادر وتصميم التكامل؛ حالة التنفيذ أعلاه هي المرجع للتشغيل الحالي.
+
+[فحص علامات الخطأ والتحقق من الأدوات](Documents/TOOL_VALIDATION_AUDIT_2026_10_17_AR.md)
 
 [دليل المصادر](Documents/05_Climate_Data_Sources_Directory/README.md)
 
@@ -146,8 +150,10 @@
 
 - طبقات نقاط داخل File Geodatabase، وتصدير Shapefile عند تفعيله.
 - أسطح **GeoTIFF** مستوفاة ومقصوصة على منطقة الدراسة، باستخدام طرق مثل IDW وKriging وSpline.
-- جداول **Excel / CSV** ومؤشرات سنوية وفصلية وشهرية؛ وسلاسل يومية عند تفعيل حفظها.
+- جداول **Excel** ومؤشرات سنوية وفصلية وشهرية؛ وسلاسل يومية عند تفعيل حفظها. تنقسم السلاسل الكبيرة على شيتات `Daily` و`Daily_2` وغيرها دون حذف صفوف؛ يُستخدم CSV فقط عند فشل تصدير Excel مع رسالة توضح السبب.
 - متجهات الرياح وخطوط تساوي الضغط عند تفعيل خياراتها، وقواميس وتقارير تشغيل.
+
+لتصدير السنوات منفردة، فعّل **«تصدير ملف Excel مستقل لكل سنة (بالإضافة إلى الملف المجمع)»** / **Export Separate Excel Workbook per Year** عند تنزيل فترة متعددة السنوات. تحت مجلد كل عنصر ينشأ مجلد `Years` يحتوي ملفات `<Element>_<Year>.xls`. يعاد حساب الملخصات لكل سنة ببياناتها ووحداتها وإعدادات سد الفجوات نفسها، دون إعادة التنزيل. تحتوي الملفات على `Data` و`Source_Data` و`Month` حسب الحقول المختارة، و`Daily` عند تفعيل حفظ اليومي. يظل الملف المجمّع موجودًا؛ الخيار لا ينشئ راستر أو قاعدة بيانات مستقلة لكل سنة، ولا يعمل على مؤشرات أوفلاين مجمعة لا تحتوي السلسلة الأصلية.
 
 ```text
 MIRSAD/
@@ -179,7 +185,7 @@ MIRSAD/
 | التشغيل والتوافق | [الإصلاحات وحدود التحقق الأصلي](Documents/RUNTIME_FIXES_2026_10_16_AR.md) |
 | التطوير والمساهمة | [العربية](Documents/06_Methodology_Adding_New_Climate_Module/Adding_New_Climate_Module_Guide_AR.md) · [English](Documents/06_Methodology_Adding_New_Climate_Module/Adding_New_Climate_Module_Guide_EN.md) |
 
-نجحت اختبارات Python 2.7 و3، ومنها **15 حالة لاختيار المحطات المتعدد**. بعض اختبارات تدفق GIS تستخدم محاكاة ArcPy؛ نجاحها لا يعادل اختبار التشغيل الأصلي. عائق تثبيت ArcGIS المحلي وحدود التحقق موثقان في تقرير التشغيل أعلاه.
+نجحت اختبارات Python 2.7 و3، ومنها **17 حالة لاختيار المحطات المتعدد** و**8 حالات للتصدير السنوي وExcel**. يشمل التحقق حفظ ملفات Excel وقراءتها فعليًا، والتقسيم عند تجاوز 60 ألف صف، والتواريخ الكبيسة، ووحدات القياس ومجاميع الأمطار السنوية. بعض اختبارات تدفق GIS تستخدم محاكاة ArcPy؛ نجاحها لا يعادل اختبار التشغيل الأصلي. عائق تثبيت ArcGIS المحلي وحدود التحقق موثقان في تقرير التشغيل أعلاه.
 
 أمثلة اختبارات مستقلة عن الشبكة، تُشغّل كل مجموعة في عملية منفصلة:
 
@@ -187,6 +193,8 @@ MIRSAD/
 python -B tests/test_station_multi_selection.py
 python -B tests/test_data_quality.py
 python -B tests/test_runtime_stability.py
+python -B tests/test_yearly_excel_export.py
+python -B tests/test_tool_validation.py
 ```
 
 بعد توفر تثبيت ArcGIS سليم، يُشغّل الفحص الأصلي صراحةً من بيئته:
@@ -206,6 +214,10 @@ python -B tests/verify_native_offline.py
 3. For a station subset, select **Select Specific Stations by Country (Multiple Selection)**, choose a region and country, then one or more named stations. Empty or stale selections never broaden into a whole-country run. Existing country-network, manual-ID and local-layer modes remain available.
 4. Select the provider, period, climate modules and output workspace, then run. NASA POWER and Open-Meteo are implemented for point/station-location queries; the online raster pipeline uses NASA POWER Regional. Direct NOAA, Hybrid and CDS downloads are not implemented.
 5. For monthly rasters in the raster tool, use **Offline** mode, existing monthly fields and a span of at least two years. Monthly means and monthly ranges have independent switches.
+
+In **Select by Country (National Network)** mode, the station checklist is also available after choosing a region and an individual country. Select a subset or leave it empty for the full national network. The dedicated specific-stations mode still requires a nonempty selection.
+
+Tabular exports use Excel, splitting large daily series across numbered sheets. CSV is only a reported fallback when Excel cannot be written. For multi-year point/station downloads, enable **Export Separate Excel Workbook per Year** to keep the combined workbook and add `<Element>/Years/<Element>_<Year>.xls`. Each year's summaries are recomputed from its own cached observations, using the selected units and gap filling; daily rows and source dates are year-specific. No extra downloads, yearly rasters or yearly geodatabases are created.
 
 The catalogue contains **19 modules / 521 registered indicator fields**, plus **13 administrative fields**. Outputs depend on selected options and available inputs. Missing rainfall is not zero, incomplete periods are not reported as complete totals, and derived outputs remain NULL when their required observations are unavailable. Selecting a station chooses a location; it does not change reanalysis into ground observations.
 

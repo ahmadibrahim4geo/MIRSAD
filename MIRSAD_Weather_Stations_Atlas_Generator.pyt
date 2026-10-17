@@ -34,6 +34,10 @@ def _specific_stations_mode(text):
     return "Specific Stations" in (text or "") or "محطات محددة" in (text or "")
 
 
+def _country_stations_mode(text):
+    return "Select by Country" in (text or "") or "اختيار بالدولة" in (text or "")
+
+
 def _selected_station_values(parameter):
     if parameter is None:
         return []
@@ -218,9 +222,9 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         p_st_selected.filter.list = []
         p_st_selected.enabled = False
         p_st_selected.description = (
-            "In 'Select Specific Stations by Country' mode, choose one or more stations. "
-            "Labels show station name, USAF/WBAN codes and country. Only the selected stations "
-            "are processed; an empty selection never processes the whole country.")
+            "Choose a region and country, then optionally select stations in national network mode. "
+            "Leave empty to process the full national network. In 'Select Specific Stations by Country' "
+            "mode, at least one station is required. Labels show station name, USAF/WBAN codes and country.")
 
         p_st_poly = arcpy.Parameter(
             displayName="Study Area Boundary Polygon (Optional Mask / Clip)",
@@ -287,25 +291,24 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         p_csrc = core_pdict.get("Climate_Data_Source")
         if p_csrc:
             p_csrc.filter.list = [
-                "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
-                "NOAA ISD / GHCN Direct Station Ground Observations Archive",
                 "NASA POWER API (Agroclimatology / MERRA-2)",
                 "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
             ]
             p_csrc.value = "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
             p_csrc.description = (
                 "Select meteorological data provider for the weather stations:\n"
-                "• 'Hybrid' and 'NOAA Direct': Direct observation downloads are not implemented; these choices report a validation error.\n"
+                "• Hybrid and NOAA Direct downloads are not implemented and are excluded from this list.\n"
                 "• 'NASA POWER API': Gridded global agroclimatology (solar radiation, temperature, precipitation, 1981-Present).\n"
                 "• 'Open-Meteo Historical API' [Default]: ERA5 reanalysis sampled at station locations."
             )
 
         p_dly = core_pdict.get("Save_Daily_Series")
         if p_dly:
-            p_dly.displayName = "Save Daily Time Series (Daily Sheet + CSV + GDB Table)"
+            p_dly.displayName = "Save Daily Time Series (Excel Sheets + GDB Table)"
             p_dly.description = (
                 "When enabled (with Daily temporal resolution), saves the complete daily time series "
-                "into a dedicated 'Daily' sheet in the Excel workbook, an open CSV file, and a table inside the Geodatabase."
+                "into Daily sheets in Excel and a table inside the Geodatabase. Large daily series use "
+                "additional Excel sheets; CSV is used only if Excel export fails."
             )
 
         station_params = [
@@ -485,7 +488,9 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             return
         mode = pdict.get("Station_Selection_Mode")
         operation = pdict.get("Operation_Mode")
-        active = (_specific_stations_mode(mode.valueAsText if mode else "") and
+        mode_text = mode.valueAsText if mode else ""
+        specific = _specific_stations_mode(mode_text)
+        active = ((specific or _country_stations_mode(mode_text)) and
                   not _core.is_offline_mode(operation.valueAsText if operation else ""))
         p_selected.enabled = active
         if not active:
@@ -516,9 +521,11 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                     include = True
                 if include:
                     country_labels[code] = "%s (%s)" % (_core._excel_text(ar if arabic else en), code)
-            p_country.filter.list = sorted(country_labels.values())
+            aggregates = [] if specific else [label for label in p_country.filter.list
+                                             if label.startswith("[")]
+            p_country.filter.list = aggregates + sorted(country_labels.values())
             target = self._parse_target_country(original_country, region)
-            chosen_country = country_labels.get(target)
+            chosen_country = country_labels.get(target, original_country if original_country in aggregates else None)
             if (p_country.valueAsText or None) != chosen_country:
                 p_country.value = chosen_country
             options = station_choices(catalogue.get(target, [])) if target in country_labels else {}
@@ -547,11 +554,15 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             except Exception:
                 pass
         p_op, p_mode = pdict.get("Operation_Mode"), pdict.get("Station_Selection_Mode")
+        mode_text = p_mode.valueAsText if p_mode else ""
+        specific = _specific_stations_mode(mode_text)
         if (_core.is_offline_mode(p_op.valueAsText if p_op else "") or
-                not _specific_stations_mode(p_mode.valueAsText if p_mode else "")):
+                not (specific or _country_stations_mode(mode_text))):
             return
         arabic = isinstance(self, WeatherStationsAtlasGeneratorAR)
         values = _selected_station_values(p_selected)
+        if not specific and not values:
+            return
         p_country = pdict.get("Select_Country")
         if getattr(self, "_station_picker_error", None):
             error = ("تعذر قراءة دليل المحطات المحلي: " if arabic else "Could not read the local station directory: ") + self._station_picker_error
@@ -680,7 +691,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
 
     def _resolve_stations(self, mode, target_country, study_poly, inc_buf, custom_ids, local_layer=None,
                           selected_stations=None):
-        if _specific_stations_mode(mode):
+        if _specific_stations_mode(mode) or (_country_stations_mode(mode) and selected_stations):
             options = station_choices(self._station_catalogue().get(target_country, []))
             seen = set()
             unique = []
@@ -917,7 +928,8 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             messages.addMessage("Multi-source Integrated Reanalysis & Surface Atlas Database Platform")
             messages.addMessage("================================================================================")
             messages.addMessage("[1/5] Resolving Weather Station Network (Mode: %s) ..." % st_mode)
-            if _specific_stations_mode(st_mode):
+            if (_specific_stations_mode(st_mode) or
+                    (_country_stations_mode(st_mode) and _selected_station_values(pdict.get("Selected_Stations")))):
                 resolved_stations = self._resolve_stations(
                     st_mode, target_country, study_poly, inc_buf, custom_ids, local_layer,
                     selected_stations=_selected_station_values(pdict.get("Selected_Stations")))
@@ -1149,9 +1161,9 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
         if p_selected:
             p_selected.displayName = "اختر المحطات من الدولة (اختيار متعدد)"
             p_selected.description = (
-                "في وضع اختيار محطات محددة من الدولة، اختر محطة واحدة أو أكثر. "
-                "تعرض القائمة اسم المحطة وأكواد USAF/WBAN والدولة. تُعالج المحطات المختارة فقط؛ "
-                "الاختيار الفارغ لا يشغّل شبكة الدولة كاملة.")
+                "اختر الإقليم والدولة، ثم حدد المحطات المطلوبة اختياريًا في وضع شبكة الدولة. "
+                "ترك القائمة فارغة يعالج شبكة الدولة كاملة. في وضع اختيار محطات محددة يلزم "
+                "اختيار محطة واحدة على الأقل. تظهر أسماء المحطات وأكواد USAF/WBAN والدولة.")
 
         # 4. Study_Area_Polygon
         p_poly = pdict.get("Study_Area_Polygon")
@@ -1188,13 +1200,11 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
         if p_csrc:
             p_csrc.displayName = "مصدر البيانات المناخية ومحرك المعالجة"
             p_csrc.filter.list = [
-                "نظام هجين: أرصاد محطات NOAA + سد فجوات NASA/ERA5 (Hybrid) [موصى به]",
-                "أرشيف الأرصاد السطحية المباشرة من محطات NOAA ISD / GHCN",
                 "واجهة ناسا باور المناخية الزراعية (NASA POWER API / MERRA-2)",
                 "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
             ]
             p_csrc.value = "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
-            p_csrc.description = "بيانات إعادة التحليل عند مواقع المحطات. تنزيل أرصاد NOAA المباشرة والدمج الهجين غير منفذين حاليًا وسيظهر خطأ عند اختيارهما."
+            p_csrc.description = "المصادر المنفذة: NASA POWER وOpen-Meteo عند مواقع المحطات. تنزيل أرصاد NOAA المباشرة والدمج الهجين غير منفذين حاليًا، ولذلك لا يظهران في القائمة. يجب تصحيح الإعدادات القديمة التي تستخدمهما باختيار مصدر مدعوم."
 
         # 10. Operation_Mode
         p_op = pdict.get("Operation_Mode")
@@ -1254,11 +1264,20 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
         # 19. Save_Daily_Series
         p_dly = pdict.get("Save_Daily_Series")
         if p_dly:
-            p_dly.displayName = "حفظ السلاسل الزمنية اليومية (شيت Daily + ملف CSV + قاعدة البيانات)"
+            p_dly.displayName = "حفظ السلاسل الزمنية اليومية (شيتات Excel + قاعدة البيانات)"
             p_dly.description = (
                 "حفظ السلسلة الزمنية اليومية الكاملة لمحطات الرصد الجوي في شيت منفصل (Daily) "
-                "في مصنف إكسل، وملف CSV مستقل، وجدول متكامل داخل قاعدة البيانات الجغرافية."
+                "في مصنف إكسل وجدول داخل قاعدة البيانات الجغرافية. تقسم السلاسل الكبيرة على شيتات "
+                "إكسل إضافية؛ يستخدم CSV فقط عند تعذر تصدير إكسل."
             )
+
+        p_yearly = pdict.get("Export_Separate_Years")
+        if p_yearly:
+            p_yearly.displayName = "تصدير ملف Excel مستقل لكل سنة (بالإضافة إلى الملف المجمع)"
+            p_yearly.description = (
+                "عند اختيار فترة متعددة السنوات، يعاد حساب ملخصات كل سنة من بياناتها وتصدر "
+                "ملفاتها داخل مجلد العنصر المناخي / Years، مع شيتات Data وMonth وSource_Data "
+                "وDaily عند تفعيل حفظ البيانات اليومية، دون إعادة التنزيل.")
 
         return params
 
