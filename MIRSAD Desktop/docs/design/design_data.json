@@ -1,0 +1,1865 @@
+{
+  "manifest": {
+    "catalogue_version": "2026.10.17.2",
+    "catalogue_hash": "19269c6797e7ce31bf724b4f60b555bd875c63422457c9133d509e3a9556d2ed",
+    "count": 28066,
+    "source": "NOAA ISD station locations; MIRSAD display policy retained",
+    "source_dbf_sha256": "b584ac3742de74b8ba2ef5b938fc95be4d5a0a876489bc55608b808397328f57",
+    "reference_url": "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv",
+    "reference_sha256": "1994747ab4af1b97e63adb434b4d0d022f2daee76f0c144ea9ab46be2d906604",
+    "audited_utc": "2026-10-17T12:20:53.364682+00:00",
+    "qa_counts": {
+      "reference_match": 28064,
+      "review_required": 2
+    },
+    "accuracy_limit": "Catalogue agreement is not ground verification; discrepancies are not silently relocated.",
+    "embedded_sha256": "211a572688807b6b1530fe2c202ca64f316d62a102576b5661b4c302527f500a"
+  },
+  "stations": [
+    {
+      "station_key": "624190|99999|22.376000|31.612000",
+      "usaf": "624190",
+      "wban": "99999",
+      "name": "ABU SIMBEL",
+      "latitude": 22.376,
+      "longitude": 31.612,
+      "elevation": 187.8,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624380|99999|30.567000|32.100000",
+      "usaf": "624380",
+      "wban": "99999",
+      "name": "ABU SUWAYR",
+      "latitude": 30.567,
+      "longitude": 32.1,
+      "elevation": 16.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624580|99999|28.900000|33.183000",
+      "usaf": "624580",
+      "wban": "99999",
+      "name": "ABURDEES",
+      "latitude": 28.9,
+      "longitude": 33.183,
+      "elevation": 8.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623430|99999|31.050000|31.467000",
+      "usaf": "623430",
+      "wban": "99999",
+      "name": "AD DANABIQ",
+      "latitude": 31.05,
+      "longitude": 31.467,
+      "elevation": 7.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623180|99999|31.184000|29.949000",
+      "usaf": "623180",
+      "wban": "99999",
+      "name": "ALEXANDRIA INTL",
+      "latitude": 31.184,
+      "longitude": 29.949,
+      "elevation": -1.8,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624140|99999|23.964000|32.820000",
+      "usaf": "624140",
+      "wban": "99999",
+      "name": "ASWAN INTL",
+      "latitude": 23.964,
+      "longitude": 32.82,
+      "elevation": 201.8,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623930|99999|27.047000|31.012000",
+      "usaf": "623930",
+      "wban": "99999",
+      "name": "ASYUT INTL",
+      "latitude": 27.047,
+      "longitude": 31.012,
+      "elevation": 235.3,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623920|99999|27.200000|31.167000",
+      "usaf": "623920",
+      "wban": "99999",
+      "name": "ASYUT-AGRIMET",
+      "latitude": 27.2,
+      "longitude": 31.167,
+      "elevation": 52.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624200|99999|28.333000|28.867000",
+      "usaf": "624200",
+      "wban": "99999",
+      "name": "BAHARIA",
+      "latitude": 28.333,
+      "longitude": 28.867,
+      "elevation": 130.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623690|99999|30.133000|31.250000",
+      "usaf": "623690",
+      "wban": "99999",
+      "name": "BAHTIM",
+      "latitude": 30.133,
+      "longitude": 31.25,
+      "elevation": 16.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623250|99999|31.550000|31.100000",
+      "usaf": "623250",
+      "wban": "99999",
+      "name": "BALTIM",
+      "latitude": 31.55,
+      "longitude": 31.1,
+      "elevation": 2.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623630|99999|30.467000|31.183000",
+      "usaf": "623630",
+      "wban": "99999",
+      "name": "BANHA",
+      "latitude": 30.467,
+      "longitude": 31.183,
+      "elevation": 14.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624540|99999|30.967000|32.767000",
+      "usaf": "624540",
+      "wban": "99999",
+      "name": "BEAR EL ABD",
+      "latitude": 30.967,
+      "longitude": 32.767,
+      "elevation": 24.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623601|99999|30.918000|29.696000",
+      "usaf": "623601",
+      "wban": "99999",
+      "name": "BORG EL ARAB INTL",
+      "latitude": 30.918,
+      "longitude": 29.696,
+      "elevation": 53.9,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623720|99999|30.100000|31.367000",
+      "usaf": "623720",
+      "wban": "99999",
+      "name": "CAIRO /ALMAZA",
+      "latitude": 30.1,
+      "longitude": 31.367,
+      "elevation": 74.1,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623670|99999|30.083000|31.367000",
+      "usaf": "623670",
+      "wban": "99999",
+      "name": "CAIRO ALMAZA",
+      "latitude": 30.083,
+      "longitude": 31.367,
+      "elevation": 51.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623710|99999|30.083000|31.283000",
+      "usaf": "623710",
+      "wban": "99999",
+      "name": "CAIRO H.Q.",
+      "latitude": 30.083,
+      "longitude": 31.283,
+      "elevation": 26.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623660|99999|30.122000|31.406000",
+      "usaf": "623660",
+      "wban": "99999",
+      "name": "CAIRO INTL",
+      "latitude": 30.122,
+      "longitude": 31.406,
+      "elevation": 116.4,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623680|99999|30.117000|30.917000",
+      "usaf": "623680",
+      "wban": "99999",
+      "name": "CAIRO WEST",
+      "latitude": 30.117,
+      "longitude": 30.917,
+      "elevation": 151.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623090|99999|31.017000|28.433000",
+      "usaf": "623090",
+      "wban": "99999",
+      "name": "DABAA",
+      "latitude": 31.017,
+      "longitude": 28.433,
+      "elevation": 18.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624670|99999|28.483000|34.500000",
+      "usaf": "624670",
+      "wban": "99999",
+      "name": "DAHAB",
+      "latitude": 28.483,
+      "longitude": 34.5,
+      "elevation": 19.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624320|99999|25.500000|28.967000",
+      "usaf": "624320",
+      "wban": "99999",
+      "name": "DAKHLA",
+      "latitude": 25.5,
+      "longitude": 28.967,
+      "elevation": 117.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623390|99999|31.033000|30.467000",
+      "usaf": "623390",
+      "wban": "99999",
+      "name": "DAMANHOUR",
+      "latitude": 31.033,
+      "longitude": 30.467,
+      "elevation": 2.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623300|99999|31.417000|31.817000",
+      "usaf": "623300",
+      "wban": "99999",
+      "name": "DAMIETTA",
+      "latitude": 31.417,
+      "longitude": 31.817,
+      "elevation": 1.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624110|99999|24.416000|32.956000",
+      "usaf": "624110",
+      "wban": "99999",
+      "name": "DARAW",
+      "latitude": 24.416,
+      "longitude": 32.956,
+      "elevation": 99.1,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624080|99999|24.983000|32.817000",
+      "usaf": "624080",
+      "wban": "99999",
+      "name": "EDFOU",
+      "latitude": 24.983,
+      "longitude": 32.817,
+      "elevation": 89.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623665|99999|24.983000|32.867000",
+      "usaf": "623665",
+      "wban": "99999",
+      "name": "EDFU",
+      "latitude": 24.983,
+      "longitude": 32.867,
+      "elevation": 85.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623370|99999|31.073000|33.836000",
+      "usaf": "623370",
+      "wban": "99999",
+      "name": "EL ARISH INTL",
+      "latitude": 31.073,
+      "longitude": 33.836,
+      "elevation": 36.9,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623360|99999|31.083000|33.817000",
+      "usaf": "623360",
+      "wban": "99999",
+      "name": "EL ARISH-AGRIMET",
+      "latitude": 31.083,
+      "longitude": 33.817,
+      "elevation": 27.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624590|99999|28.209000|33.646000",
+      "usaf": "624590",
+      "wban": "99999",
+      "name": "EL TOR",
+      "latitude": 28.209,
+      "longitude": 33.646,
+      "elevation": 35.1,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624500|99999|29.867000|32.467000",
+      "usaf": "624500",
+      "wban": "99999",
+      "name": "EL-SUEZ",
+      "latitude": 29.867,
+      "longitude": 32.467,
+      "elevation": 3.6,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624530|99999|30.450000|33.767000",
+      "usaf": "624530",
+      "wban": "99999",
+      "name": "ELHASANA",
+      "latitude": 30.45,
+      "longitude": 33.767,
+      "elevation": 255.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623730|99999|30.067000|31.183000",
+      "usaf": "623730",
+      "wban": "99999",
+      "name": "EMBABA",
+      "latitude": 30.067,
+      "longitude": 31.183,
+      "elevation": 19.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624440|99999|30.317000|32.283000",
+      "usaf": "624440",
+      "wban": "99999",
+      "name": "FAID",
+      "latitude": 30.317,
+      "longitude": 32.283,
+      "elevation": 11.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624230|99999|27.050000|27.983000",
+      "usaf": "624230",
+      "wban": "99999",
+      "name": "FARAFRA",
+      "latitude": 27.05,
+      "longitude": 27.983,
+      "elevation": 78.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623810|99999|29.300000|30.850000",
+      "usaf": "623810",
+      "wban": "99999",
+      "name": "FAYOUM",
+      "latitude": 29.3,
+      "longitude": 30.85,
+      "elevation": 23.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623380|99999|31.500000|34.450000",
+      "usaf": "623380",
+      "wban": "99999",
+      "name": "GHAZZA",
+      "latitude": 31.5,
+      "longitude": 34.45,
+      "elevation": 16.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623750|99999|30.050000|31.217000",
+      "usaf": "623750",
+      "wban": "99999",
+      "name": "GIZA-AGRIMET",
+      "latitude": 30.05,
+      "longitude": 31.217,
+      "elevation": 18.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623780|99999|29.867000|31.333000",
+      "usaf": "623780",
+      "wban": "99999",
+      "name": "HELWAN",
+      "latitude": 29.867,
+      "longitude": 31.333,
+      "elevation": 141.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624630|99999|27.178000|33.799000",
+      "usaf": "624630",
+      "wban": "99999",
+      "name": "HURGHADA INTL",
+      "latitude": 27.178,
+      "longitude": 33.799,
+      "elevation": 15.8,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624640|99999|27.283000|33.733000",
+      "usaf": "624640",
+      "wban": "99999",
+      "name": "HURGUADA",
+      "latitude": 27.283,
+      "longitude": 33.733,
+      "elevation": 7.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624400|99999|30.600000|32.250000",
+      "usaf": "624400",
+      "wban": "99999",
+      "name": "ISMAILIA",
+      "latitude": 30.6,
+      "longitude": 32.25,
+      "elevation": 12.5,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624410|99999|30.600000|32.283000",
+      "usaf": "624410",
+      "wban": "99999",
+      "name": "ISMAILIA          &",
+      "latitude": 30.6,
+      "longitude": 32.283,
+      "elevation": 3.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623662|99999|30.583000|32.250000",
+      "usaf": "623662",
+      "wban": "99999",
+      "name": "ISMALIA",
+      "latitude": 30.583,
+      "longitude": 32.25,
+      "elevation": 3.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624620|99999|30.820000|30.191000",
+      "usaf": "624620",
+      "wban": "99999",
+      "name": "JIYANKLIS NEW",
+      "latitude": 30.82,
+      "longitude": 30.191,
+      "elevation": 14.9,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624350|99999|25.450000|30.533000",
+      "usaf": "624350",
+      "wban": "99999",
+      "name": "KHARGA",
+      "latitude": 25.45,
+      "longitude": 30.533,
+      "elevation": 73.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624650|99999|26.133000|34.250000",
+      "usaf": "624650",
+      "wban": "99999",
+      "name": "KOSSEIR",
+      "latitude": 26.133,
+      "longitude": 34.25,
+      "elevation": 11.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624050|99999|25.671000|32.707000",
+      "usaf": "624050",
+      "wban": "99999",
+      "name": "LUXOR INTL",
+      "latitude": 25.671,
+      "longitude": 32.707,
+      "elevation": 89.6,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624470|99999|30.050000|32.533000",
+      "usaf": "624470",
+      "wban": "99999",
+      "name": "MADIYAH",
+      "latitude": 30.05,
+      "longitude": 32.533,
+      "elevation": 14.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623890|99999|27.700000|30.750000",
+      "usaf": "623890",
+      "wban": "99999",
+      "name": "MALAWY-AGRIMET",
+      "latitude": 27.7,
+      "longitude": 30.75,
+      "elevation": 44.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623661|99999|25.557000|34.582000",
+      "usaf": "623661",
+      "wban": "99999",
+      "name": "MARSA ALAM INTL",
+      "latitude": 25.557,
+      "longitude": 34.582,
+      "elevation": 76.5,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623060|99999|31.325000|27.222000",
+      "usaf": "623060",
+      "wban": "99999",
+      "name": "MERSA MATRUH",
+      "latitude": 31.325,
+      "longitude": 27.222,
+      "elevation": 28.7,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623663|99999|28.000000|30.750000",
+      "usaf": "623663",
+      "wban": "99999",
+      "name": "MINYA",
+      "latitude": 28.0,
+      "longitude": 30.75,
+      "elevation": 1.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623860|99999|28.083000|30.733000",
+      "usaf": "623860",
+      "wban": "99999",
+      "name": "MINYA",
+      "latitude": 28.083,
+      "longitude": 30.733,
+      "elevation": 40.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623870|99999|28.083000|30.733000",
+      "usaf": "623870",
+      "wban": "99999",
+      "name": "MINYA",
+      "latitude": 28.083,
+      "longitude": 30.733,
+      "elevation": 37.2,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624520|99999|29.917000|33.733000",
+      "usaf": "624520",
+      "wban": "99999",
+      "name": "NEKHEL",
+      "latitude": 29.917,
+      "longitude": 33.733,
+      "elevation": 403.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623150|99999|31.183000|29.867000",
+      "usaf": "623150",
+      "wban": "99999",
+      "name": "PORT ALEXANDRIA",
+      "latitude": 31.183,
+      "longitude": 29.867,
+      "elevation": 14.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623290|99999|31.467000|31.767000",
+      "usaf": "623290",
+      "wban": "99999",
+      "name": "PORT DAMIETTA",
+      "latitude": 31.467,
+      "longitude": 31.767,
+      "elevation": 4.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623330|99999|31.267000|32.300000",
+      "usaf": "623330",
+      "wban": "99999",
+      "name": "PORT SAID",
+      "latitude": 31.267,
+      "longitude": 32.3,
+      "elevation": 6.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623320|99999|31.283000|32.233000",
+      "usaf": "623320",
+      "wban": "99999",
+      "name": "PORT SAID/EL GAMIL",
+      "latitude": 31.283,
+      "longitude": 32.233,
+      "elevation": 6.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624490|99999|29.933000|32.567000",
+      "usaf": "624490",
+      "wban": "99999",
+      "name": "PORT TAWFIK",
+      "latitude": 29.933,
+      "longitude": 32.567,
+      "elevation": 4.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624020|99999|26.183000|32.733000",
+      "usaf": "624020",
+      "wban": "99999",
+      "name": "QENA",
+      "latitude": 26.183,
+      "longitude": 32.733,
+      "elevation": 74.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623350|99999|31.200000|34.200000",
+      "usaf": "623350",
+      "wban": "99999",
+      "name": "RAFH-AGRIMET",
+      "latitude": 31.2,
+      "longitude": 34.2,
+      "elevation": 73.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623080|99999|31.117000|27.867000",
+      "usaf": "623080",
+      "wban": "99999",
+      "name": "RAS EL HIKMA / QISM MOURSY MA",
+      "latitude": 31.117,
+      "longitude": 27.867,
+      "elevation": 40.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624550|99999|29.583000|32.717000",
+      "usaf": "624550",
+      "wban": "99999",
+      "name": "RAS SEDR",
+      "latitude": 29.583,
+      "longitude": 32.717,
+      "elevation": 16.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623240|99999|31.450000|30.367000",
+      "usaf": "623240",
+      "wban": "99999",
+      "name": "ROSETTA",
+      "latitude": 31.45,
+      "longitude": 30.367,
+      "elevation": 1.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623000|99999|31.533000|25.183000",
+      "usaf": "623000",
+      "wban": "99999",
+      "name": "SALLOUM",
+      "latitude": 31.533,
+      "longitude": 25.183,
+      "elevation": 6.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623050|99999|31.567000|25.133000",
+      "usaf": "623050",
+      "wban": "99999",
+      "name": "SALLUM PLATEAU",
+      "latitude": 31.567,
+      "longitude": 25.133,
+      "elevation": 6.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624570|99999|28.683000|34.050000",
+      "usaf": "624570",
+      "wban": "99999",
+      "name": "SANT KATREIN AIRPORT",
+      "latitude": 28.683,
+      "longitude": 34.05,
+      "elevation": 1331.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624760|99999|23.133000|35.583000",
+      "usaf": "624760",
+      "wban": "99999",
+      "name": "SHALATIN",
+      "latitude": 23.133,
+      "longitude": 35.583,
+      "elevation": 21.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624250|99999|22.586000|28.717000",
+      "usaf": "624250",
+      "wban": "99999",
+      "name": "SHARK EL OWEINAT INTL",
+      "latitude": 22.586,
+      "longitude": 28.717,
+      "elevation": 261.8,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624639|99999|27.967000|34.383000",
+      "usaf": "624639",
+      "wban": "99999",
+      "name": "SHARM EL SHEIKH INT",
+      "latitude": 27.967,
+      "longitude": 34.383,
+      "elevation": 45.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623600|99999|30.600000|31.017000",
+      "usaf": "623600",
+      "wban": "99999",
+      "name": "SHEBIN EL KOM",
+      "latitude": 30.6,
+      "longitude": 31.017,
+      "elevation": 11.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623010|99999|31.617000|25.900000",
+      "usaf": "623010",
+      "wban": "99999",
+      "name": "SIDI BARRANI",
+      "latitude": 31.617,
+      "longitude": 25.9,
+      "elevation": 23.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623030|99999|31.633000|25.967000",
+      "usaf": "623030",
+      "wban": "99999",
+      "name": "SIDI BARRANI",
+      "latitude": 31.633,
+      "longitude": 25.967,
+      "elevation": 23.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624170|99999|29.200000|25.483000",
+      "usaf": "624170",
+      "wban": "99999",
+      "name": "SIWA",
+      "latitude": 29.2,
+      "longitude": 25.483,
+      "elevation": -15.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624160|99999|29.346000|25.507000",
+      "usaf": "624160",
+      "wban": "99999",
+      "name": "SIWA OASIS ARPT",
+      "latitude": 29.346,
+      "longitude": 25.507,
+      "elevation": 101.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623980|99999|26.333000|31.733000",
+      "usaf": "623980",
+      "wban": "99999",
+      "name": "SOHAG / SUHAG INTL",
+      "latitude": 26.333,
+      "longitude": 31.733,
+      "elevation": 92.7,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623970|99999|26.333000|31.750000",
+      "usaf": "623970",
+      "wban": "99999",
+      "name": "SOHAG AIRPORT",
+      "latitude": 26.333,
+      "longitude": 31.75,
+      "elevation": 92.7,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624030|99999|26.200000|32.750000",
+      "usaf": "624030",
+      "wban": "99999",
+      "name": "SOUTH OF VALLEY UNIVERSITY",
+      "latitude": 26.2,
+      "longitude": 32.75,
+      "elevation": 96.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623664|99999|28.683000|34.067000",
+      "usaf": "623664",
+      "wban": "99999",
+      "name": "ST CATHERINE INTL",
+      "latitude": 28.683,
+      "longitude": 34.067,
+      "elevation": 1331.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624560|99999|29.600000|34.783000",
+      "usaf": "624560",
+      "wban": "99999",
+      "name": "TABA AIRPORT (RAS ELNAKB)",
+      "latitude": 29.6,
+      "longitude": 34.783,
+      "elevation": 749.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "624655|99999|29.600000|34.767000",
+      "usaf": "624655",
+      "wban": "99999",
+      "name": "TABA INTL",
+      "latitude": 29.6,
+      "longitude": 34.767,
+      "elevation": 768.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623450|99999|30.650000|30.700000",
+      "usaf": "623450",
+      "wban": "99999",
+      "name": "TAHRIR",
+      "latitude": 30.65,
+      "longitude": 30.7,
+      "elevation": 15.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623480|99999|30.783000|31.000000",
+      "usaf": "623480",
+      "wban": "99999",
+      "name": "TANTA",
+      "latitude": 30.783,
+      "longitude": 31.0,
+      "elevation": 12.0,
+      "qa_status": "reference_match"
+    },
+    {
+      "station_key": "623570|99999|30.400000|30.350000",
+      "usaf": "623570",
+      "wban": "99999",
+      "name": "WADI EL NATROON",
+      "latitude": 30.4,
+      "longitude": 30.35,
+      "elevation": 1.0,
+      "qa_status": "reference_match"
+    }
+  ],
+  "modules": [
+    {
+      "name": "Temperature",
+      "arabic": "درجة حرارة الهواء",
+      "params": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN"
+      ],
+      "prefixes": [
+        "T_"
+      ],
+      "unit": "deg_C",
+      "group": "primary"
+    },
+    {
+      "name": "Land Surface Temperature",
+      "arabic": "درجة حرارة سطح الأرض",
+      "params": [
+        "TS",
+        "T2M"
+      ],
+      "prefixes": [
+        "LST_"
+      ],
+      "unit": "deg_C",
+      "group": "primary"
+    },
+    {
+      "name": "Precipitation",
+      "arabic": "الأمطار",
+      "params": [
+        "PRECTOTCORR"
+      ],
+      "prefixes": [
+        "R_"
+      ],
+      "unit": "mm",
+      "group": "primary"
+    },
+    {
+      "name": "Sea Level Pressure",
+      "arabic": "الضغط عند سطح البحر",
+      "params": [
+        "SLP"
+      ],
+      "prefixes": [
+        "PSL_"
+      ],
+      "unit": "hPa",
+      "group": "primary"
+    },
+    {
+      "name": "Surface Pressure",
+      "arabic": "الضغط السطحي",
+      "params": [
+        "PS"
+      ],
+      "prefixes": [
+        "PS_"
+      ],
+      "unit": "hPa",
+      "group": "primary"
+    },
+    {
+      "name": "Wind",
+      "arabic": "الرياح: السرعة والاتجاه",
+      "params": [
+        "WS10M",
+        "WD10M"
+      ],
+      "prefixes": [
+        "W_"
+      ],
+      "unit": "m/s; degree",
+      "group": "primary"
+    },
+    {
+      "name": "Relative Humidity",
+      "arabic": "الرطوبة النسبية",
+      "params": [
+        "RH2M"
+      ],
+      "prefixes": [
+        "RH_"
+      ],
+      "unit": "percent",
+      "group": "primary"
+    },
+    {
+      "name": "Dew Point",
+      "arabic": "نقطة الندى",
+      "params": [
+        "T2MDEW"
+      ],
+      "prefixes": [
+        "Td_"
+      ],
+      "unit": "deg_C",
+      "group": "primary"
+    },
+    {
+      "name": "Solar Radiation",
+      "arabic": "الإشعاع الشمسي",
+      "params": [
+        "ALLSKY_SFC_SW_DWN"
+      ],
+      "prefixes": [
+        "Sol_"
+      ],
+      "unit": "kWh/m2/day",
+      "group": "primary"
+    },
+    {
+      "name": "UV Index",
+      "arabic": "الأشعة فوق البنفسجية",
+      "params": [
+        "ALLSKY_SFC_UV_INDEX"
+      ],
+      "prefixes": [
+        "UV_"
+      ],
+      "unit": "WHO index",
+      "group": "primary"
+    },
+    {
+      "name": "Cloud Cover",
+      "arabic": "الغطاء السحابي",
+      "params": [
+        "CLOUD_AMT"
+      ],
+      "prefixes": [
+        "Cld_"
+      ],
+      "unit": "percent",
+      "group": "primary"
+    },
+    {
+      "name": "Heat Index",
+      "arabic": "مؤشر الحرارة والإجهاد الحراري",
+      "params": [
+        "T2M",
+        "RH2M"
+      ],
+      "prefixes": [
+        "HI_",
+        "WBGT_"
+      ],
+      "unit": "deg_C",
+      "group": "derived"
+    },
+    {
+      "name": "Wind Chill",
+      "arabic": "برودة الرياح والإجهاد البارد",
+      "params": [
+        "T2M",
+        "WS10M"
+      ],
+      "prefixes": [
+        "WC_"
+      ],
+      "unit": "deg_C",
+      "group": "derived"
+    },
+    {
+      "name": "De Martonne Aridity",
+      "arabic": "الجفاف: دي مارتون",
+      "params": [
+        "T2M",
+        "PRECTOTCORR"
+      ],
+      "prefixes": [
+        "DM_"
+      ],
+      "unit": "index",
+      "group": "derived"
+    },
+    {
+      "name": "Evapotranspiration",
+      "arabic": "البخر والنتح: هارجريفز",
+      "params": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN"
+      ],
+      "prefixes": [
+        "ET_",
+        "PET_"
+      ],
+      "unit": "mm",
+      "group": "derived"
+    },
+    {
+      "name": "UNEP Aridity",
+      "arabic": "الجفاف: UNEP",
+      "params": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR"
+      ],
+      "prefixes": [
+        "UNEP_"
+      ],
+      "unit": "ratio",
+      "group": "derived"
+    },
+    {
+      "name": "Water Deficit",
+      "arabic": "العجز المائي",
+      "params": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR"
+      ],
+      "prefixes": [
+        "Water_Deficit_"
+      ],
+      "unit": "mm",
+      "group": "derived"
+    },
+    {
+      "name": "Dry Months",
+      "arabic": "عدد الأشهر الجافة",
+      "params": [
+        "T2M",
+        "PRECTOTCORR"
+      ],
+      "prefixes": [
+        "Dry_Months_"
+      ],
+      "unit": "months",
+      "group": "derived"
+    },
+    {
+      "name": "Trends & Anomalies",
+      "arabic": "الاتجاهات والشذوذ عن خط الأساس",
+      "params": [
+        "T2M",
+        "PRECTOTCORR"
+      ],
+      "prefixes": [
+        "T_",
+        "R_"
+      ],
+      "unit": "mixed",
+      "group": "derived"
+    }
+  ],
+  "omAvailable": [
+    "ALLSKY_SFC_SW_DWN",
+    "CLOUD_AMT",
+    "PRECTOTCORR",
+    "PS",
+    "RH2M",
+    "SLP",
+    "T2M",
+    "T2MDEW",
+    "T2M_MAX",
+    "T2M_MIN",
+    "WD10M",
+    "WS10M"
+  ],
+  "databases": {
+    "Egypt_Spatial_Database.gdb": {
+      "name": "Egypt_Spatial_Database.gdb",
+      "type": "File Geodatabase",
+      "path": "D:\\MIRSAD Projects\\Egypt_Atlas\\Databases\\Egypt_Spatial_Database.gdb",
+      "datasets": {
+        "Cadastral_Boundaries": [
+          {
+            "name": "Egypt_National_Border",
+            "type": "Polygon",
+            "feature_count": 1,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "الحدود الدولية الكاملة لجمهورية مصر العربية",
+            "description_en": "Complete international boundary of Egypt",
+            "mask_id": "egypt_border",
+            "area_km2": "1,002,450 km²"
+          },
+          {
+            "name": "Nile_Valley_and_Delta_Mask",
+            "type": "Polygon",
+            "feature_count": 1,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "نطاق وادي النيل والدلتا والمناطق الزراعية والمأهولة",
+            "description_en": "Nile Valley and Delta inhabited agricultural corridor",
+            "mask_id": "delta_valley",
+            "area_km2": "36,500 km²"
+          },
+          {
+            "name": "Sinai_Peninsula_Boundary",
+            "type": "Polygon",
+            "feature_count": 1,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "شبه جزيرة سيناء (محافظتا شمال وجنوب سيناء)",
+            "description_en": "Sinai Peninsula boundary (North & South Sinai)",
+            "mask_id": "sinai",
+            "area_km2": "60,000 km²"
+          },
+          {
+            "name": "Coastal_Zone_Buffer_50km",
+            "type": "Polygon",
+            "feature_count": 1,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "نطاق الساحل الشمالي والبحر الأحمر بعرض 50 كم",
+            "description_en": "Mediterranean and Red Sea coastal buffer (50 km)",
+            "mask_id": "coastal",
+            "area_km2": "95,000 km²"
+          },
+          {
+            "name": "Western_Desert_Oases_Zone",
+            "type": "Polygon",
+            "feature_count": 5,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "منخفضات الواحات بالصحراء الغربية (سيوة، البحرية، الفرافرة، الداخلة، الخارجة)",
+            "description_en": "Western Desert Oases Depressions (Siwa, Baharia, Farafra, Dakhla, Kharga)",
+            "mask_id": "oases",
+            "area_km2": "42,000 km²"
+          }
+        ],
+        "Meteorology_Network": [
+          {
+            "name": "NOAA_ISD_Stations_EG",
+            "type": "Point",
+            "feature_count": 86,
+            "crs": "EPSG:4326 (WGS 84)",
+            "description_ar": "محطات الرصد السطحي المعتمدة من NOAA لجمهورية مصر العربية",
+            "description_en": "NOAA ISD audited synoptic stations in Egypt (86 stations)",
+            "is_station_source": true
+          },
+          {
+            "name": "EMA_Synoptic_Stations",
+            "type": "Point",
+            "feature_count": 32,
+            "crs": "EPSG:4326 (WGS 84)",
+            "description_ar": "المحطات الرئيسية للهيئة العامة للأرصاد الجوية المصرية",
+            "description_en": "Egyptian Meteorological Authority synoptic stations (32 stations)",
+            "is_station_source": true
+          },
+          {
+            "name": "Delta_Agricultural_Gauges",
+            "type": "Point",
+            "feature_count": 24,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "محطات الأرصاد الزراعية بالدلتا وشمال مصر",
+            "description_en": "Agricultural agrimet weather gauges in the Delta (24 gauges)",
+            "is_station_source": true
+          }
+        ],
+        "Hydrography": [
+          {
+            "name": "River_Nile_Course",
+            "type": "Polyline",
+            "feature_count": 1,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "مجرى نهر النيل وفرعا دمياط ورشيد",
+            "description_en": "Main course of the River Nile with Rosetta and Damietta branches"
+          },
+          {
+            "name": "Lakes_and_Water_Bodies",
+            "type": "Polygon",
+            "feature_count": 6,
+            "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+            "description_ar": "بحيرة ناصر وبحيرات الدلتا (المنزلة، البرلس، إدكو، قارون)",
+            "description_en": "Lake Nasser and northern Delta lakes (Manzala, Burullus, Idku, Qarun)"
+          }
+        ]
+      },
+      "tables": [
+        {
+          "name": "Monthly_Normals_Historical",
+          "type": "Table",
+          "record_count": 1032,
+          "description_ar": "المتوسطات المناخية الشهرية المعتمدة (1991-2020)",
+          "description_en": "Monthly historical climate normals (1991-2020)"
+        }
+      ]
+    },
+    "Regional_Study_Zone.gpkg": {
+      "name": "Regional_Study_Zone.gpkg",
+      "type": "GeoPackage",
+      "path": "D:\\MIRSAD Projects\\Egypt_Atlas\\Databases\\Regional_Study_Zone.gpkg",
+      "layers": [
+        {
+          "name": "Eastern_Desert_Mining_Sector",
+          "type": "Polygon",
+          "feature_count": 1,
+          "crs": "EPSG:32636 (WGS 84 / UTM Zone 36N)",
+          "description_ar": "نطاق امتياز التعدين بالصحراء الشرقية",
+          "description_en": "Eastern Desert mineral exploration concession boundary",
+          "mask_id": "coastal",
+          "area_km2": "18,200 km²"
+        },
+        {
+          "name": "Field_Observation_Points",
+          "type": "Point",
+          "feature_count": 14,
+          "crs": "EPSG:4326 (WGS 84)",
+          "description_ar": "نقاط الرصد الحقلي الميداني",
+          "description_en": "Field ground-truth observation points"
+        }
+      ]
+    }
+  },
+  "masks": {
+    "egypt_border": {
+      "id": "egypt_border",
+      "name_ar": "الحدود الدولية لمصر (كامل الدولة)",
+      "name_en": "Egypt National Boundary (Full Extent)",
+      "layer_source": "Egypt_Spatial_Database.gdb / Egypt_National_Border",
+      "area_km2": "1,002,450 km²",
+      "points": [
+        [
+          25.0,
+          31.55
+        ],
+        [
+          25.9,
+          31.62
+        ],
+        [
+          27.22,
+          31.33
+        ],
+        [
+          28.43,
+          31.02
+        ],
+        [
+          28.95,
+          30.85
+        ],
+        [
+          29.7,
+          30.92
+        ],
+        [
+          29.95,
+          31.18
+        ],
+        [
+          30.37,
+          31.45
+        ],
+        [
+          31.1,
+          31.55
+        ],
+        [
+          31.82,
+          31.42
+        ],
+        [
+          32.3,
+          31.27
+        ],
+        [
+          32.77,
+          30.97
+        ],
+        [
+          33.84,
+          31.07
+        ],
+        [
+          34.25,
+          31.28
+        ],
+        [
+          34.89,
+          29.58
+        ],
+        [
+          34.78,
+          28.9
+        ],
+        [
+          34.5,
+          28.48
+        ],
+        [
+          34.38,
+          27.97
+        ],
+        [
+          34.25,
+          27.73
+        ],
+        [
+          33.65,
+          28.21
+        ],
+        [
+          33.18,
+          28.9
+        ],
+        [
+          32.72,
+          29.58
+        ],
+        [
+          32.56,
+          29.97
+        ],
+        [
+          32.47,
+          29.87
+        ],
+        [
+          32.65,
+          29.1
+        ],
+        [
+          33.1,
+          28.3
+        ],
+        [
+          33.73,
+          27.28
+        ],
+        [
+          33.95,
+          26.75
+        ],
+        [
+          34.25,
+          26.13
+        ],
+        [
+          34.58,
+          25.56
+        ],
+        [
+          35.4,
+          23.9
+        ],
+        [
+          35.58,
+          23.13
+        ],
+        [
+          36.65,
+          22.2
+        ],
+        [
+          36.65,
+          22.0
+        ],
+        [
+          31.6,
+          22.0
+        ],
+        [
+          28.7,
+          22.0
+        ],
+        [
+          25.0,
+          22.0
+        ],
+        [
+          25.0,
+          27.0
+        ],
+        [
+          25.0,
+          31.55
+        ]
+      ]
+    },
+    "delta_valley": {
+      "id": "delta_valley",
+      "name_ar": "وادي النيل والدلتا",
+      "name_en": "Nile Valley and Delta",
+      "layer_source": "Egypt_Spatial_Database.gdb / Nile_Valley_and_Delta_Mask",
+      "area_km2": "36,500 km²",
+      "points": [
+        [
+          29.8,
+          31.2
+        ],
+        [
+          30.37,
+          31.45
+        ],
+        [
+          31.1,
+          31.55
+        ],
+        [
+          31.82,
+          31.42
+        ],
+        [
+          32.3,
+          31.27
+        ],
+        [
+          32.3,
+          30.6
+        ],
+        [
+          32.56,
+          29.97
+        ],
+        [
+          31.6,
+          29.8
+        ],
+        [
+          31.4,
+          29.0
+        ],
+        [
+          31.1,
+          28.1
+        ],
+        [
+          31.4,
+          27.1
+        ],
+        [
+          32.0,
+          26.4
+        ],
+        [
+          33.0,
+          26.1
+        ],
+        [
+          32.9,
+          25.6
+        ],
+        [
+          33.1,
+          24.4
+        ],
+        [
+          33.2,
+          23.9
+        ],
+        [
+          32.6,
+          23.9
+        ],
+        [
+          32.7,
+          24.5
+        ],
+        [
+          32.6,
+          25.6
+        ],
+        [
+          32.5,
+          26.1
+        ],
+        [
+          31.5,
+          26.5
+        ],
+        [
+          30.9,
+          27.1
+        ],
+        [
+          30.6,
+          28.1
+        ],
+        [
+          30.6,
+          29.0
+        ],
+        [
+          30.7,
+          29.3
+        ],
+        [
+          30.8,
+          30.0
+        ],
+        [
+          30.4,
+          30.4
+        ],
+        [
+          29.8,
+          31.2
+        ]
+      ]
+    },
+    "sinai": {
+      "id": "sinai",
+      "name_ar": "شبه جزيرة سيناء",
+      "name_en": "Sinai Peninsula",
+      "layer_source": "Egypt_Spatial_Database.gdb / Sinai_Peninsula_Boundary",
+      "area_km2": "60,000 km²",
+      "points": [
+        [
+          32.3,
+          31.27
+        ],
+        [
+          32.77,
+          30.97
+        ],
+        [
+          33.84,
+          31.07
+        ],
+        [
+          34.25,
+          31.28
+        ],
+        [
+          34.89,
+          29.58
+        ],
+        [
+          34.78,
+          28.9
+        ],
+        [
+          34.5,
+          28.48
+        ],
+        [
+          34.38,
+          27.97
+        ],
+        [
+          34.25,
+          27.73
+        ],
+        [
+          33.65,
+          28.21
+        ],
+        [
+          33.18,
+          28.9
+        ],
+        [
+          32.72,
+          29.58
+        ],
+        [
+          32.56,
+          29.97
+        ],
+        [
+          32.3,
+          30.6
+        ],
+        [
+          32.3,
+          31.27
+        ]
+      ]
+    },
+    "coastal": {
+      "id": "coastal",
+      "name_ar": "نطاق الساحل الشمالي والبحر الأحمر (50 كم)",
+      "name_en": "Coastal Zone Corridor (50 km Buffer)",
+      "layer_source": "Egypt_Spatial_Database.gdb / Coastal_Zone_Buffer_50km",
+      "area_km2": "95,000 km²",
+      "points": [
+        [
+          25.0,
+          31.55
+        ],
+        [
+          27.22,
+          31.33
+        ],
+        [
+          29.95,
+          31.18
+        ],
+        [
+          31.1,
+          31.55
+        ],
+        [
+          31.82,
+          31.42
+        ],
+        [
+          32.3,
+          31.27
+        ],
+        [
+          33.84,
+          31.07
+        ],
+        [
+          34.25,
+          31.28
+        ],
+        [
+          34.89,
+          29.58
+        ],
+        [
+          34.38,
+          27.97
+        ],
+        [
+          33.73,
+          27.28
+        ],
+        [
+          34.25,
+          26.13
+        ],
+        [
+          34.58,
+          25.56
+        ],
+        [
+          35.58,
+          23.13
+        ],
+        [
+          36.65,
+          22.2
+        ],
+        [
+          36.2,
+          22.2
+        ],
+        [
+          35.1,
+          23.2
+        ],
+        [
+          34.1,
+          25.5
+        ],
+        [
+          33.6,
+          26.5
+        ],
+        [
+          33.2,
+          27.5
+        ],
+        [
+          32.2,
+          29.8
+        ],
+        [
+          31.8,
+          31.0
+        ],
+        [
+          30.0,
+          30.8
+        ],
+        [
+          27.2,
+          30.9
+        ],
+        [
+          25.0,
+          31.1
+        ],
+        [
+          25.0,
+          31.55
+        ]
+      ]
+    },
+    "oases": {
+      "id": "oases",
+      "name_ar": "واحات الصحراء الغربية",
+      "name_en": "Western Desert Oases Zone",
+      "layer_source": "Egypt_Spatial_Database.gdb / Western_Desert_Oases_Zone",
+      "area_km2": "42,000 km²",
+      "points": [
+        [
+          25.2,
+          29.6
+        ],
+        [
+          26.0,
+          29.6
+        ],
+        [
+          26.0,
+          28.8
+        ],
+        [
+          25.2,
+          28.8
+        ],
+        [
+          25.2,
+          29.6
+        ],
+        [
+          28.5,
+          28.6
+        ],
+        [
+          29.2,
+          28.6
+        ],
+        [
+          29.2,
+          28.0
+        ],
+        [
+          28.5,
+          28.0
+        ],
+        [
+          28.5,
+          28.6
+        ],
+        [
+          27.6,
+          27.3
+        ],
+        [
+          28.4,
+          27.3
+        ],
+        [
+          28.4,
+          26.7
+        ],
+        [
+          27.6,
+          26.7
+        ],
+        [
+          27.6,
+          27.3
+        ],
+        [
+          28.6,
+          25.8
+        ],
+        [
+          29.4,
+          25.8
+        ],
+        [
+          29.4,
+          25.1
+        ],
+        [
+          28.6,
+          25.1
+        ],
+        [
+          28.6,
+          25.8
+        ],
+        [
+          30.2,
+          25.8
+        ],
+        [
+          30.9,
+          25.8
+        ],
+        [
+          30.9,
+          25.1
+        ],
+        [
+          30.2,
+          25.1
+        ],
+        [
+          30.2,
+          25.8
+        ]
+      ]
+    }
+  }
+}

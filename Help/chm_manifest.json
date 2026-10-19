@@ -1,0 +1,22 @@
+{
+  "version": "0.4.0.dev8",
+  "compiler_sha256": "3e96894609819ae3d595ff6e0fbe9ce6c9ac17bdeda256b994831992f668cb99",
+  "outputs": [
+    {
+      "language": "en",
+      "topics": 45,
+      "bytes": 131277,
+      "sha256": "fe180de29b9790c1153e7bf07f2f4d6b5b806768d55191671eb9a74f193edd34",
+      "compiler_exit": 1,
+      "full_text_index": true
+    },
+    {
+      "language": "ar",
+      "topics": 45,
+      "bytes": 134244,
+      "sha256": "a7ef55dc4a325d629eff8ca7ff0e3b36a2d6a4e973cbce85143f716724356f5c",
+      "compiler_exit": 1,
+      "full_text_index": true
+    }
+  ]
+}

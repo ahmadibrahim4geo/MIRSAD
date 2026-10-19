@@ -1,45 +1,21 @@
-================================================================================
-DATA SOURCE PROFILE: COPERNICUS CLIMATE DATA STORE (CDS / ERA5 / AgERA5)
-================================================================================
-Source Name           : Copernicus Climate Data Store (CDS / ERA5 / AgERA5)
-Provider Organization : European Centre for Medium-Range Weather Forecasts (ECMWF)
-Program               : Copernicus Climate Change Service (C3S) / European Union
-Coverage Start        : 1940-01-01 (ERA5 Atmospheric Reanalysis)
-                        1950-01-01 (ERA5-Land Terrestrial Surface Reanalysis)
-                        1979-01-01 (AgERA5 Agricultural Reanalysis)
-Coverage End          : Present (Continuous with 5-day latency for ERA5T stream)
-Temporal Resolution   : Hourly, Daily, and Monthly
-Spatial Resolution    : 0.1° (~9 km to 11 km) for ERA5-Land & AgERA5 (Topography-Adjusted)
-                        0.25° (~28 km to 31 km) for ERA5 Standard Global Atmospheric
-Spatial Domain        : Continuous Global Gridded Coverage (Land, Ocean, Atmosphere)
+# MIRSAD climate source profile
 
-AUTHENTICATION:
-- Official CDS Portal: https://cds.climate.copernicus.eu
-- Authentication Type: Optional Personal Access Token (API Key / Token)
-- Zero-Auth Fallback : If API Key is omitted, ERA5 high-resolution reanalysis is
-                       streamed seamlessly via MIRSAD's optimized gateway.
+2026-10-18 · Implemented development source contract
 
-WHAT THIS SOURCE CAN PROVIDE:
-[+] Official Scientific Reference Archive: Authoritative WMO/ECMWF certified standards
-[+] Exceptional Spatial Resolution: 0.10° (~9 km to 11 km) for ERA5-Land and AgERA5
-[+] Continuous Unbroken 85+ Year Historical Time Series (1940-Present)
-[+] 4D-Var Data Assimilation incorporating millions of daily global observations
-[+] 2m Air Temperature (Mean, Daily Max, Daily Min) & Apparent / Feels-Like Temp
-[+] 2m Dew Point Temperature and Relative Humidity
-[+] Direct High-Resolution Mean Sea Level Pressure (PSL) & Surface Pressure (PS)
-[+] Boundary Layer Winds: 10m & 100m Wind Speed, Direction, and 10m Gusts
-[+] Total Precipitation (Liquid Equivalent, Rain, Snowfall, Snow Depth)
-[+] Multi-Layer Cloud Cover (Low, Mid, High, Total Fractions %)
-[+] Soil Temperature at 4 Layer Depths (0-7, 7-28, 28-100, 100-255 cm)
-[+] Volumetric Soil Moisture at 4 Layer Depths (m3/m3)
-[+] Standard Reference Evapotranspiration (ET0 FAO-56 Penman-Monteith)
-[+] AgERA5 Tailored Agroclimatic Variables for Crop & Vegetation Modeling
-[+] Direct Support for Point Analysis and Gridded NetCDF Regional Processing
+## Copernicus CDS ERA5-Land (Need Sign In)
 
-WHAT THIS SOURCE CANNOT PROVIDE:
-[-] Historical Data Prior to January 1, 1940 (1901-1939 Unavailable)
-[-] Pure Physical Ground Truth Readings (It is a Reanalysis Model, not a raw glass gauge)
-[-] Same-Day Real-Time Instant Weather (Trails by 2-5 days for quality consolidation)
-[-] Note: Future climate projection scenarios (CMIP6 / IPCC SSPs) are excluded
-    from the current operational module in accordance with project scope.
-================================================================================
+1950-01 → Latest published CDS ARCO data
+
+0.1 degree API grid | Daily
+
+Global land | points, stations
+
+T2M, T2M_MAX, T2M_MIN, T2MDEW, RH2M, TS, PS, WS10M, WD10M, PRECTOTCORR, ALLSKY_SFC_SW_DWN
+
+Need Sign In: personal CDS token and accepted dataset terms. ARCO is already hourly de-accumulated; a day requires 24 UTC hours. Max/min use hourly samples; RH is derived from temperature/dewpoint. The service returns the full archive per variable, filtered locally with a 64 MB limit. Protocol/conversion tests pass; authenticated end-to-end access remains unverified.
+
+https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land-timeseries
+
+[All sources](../SOURCES_EN.md)
+
+No source guarantees complete coverage. Missing values stay NULL.

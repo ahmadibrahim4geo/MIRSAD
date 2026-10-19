@@ -537,13 +537,12 @@ class TestClimateToolboxModifications(unittest.TestCase):
         self.assertEqual(pyt_mod.resolve_module_canonical("02_Land_Surface_Temperature"), "Land Surface Temperature")
         self.assertEqual(rag.resolve_module_canonical("02_Land_Surface_Temperature"), "Land Surface Temperature")
 
-        # 3. Parameter Counts (Strictly 64/65/66 in PYT and 32/33/34 in RAG)
+        # 3. Current native parameter contract: 69 point, 36 regional raster.
         pyt_params = pyt_mod.PowerClimateAtlasGenerator().getParameterInfo()
-        self.assertIn(len(pyt_params), (64, 65, 66))
+        self.assertEqual(len(pyt_params), 69)
         rag_params = rag.RasterDataClimateAtlasGenerator().getParameterInfo()
-        # Monthly raster output is appended after the existing 34 parameters.
-        self.assertEqual(len(rag_params), 35)
-        self.assertEqual(rag_params[-1].name, "Generate_Monthly_Rasters")
+        self.assertEqual(len(rag_params), 36)
+        self.assertIn("Generate_Monthly_Rasters", [p.name for p in rag_params])
 
         # 4. Filter Scope: Annual Only
         ann_filtered = pyt_mod.resolve_filtered_fields(["Land Surface Temperature"], "Annual Only (سنوي فقط)")

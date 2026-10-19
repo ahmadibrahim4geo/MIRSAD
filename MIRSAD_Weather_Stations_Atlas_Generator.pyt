@@ -71,7 +71,7 @@ def _load_core_module():
 
 
 _core = _load_core_module()
-from utils.station_catalogue import load_catalogue, station_choices
+from utils.station_catalogue import load_catalogue, load_shared_catalogue, station_choices
 
 try:
     from country_continent_registry import COUNTRY_REGISTRY, get_country_info
@@ -291,15 +291,23 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         p_csrc = core_pdict.get("Climate_Data_Source")
         if p_csrc:
             p_csrc.filter.list = [
-                "NASA POWER API (Agroclimatology / MERRA-2)",
-                "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
+                "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+                "NOAA GSOD (Station Observations Only)",
+                "Open-Meteo ERA5 (Standalone - No NASA Supplement)",
+                "Hybrid: ERA5 + NASA POWER (Any Point)",
+                "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)",
+                "NASA POWER API (Agroclimatology / MERRA-2)"
             ]
-            p_csrc.value = "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)"
+            p_csrc.value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
+            from utils.climate_products import choices
+            p_csrc.filter.list.extend(choices(stations=True))
             p_csrc.description = (
                 "Select meteorological data provider for the weather stations:\n"
-                "• Hybrid and NOAA Direct downloads are not implemented and are excluded from this list.\n"
-                "• 'NASA POWER API': Gridded global agroclimatology (solar radiation, temperature, precipitation, 1981-Present).\n"
-                "• 'Open-Meteo Historical API' [Default]: ERA5 reanalysis sampled at station locations."
+                "Hybrid downloads NOAA GSOD for the whole network, then selected ERA5, then NASA POWER for missing values.\n"
+                "NOAA GSOD Only requires an exact USAF/WBAN/location identity; no nearest-station substitution. Archive starts 1929, station coverage varies.\n"
+                "ERA5 Standalone uses only the selected model: ERA5-Land 0.1 degree/from 1950; ERA5 0.25 degree/from 1940; Seamless varies by variable. Land lacks rain/wind in this API.\n"
+                "Any-point Hybrid uses ERA5 then NASA. Legacy Open-Meteo retains its NASA supplement. NASA has fixed native meteorology and solar grids.\n"
+                "Missing/unsupported variables remain NULL; selected monthly estimates are recorded separately. Resolution is source information, not output raster pixels."
             )
 
         p_dly = core_pdict.get("Save_Daily_Series")
@@ -472,13 +480,22 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         p_om_m = pdict.get("OpenMeteo_Model")
         if p_src and p_om_m:
             src_text = p_src.valueAsText or ""
-            p_om_m.enabled = ("Open-Meteo" in src_text or "Hybrid" in src_text)
+            from utils.climate_sources import resolution_options, canonical_resolution, ERA5_MODELS
+            options=resolution_options(src_text)
+            old=p_om_m.valueAsText or ""
+            if old in ERA5_MODELS:self._last_era5_resolution=canonical_resolution(old)
+            p_om_m.filter.list=list(options)
+            p_om_m.value=getattr(self,"_last_era5_resolution",options[0]) if len(options)>1 else options[0]
+            p_om_m.enabled=len(options)>1
 
         # Call core updateParameters for units, temporal filters, interpolation, etc.
         self._update_station_choices(pdict, original_country)
         _core.PowerClimateAtlasGenerator.updateParameters(self, parameters)
 
     def _station_catalogue(self):
+        shared = os.path.join(TOOLBOX_DIR, "data", "stations.sqlite")
+        if os.path.isfile(shared):
+            return load_shared_catalogue(shared)
         shp = SHP_HUB_GLOBAL if os.path.exists(SHP_HUB_GLOBAL) else SHP_HUB_EGYPT
         return load_catalogue(os.path.splitext(shp)[0] + ".dbf")
 
@@ -528,7 +545,19 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             chosen_country = country_labels.get(target, original_country if original_country in aggregates else None)
             if (p_country.valueAsText or None) != chosen_country:
                 p_country.value = chosen_country
-            options = station_choices(catalogue.get(target, [])) if target in country_labels else {}
+            if target == "ARAB":
+                target_stations = [s for slist in catalogue.values() for s in slist if s.get("Is_Arab")]
+            elif target in ("AFRICA", "ASIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA", "OCEANIA", "ANTARCTICA"):
+                target_stations = [s for slist in catalogue.values() for s in slist if (s.get("Continent") or "").upper() == target]
+            elif target in ("WORLD", "ALL"):
+                target_stations = [s for slist in catalogue.values() for s in slist]
+            else:
+                target_stations = catalogue.get(target, [])
+            # The specific-country workflow must not expose an aggregate picker
+            # after its aggregate country label has been cleared as invalid.
+            if specific and not chosen_country:
+                target_stations = []
+            options = station_choices(target_stations) if target_stations else {}
             labels = sorted(options)
             if list(p_selected.filter.list) != labels:
                 p_selected.filter.list = labels
@@ -643,56 +672,24 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             except Exception:
                 pass
 
-        # Load from HUB Directory
-        shp_target = SHP_HUB_GLOBAL if os.path.exists(SHP_HUB_GLOBAL) else SHP_HUB_EGYPT
-        if os.path.exists(shp_target):
-            if HAS_ARCPY:
-                fields = ["Station_ID", "Name", "Country", "Country_Nm", "Continent", "Is_Arab", "Lat", "Lon", "Elev_m", "SHAPE@XY"]
-                with arcpy.da.SearchCursor(shp_target, fields) as cur:
-                    for r in cur:
-                        name_val = _core._excel_text(r[1])
-                        lat = float(r[6])
-                        lon = float(r[7])
-                        ctry = str(r[2]).strip().upper()
-                        c_nm = str(r[3])
-                        cont = str(r[4])
-                        is_ar = bool(r[5])
-                        stations.append({
-                            "Station_ID": str(r[0]),
-                            "Name": name_val,
-                            "Country": ctry,
-                            "Country_Nm": c_nm,
-                            "Continent": cont,
-                            "Is_Arab": is_ar,
-                            "Lat": lat,
-                            "Lon": lon,
-                            "Elev_m": float(r[8])
-                        })
-            else:
-                try:
-                    import geopandas as gpd
-                    df = gpd.read_file(shp_target)
-                    for _, r in df.iterrows():
-                        stations.append({
-                            "Station_ID": str(r["Station_ID"]),
-                            "Name": _core._excel_text(r["Name"]),
-                            "Country": str(r["Country"]).strip().upper(),
-                            "Country_Nm": str(r.get("Country_Nm", "")),
-                            "Continent": str(r.get("Continent", "Other")),
-                            "Is_Arab": bool(r.get("Is_Arab", False)),
-                            "Lat": float(r["Lat"]),
-                            "Lon": float(r["Lon"]),
-                            "Elev_m": float(r.get("Elev_m", 0.0))
-                        })
-                except Exception:
-                    pass
-
-        return stations
+        # The audited shared catalogue is also embedded in MIRSAD Desktop.
+        # Local user layers above retain their own explicitly supplied geometry.
+        catalogue = self._station_catalogue()
+        return [dict(row) for country in sorted(catalogue) for row in catalogue[country]]
 
     def _resolve_stations(self, mode, target_country, study_poly, inc_buf, custom_ids, local_layer=None,
                           selected_stations=None):
         if _specific_stations_mode(mode) or (_country_stations_mode(mode) and selected_stations):
-            options = station_choices(self._station_catalogue().get(target_country, []))
+            cat = self._station_catalogue()
+            if target_country == "ARAB":
+                target_stations = [s for slist in cat.values() for s in slist if s.get("Is_Arab")]
+            elif target_country in ("AFRICA", "ASIA", "EUROPE", "NORTH AMERICA", "SOUTH AMERICA", "OCEANIA", "ANTARCTICA"):
+                target_stations = [s for slist in cat.values() for s in slist if (s.get("Continent") or "").upper() == target_country]
+            elif target_country in ("WORLD", "ALL"):
+                target_stations = [s for slist in cat.values() for s in slist]
+            else:
+                target_stations = cat.get(target_country, [])
+            options = station_choices(target_stations)
             seen = set()
             unique = []
             for value in selected_stations or []:
@@ -788,20 +785,21 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             wgs = arcpy.SpatialReference(4326)
             arcpy.management.CreateFeatureclass(out_dir, shp_name, "POINT", spatial_reference=wgs)
             arcpy.management.AddField(out_shp, "Station_ID", "TEXT", field_length=20)
+            arcpy.management.AddField(out_shp, "WBAN", "TEXT", field_length=5)
             arcpy.management.AddField(out_shp, "Station_Nm", "TEXT", field_length=100)
             arcpy.management.AddField(out_shp, "Country_Cd", "TEXT", field_length=10)
             arcpy.management.AddField(out_shp, "Elev_m", "DOUBLE")
             arcpy.management.AddField(out_shp, "Source_ID", "LONG")
             arcpy.management.AddField(out_shp, "Point_Type", "TEXT", field_length=30)
 
-            fields = ["SHAPE@XY", "Station_ID", "Station_Nm", "Country_Cd", "Elev_m", "Source_ID", "Point_Type"]
+            fields = ["SHAPE@XY", "Station_ID", "Station_Nm", "Country_Cd", "Elev_m", "Source_ID", "Point_Type", "WBAN"]
             with arcpy.da.InsertCursor(out_shp, fields) as cur:
                 for idx, s in enumerate(stations):
                     xy = (s["Lon"], s["Lat"])
                     pt_type = "Supplementary Point" if s.get("Is_Supplementary") else "Ground Station"
                     st_name = (s.get("Name") or s.get("Station_Nm") or "")[:100]
                     st_ctry = (s.get("Country") or s.get("Country_Cd") or "")[:10]
-                    cur.insertRow([xy, s["Station_ID"], st_name, st_ctry, float(s.get("Elev_m", 0.0)), idx + 1, pt_type])
+                    cur.insertRow([xy, s["Station_ID"], st_name, st_ctry, float(s.get("Elev_m", 0.0)), idx + 1, pt_type, s.get("WBAN", "")])
         else:
             import pyogrio
             from shapely.geometry import Point
@@ -810,6 +808,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             for idx, s in enumerate(stations):
                 data.append({
                     "Station_ID": s["Station_ID"],
+                    "WBAN": s.get("WBAN", ""),
                     "Station_Nm": (s.get("Name") or s.get("Station_Nm") or "")[:100],
                     "Country_Cd": (s.get("Country") or s.get("Country_Cd") or "")[:10],
                     "Elev_m": float(s.get("Elev_m", 0.0)),
@@ -1004,7 +1003,16 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
 
                 # Canonicalize Data Source for core engine
                 if p_name == "Climate_Data_Source":
-                    if "Hybrid" in val_text or "هجين" in val_text:
+                    from utils.climate_products import ENABLED
+                    if val_text in ENABLED:
+                        pass
+                    elif "NOAA GSOD" in val_text and "Hybrid" not in val_text:
+                        val = val_text = "NOAA GSOD (Station Observations Only)"
+                    elif "Standalone" in val_text:
+                        val = val_text = "Open-Meteo ERA5 (Standalone - No NASA Supplement)"
+                    elif "Hybrid" in val_text and "NOAA" not in val_text and "ERA5" in val_text:
+                        val = val_text = "Hybrid: ERA5 + NASA POWER (Any Point)"
+                    elif "Hybrid" in val_text or "هجين" in val_text:
                         val = val_text = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
                     elif "NOAA" in val_text or "أرشيف" in val_text:
                         val = val_text = "NOAA ISD / GHCN Direct Station Ground Observations Archive"
@@ -1200,11 +1208,17 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
         if p_csrc:
             p_csrc.displayName = "مصدر البيانات المناخية ومحرك المعالجة"
             p_csrc.filter.list = [
-                "واجهة ناسا باور المناخية الزراعية (NASA POWER API / MERRA-2)",
-                "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
+                "النموذج الهجين الذكي (Hybrid: NOAA Station Observations + NASA / ERA5)",
+                "أرصاد NOAA فقط (NOAA GSOD Only)",
+                "إعادة تحليل مستقلة (Open-Meteo ERA5 Standalone)",
+                "هجين للنقاط العادية (Hybrid: ERA5 + NASA POWER)",
+                "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)",
+                "واجهة ناسا باور المناخية الزراعية (NASA POWER API / MERRA-2)"
             ]
-            p_csrc.value = "واجهة أوبن-ميتيو لبيانات ERA5 عالية الدقة (Open-Meteo ERA5 Reanalysis)"
-            p_csrc.description = "المصادر المنفذة: NASA POWER وOpen-Meteo عند مواقع المحطات. تنزيل أرصاد NOAA المباشرة والدمج الهجين غير منفذين حاليًا، ولذلك لا يظهران في القائمة. يجب تصحيح الإعدادات القديمة التي تستخدمهما باختيار مصدر مدعوم."
+            p_csrc.value = "النموذج الهجين الذكي (Hybrid: NOAA Station Observations + NASA / ERA5)"
+            from utils.climate_products import choices
+            p_csrc.filter.list.extend(choices(stations=True))
+            p_csrc.description = "الهجين: NOAA GSOD ثم ERA5 ثم NASA. يتاح NOAA GSOD منفردًا بهوية USAF/WBAN والموقع الصحيح، وERA5 مستقل بلا NASA، وهجين ERA5 ثم NASA للنقاط. الدقة الافتراضية Land 0.1 درجة من 1950؛ لا يوفر كل المتغيرات، واختر Seamless أو ERA5 0.25 درجة من 1940 للأمطار والرياح. لا يتم استبدال أقرب محطة تلقائيًا، والمفقود يبقى NULL مع تسجيل التقدير الشهري الاختياري منفصلًا."
 
         # 10. Operation_Mode
         p_op = pdict.get("Operation_Mode")

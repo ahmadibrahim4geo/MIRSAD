@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">MIRSAD folded map and sun</title>
+  <path fill="#FFFFFF" d="M12 44 35 30V93L12 107Z"/>
+  <path fill="#12B8C8" d="M38 30 62 44V107L38 93Z"/>
+  <path fill="#FFFFFF" d="M65 44 88 30V93L65 107Z"/>
+  <path fill="#12B8C8" d="M91 30 115 44V107L91 93Z"/>
+  <circle fill="#E8AD43" cx="105" cy="17" r="10"/>
+</svg>

@@ -1,0 +1,11 @@
+{
+  "arcgis_pro_version": "3.6",
+  "entries": 7519,
+  "counts": {
+    "Geographic Coordinate Systems": 1175,
+    "Projected Coordinate Systems": 6344
+  },
+  "sha256": "593ef42e127ae502545246a89f5139389500e5ba90adee3367472989af460085",
+  "source_snapshot_sha256": "a2fc95730cecbdbaab7a66afea6421ac43bf551dba80423ac07bf39b8359ffc2",
+  "purpose": "Development-time native folder/name comparison; no runtime ArcGIS dependency"
+}

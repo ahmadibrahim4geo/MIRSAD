@@ -80,6 +80,7 @@ class ArcPy(types.ModuleType):
                               MakeFeatureLayer=lambda *a: None,
                               GetCount=lambda *a: [4])
         self.conversion = Bag(PolygonToRaster=lambda *a: self.calls.append("mask_raster"))
+        self.Select_analysis = lambda *args: self.calls.append(("select", args))
         self.da = Bag(SearchCursor=lambda path, fields: Cursor(
             [("1996", "2025")] if fields == ["Data_Start", "Data_End"] else []))
 
@@ -146,7 +147,7 @@ def load(name, path):
 core = load("stability_core", os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt"))
 import raster_atlas_generator as raster
 stations = load("stability_stations", os.path.join(ROOT, "MIRSAD_Weather_Stations_Atlas_Generator.pyt"))
-from utils.arcgis_runtime import SpatialLicense, preserve_arcpy_environment, provider_error
+from utils.arcgis_runtime import SpatialLicense, preserve_arcpy_environment, provider_error, filegdb_raster_workspace
 
 
 class Messages(object):
@@ -235,6 +236,7 @@ class RuntimeStability(unittest.TestCase):
     def core_params(self, tool, **overrides):
         values = dict(Operation_Mode="Interpolate & Map Existing Data (Offline Mode - No Internet)",
                       Precalculated_Point_Layers="01_Temperature", Climate_Modules="Temperature",
+                      Climate_Data_Source="NASA POWER API",
                       Output_Workspace=self.tmp, Study_Area_Name="Regression", Study_Area_Mask=None,
                       Temporal_Scope="Annual", Field_Filter_Scope="Annual Only",
                       Add_To_Map=False, Export_Shapefiles=False)
@@ -249,7 +251,7 @@ class RuntimeStability(unittest.TestCase):
         self.assertEqual(len(self.logs), 1)
         self.assertTrue(self.logs[0]["start_time"])
         self.assertEqual(self.logs[0]["module_timings"], {})
-        self.assertTrue(any("Generated Successfully" in line for line in messages.lines))
+        self.assertTrue(any("[DONE]" in line or "[COMPLETED WITH WARNINGS]" in line for line in messages.lines))
         self.assertEqual(self.fake.calls, ["checkout", "checkin"])
         self.assertEqual(self.fake.env.__dict__, self.saved_env)
 
@@ -262,6 +264,17 @@ class RuntimeStability(unittest.TestCase):
             tool.execute(self.core_params(tool), Messages())
         self.assertEqual(self.fake.calls, ["checkout", "checkin"])
         self.assertEqual(self.fake.env.__dict__, self.saved_env)
+
+    def test_qa_failure_does_not_report_unqualified_success(self):
+        tool=self.prepare_core()
+        def failed_qa(element_fcs,paths,modules,registry,results,msg,warn,**kwargs):
+            warn("QA FAIL: raster processing failures failed=1")
+            return [("raster processing failures",False,"failed=1")]
+        tool._run_qa=failed_qa
+        messages=Messages()
+        tool.execute(self.core_params(tool),messages)
+        self.assertTrue(any("[COMPLETED WITH WARNINGS]" in line for line in messages.lines))
+        self.assertFalse(any("[DONE]" in line for line in messages.lines))
 
     def test_large_raster_rejected_before_mask_allocation(self):
         tool = self.prepare_core()
@@ -461,8 +474,9 @@ class RuntimeStability(unittest.TestCase):
             self.assertEqual(self.fake.env.__dict__, self.saved_env)
 
     def test_unimplemented_providers_blocked_before_network(self):
-        for source in ("Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling", "NOAA ISD / GHCN Direct Station Ground Observations Archive", "Copernicus Climate Data Store (CDS / ERA5 / AgERA5)"):
+        for source in ("NOAA Direct Observations Archive", "Copernicus Climate Data Store (CDS / ERA5 / AgERA5)"):
             self.assertIsNotNone(provider_error(source))
+        self.assertIsNone(provider_error("Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"))
         self.assertIsNone(provider_error("NASA POWER API"))
         self.assertIsNone(provider_error(u"واجهة أوبن-ميتيو (Open-Meteo ERA5 Reanalysis)"))
         with self.assertRaises(RuntimeError):
@@ -486,6 +500,7 @@ class RuntimeStability(unittest.TestCase):
             def save(self, path):
                 pass
         def interpolate(*args):
+            self.assertTrue(args[0].endswith(os.path.join("spatial_work.gdb", "pwr_atlas_interp")))
             obj = Surface()
             live.append(weakref.ref(obj))
             return obj
@@ -516,6 +531,32 @@ class RuntimeStability(unittest.TestCase):
             else:
                 sys.modules["arcpy.sa"] = original_sa
         self.assertTrue(all("unmasked output was not published" in w for w in warnings))
+        self.assertEqual(len([call for call in self.fake.calls if isinstance(call,tuple) and call[0]=="select" and call[1][2]=="T_Annual_Mean IS NOT NULL"]),2)
+
+    def test_temporary_rasters_use_filegdb_and_restore_host_after_failure(self):
+        old=globals().get("arcpy");globals()["arcpy"]=self.fake
+        original=dict(workspace=getattr(self.fake.env,"workspace",None),scratchWorkspace=getattr(self.fake.env,"scratchWorkspace",None))
+        @filegdb_raster_workspace
+        def calculate(owner,out_tif,fail=False):
+            self.assertTrue(self.fake.env.workspace.endswith("spatial_work.gdb"))
+            self.assertEqual(self.fake.env.workspace,self.fake.env.scratchWorkspace)
+            if fail:raise ValueError("expected processing failure")
+            return "raster"
+        try:
+            target=os.path.join(self.tmp,"spaced output.tif")
+            self.assertEqual(calculate(self,target),"raster")
+            with self.assertRaises(ValueError):calculate(self,target,fail=True)
+            self.assertEqual(dict((key,getattr(self.fake.env,key)) for key in original),original)
+        finally:
+            if old is None:globals().pop("arcpy",None)
+            else:globals()["arcpy"]=old
+
+    def test_raster_failure_cannot_pass_empty_registry_qa(self):
+        checks=core.PowerClimateAtlasGenerator()._run_qa(
+            {},{"vec":self.tmp},[],[],{},lambda text:None,lambda text:None,
+            raster_failures=["Raster T_Annual_Mean failed: native error"])
+        failed=[check for check in checks if check[0]=="raster processing failures"]
+        self.assertEqual(failed,[("raster processing failures",False,"failed=1")])
 
 
 if __name__ == "__main__":

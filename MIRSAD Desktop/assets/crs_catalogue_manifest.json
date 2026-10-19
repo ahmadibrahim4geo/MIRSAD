@@ -1,0 +1,22 @@
+{
+  "source": "Esri Projection Engine Database",
+  "revision": "06dc50b556a2fa49224453ce8cbcf1833b3b64f7",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/Esri/projection-engine-db-doc/06dc50b556a2fa49224453ce8cbcf1833b3b64f7/json/pe_list_geogcs.json",
+      "sha256": "a159496117c1730e0f511c8a64c9eea39a29683fa151bae4db28ac138ae46b1a"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Esri/projection-engine-db-doc/06dc50b556a2fa49224453ce8cbcf1833b3b64f7/json/pe_list_projcs.json",
+      "sha256": "5b6d869c2cd12a903f59000bb35c4cf3d27221135d5d55d725486a5a4a5c8f49"
+    }
+  ],
+  "entries": 9185,
+  "counts": {
+    "Geographic Coordinate Systems": 1365,
+    "Projected Coordinate Systems": 7820
+  },
+  "sha256": "6a11ad03bbcd6ac38b934bba279bc61b45b5ea19da55e15b8c770b3ce1f11d74",
+  "taxonomy": "Esri type and official area of use; native Pro folder snapshot overrides when present",
+  "license": "Apache-2.0; see crs_catalogue_LICENSE.txt"
+}

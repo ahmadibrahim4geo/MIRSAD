@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-ArcGIS Pro and ArcMap Dual Compatibility Verification Suite.
-Verifies that both tools in the Climate Toolbox:
-  1. POWER_Climate_Atlas_Generator_10_8.pyt
-  2. raster_atlas_generator.py
-operate flawlessly under ArcGIS Pro (Python 3.x, arcpy.mp, .lyrx, PYTHON3 expression type)
-as well as ArcGIS Desktop 10.8 (Python 2.7, arcpy.mapping, .lyr, PYTHON_9.3 expression type).
+Headless point/raster toolbox platform-dispatch assertions.
+ArcPy is replaced by a double: these checks do not verify native GIS execution.
+Pro uses arcpy.mp, .lyrx and PYTHON3; ArcMap has separate Python 2.7 checks.
 """
 
 import unittest
@@ -116,7 +113,7 @@ pyt_mod.__dict__["arcpy"] = mock_arcpy
 raw_pyt = open(PYT_PATH, "rb").read()
 if sys.version_info[0] == 3:
     if isinstance(raw_pyt, bytes):
-        raw_pyt = raw_pyt.decode("utf-8")
+        raw_pyt = raw_pyt.decode("utf-8-sig")
     _nl = "\n" if "\n" in raw_pyt else "\r\n"
     _first, _sep, _rest = raw_pyt.partition(_nl)
     if "coding" in _first and _first.lstrip().startswith("#"):
@@ -149,21 +146,23 @@ class TestArcGISProCompatibility(unittest.TestCase):
         self.assertEqual(lyr_ext, ".lyrx")
 
     def test_04_pyt_toolbox_registration(self):
-        """Verify MIRSAD Climate Atlas Toolbox registers both tools for ArcGIS Pro."""
+        """Point EN/AR tools are separate from the dedicated raster toolbox."""
         tb = pyt_mod.Toolbox()
         self.assertTrue("MIRSAD" in tb.label or "ArcGIS Pro" in tb.label)
         self.assertEqual(len(tb.tools), 2)
         tool_classes = [t.__name__ for t in tb.tools]
         self.assertIn("PowerClimateAtlasGenerator", tool_classes)
-        self.assertIn("RasterDataClimateAtlasGenerator", tool_classes)
+        self.assertIn("SpatialClimateAtlasGeneratorAR", tool_classes)
+        self.assertNotIn("RasterDataClimateAtlasGenerator", tool_classes)
 
     def test_05_rag_standalone_toolbox(self):
         """Verify raster_atlas_generator.py provides a valid Toolbox class for standalone Pro use."""
         self.assertTrue(hasattr(rag_mod, "Toolbox"))
         tb = rag_mod.Toolbox()
         self.assertTrue("MIRSAD" in tb.label or "ArcGIS Pro" in tb.label)
-        self.assertEqual(len(tb.tools), 1)
+        self.assertEqual(len(tb.tools), 2)
         self.assertEqual(tb.tools[0].__name__, "RasterDataClimateAtlasGenerator")
+        self.assertEqual(tb.tools[1].__name__, "RasterDataClimateAtlasGeneratorAR")
 
     def test_06_arcpy_mp_add_to_map_support(self):
         """Verify _add_to_map in 10_8 tool uses arcpy.mp when running inside ArcGIS Pro."""

@@ -1,4 +1,6 @@
 # 06. Methodology Guide for Adding a New Climate Module and Incremental Database Updating
+
+> **Development update — 17 October 2026:** This legacy toolbox guide includes historical counts and assumptions. Read the [MIRSAD Desktop methodology review](../../MIRSAD%20Desktop/docs/METHODOLOGY_REVIEW.md) before new development. Verify parameter counts from code; direct Hybrid/NOAA downloads are not implemented, and Excel is the normal tabular export. ArcPy examples remain references for the legacy workflow.
 ## MIRSAD (مِرصاد) — Climate Atlas & Meteorological Database Platform
 ### Multi-source Integrated Reanalysis & Surface Atlas Database — SOP Architecture Manual
 

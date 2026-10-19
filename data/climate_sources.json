@@ -1,0 +1,389 @@
+{
+  "reviewed": "2026-10-18",
+  "sources": [
+    {
+      "auth": null,
+      "end": "Latest published data, variable-dependent",
+      "id": "power",
+      "implementation": "implemented",
+      "label": "NASA POWER",
+      "normalized_units": {
+        "ALLSKY_SFC_SW_DWN": "MJ/m2/day",
+        "ALLSKY_SFC_UV_INDEX": "source UV index",
+        "CLOUD_AMT": "percent",
+        "PRECTOTCORR": "mm per day or native month total",
+        "PS": "kPa",
+        "RH2M": "percent",
+        "SLP": "kPa",
+        "T2M": "deg C",
+        "T2MDEW": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C",
+        "TS": "deg C",
+        "WD10M": "degree",
+        "WS10M": "m/s"
+      },
+      "notes_ar": "شبكات ثابتة حسب المتغير؛ تصغير بكسل الإخراج لا يزيد دقة معلومات المصدر.",
+      "notes_en": "Fixed variable-specific grids; smaller output pixels do not increase source information resolution.",
+      "region": "Global",
+      "resolution": "0.5 x 0.625 degree meteorology; 1 x 1 degree radiation/cloud",
+      "start": "Meteorology 1981; radiation 1984; UV 2001",
+      "temporal": "Daily points; monthly regional",
+      "tools": [
+        "points",
+        "stations",
+        "regional"
+      ],
+      "url": "https://power.larc.nasa.gov/docs/",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "T2MDEW",
+        "TS",
+        "PRECTOTCORR",
+        "RH2M",
+        "CLOUD_AMT",
+        "PS",
+        "SLP",
+        "WS10M",
+        "WD10M",
+        "ALLSKY_SFC_SW_DWN",
+        "ALLSKY_SFC_UV_INDEX"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Latest archive, typically delayed",
+      "id": "openmeteo",
+      "implementation": "implemented",
+      "label": "Open-Meteo ERA5 / ERA5-Land",
+      "normalized_units": {
+        "ALLSKY_SFC_SW_DWN": "MJ/m2/day",
+        "ALLSKY_SFC_UV_INDEX": "source UV index",
+        "CLOUD_AMT": "percent",
+        "PRECTOTCORR": "mm per day or native month total",
+        "PS": "kPa",
+        "RH2M": "percent",
+        "SLP": "kPa",
+        "T2M": "deg C",
+        "T2MDEW": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C",
+        "TS": "deg C",
+        "WD10M": "degree",
+        "WS10M": "m/s"
+      },
+      "notes_ar": "Auto يستخدم Land للحرارة والرطوبة والندى، وERA5 لبقية المتغيرات المدعومة. للفترة التي تبدأ قبل 1950 يستخدم ERA5 كاملًا. الوضع المستقل لا يستكمل NASA؛ المسار القديم والهجين لهما سياسة معلنة منفصلة.",
+      "notes_en": "Auto uses Land for temperature, RH and dewpoint and ERA5 for other supported variables. An interval beginning before 1950 uses ERA5 throughout. Standalone never supplements NASA; legacy and Hybrid retain explicitly separate policies.",
+      "region": "Global; Land variables require valid land cells",
+      "resolution": "Auto: Land 0.1 degree or ERA5 0.25 degree per variable and full interval",
+      "start": "ERA5 1940; Land 1950",
+      "temporal": "Daily",
+      "tools": [
+        "points",
+        "stations"
+      ],
+      "url": "https://open-meteo.com/en/docs/historical-weather-api",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR",
+        "ALLSKY_SFC_SW_DWN",
+        "RH2M",
+        "T2MDEW",
+        "PS",
+        "SLP",
+        "WS10M",
+        "WD10M",
+        "CLOUD_AMT"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Station/year-specific",
+      "id": "gsod",
+      "implementation": "implemented",
+      "label": "NOAA GSOD",
+      "normalized_units": {
+        "ALLSKY_SFC_SW_DWN": "MJ/m2/day",
+        "ALLSKY_SFC_UV_INDEX": "source UV index",
+        "CLOUD_AMT": "percent",
+        "PRECTOTCORR": "mm per day or native month total",
+        "PS": "kPa",
+        "RH2M": "percent",
+        "SLP": "kPa",
+        "T2M": "deg C",
+        "T2MDEW": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C",
+        "TS": "deg C",
+        "WD10M": "degree",
+        "WS10M": "m/s"
+      },
+      "notes_ar": "USAF وWBAN والموقع معًا؛ ليس ISD الساعي ولا GHCN. الهجين ينهي NOAA ثم ERA5 ثم NASA ثم Gap Fill الشهري.",
+      "notes_en": "USAF, WBAN and location are required together. This is not hourly ISD or GHCN. Hybrid finishes NOAA, then ERA5, then NASA, then optional monthly Gap Fill.",
+      "region": "Exact catalogue station",
+      "resolution": "Station observations",
+      "start": "General archive 1929; station/element-specific",
+      "temporal": "Daily summaries",
+      "tools": [
+        "stations"
+      ],
+      "url": "https://www.ncei.noaa.gov/data/global-summary-of-the-day/",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "T2MDEW",
+        "PRECTOTCORR",
+        "PS",
+        "SLP",
+        "WS10M"
+      ]
+    },
+    {
+      "auth": "cds_token",
+      "end": "Latest published CDS ARCO data",
+      "id": "cds_era5_land_arco",
+      "implementation": "implemented; authenticated live verification pending",
+      "label": "Copernicus CDS ERA5-Land (Need Sign In)",
+      "normalized_units": {
+        "ALLSKY_SFC_SW_DWN": "MJ/m2/day",
+        "PRECTOTCORR": "mm per day or native month total",
+        "PS": "kPa",
+        "RH2M": "percent",
+        "T2M": "deg C",
+        "T2MDEW": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C",
+        "TS": "deg C",
+        "WD10M": "degree",
+        "WS10M": "m/s"
+      },
+      "notes_ar": "Need Sign In: رمز CDS الشخصي وقبول شروط المنتج. ARCO ساعي منزوع التراكم بالفعل؛ اليوم يتطلب 24 ساعة UTC. العظمى والصغرى من العينات الساعية، والرطوبة مشتقة من الحرارة والندى. الخدمة ترجع كامل الأرشيف لكل متغير ثم تُرشح الفترة محليًا بحد 64MB. المسار منفذ واختُبر بروتوكوله وتحويلاته؛ لم يُختبر بحساب حقيقي.",
+      "notes_en": "Need Sign In: personal CDS token and accepted dataset terms. ARCO is already hourly de-accumulated; a day requires 24 UTC hours. Max/min use hourly samples; RH is derived from temperature/dewpoint. The service returns the full archive per variable, filtered locally with a 64 MB limit. Protocol/conversion tests pass; authenticated end-to-end access remains unverified.",
+      "region": "Global land",
+      "resolution": "0.1 degree API grid",
+      "start": "1950-01",
+      "temporal": "Daily",
+      "tools": [
+        "points",
+        "stations"
+      ],
+      "url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land-timeseries",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "T2MDEW",
+        "RH2M",
+        "TS",
+        "PS",
+        "WS10M",
+        "WD10M",
+        "PRECTOTCORR",
+        "ALLSKY_SFC_SW_DWN"
+      ]
+    },
+    {
+      "auth": "earthdata",
+      "end": "Latest Final run (delayed)",
+      "id": "imerg07_final",
+      "implementation": "implemented; authenticated live verification pending",
+      "label": "NASA IMERG V07 Daily Final (Need Sign In)",
+      "normalized_units": {
+        "PRECTOTCORR": "mm per day or native month total"
+      },
+      "notes_ar": "Need Sign In: حساب NASA Earthdata وإجازة GES DISC. أمطار Final اليومية بوحدة mm/day؛ لا ضرب ثانٍ في 24. المسار منفذ؛ التنزيل بحساب حقيقي لم يُختبر بعد.",
+      "notes_en": "Need Sign In: NASA Earthdata account with GES DISC authorization. Final daily precipitation is mm/day, with no second multiplication by 24. Adapter implemented; live authenticated download remains unverified.",
+      "region": "Global grid; missing cells retained",
+      "resolution": "0.1 degree",
+      "start": "File-specific GES DISC catalogue",
+      "temporal": "Daily",
+      "tools": [
+        "points",
+        "stations"
+      ],
+      "url": "https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_07/summary",
+      "variables": [
+        "PRECTOTCORR"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Latest final month",
+      "id": "chirps3",
+      "implementation": "implemented; public sample verified",
+      "label": "CHIRPS v3 (Monthly Rainfall)",
+      "normalized_units": {
+        "PRECTOTCORR": "mm per day or native month total"
+      },
+      "notes_ar": "أمطار شهرية نهائية؛ لم يُنفذ تنزيل CHIRPS اليومي. الصفر صحيح والمفقود NULL.",
+      "notes_en": "Final monthly rainfall only; daily CHIRPS ingestion is not implemented. Zero is valid; missing stays NULL.",
+      "region": "Land 60S to 60N",
+      "resolution": "0.05 degree",
+      "start": "1981-01",
+      "temporal": "Monthly",
+      "tools": [
+        "points",
+        "stations",
+        "regional"
+      ],
+      "url": "https://www.chc.ucsb.edu/data/chirps3",
+      "variables": [
+        "PRECTOTCORR"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Latest published month; inspected from time axis",
+      "id": "terraclimate11",
+      "implementation": "implemented; public sample verified",
+      "label": "TerraClimate v1.1 (Monthly Climate)",
+      "normalized_units": {
+        "ALLSKY_SFC_SW_DWN": "MJ/m2/day",
+        "PRECTOTCORR": "mm per day or native month total",
+        "T2M": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C",
+        "WS10M": "m/s"
+      },
+      "notes_ar": "الإصدار 1.1 مستقل عن 1.0. قراءة CF scale/offset من كل متغير. متوسط الحرارة مشتق من (العظمى+الصغرى)/2. المطر مجموع شهري.",
+      "notes_en": "v1.1 is separate from v1.0. CF scale/offset are read per variable. Mean temperature is (tmax+tmin)/2. Rainfall is a monthly total.",
+      "region": "Global land",
+      "resolution": "1/24 degree (~4 km)",
+      "start": "1950-01",
+      "temporal": "Monthly",
+      "tools": [
+        "points",
+        "stations"
+      ],
+      "url": "https://www.climatologylab.org/terraclimate.html",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR",
+        "WS10M",
+        "ALLSKY_SFC_SW_DWN"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "2018/2021; variable-specific catalogue",
+      "id": "chelsa21",
+      "implementation": "implemented; public sample verified",
+      "label": "CHELSA v2.1 (Monthly Climate)",
+      "normalized_units": {
+        "CLOUD_AMT": "percent",
+        "PRECTOTCORR": "mm per day or native month total",
+        "RH2M": "percent",
+        "T2M": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C",
+        "WS10M": "m/s"
+      },
+      "notes_ar": "تُقرأ الوحدات والتحويل من الملف نفسه؛ مدى التواريخ يختلف حسب المتغير. الإشعاع الشمسي مستبعد حتى حل تعارض بيانات وحدته. الملف غير المتاح يبقى NULL.",
+      "notes_en": "Units/scaling are validated from each file; dates vary by variable. Solar radiation is excluded pending conflicting unit metadata. Unavailable files stay NULL.",
+      "region": "Global land",
+      "resolution": "30 arcsec (~1 km)",
+      "start": "1979/1980; variable-specific catalogue",
+      "temporal": "Monthly",
+      "tools": [
+        "points",
+        "stations",
+        "regional"
+      ],
+      "url": "https://www.chelsa-climate.org/datasets/chelsa_monthly",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR",
+        "WS10M",
+        "RH2M",
+        "CLOUD_AMT"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Available site dates from API",
+      "id": "mod11a2_day",
+      "implementation": "implemented; public sample verified",
+      "label": "MODIS MOD11A2 (Daytime Surface Temperature)",
+      "normalized_units": {
+        "TS": "deg C"
+      },
+      "notes_ar": "حرارة سطح نهارية، وليست حرارة هواء. تجميع شهري موزون بأيام السماء الصافية المقبولة بالجودة. لا أيام رصد مصطنعة ولا فرق سطح/هواء دون حرارة هواء.",
+      "notes_en": "Daytime surface temperature, not air temperature. Monthly estimates weight quality-accepted clear-sky days. No synthetic daily observations or surface-air differences without air data.",
+      "region": "Global land",
+      "resolution": "Nominal 1 km",
+      "start": "2000-02",
+      "temporal": "8-day clear-sky composites; explicit monthly aggregation",
+      "tools": [
+        "points",
+        "stations"
+      ],
+      "url": "https://modis.ornl.gov/data/modis_webservice.html",
+      "variables": [
+        "TS"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Available site dates from API",
+      "id": "mod11a2_night",
+      "implementation": "implemented; public sample verified",
+      "label": "MODIS MOD11A2 (Nighttime Surface Temperature)",
+      "normalized_units": {
+        "TS": "deg C"
+      },
+      "notes_ar": "حرارة سطح ليلية منفصلة عن النهارية، بنفس فحص الجودة والسحب. نسبة التغطية تعكس الأيام الصافية المقبولة.",
+      "notes_en": "Nighttime surface temperature stays separate from daytime, with the same quality/cloud screening. Coverage reflects accepted clear-sky days.",
+      "region": "Global land",
+      "resolution": "Nominal 1 km",
+      "start": "2000-02",
+      "temporal": "8-day clear-sky composites; explicit monthly aggregation",
+      "tools": [
+        "points",
+        "stations"
+      ],
+      "url": "https://modis.ornl.gov/data/modis_webservice.html",
+      "variables": [
+        "TS"
+      ]
+    },
+    {
+      "auth": null,
+      "end": "Station/element-specific",
+      "id": "ghcnd",
+      "implementation": "implemented; public sample verified",
+      "label": "NOAA GHCN-Daily (Station Observations Only)",
+      "normalized_units": {
+        "PRECTOTCORR": "mm per day or native month total",
+        "T2M": "deg C",
+        "T2M_MAX": "deg C",
+        "T2M_MIN": "deg C"
+      },
+      "notes_ar": "يلزم حقل GHCN_ID صريح من 11 حرفًا وإحداثيات مطابقة. لا تحويل تلقائي من USAF/WBAN ولا أقرب محطة. قيم QFLAG غير الفارغة تستبعد؛ TAVG غير الموجود لا يُخترع.",
+      "notes_en": "Requires an explicit 11-character GHCN_ID and matching coordinates. No USAF/WBAN conversion or nearest-station substitution. Nonblank QFLAG values are excluded; absent TAVG is not invented.",
+      "region": "Catalogue stations only",
+      "resolution": "Station location",
+      "start": "Station/element-specific",
+      "temporal": "Daily",
+      "tools": [
+        "stations"
+      ],
+      "url": "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily",
+      "variables": [
+        "T2M",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR"
+      ]
+    }
+  ],
+  "version": "2026-10-18-products-v1"
+}

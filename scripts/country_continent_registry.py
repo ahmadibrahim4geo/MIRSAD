@@ -354,7 +354,8 @@ def get_country_info(code, lat=None, lon=None):
     code_up = str(code).strip().upper()
     
     # 1. Sovereign Unification & Palestine vs Europe/Pacific
-    if code_up in ("IS", "IL", "GZ", "WE", "PS"):
+    if code_up in ("IS", "IL", "GZ", "WE", "PS") or (
+            code_up == "EG" and lat is not None and lon is not None and (31.2 <= lat <= 31.7 and 34.1 <= lon <= 34.6)):
         # Check if coordinates belong to Palau in the Pacific (lat ~7, lon ~134)
         if lat is not None and lon is not None and (lat < 15.0 and lon > 100.0):
             return ("Palau", "بالاو", "Oceania", False)

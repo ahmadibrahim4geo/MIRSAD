@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 POWER Climate Atlas Generator — ArcMap Desktop 10.x edition (tested 10.8)
 ArcGIS Desktop Python Toolbox (.pyt) — Python 2.7 compatible.
@@ -100,13 +100,16 @@ _this_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals(
 if _this_dir not in sys.path:
     sys.path.insert(0, _this_dir)
 
-from utils.arcgis_runtime import preserve_arcpy_environment, SpatialLicense, provider_error, is_offline_mode
+from utils.arcgis_runtime import preserve_arcpy_environment, SpatialLicense, provider_error, is_offline_mode, filegdb_raster_workspace
+from utils.climate_sources import (pipeline_sources, resolution_options, canonical_resolution,
+    GRID_HYBRID, NOAA_ONLY, ERA5_ONLY, ERA5_MODELS)
 from utils.climate_quality import merge_point_layers, coordinates, derive_from_fields, IDENTITY_FIELDS
 
 try:
-    from raster_atlas_generator import RasterDataClimateAtlasGenerator
+    from raster_atlas_generator import RasterDataClimateAtlasGenerator, RasterDataClimateAtlasGeneratorAR
 except Exception:
     RasterDataClimateAtlasGenerator = None
+    RasterDataClimateAtlasGeneratorAR = None
 
 TOOL_VERSION = "1.1-arcmap10"
 # CONSISTENCY_MARKER_ZZ9
@@ -704,26 +707,40 @@ def get_element_source_metadata(module, provider, om_model=None, gap_method="cli
     m = str(module or "")
     om_m = str(om_model or "ERA5-Land")
 
-    if "hybrid" in p:
-        p_src = "NOAA ISD / GHCN Certified Ground Station Network"
-        model = "In-Situ Synoptic Ground Tower (Observed Ground-Truth) + ECMWF ERA5-Land (~9 km) / MERRA-2"
+    from utils.climate_products import descriptor as product_descriptor
+    product=product_descriptor(provider)
+    if product:
+        p_src=provider;model=product["id"];url=product["url"]
+        gap_m="Selected monthly estimation: %s"%gap_method
+        gap_s="Raw native values retained; inspect source product audit"
+        cov=product["start"]+" to "+product["end"]
+        res=product["resolution"];qual="Product QA and actual coverage; no completeness guarantee"
+        citation=product["url"]
+    elif "hybrid" in p:
+        p_src = "NOAA GSOD (ISD-derived daily observations), then Open-Meteo / NASA POWER for missing cells"
+        model = "NOAA GSOD; selected Open-Meteo %s; NASA POWER" % om_m
         url = "https://www.ncei.noaa.gov | https://open-meteo.com | https://power.larc.nasa.gov"
-        gap_m = "Automated Hybrid Satellite & Reanalysis Numerical Imputation"
-        gap_s = "ECMWF ERA5-Land (~9 km) / NASA POWER MERRA-2 (~50 km)"
-        cov = "1940-Present (Ground-Truth Unified)"
-        res = "In-Situ Ground Point + 0.1 deg (~9 km) Gap-Filling"
-        qual = "Hybrid Multi-Tier Validated (100% Complete Record)"
-        citation = "NOAA NCEI ISD Ground Observations & ECMWF ERA5-Land Reanalysis (Hersbach et al., 2020)"
+        gap_m = "Source completion, followed by monthly statistical method: %s" % gap_method
+        gap_s = "Per-day source and per-month estimation audit in Source Data/Hybrid"
+        cov = "%d-%d requested; actual coverage varies by station, variable and source" % (y0,y1)
+        res = "Ground station / selected reanalysis grid / POWER grid; see source audit"
+        qual = "Missing values retained; source failures and monthly estimates recorded separately"
+        citation = "NOAA NCEI GSOD (derived from ISD); ECMWF ERA5; NASA POWER"
+        if "NOAA GSOD" not in (pipeline_sources(provider) or ()):
+            p_src="Selected Open-Meteo ERA5 model, then NASA POWER for missing cells"
+            model="Selected Open-Meteo %s; NASA POWER" % om_m
+            url="https://open-meteo.com | https://power.larc.nasa.gov"
+            citation="ECMWF ERA5; NASA POWER"
     elif "noaa" in p:
-        p_src = "NOAA NCEI Integrated Surface Database (ISD / GHCN)"
-        model = "In-Situ Synoptic Meteorological Tower (WMO Standard Instruments)"
-        url = "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database"
-        gap_m = "None (Pure Ground Observation)" if gap_method == "none" else "Climatological Station Imputation"
-        gap_s = "None" if gap_method == "none" else "Station Multi-Year Climatology Baseline"
-        cov = "1901-Present (Historical & Active Network)"
-        res = "Point Ground Station Observation Tower"
-        qual = "NOAA NCEI Level 2 Certified Ground Observation"
-        citation = "Smith, A., et al. (2011). The Integrated Surface Database: Recent Improvements. BAMS."
+        p_src = "NOAA NCEI GSOD (ISD-derived daily station observations only)"
+        model = "Station observations; no reanalysis or NASA supplementation"
+        url = "https://www.ncei.noaa.gov/data/global-summary-of-the-day/access/"
+        gap_m = "No cross-provider supplement; selected monthly estimation: %s" % gap_method
+        gap_s = "Raw daily observations unchanged; inspect monthly-estimates audit"
+        cov = "Archive begins 1929; actual station/year/variable coverage varies"
+        res = "Native station location; no selectable raster resolution"
+        qual = "USAF/WBAN/location matched; missing values retained; GSOD flags audited"
+        citation = "NOAA NCEI Global Summary of the Day (GSOD), derived from ISD"
     elif "copernicus" in p or "cds" in p:
         p_src = "Copernicus Climate Data Store (CDS) - European Union / ECMWF"
         if "land" in om_m.lower():
@@ -741,18 +758,18 @@ def get_element_source_metadata(module, provider, om_model=None, gap_method="cli
     elif "open-meteo" in p or "era5" in p:
         p_src = "Open-Meteo Historical Weather API"
         if "land" in om_m.lower():
-            model = "ECMWF ERA5-Land High-Resolution Reanalysis (~9 km / 0.1 deg)"
-            res = "0.1 deg x 0.1 deg (~9 km)"
+            model = "ECMWF ERA5-Land via Open-Meteo (0.1 deg API grid)"
+            res = "0.1 deg x 0.1 deg (~11 km API grid); variable-dependent availability"
         elif "seamless" in om_m.lower():
-            model = "ECMWF ERA5-Seamless Multi-Scale Reanalysis (9-25 km)"
-            res = "0.1 - 0.25 deg (9-25 km)"
+            model = "ECMWF ERA5-Seamless: ERA5-Land/ERA5 by variable"
+            res = "0.1 - 0.25 deg (~11-25 km API grid; variable-dependent)"
         else:
             model = "ECMWF ERA5 Atmospheric Reanalysis (~25 km / 0.25 deg)"
             res = "0.25 deg x 0.25 deg (~25 km)"
         url = "https://open-meteo.com/en/docs/historical-weather-api"
-        gap_m = "ECMWF Continuous 4D-Var Data Assimilation"
-        gap_s = "ECMWF IFS Cy41r2 Model Assimilation"
-        cov = "1940-Present (Daily & Hourly)"
+        gap_m = "Selected monthly estimation: %s" % gap_method
+        gap_s = "Standalone: no NASA supplement" if pipeline_sources(provider) else "Legacy Open-Meteo: explicit NASA supplement for missing cells"
+        cov = "1950-present; actual availability varies" if "land" in om_m.lower() else "1940-present; Seamless coverage depends on variable/model"
         qual = "ECMWF Operational Quality Controlled Reanalysis"
         citation = "Muñoz-Sabater, J., et al. (2021). ERA5-Land: A state-of-the-art global reanalysis dataset. ESSD."
     else:
@@ -880,6 +897,8 @@ def build_source_data_provenance_table(pts_or_results, modules, provider, om_mod
 
         for m in eff_modules:
             meta = get_element_source_metadata(m, provider, om_model, gap_method, y0, y1)
+            if p.get("hybrid"):
+                meta["primary_source"] = p.get("source_summary") or "No usable source values"
             prov_rows.append([
                 oid, sid, sname, ctry,
                 lat, lon, elev,
@@ -3687,6 +3706,8 @@ def om_var_sets(modules):
 
 def om_model_slug(model_text):
     s = str(model_text or "").lower()
+    if "auto" in s or not s:
+        return "auto"
     if "land" in s:
         return "era5_land"
     elif "seamless" in s:
@@ -4313,11 +4334,9 @@ class Toolbox(object):
     """
 
     def __init__(self):
-        self.label = "MIRSAD - Climate Atlas & Meteorological Database Generator"
+        self.label = "MIRSAD Point Climate Atlas Generator"
         self.alias = "mirsadAtlas"
-        self.tools = [PowerClimateAtlasGenerator]
-        if RasterDataClimateAtlasGenerator:
-            self.tools.append(RasterDataClimateAtlasGenerator)
+        self.tools = [PowerClimateAtlasGenerator, SpatialClimateAtlasGeneratorAR]
 
 
 class PowerClimateAtlasGenerator(object):
@@ -4348,7 +4367,7 @@ class PowerClimateAtlasGenerator(object):
     """
 
     def __init__(self):
-        self.label = "MIRSAD: Spatial Climate Atlas Generator"
+        self.label = "MIRSAD: Point Climate Atlas Generator"
         self.category = ""
         self.description = (
             "MIRSAD Platform: Fetch multi-source climate data (NASA POWER, Open-Meteo ERA5, "
@@ -4604,36 +4623,36 @@ class PowerClimateAtlasGenerator(object):
             direction="Input")
         p14.filter.type = "ValueList"
         p14.filter.list = [
+            "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+            GRID_HYBRID,
+            ERA5_ONLY,
             "NASA POWER API",
             "Open-Meteo Historical API (ERA5 Reanalysis)"
         ]
-        p14.value = "NASA POWER API"
+        p14.value = "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling"
+        from utils.climate_products import choices
+        p14.filter.list.extend(choices())
         p14.category = "Data Source"
         p14.description = ("REQUIRED. Data provider for all climate queries.\n"
-                           "• 'NASA POWER API' [Default]: Gridded global agroclimatology & solar radiation (1981-Present).\n"
+                           "• 'Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling' [Recommended]: Ground-truth station harmonization with ERA5 reanalysis and satellite solar/UV gap-filling.\n"
+                           "• 'NASA POWER API': Gridded global agroclimatology & solar radiation (1981-Present).\n"
                            "• 'Open-Meteo Historical API (ERA5 Reanalysis)': High-resolution numerical atmospheric reanalysis (~9 km, 1940-Present).\n"
-                           "• CDS, Hybrid, and NOAA Direct: Direct downloads are not implemented. "
-                           "They are excluded from this list; old saved settings report an error instead of substituting another source. "
-                           "precalculated data can still be used in Offline mode.")
+                           "• Precalculated data from any source can also be used in Offline mode.")
 
         p_om_model = arcpy.Parameter(
-            displayName="Open-Meteo Reanalysis Model",
+            displayName="Resolution / Native Source Grid",
             name="OpenMeteo_Model",
             datatype="GPString",
             parameterType="Optional",
             direction="Input")
         p_om_model.filter.type = "ValueList"
-        p_om_model.filter.list = [
-            "ERA5-Land (Highest Resolution ~9 km / 0.1 deg) [Recommended]",
-            "ERA5-Seamless (Combined 9-25 km / 0.1-0.25 deg)",
-            "ERA5 (Standard Reanalysis ~25 km / 0.25 deg)"
-        ]
-        p_om_model.value = "ERA5-Land (Highest Resolution ~9 km / 0.1 deg) [Recommended]"
+        p_om_model.filter.list = list(ERA5_MODELS)
+        p_om_model.value = ERA5_MODELS[0]
         p_om_model.category = "Data Source"
-        p_om_model.description = ("ATMOSPHERIC REANALYSIS MODEL. "
-                                  "'ERA5-Land' (default, recommended): highest spatial resolution (~9 km / 0.1 deg). "
-                                  "'ERA5-Seamless': combined high-resolution model. "
-                                  "'ERA5': standard global reanalysis (~25 km / 0.25 deg).")
+        p_om_model.description = ("SOURCE RESOLUTION. Highest available ERA5 grid is the default: "
+                                  "ERA5-Land 0.1 deg (~11 km API grid), starting 1950. ERA5 is 0.25 deg, starting 1940. "
+                                  "Seamless mixes grids by variable. NOAA is station-only; POWER grids are fixed by variable. "
+                                  "Smaller output cells do not increase source information resolution.")
 
         p_cds_key = arcpy.Parameter(
             displayName="Copernicus CDS API Key / Personal Token",
@@ -4642,8 +4661,15 @@ class PowerClimateAtlasGenerator(object):
             parameterType="Optional",
             direction="Input")
         p_cds_key.category = "Data Source"
-        p_cds_key.description = ("Legacy CDS credential field. Direct CDS downloads are not implemented. "
-                                 "NASA POWER and Open-Meteo do not require this key.")
+        p_cds_key.description = ("Need Sign In: your own CDS personal token. Accept the dataset terms on CDS. "
+                                 "Never include the token in shared projects or logs. Public sources do not require it.")
+        p_source_user=arcpy.Parameter(displayName="NASA Earthdata username / اسم المستخدم — Need Sign In",
+            name="Source_Username",datatype="GPString",parameterType="Optional",direction="Input")
+        p_source_password=arcpy.Parameter(displayName="NASA Earthdata password / كلمة المرور — Need Sign In",
+            name="Source_Password",datatype="GPStringHidden",parameterType="Optional",direction="Input")
+        for parameter in (p_source_user,p_source_password):
+            parameter.category="Source Account — Need Sign In"
+            parameter.description="Use your own NASA Earthdata account. Authorize GES DISC if required. Credentials are not included in MIRSAD output logs."
 
         # ═══ Time Window ═══
         p3 = arcpy.Parameter(
@@ -5321,7 +5347,7 @@ class PowerClimateAtlasGenerator(object):
                 p13, p31, p32,
                 p25, p26, p27,
                 p23, p28,
-                p22, p_yearly_excel]
+                p22, p_yearly_excel, p_source_user, p_source_password]
 
     def isLicensed(self):
         return True
@@ -5388,12 +5414,22 @@ class PowerClimateAtlasGenerator(object):
         if p_src:
             p_src.enabled = not is_offline
         src_text = p_src.valueAsText if p_src else "NASA POWER API"
-        use_om = bool(src_text and "Open-Meteo" in src_text)
+        use_om = bool(src_text and ("Open-Meteo" in src_text or "Hybrid" in src_text or u"هجين" in src_text))
         use_cds = bool(src_text and ("Copernicus" in src_text or "CDS" in src_text))
         if "OpenMeteo_Model" in pdict:
-            pdict["OpenMeteo_Model"].enabled = (not is_offline) and (use_om or use_cds)
+            resolution=pdict["OpenMeteo_Model"]
+            old_resolution=resolution.valueAsText or ""
+            if old_resolution in ERA5_MODELS:self._last_era5_resolution=canonical_resolution(old_resolution)
+            options=resolution_options(src_text)
+            resolution.filter.list=list(options)
+            resolution.value=getattr(self,"_last_era5_resolution",options[0]) if len(options)>1 else options[0]
+            resolution.enabled=(not is_offline) and len(options)>1
         if "CDS_API_Key" in pdict:
             pdict["CDS_API_Key"].enabled = (not is_offline) and use_cds
+        from utils.climate_products import descriptor as product_descriptor
+        spec=product_descriptor(src_text)
+        for field in ("Source_Username","Source_Password"):
+            if field in pdict:pdict[field].enabled=(not is_offline) and bool(spec and spec.get("auth")=="earthdata")
 
         # --- Time Mode & Date controls ---
         p_mode = pdict.get("Time_Mode") or pdict.get("Time_Range_Mode")
@@ -5415,7 +5451,10 @@ class PowerClimateAtlasGenerator(object):
         if "End_Date" in pdict:
             pdict["End_Date"].enabled = (not is_offline) and custom_range
         if "Temporal_Resolution" in pdict:
-            pdict["Temporal_Resolution"].enabled = not is_offline
+            monthly_product=bool(spec and spec["temporal"]!="Daily")
+            pdict["Temporal_Resolution"].filter.list=["Monthly"] if monthly_product else ["Monthly","Daily"]
+            if monthly_product:pdict["Temporal_Resolution"].value="Monthly"
+            pdict["Temporal_Resolution"].enabled = (not is_offline) and not monthly_product
         if "Gap_Fill_Method" in pdict:
             pdict["Gap_Fill_Method"].enabled = not is_offline
 
@@ -6036,11 +6075,25 @@ class PowerClimateAtlasGenerator(object):
                 if problem:
                     raise RuntimeError(problem)
             use_om = bool(provider.startswith("Open-Meteo") or "ERA5" in provider or "Hybrid" in provider or "Copernicus" in provider or "CDS" in provider)
+            source_order = pipeline_sources(provider)
+            from utils.climate_products import descriptor as product_descriptor,run as download_product
+            product_spec=product_descriptor(provider)
+            if not is_offline and product_spec and product_spec["temporal"]!="Daily":
+                # Native monthly/composite values cannot become daily records,
+                # including calls made outside ArcPy's updateParameters cycle.
+                temporal="Monthly";save_daily=False
+            is_hybrid = bool(source_order or product_spec)
             p_cds_k = pdict.get("CDS_API_Key")
             cds_key = p_cds_k.valueAsText if (p_cds_k and p_cds_k.valueAsText) else None
+            source_credentials=dict(token=cds_key or "")
+            for key,field in (("username","Source_Username"),("password","Source_Password")):
+                source_credentials[key]=pdict[field].valueAsText or "" if field in pdict else ""
             p_om_m = pdict.get("OpenMeteo_Model")
-            om_model = p_om_m.valueAsText if (p_om_m and p_om_m.valueAsText) else "ERA5-Land (Highest Resolution ~9 km / 0.1 deg) [Recommended]"
+            om_model = p_om_m.valueAsText if (p_om_m and p_om_m.valueAsText) else ERA5_MODELS[0]
             om_slug = om_model_slug(om_model)
+            if use_om and om_slug=="auto" and not source_order:
+                source_order=("Open-Meteo","NASA POWER")
+                is_hybrid=True
             p_gf = pdict.get("Gap_Fill_Method")
             _gap_txt = p_gf.valueAsText if (p_gf and p_gf.valueAsText) else "Climatological Month Mean (Recommended)"
             if _gap_txt.startswith("Linear"):
@@ -6254,9 +6307,11 @@ class PowerClimateAtlasGenerator(object):
             if download_only:
                 msg("Mode: DOWNLOAD & SAVE POINT DATA ONLY (points + tables, skipping rasters and atlas).")
             msg("Data source: %s" % provider)
-            if use_om:
+            if product_spec:
+                msg("Selected product: %s | Native grid: %s | Native time: %s" % (product_spec["id"],product_spec["resolution"],product_spec["temporal"]))
+            elif use_om:
                 msg("Atmospheric Model: %s [API code: %s]" % (om_model, om_slug))
-            else:
+            elif "NASA POWER" in provider:
                 msg("NASA POWER Model: MERRA-2 (~50 km / 0.5 deg) & CERES SYN1deg (~100 km / 1.0 deg) via AG community")
             msg("Modules: %s%s | Period: %s | Temporal: %s | Interp: %s"
                 % (", ".join(modules) if modules else "None",
@@ -6583,11 +6638,13 @@ class PowerClimateAtlasGenerator(object):
                     if not pts:
                         raise RuntimeError("Tolerance removed all points.")
 
-                msg("Checking server connectivity (one probe request) ...")
+                msg("Selected-source pipeline: checking each source during its own stage." if is_hybrid else "Checking server connectivity (one probe request) ...")
                 try:
-                    probe_server(provider, pts[0]["lat"], pts[0]["lon"], y0, len(pts),
+                    if not is_hybrid:
+                        probe_server(provider, pts[0]["lat"], pts[0]["lon"], y0, len(pts),
                                  model=om_slug, start_date=start_date_str, end_date=end_date_str)
-                    msg("Server connectivity OK (%s)." % provider)
+                    if not is_hybrid:
+                        msg("Server connectivity OK (%s)." % provider)
                 except RuntimeError as ex:
                     messages.addErrorMessage(str(ex))
                     raise
@@ -6605,7 +6662,58 @@ class PowerClimateAtlasGenerator(object):
                     except Exception:
                         sess = None
 
-                if use_om:
+                if is_hybrid:
+                    from utils import hybrid_pipeline
+                    required = set()
+                    for selected_module in ordered_modules:
+                        if selected_module == "Climate_Models":
+                            for submodel in active_submodels:
+                                required.update(SUBMODEL_DEPS[submodel].get("params", []))
+                        else:
+                            required.update(MODULE_PARAMS.get(selected_module, []))
+                    hybrid_start = hybrid_pipeline.date(start_date_str) if start_date_str else datetime.date(y0,1,1)
+                    hybrid_end = hybrid_pipeline.date(end_date_str) if end_date_str else datetime.date(y1,12,31)
+                    hybrid_stations = []
+                    for p in pts:
+                        usaf, wban = p.get("station_id", ""), p.get("wban", "")
+                        hybrid_stations.append(dict(station_key="%s|%s|%.8f|%.8f" % (usaf,wban,p["lat"],p["lon"]),
+                            usaf=usaf,wban=wban,ghcn_id=p.get("ghcn_id"),latitude=p["lat"],longitude=p["lon"],name=p.get("station_name", "")))
+                    def hybrid_progress(event):
+                        msg(event["message"])
+                        arcpy.SetProgressor("step",event["stage"],0,len(pts),1)
+                        arcpy.SetProgressorPosition(event["completed"])
+                    def hybrid_cancelled():
+                        return bool(getattr(arcpy.env,"isCancelled",False))
+                    try:
+                        if product_spec:
+                            downloaded=download_product(provider,hybrid_stations,hybrid_start,hybrid_end,sorted(required),
+                                os.path.join(paths["source_data"],"Products"),hybrid_progress,hybrid_cancelled,session=sess,credentials=source_credentials)
+                        else:
+                            downloaded = hybrid_pipeline.run(hybrid_stations,hybrid_start,hybrid_end,sorted(required),
+                                os.path.join(paths["source_data"],"Hybrid"),hybrid_progress,hybrid_cancelled,model=om_slug,session=sess,sources=source_order)
+                        msg("All selected source stages complete. Applying selected monthly Gap Fill once ...")
+                        hybrid_pipeline.prepare_monthly(downloaded,hybrid_start,hybrid_end,gap_method,fill_interior_gaps)
+                        for rec, downloaded_rec in zip(results,downloaded):
+                            rec.update(monthly=downloaded_rec["monthly"],
+                                daily_raw=dict((p,dict((tuple(map(int,d.split("-"))),v) for d,v in values.items())) for p,values in downloaded_rec["series"].items()),
+                                status=downloaded_rec["status"],error=downloaded_rec["error"],
+                                source_summary=downloaded_rec["source_summary"],hybrid=True,
+                                source_status=downloaded_rec["status"],
+                                native_monthly=downloaded_rec.get("native_monthly",{}),
+                                native_monthly_coverage=downloaded_rec.get("native_monthly_coverage",{}),
+                                resolution_by_variable=downloaded_rec.get("resolution_by_variable",{}),
+                                monthly_gap_provenance=downloaded_rec["monthly_gap_provenance"])
+                            for warning in downloaded_rec["warnings"]:
+                                warn("%s: %s" % (rec.get("station_name",""),warning))
+                            hybrid_pipeline.atomic_json(downloaded_rec["raw_path"].replace("-summary.json","-monthly-estimates.json"),
+                                dict(station=downloaded_rec["station"],estimates=downloaded_rec["monthly_gap_provenance"],
+                                     source_missing_counts=downloaded_rec.get("missing_counts",{}),source_events=downloaded_rec.get("source_events",[])))
+                    finally:
+                        arcpy.ResetProgressor()
+                        if sess is not None:
+                            sess.close()
+                            sess = None
+                if use_om and not is_hybrid:
                     om_daily_all, om_hourly_all, _om_drop, _om_note = om_probe_vars(
                         ordered_modules, model=om_slug, start_date=start_date_str, end_date=end_date_str)
                     if _om_note:
@@ -6633,7 +6741,10 @@ class PowerClimateAtlasGenerator(object):
                         t_dl_start = time.time()
 
                         # Check if any station needs querying
-                        if use_om:
+                        if is_hybrid:
+                            pts_to_fetch = []
+                            msg("Selected sources already downloaded for all modules; using finalized source series.")
+                        elif use_om:
                             # For Open-Meteo, get required variables for this module
                             m_d_vars, m_h_vars = om_var_sets([m])
                             m_d_vars = [v for v in m_d_vars if v in om_daily_all]
@@ -6781,7 +6892,7 @@ class PowerClimateAtlasGenerator(object):
                         msg("Element [%d/%d] %s: Computing indicators ..." % (mi + 1, len(ordered_modules), m))
                         for idx, rec in enumerate(results):
                             try:
-                                if use_om:
+                                if use_om or is_hybrid:
                                     monthly = rec.get("monthly", {})
                                     daily_raw = rec.get("daily_raw", {})
                                     precip_totals = True
@@ -6802,9 +6913,9 @@ class PowerClimateAtlasGenerator(object):
                                                                 if start_ym <= ym <= end_ym)
 
                                 f = compute_point_fields(monthly, years, [m], temporal,
-                                                         daily_raw, precip_totals, gap_method,
+                                                         daily_raw, precip_totals, "none" if is_hybrid else gap_method,
                                                          lat=rec.get("lat", 0.0),
-                                                         uv_source=("om" if use_om else "nasa"),
+                                                         uv_source=("nasa" if is_hybrid else "om" if use_om else "nasa"),
                                                          monthly_ranges=monthly_ranges_on,
                                                          unit_temp=unit_temp_text,
                                                          unit_precip=unit_precip_text,
@@ -6812,11 +6923,29 @@ class PowerClimateAtlasGenerator(object):
                                                          unit_wind=unit_wind_text,
                                                          unit_solar=unit_solar_text)
                                 rec.setdefault("fields", {}).update(f)
+                                if is_hybrid:
+                                    # A successful earlier module must not label an
+                                    # unsupported later module as a successful download.
+                                    rec["status"]=rec.get("source_status","OK")
+                                    rec["error"]=""
+                                    dependencies=needed_m
+                                    if m=="Land Surface Temperature" and provider.startswith("MODIS MOD11A2"):dependencies=["TS"]
+                                    available=any(v is not None for p in dependencies for v in monthly.get(p,{}).values())
+                                    if not available:
+                                        rec["status"]="NO_DATA";rec["error"]="No usable dependencies for "+m+" from "+provider
+                                    elif product_spec and product_spec["temporal"]!="Daily":
+                                        periods=list(hybrid_pipeline.days(hybrid_start,hybrid_end))
+                                        periods=sorted(set(day[:7] for day in periods))
+                                        coverage=rec.get("native_monthly_coverage",{})
+                                        fractions=[min(coverage.get(p,{}).get(period,0.) for p in dependencies) for period in periods]
+                                        fraction=sum(fractions)/max(1,len(fractions))
+                                        if fraction<1:
+                                            rec["status"]="PARTIAL";rec["error"]="Native monthly/quality coverage %.3f; inspect raw product summary"%fraction
                             except Exception as ex:
                                 warn("Element '%s' failed at point %s: %s"
                                      % (m, rec.get("oid"), str(ex)[:200]))
 
-                        if gap_method != "none":
+                        if gap_method != "none" and not is_hybrid:
                             spatial_impute_missing(results, [m])
 
                         if m == "UV Index" and not use_om and years and min(years) < 2001:
@@ -6982,11 +7111,14 @@ class PowerClimateAtlasGenerator(object):
                         except Exception:
                             pass
 
-                n_data = sum(1 for r in results if r.get("status") == "OK")
+                # Module quality is independent of whether the selected source
+                # returned any data. A missing last module must not discard valid
+                # earlier modules or report the entire source as unavailable.
+                n_data = sum(1 for r in results if r.get("source_status",r.get("status")) == "OK")
                 n_empty = len(results) - n_data
                 ok_count = n_data
                 fail = [(r["oid"], r.get("error", "")) for r in results
-                        if r.get("status") != "OK"]
+                        if r.get("source_status",r.get("status")) != "OK"]
                 msg("Data retrieved for %d/%d points%s." % (
                     n_data, len(results),
                     (" (%d without valid values)" % n_empty) if n_empty else ""))
@@ -7101,7 +7233,8 @@ class PowerClimateAtlasGenerator(object):
             self._write_dictionaries(paths["vec"], active_export_modules, msg, provider,
                                      wanted_fields_by_module=wanted_fields_by_module)
             qa = self._run_qa(element_fcs, paths, active_export_modules, raster_registry, results, msg, warn,
-                              wanted_fields_by_module=wanted_fields_by_module)
+                              wanted_fields_by_module=wanted_fields_by_module,
+                              raster_failures=[text for text in warnings if text.startswith("Raster ") and " failed:" in text])
 
             ar_gdb_path = None
             if arabic_db and element_fcs:
@@ -7241,7 +7374,10 @@ class PowerClimateAtlasGenerator(object):
                 warn("Could not generate Climate Atlas Classification Guide: %s" % ex_guide)
 
             msg("\n" + "=" * 70)
-            msg("  [DONE] NASA POWER Climate Atlas Generated Successfully!")
+            if warnings:
+                warn("  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above.")
+            else:
+                msg("  [DONE] MIRSAD Climate Atlas Generated Successfully!")
             msg("  Execution Started : %s" % overall_start_dt)
             msg("  Execution Finished: %s" % now_str())
             msg("  Total Duration    : %s (%.1f seconds)" % (format_duration(t_total_elapsed), t_total_elapsed))
@@ -7455,9 +7591,17 @@ class PowerClimateAtlasGenerator(object):
         st_nm_field = next((f for f in ["Name", "Station_Nm", "STATION_NM", "NAME", "station_name"] if f in fields_in), None)
         st_ctry_field = next((f for f in ["Country", "Country_Nm", "Country_Cd", "COUNTRY", "country"] if f in fields_in), None)
         st_elev_field = next((f for f in ["Elev_m", "Elev_Meters", "ELEV_M", "Elevation", "elevation"] if f in fields_in), None)
+        wban_field = next((f for f in ["WBAN", "wban"] if f in fields_in), None)
+        ghcn_field = next((f for f in ["GHCN_ID", "ghcn_id"] if f in fields_in), None)
 
         search_fields = [oid_field, "SHAPE@XY"]
         f_map = {}
+        if ghcn_field:
+            f_map["ghcn_id"] = len(search_fields)
+            search_fields.append(ghcn_field)
+        if wban_field:
+            f_map["wban"] = len(search_fields)
+            search_fields.append(wban_field)
         if st_id_field:
             f_map["st_id"] = len(search_fields)
             search_fields.append(st_id_field)
@@ -7487,6 +7631,8 @@ class PowerClimateAtlasGenerator(object):
                         lon, lat = x, y
 
                     p_info = {"oid": row[0], "lat": float(lat), "lon": float(lon)}
+                    p_info["ghcn_id"] = str(row[f_map["ghcn_id"]]) if "ghcn_id" in f_map and row[f_map["ghcn_id"]] is not None else None
+                    p_info["wban"] = str(row[f_map["wban"]]) if "wban" in f_map and row[f_map["wban"]] is not None else ""
                     if "st_id" in f_map and row[f_map["st_id"]] is not None:
                         p_info["station_id"] = str(row[f_map["st_id"]])
                     else:
@@ -7925,8 +8071,8 @@ class PowerClimateAtlasGenerator(object):
                     try:
                         yearly["fields"] = compute_point_fields(
                             monthly, [year], [module_name], temporal, daily_raw,
-                            use_om, gap_method, lat=rec.get("lat", 0.0),
-                            uv_source="om" if use_om else "nasa", monthly_ranges=monthly_ranges,
+                            use_om, "none" if rec.get("hybrid") else gap_method, lat=rec.get("lat", 0.0),
+                            uv_source="nasa" if rec.get("hybrid") else "om" if use_om else "nasa", monthly_ranges=monthly_ranges,
                             **dict((key, admin_meta.get(key)) for key in
                                    ("unit_temp", "unit_precip", "unit_press", "unit_wind", "unit_solar")))
                         if any(value is not None for value in yearly["fields"].values()):
@@ -7935,7 +8081,7 @@ class PowerClimateAtlasGenerator(object):
                         yearly.update(status="FAILED", error=str(ex))
                         warn("Year %d, %s, point %s: %s" % (year, module_name, rec.get("oid"), ex))
                 yearly_results.append(yearly)
-            if gap_method != "none":
+            if gap_method != "none" and not any(rec.get("hybrid") for rec in results):
                 spatial_impute_missing(yearly_results, [module_name])
             meta = dict(admin_meta, y0=year, y1=year,
                         data_start=max(admin_meta.get("request_start") or "%04d-01-01" % year,
@@ -8667,6 +8813,7 @@ class PowerClimateAtlasGenerator(object):
                     pass
         return out
 
+    @filegdb_raster_workspace
     def _interpolate_all(self, master_fc, modules, paths, cell, method, mask, msg, warn,
                          iopts=None, kopts=None, is_geo=False,
                          purge=True, scratch=None, focal=None, source_by_module=None,
@@ -8678,10 +8825,6 @@ class PowerClimateAtlasGenerator(object):
         if scratch is None:
             scratch = os.path.join(out_ws, "_scratch")
         makedirs_ok(scratch)
-        try:
-            arcpy.env.scratchWorkspace = scratch
-        except Exception:
-            pass
         focal = focal or {"apply": False, "stat": "MEAN", "size": 3}
         if reclass_opts is None:
             reclass_opts = {"enable": False, "nclass": 7, "method": "Natural Breaks (Jenks)"}
@@ -8795,12 +8938,15 @@ class PowerClimateAtlasGenerator(object):
                 if n_valid < 3:
                     warn("Skipping raster %s: only %d valid points." % (field, n_valid))
                     continue
-                lyr = "pwr_atlas_interp"
+                # Spatial Analyst can misparse named FeatureLayers backed by
+                # paths containing spaces (010819). Materialize the same NULL
+                # selection in the owned scratch GDB and pass its full path.
+                lyr = os.path.join(arcpy.env.scratchWorkspace, "pwr_atlas_interp")
                 try:
                     arcpy.management.Delete(lyr)
                 except Exception:
                     pass
-                arcpy.management.MakeFeatureLayer(
+                arcpy.Select_analysis(
                     src_fc, lyr, "%s IS NOT NULL" % arcpy.AddFieldDelimiters(src_fc, actual_field))
                 try:
                     arcpy.ClearEnvironment("mask")
@@ -8829,7 +8975,7 @@ class PowerClimateAtlasGenerator(object):
                             arcpy.management.Delete(lyr)
                         except Exception:
                             pass
-                        arcpy.management.MakeFeatureLayer(
+                        arcpy.Select_analysis(
                             src_fc, lyr, "%s IS NOT NULL" % arcpy.AddFieldDelimiters(src_fc, actual_field))
                         surf = self._interp_surface(lyr, actual_field, cell, method, iopts, kopts)
                 else:
@@ -9339,7 +9485,8 @@ class PowerClimateAtlasGenerator(object):
                                    [[r[c] for c in ar_cols] for r in rows], True)],
                                    msg, lambda text: msg("WARNING: " + text))
 
-    def _run_qa(self, element_fcs, paths, modules, registry, results, msg, warn, wanted_fields_by_module=None):
+    def _run_qa(self, element_fcs, paths, modules, registry, results, msg, warn, wanted_fields_by_module=None,
+                raster_failures=None):
         checks = []
 
         def _add(name, ok, detail=""):
@@ -9427,6 +9574,8 @@ class PowerClimateAtlasGenerator(object):
         missing = [item[0] for item in registry if not os.path.isfile(item[1])]
         _add("tif per raster", len(missing) == 0,
              "(%d/%d, missing=%s)" % (len(registry) - len(missing), len(registry), missing[:5]))
+        _add("raster processing failures", not raster_failures,
+             "failed=%d" % len(raster_failures or []))
         mods_with_r = set(item[3] for item in registry)
         _add("outputs match selected modules", not (mods_with_r - set(modules)),
              "raster modules=%s" % sorted(mods_with_r))
@@ -9622,3 +9771,132 @@ class PowerClimateAtlasGenerator(object):
         elif scratch:
             msg("Scratch kept for inspection (purge OFF): %s" % scratch)
         msg("Intermediate data cleaned (in_memory, masks reset). Inputs and final outputs untouched.")
+
+
+class SpatialClimateAtlasGeneratorAR(PowerClimateAtlasGenerator):
+    """MIRSAD: Spatial Climate Atlas Generator — Arabic Edition."""
+
+    def __init__(self):
+        super(SpatialClimateAtlasGeneratorAR, self).__init__() if hasattr(super(SpatialClimateAtlasGeneratorAR, self), '__init__') else PowerClimateAtlasGenerator.__init__(self)
+        self.label = "MIRSAD: Point Climate Atlas Generator (AR)"
+        self.description = (
+            "أداة مِرصاد الجغرافية لإنشاء الأطلس المناخي المكاني لطبقات النقاط: "
+            "تنزيل البيانات المناخية متعددة المصادر (NASA POWER, Open-Meteo ERA5, أو النموذج الهجين)، "
+            "وحساب المؤشرات المناخية السنوية والموسمية، وبناء حزمة الأطلس المتكاملة: "
+            "طبقات نقاط، جداول إكسل، أسطح راستر مستمرة ومقصوصة، أسهم متجهات الرياح، خطوط الضغط المتساوي، "
+            "وقواميس البيانات ثنائية اللغة وسجلات التوثيق والجودة."
+        )
+        self.category = ""
+        self.canRunInBackground = True
+
+    def getParameterInfo(self):
+        params = PowerClimateAtlasGenerator.getParameterInfo(self)
+        pdict = dict((p.name, p) for p in params)
+
+        p_op = pdict.get("Operation_Mode")
+        if p_op:
+            p_op.displayName = "نمط سير العمل والتشغيل"
+            p_op.filter.list = [
+                "تنزيل البيانات وإنتاج الأطلس كاملاً (المسار الشامل) [الافتراضي]",
+                "استيفاء ورسم الخرائط لبيانات موجودة مسبقاً (وضع أوفلاين)"
+            ]
+            p_op.value = "تنزيل البيانات وإنتاج الأطلس كاملاً (المسار الشامل) [الافتراضي]"
+
+        p_wf = pdict.get("Execution_Workflow_Mode")
+        if p_wf:
+            p_wf.displayName = "نمط تنفيذ المعالجة وتدفق المهام"
+            p_wf.filter.list = [
+                "نمط الدفعات: تنزيل كافة البيانات أولاً ثم المعالجة [موصى به]",
+                "نمط تتابعي: معالجة عنصر بعنصر"
+            ]
+            p_wf.value = "نمط الدفعات: تنزيل كافة البيانات أولاً ثم المعالجة [موصى به]"
+
+        p0 = pdict.get("Input_Point_Features")
+        if p0:
+            p0.displayName = "طبقة نقاط الإدخال (شيب فايل أو فيتشر كلاس)"
+
+        p_precalc = pdict.get("Precalculated_Point_Layers")
+        if p_precalc:
+            p_precalc.displayName = "طبقة نقاط محسوبة مسبقاً (وضع أوفلاين)"
+
+        p1 = pdict.get("Study_Area_Mask")
+        if p1:
+            p1.displayName = "قناع حدود منطقة الدراسة (مضلع اختياري)"
+
+        p_sname = pdict.get("Study_Area_Name")
+        if p_sname:
+            p_sname.displayName = "اسم منطقة الدراسة (اختياري - لتسمية الطبقات)"
+
+        p12 = pdict.get("Output_Workspace")
+        if p12:
+            p12.displayName = "مجلد مساحة عمل المخرجات الرئيسي"
+
+        p2 = pdict.get("Output_Spatial_Reference")
+        if p2:
+            p2.displayName = "نظام الإسناد المكاني للمخرجات (Spatial Reference)"
+
+        p_csrc = pdict.get("Climate_Data_Source")
+        if p_csrc:
+            p_csrc.displayName = "مصدر البيانات المناخية ومحرك المعالجة"
+
+        p_tmode = pdict.get("Temporal_Resolution")
+        if p_tmode:
+            p_tmode.displayName = "الدقة الزمنية للبيانات (شهري / يومي)"
+
+        p_syear = pdict.get("Start_Year")
+        if p_syear:
+            p_syear.displayName = "سنة البداية"
+
+        p_eyear = pdict.get("End_Year")
+        if p_eyear:
+            p_eyear.displayName = "سنة النهاية"
+
+        p_bsyear = pdict.get("Baseline_Start_Year")
+        if p_bsyear:
+            p_bsyear.displayName = "سنة بداية خط الأساس (المقارنة المرجعية والتغير المناخي)"
+
+        p_beyear = pdict.get("Baseline_End_Year")
+        if p_beyear:
+            p_beyear.displayName = "سنة نهاية خط الأساس"
+
+        p_trend = pdict.get("Calculate_Trends")
+        if p_trend:
+            p_trend.displayName = "حساب الاتجاهات المناخية والانحرافات عن المعدل"
+
+        p_unit = pdict.get("Measurement_Units_System")
+        if p_unit:
+            p_unit.displayName = "نظام وحدات القياس (متري Metric / إمبراطوري Imperial)"
+
+        p_interp = pdict.get("Interpolation_Method")
+        if p_interp:
+            p_interp.displayName = "طريقة الاستيفاء المكاني للراستر"
+
+        p_bcell = pdict.get("Base_Cell_Size")
+        if p_bcell:
+            p_bcell.displayName = "حجم الخلية الأساسي لأسطح الراستر (بالأمتار)"
+
+        p_en_rst = pdict.get("Enable_Raster_Generation")
+        if p_en_rst:
+            p_en_rst.displayName = "توليد أسطح الراستر المستمرة (GeoTIFF)"
+
+        p_syr = pdict.get("Save_Yearly_Outputs")
+        if p_syr:
+            p_syr.displayName = "حفظ مخرجات السنوات الفردية (طبقات + شيتات إكسل إضافية)"
+
+        p_sdly = pdict.get("Save_Daily_Series")
+        if p_sdly:
+            p_sdly.displayName = "حفظ السلاسل الزمنية اليومية (شيتات Excel + قاعدة البيانات)"
+
+        p_gap = pdict.get("Gap_Fill_Method")
+        if p_gap:
+            p_gap.displayName = "طريقة استكمال ومعالجة القيم المفقودة (Gap Filling)"
+
+        p_om = pdict.get("OpenMeteo_Model")
+        if p_om:
+            p_om.displayName = "النموذج المناخي للشبكة الأوروبية (Open-Meteo ERA5 Reanalysis)"
+
+        p_donly = pdict.get("Download_Only")
+        if p_donly:
+            p_donly.displayName = "تنزيل وحفظ بيانات النقاط فقط (تخطي الراسترات والأطلس)"
+
+        return params

@@ -1,0 +1,16 @@
+{
+  "catalogue_version": "2026.10.17.3",
+  "catalogue_hash": "167239e5bd5613d0455a967a82b23ddcb91f659c07bf95024e2b4855171dbcf5",
+  "count": 28066,
+  "source": "NOAA ISD station locations; MIRSAD display policy retained",
+  "source_dbf_sha256": "b584ac3742de74b8ba2ef5b938fc95be4d5a0a876489bc55608b808397328f57",
+  "reference_url": "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv",
+  "reference_sha256": "1994747ab4af1b97e63adb434b4d0d022f2daee76f0c144ea9ab46be2d906604",
+  "audited_utc": "2026-10-17T18:19:57.446037+00:00",
+  "qa_counts": {
+    "reference_match": 28064,
+    "review_required": 2
+  },
+  "accuracy_limit": "Catalogue agreement is not ground verification; discrepancies are not silently relocated.",
+  "embedded_sha256": "bead86dbe5bf8bf4f0cf90502ce0211ad4f5c5795050aafc9725366030c35e00"
+}

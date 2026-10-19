@@ -1,0 +1,16 @@
+[project]
+name = "mirsad-desktop"
+version = "0.4.0.dev8"
+description = "Independent MIRSAD station and climate workspace"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "PySide6-Essentials>=6.8,<7", "PySide6-Pdf>=6.12,<6.13", "pyogrio>=0.11,<0.14", "numpy>=2,<3",
+  "shapely>=2,<3", "pyproj>=3.7,<4", "openpyxl>=3.1,<4", "requests>=2.32,<3",
+  "scipy>=1.14,<2", "rasterio>=1.4,<2", "matplotlib>=3.9,<4", "defusedxml>=0.7.1,<1"
+]
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.12,<7"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

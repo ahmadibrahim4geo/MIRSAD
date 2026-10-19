@@ -1,0 +1,13 @@
+VSVersionInfo(
+ ffi=FixedFileInfo(filevers=(0,4,0,8),prodvers=(0,4,0,8),mask=0x3f,flags=0x2,OS=0x40004,fileType=0x1,subtype=0x0,date=(0,0)),
+ kids=[StringFileInfo([StringTable('040904B0',[
+  StringStruct('CompanyName','Ahmad Ibrahim'),
+  StringStruct('FileDescription','MIRSAD Desktop - Geospatial & Climate Atlas'),
+  StringStruct('FileVersion','0.4.0.dev8'),
+  StringStruct('InternalName','MIRSAD'),
+  StringStruct('LegalCopyright','Copyright (c) 2026 Ahmad Ibrahim. MIT License.'),
+  StringStruct('OriginalFilename','MIRSAD.exe'),
+  StringStruct('ProductName','MIRSAD Desktop'),
+  StringStruct('ProductVersion','0.4.0.dev8'),
+  StringStruct('Comments','https://github.com/ahmadibrahim4geo/MIRSAD')
+ ])]),VarFileInfo([VarStruct('Translation',[1033,1200])])])

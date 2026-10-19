@@ -1,0 +1,15 @@
+<p>Derived indices are calculated in their prescribed internal units before output conversion. Changing a display unit must not put Fahrenheit into P&lt;2T or inches into De Martonne. A range, anomaly, slope or temperature difference is a delta, not an absolute temperature.</p>
+<table><tr><th>Quantity</th><th>Conversion from calculation unit</th></tr>
+<tr><td>Absolute temperature, °C</td><td>°F=1.8×°C+32; K=°C+273.15.</td></tr>
+<tr><td>Temperature delta, °C</td><td>°F delta=1.8×delta; K delta=delta. Applies to ranges, trends and anomalies; see the LST difference limitation below.</td></tr>
+<tr><td>Rainfall / PET / signed water difference, mm</td><td>inches=mm/25.4. Counts and percentages are not converted.</td></tr>
+<tr><td>Pressure, hPa</td><td>kPa=hPa/10; inHg=hPa×0.029530.</td></tr>
+<tr><td>Wind, m/s</td><td>km/h=m/s×3.6; knots=m/s×1.943844; mph=m/s×2.236936. Direction remains degrees.</td></tr>
+<tr><td>Solar, kWh/m²/day (total: kWh/m²/year)</td><td>MJ=value×3.6; Wh=value×1000; cal/cm² or Langley=value×85.9845; period denominator stays daily or annual as appropriate.</td></tr>
+<tr><td>RH/cloud, UV, aridity, dry months</td><td>Percent, source/estimated UV index, ratio/index, and number of months respectively. UNEP is not percent.</td></tr></table>
+<h3>Recorded implementation difference: LST minus air temperature</h3>
+<p>The legacy toolbox converter recognizes delta names containing Range, Trend, Anom or Diff. LST_minus_T_* does not match that rule: its Fahrenheit/Kelvin conversion currently adds the absolute offset incorrectly. Desktop explicitly corrects these LST difference fields after conversion. For consistent interpretation of this difference between the hosts, use Celsius until the legacy converter is separately corrected and verified. This documentation change does not silently change calculations or old output files.</p>
+<h3>Reading rounded columns</h3>
+<p>Calculations generally use unrounded internal inputs and then round output fields. The documented monthly LST difference is an exception using rounded monthly temperature columns; summary-of-monthly trend fields also average their already rounded monthly results. Rainfall totals may not reproduce a derived aridity ratio by dividing rounded exported columns, especially with unequal year coverage. Keep raw inputs and coverage information.</p>
+<h3>Method references and implementation scope</h3>
+<p><a href="https://www.fao.org/4/x0490e/x0490e07.htm">FAO-56: radiation and meteorological calculations</a>; <a href="https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml">NOAA/WPC: Rothfusz heat index</a>; <a href="https://www.weather.gov/safety/cold-wind-chill-chart">NWS: wind chill</a>; <a href="https://doi.org/10.1175/JAMC-D-11-0143.1">Stull (2011): wet-bulb approximation</a>. These describe methods, not a claim that every standard or validity guard is fully implemented. The equation pages state the actual repository behavior reviewed on 18 October 2026.</p>

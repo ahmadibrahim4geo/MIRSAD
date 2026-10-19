@@ -92,7 +92,7 @@ pyt_mod.__dict__["arcpy"] = mock_arcpy
 raw_pyt = open(PYT_PATH, "rb").read()
 if sys.version_info[0] == 3:
     if isinstance(raw_pyt, bytes):
-        raw_pyt = raw_pyt.decode("utf-8")
+        raw_pyt = raw_pyt.decode("utf-8-sig")
     _nl = "\n" if "\n" in raw_pyt else "\r\n"
     _first, _sep, _rest = raw_pyt.partition(_nl)
     if "coding" in _first and _first.lstrip().startswith("#"):

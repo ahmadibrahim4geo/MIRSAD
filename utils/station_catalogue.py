@@ -5,8 +5,35 @@ import collections
 import math
 import os
 import struct
+import sqlite3
 
 _CACHE = {}
+
+
+def load_shared_catalogue(path):
+    """Versioned, audited location snapshot shared with the independent desktop."""
+    stat = os.stat(path)
+    signature = (os.path.abspath(path), stat.st_size, stat.st_mtime)
+    if signature in _CACHE:
+        return _CACHE[signature]
+    countries = {}
+    database = sqlite3.connect(path)
+    try:
+        # Python 2.7's sqlite3.Row rejects unicode column-name indexes.
+        database.row_factory = lambda cursor, row: dict((column[0], value)
+                                                       for column, value in zip(cursor.description, row))
+        for row in database.execute("SELECT * FROM stations ORDER BY country,name,station_key"):
+            station = {"Station_ID": row["usaf"], "WBAN": row["wban"], "Name": row["name"],
+                       "Country": row["country"], "Country_Nm": row["country_name"],
+                       "Continent": row["continent"], "Is_Arab": bool(row["is_arab"]),
+                       "Lat": row["latitude"], "Lon": row["longitude"], "Elev_m": row["elevation"] or 0.0,
+                       "Station_Key": row["station_key"], "Coordinate_QA": row["qa_status"]}
+            countries.setdefault(row["country"], []).append(station)
+    finally:
+        database.close()
+    _CACHE.clear()
+    _CACHE[signature] = countries
+    return countries
 
 
 def _text(raw):

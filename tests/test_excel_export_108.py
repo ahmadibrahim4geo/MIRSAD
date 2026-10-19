@@ -107,19 +107,24 @@ class TestExcelAndArabicExport(unittest.TestCase):
         # 1. Hybrid
         hyb = pyt_mod.get_element_source_metadata("Temperature", "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling")
         self.assertIn("NOAA", hyb["primary_source"])
-        self.assertIn("ERA5", hyb["gap_fill_source"])
-        self.assertIn("In-Situ", hyb["spatial_resolution"])
+        self.assertIn("ERA5", hyb["model_used"])
+        self.assertIn("NASA POWER", hyb["model_used"])
+        self.assertIn("audit", hyb["gap_fill_source"])
+        self.assertIn("station", hyb["spatial_resolution"])
 
         # 2. NOAA Direct
         noaa = pyt_mod.get_element_source_metadata("Wind", "NOAA ISD / GHCN Direct Station Ground Observations Archive")
         self.assertIn("NOAA", noaa["primary_source"])
-        self.assertIn("Synoptic", noaa["model_used"])
+        self.assertIn("Station observations", noaa["model_used"])
+        self.assertIn("no reanalysis", noaa["model_used"])
 
         # 3. Open-Meteo ERA5
         om = pyt_mod.get_element_source_metadata("Precipitation", "Open-Meteo Historical API (ERA5 Reanalysis)", om_model="ERA5-Land")
         self.assertIn("Open-Meteo", om["primary_source"])
         self.assertIn("ERA5-Land", om["model_used"])
-        self.assertIn("9 km", om["spatial_resolution"])
+        # The Open-Meteo API samples a 0.1-degree grid; do not substitute
+        # the nominal ERA5-Land model spacing for the API grid description.
+        self.assertIn("0.1 deg", om["spatial_resolution"])
 
         # 4. NASA POWER
         nasa = pyt_mod.get_element_source_metadata("Solar Radiation", "NASA POWER API")

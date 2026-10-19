@@ -186,7 +186,10 @@ class StationMultipleSelection(unittest.TestCase):
         pd["Select_Country"].value = "[All Arab League Countries (ARAB)]"
         tool.updateParameters(params)
         self.assertEqual(pd["Select_Country"].valueAsText, "[All Arab League Countries (ARAB)]")
-        self.assertFalse(pd["Selected_Stations"].enabled)
+        # National aggregate scopes now also allow an explicit subset. Empty
+        # selection still means the full network, as the execution check below verifies.
+        self.assertTrue(pd["Selected_Stations"].enabled)
+        self.assertTrue(pd["Selected_Stations"].filter.list)
         tool.updateMessages(params)
         self.assertIsNone(pd["Selected_Stations"].error)
         tool._load_all_stations = lambda *a: self.catalogue["EG"] + self.catalogue["SA"]
@@ -241,8 +244,10 @@ class StationMultipleSelection(unittest.TestCase):
         tool = stations.WeatherStationsAtlasGenerator()
         first = tool._station_catalogue()
         self.assertIs(first, tool._station_catalogue())
-        self.assertEqual(len(first["EG"]), 86)
-        self.assertEqual(len(station_choices(first["EG"])), 86)
+        # Audited Ghazza country correction removes one former EG display row;
+        # raw source country remains separately preserved in the shared catalogue.
+        self.assertEqual(len(first["EG"]), 85)
+        self.assertEqual(len(station_choices(first["EG"])), 85)
         us = station_choices(first["US"])
         same_usaf = [(label, s) for label, s in us.items() if s["Station_ID"] == "999999"]
         self.assertGreater(len(same_usaf), 1)

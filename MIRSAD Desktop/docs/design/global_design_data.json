@@ -1,0 +1,3053 @@
+{
+  "stations": [
+    {
+      "station_key": "411120|99999|18.240000|42.657000",
+      "usaf": "411120",
+      "wban": "99999",
+      "name": "ABHA",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 18.24,
+      "longitude": 42.657,
+      "elevation": 2090.3
+    },
+    {
+      "station_key": "410350|99999|21.333000|40.267000",
+      "usaf": "410350",
+      "wban": "99999",
+      "name": "AL-HADA",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 21.333,
+      "longitude": 40.267,
+      "elevation": 2089.0
+    },
+    {
+      "station_key": "411140|99999|18.297000|42.804000",
+      "usaf": "411140",
+      "wban": "99999",
+      "name": "KING KHALED AB",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 18.297,
+      "longitude": 42.804,
+      "elevation": 2065.9
+    },
+    {
+      "station_key": "410550|99999|20.296000|41.634000",
+      "usaf": "410550",
+      "wban": "99999",
+      "name": "AL BAHA / KING SAUD BIN ABDUL",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 20.296,
+      "longitude": 41.634,
+      "elevation": 1672.1
+    },
+    {
+      "station_key": "410360|99999|21.483000|40.544000",
+      "usaf": "410360",
+      "wban": "99999",
+      "name": "TAIF",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 21.483,
+      "longitude": 40.544,
+      "elevation": 1477.7
+    },
+    {
+      "station_key": "404800|99999|21.483000|40.533000",
+      "usaf": "404800",
+      "wban": "99999",
+      "name": "TAIF/AT TAIF",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 21.483,
+      "longitude": 40.533,
+      "elevation": 1471.0
+    },
+    {
+      "station_key": "410180|99999|22.250000|41.633000",
+      "usaf": "410180",
+      "wban": "99999",
+      "name": "MAHAZAT AL-SAID-1",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 22.25,
+      "longitude": 41.633,
+      "elevation": 1394.0
+    },
+    {
+      "station_key": "411280|99999|17.611000|44.419000",
+      "usaf": "411280",
+      "wban": "99999",
+      "name": "NEJRAN",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 17.611,
+      "longitude": 44.419,
+      "elevation": 1213.7
+    },
+    {
+      "station_key": "410840|99999|19.984000|42.621000",
+      "usaf": "410840",
+      "wban": "99999",
+      "name": "BISHA",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 19.984,
+      "longitude": 42.621,
+      "elevation": 1184.8
+    },
+    {
+      "station_key": "404980|99999|19.967000|42.667000",
+      "usaf": "404980",
+      "wban": "99999",
+      "name": "BISHA",
+      "country": "SA",
+      "country_name": "Saudi Arabia",
+      "country_ar": "المملكة العربية السعودية",
+      "latitude": 19.967,
+      "longitude": 42.667,
+      "elevation": 1167.0
+    },
+    {
+      "station_key": "412180|99999|24.262000|55.609000",
+      "usaf": "412180",
+      "wban": "99999",
+      "name": "AL AIN INTL",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 24.262,
+      "longitude": 55.609,
+      "elevation": 264.9
+    },
+    {
+      "station_key": "412260|99999|23.633000|53.633000",
+      "usaf": "412260",
+      "wban": "99999",
+      "name": "MEDINA ZAYED",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 23.633,
+      "longitude": 53.633,
+      "elevation": 130.0
+    },
+    {
+      "station_key": "412265|99999|23.617000|53.383000",
+      "usaf": "412265",
+      "wban": "99999",
+      "name": "BUHASA",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 23.617,
+      "longitude": 53.383,
+      "elevation": 94.0
+    },
+    {
+      "station_key": "412164|99999|25.027000|55.366000",
+      "usaf": "412164",
+      "wban": "99999",
+      "name": "DUBAI MINHAD AB",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 25.027,
+      "longitude": 55.366,
+      "elevation": 50.3
+    },
+    {
+      "station_key": "411980|99999|25.112000|56.324000",
+      "usaf": "411980",
+      "wban": "99999",
+      "name": "FUJAIRAH INTL",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 25.112,
+      "longitude": 56.324,
+      "elevation": 46.3
+    },
+    {
+      "station_key": "411960|99999|25.329000|55.517000",
+      "usaf": "411960",
+      "wban": "99999",
+      "name": "SHARJAH INTL",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 25.329,
+      "longitude": 55.517,
+      "elevation": 33.8
+    },
+    {
+      "station_key": "411840|99999|25.613000|55.939000",
+      "usaf": "411840",
+      "wban": "99999",
+      "name": "RAS AL KHAIMAH INTL",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 25.613,
+      "longitude": 55.939,
+      "elevation": 31.1
+    },
+    {
+      "station_key": "404453|99999|24.433000|54.650000",
+      "usaf": "404453",
+      "wban": "99999",
+      "name": "ABU DHABI INTL",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 24.433,
+      "longitude": 54.65,
+      "elevation": 27.0
+    },
+    {
+      "station_key": "404520|99999|25.800000|55.933000",
+      "usaf": "404520",
+      "wban": "99999",
+      "name": "RAS-AL-KHAIMA",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 25.8,
+      "longitude": 55.933,
+      "elevation": 27.0
+    },
+    {
+      "station_key": "412170|99999|24.433000|54.651000",
+      "usaf": "412170",
+      "wban": "99999",
+      "name": "ABU DHABI INTL / ZAYED INTL",
+      "country": "AE",
+      "country_name": "United Arab Emirates",
+      "country_ar": "الإمارات العربية المتحدة",
+      "latitude": 24.433,
+      "longitude": 54.651,
+      "elevation": 26.8
+    },
+    {
+      "station_key": "671070|99999|-19.817000|47.067000",
+      "usaf": "671070",
+      "wban": "99999",
+      "name": "ANTSIRABE",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -19.817,
+      "longitude": 47.067,
+      "elevation": 1532.0
+    },
+    {
+      "station_key": "671090|99999|-19.033000|47.167000",
+      "usaf": "671090",
+      "wban": "99999",
+      "name": "ARIVONIMAMO",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -19.033,
+      "longitude": 47.167,
+      "elevation": 1450.0
+    },
+    {
+      "station_key": "671091|99999|-19.029000|47.172000",
+      "usaf": "671091",
+      "wban": "99999",
+      "name": "ANTANANARIVO ARIVONIMAMO",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -19.029,
+      "longitude": 47.172,
+      "elevation": 1449.9
+    },
+    {
+      "station_key": "670850|99999|-18.867000|47.500000",
+      "usaf": "670850",
+      "wban": "99999",
+      "name": "ANTANANARIVO / VILLE",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -18.867,
+      "longitude": 47.5,
+      "elevation": 1310.0
+    },
+    {
+      "station_key": "670830|99999|-18.797000|47.479000",
+      "usaf": "670830",
+      "wban": "99999",
+      "name": "IVATO",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -18.797,
+      "longitude": 47.479,
+      "elevation": 1279.6
+    },
+    {
+      "station_key": "671370|99999|-21.442000|47.112000",
+      "usaf": "671370",
+      "wban": "99999",
+      "name": "FIANARANTSOA",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -21.442,
+      "longitude": 47.112,
+      "elevation": 1115.0
+    },
+    {
+      "station_key": "671520|99999|-22.550000|45.400000",
+      "usaf": "671520",
+      "wban": "99999",
+      "name": "RANOHIRA",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -22.55,
+      "longitude": 45.4,
+      "elevation": 824.0
+    },
+    {
+      "station_key": "670670|99999|-17.633000|48.500000",
+      "usaf": "670670",
+      "wban": "99999",
+      "name": "AMBOHITSILAOZANA",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -17.633,
+      "longitude": 48.5,
+      "elevation": 780.0
+    },
+    {
+      "station_key": "671350|99999|-21.667000|45.167000",
+      "usaf": "671350",
+      "wban": "99999",
+      "name": "BEROROHA",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -21.667,
+      "longitude": 45.167,
+      "elevation": 530.0
+    },
+    {
+      "station_key": "670220|99999|-14.652000|49.621000",
+      "usaf": "670220",
+      "wban": "99999",
+      "name": "ANDAPA",
+      "country": "MA",
+      "country_name": "Madagascar",
+      "country_ar": "مدغشقر",
+      "latitude": -14.652,
+      "longitude": 49.621,
+      "elevation": 473.0
+    },
+    {
+      "station_key": "624570|99999|28.683000|34.050000",
+      "usaf": "624570",
+      "wban": "99999",
+      "name": "SANT KATREIN AIRPORT",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 28.683,
+      "longitude": 34.05,
+      "elevation": 1331.0
+    },
+    {
+      "station_key": "623664|99999|28.683000|34.067000",
+      "usaf": "623664",
+      "wban": "99999",
+      "name": "ST CATHERINE INTL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 28.683,
+      "longitude": 34.067,
+      "elevation": 1331.0
+    },
+    {
+      "station_key": "624655|99999|29.600000|34.767000",
+      "usaf": "624655",
+      "wban": "99999",
+      "name": "TABA INTL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 29.6,
+      "longitude": 34.767,
+      "elevation": 768.0
+    },
+    {
+      "station_key": "624560|99999|29.600000|34.783000",
+      "usaf": "624560",
+      "wban": "99999",
+      "name": "TABA AIRPORT (RAS ELNAKB)",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 29.6,
+      "longitude": 34.783,
+      "elevation": 749.0
+    },
+    {
+      "station_key": "624520|99999|29.917000|33.733000",
+      "usaf": "624520",
+      "wban": "99999",
+      "name": "NEKHEL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 29.917,
+      "longitude": 33.733,
+      "elevation": 403.0
+    },
+    {
+      "station_key": "624250|99999|22.586000|28.717000",
+      "usaf": "624250",
+      "wban": "99999",
+      "name": "SHARK EL OWEINAT INTL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 22.586,
+      "longitude": 28.717,
+      "elevation": 261.8
+    },
+    {
+      "station_key": "624530|99999|30.450000|33.767000",
+      "usaf": "624530",
+      "wban": "99999",
+      "name": "ELHASANA",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 30.45,
+      "longitude": 33.767,
+      "elevation": 255.0
+    },
+    {
+      "station_key": "623930|99999|27.047000|31.012000",
+      "usaf": "623930",
+      "wban": "99999",
+      "name": "ASYUT INTL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 27.047,
+      "longitude": 31.012,
+      "elevation": 235.3
+    },
+    {
+      "station_key": "624140|99999|23.964000|32.820000",
+      "usaf": "624140",
+      "wban": "99999",
+      "name": "ASWAN INTL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 23.964,
+      "longitude": 32.82,
+      "elevation": 201.8
+    },
+    {
+      "station_key": "624190|99999|22.376000|31.612000",
+      "usaf": "624190",
+      "wban": "99999",
+      "name": "ABU SIMBEL",
+      "country": "EG",
+      "country_name": "Egypt",
+      "country_ar": "جمهورية مصر العربية",
+      "latitude": 22.376,
+      "longitude": 31.612,
+      "elevation": 187.8
+    },
+    {
+      "station_key": "604450|99999|36.178000|5.324000",
+      "usaf": "604450",
+      "wban": "99999",
+      "name": "SETIF AIN ARNAT / SETIF 8 MAI",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 36.178,
+      "longitude": 5.324,
+      "elevation": 1050.0
+    },
+    {
+      "station_key": "605110|99999|35.341000|1.463000",
+      "usaf": "605110",
+      "wban": "99999",
+      "name": "ABDELHAFID BOUSSOUF BOU CHEKI",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 35.341,
+      "longitude": 1.463,
+      "elevation": 989.1
+    },
+    {
+      "station_key": "604680|99999|35.752000|6.309000",
+      "usaf": "604680",
+      "wban": "99999",
+      "name": "BATNA / MOSTEPHA BEN BOULAID",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 35.752,
+      "longitude": 6.309,
+      "elevation": 822.0
+    },
+    {
+      "station_key": "605710|99999|31.646000|-2.270000",
+      "usaf": "605710",
+      "wban": "99999",
+      "name": "BECHAR / BOUDGHENE BEN ALI LO",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 31.646,
+      "longitude": -2.27,
+      "elevation": 811.1
+    },
+    {
+      "station_key": "606890|99999|20.417000|1.800000",
+      "usaf": "606890",
+      "wban": "99999",
+      "name": "TIMIAOUINE",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 20.417,
+      "longitude": 1.8,
+      "elevation": 608.7
+    },
+    {
+      "station_key": "606400|99999|26.724000|8.623000",
+      "usaf": "606400",
+      "wban": "99999",
+      "name": "ILLIZI TAKHAMALT / IBRAHIM GH",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 26.724,
+      "longitude": 8.623,
+      "elevation": 541.9
+    },
+    {
+      "station_key": "605660|99999|32.384000|3.794000",
+      "usaf": "605660",
+      "wban": "99999",
+      "name": "NOUMERAT MOUFDI ZAKARIA",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 32.384,
+      "longitude": 3.794,
+      "elevation": 460.9
+    },
+    {
+      "station_key": "605310|99999|35.017000|-1.450000",
+      "usaf": "605310",
+      "wban": "99999",
+      "name": "ZENATA MESSALI EL HADJ",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 35.017,
+      "longitude": -1.45,
+      "elevation": 248.1
+    },
+    {
+      "station_key": "605800|99999|31.917000|5.413000",
+      "usaf": "605800",
+      "wban": "99999",
+      "name": "OUARGLA / AIN BEIDA",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 31.917,
+      "longitude": 5.413,
+      "elevation": 150.0
+    },
+    {
+      "station_key": "604250|99999|36.213000|1.332000",
+      "usaf": "604250",
+      "wban": "99999",
+      "name": "ECH CHELIFF / CHLEF",
+      "country": "DZ",
+      "country_name": "Algeria",
+      "country_ar": "الجمهورية الجزائرية",
+      "latitude": 36.213,
+      "longitude": 1.332,
+      "elevation": 141.1
+    },
+    {
+      "station_key": "720385|00419|39.800000|-105.766000",
+      "usaf": "720385",
+      "wban": "00419",
+      "name": "BERTHOUD PASS",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 39.8,
+      "longitude": -105.766,
+      "elevation": 4113.3
+    },
+    {
+      "station_key": "720385|99999|39.800000|-105.767000",
+      "usaf": "720385",
+      "wban": "99999",
+      "name": "BERTHOUD PASS",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 39.8,
+      "longitude": -105.767,
+      "elevation": 4113.0
+    },
+    {
+      "station_key": "702647|26499|63.866000|-148.969000",
+      "usaf": "702647",
+      "wban": "26499",
+      "name": "HEALY RIVER AIRPORT",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 63.866,
+      "longitude": -148.969,
+      "elevation": 3945.3
+    },
+    {
+      "station_key": "722061|03038|39.467000|-106.150000",
+      "usaf": "722061",
+      "wban": "03038",
+      "name": "COPPER MOUNTAIN",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 39.467,
+      "longitude": -106.15,
+      "elevation": 3680.2
+    },
+    {
+      "station_key": "722061|99999|39.467000|-106.150000",
+      "usaf": "722061",
+      "wban": "99999",
+      "name": "COPPER MOUNTAIN RE",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 39.467,
+      "longitude": -106.15,
+      "elevation": 3680.0
+    },
+    {
+      "station_key": "722203|03041|38.483000|-106.317000",
+      "usaf": "722203",
+      "wban": "03041",
+      "name": "MONARCH PASS AWOS-3 ARPT",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 38.483,
+      "longitude": -106.317,
+      "elevation": 3667.1
+    },
+    {
+      "station_key": "722203|99999|38.483000|-106.317000",
+      "usaf": "722203",
+      "wban": "99999",
+      "name": "SALIDA MTN MONARCH P",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 38.483,
+      "longitude": -106.317,
+      "elevation": 3667.0
+    },
+    {
+      "station_key": "722101|03039|37.450000|-106.800000",
+      "usaf": "722101",
+      "wban": "03039",
+      "name": "WOLF CREEK PASS AWOS-3 AIRPOR",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 37.45,
+      "longitude": -106.8,
+      "elevation": 3593.9
+    },
+    {
+      "station_key": "722101|99999|37.450000|-106.800000",
+      "usaf": "722101",
+      "wban": "99999",
+      "name": "PAGOSA SPRINGS WOL",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 37.45,
+      "longitude": -106.8,
+      "elevation": 3584.0
+    },
+    {
+      "station_key": "726396|00422|39.050000|-105.516000",
+      "usaf": "726396",
+      "wban": "00422",
+      "name": "WILKERSON PASS",
+      "country": "US",
+      "country_name": "United States",
+      "country_ar": "الولايات المتحدة الأمريكية",
+      "latitude": 39.05,
+      "longitude": -105.516,
+      "elevation": 3438.1
+    },
+    {
+      "station_key": "077200|99999|42.933000|0.150000",
+      "usaf": "077200",
+      "wban": "99999",
+      "name": "PIC DU MIDI",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 42.933,
+      "longitude": 0.15,
+      "elevation": 2883.0
+    },
+    {
+      "station_key": "074701|99999|45.963000|6.889000",
+      "usaf": "074701",
+      "wban": "99999",
+      "name": "LA FLEGERE",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 45.963,
+      "longitude": 6.889,
+      "elevation": 1850.0
+    },
+    {
+      "station_key": "075890|99999|44.947000|6.188000",
+      "usaf": "075890",
+      "wban": "99999",
+      "name": "ST CHRISTOPHE",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 44.947,
+      "longitude": 6.188,
+      "elevation": 1570.0
+    },
+    {
+      "station_key": "075600|99999|44.117000|3.583000",
+      "usaf": "075600",
+      "wban": "99999",
+      "name": "MONT AIGOUAL",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 44.117,
+      "longitude": 3.583,
+      "elevation": 1565.0
+    },
+    {
+      "station_key": "077370|99999|42.610000|2.100000",
+      "usaf": "077370",
+      "wban": "99999",
+      "name": "FORMIGUERES",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 42.61,
+      "longitude": 2.1,
+      "elevation": 1530.0
+    },
+    {
+      "station_key": "074420|99999|45.767000|2.967000",
+      "usaf": "074420",
+      "wban": "99999",
+      "name": "PUY DE DOME",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 45.767,
+      "longitude": 2.967,
+      "elevation": 1461.0
+    },
+    {
+      "station_key": "077380|99999|42.483000|1.983000",
+      "usaf": "077380",
+      "wban": "99999",
+      "name": "LES ESCALDES",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 42.483,
+      "longitude": 1.983,
+      "elevation": 1432.0
+    },
+    {
+      "station_key": "075930|99999|44.917000|6.650000",
+      "usaf": "075930",
+      "wban": "99999",
+      "name": "BRIANCON",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 44.917,
+      "longitude": 6.65,
+      "elevation": 1336.0
+    },
+    {
+      "station_key": "077400|99999|42.450000|2.000000",
+      "usaf": "077400",
+      "wban": "99999",
+      "name": "SAINT LEOCADIE",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 42.45,
+      "longitude": 2.0,
+      "elevation": 1328.0
+    },
+    {
+      "station_key": "078760|99999|45.972000|6.454000",
+      "usaf": "078760",
+      "wban": "99999",
+      "name": "LE GRAND BORNAND",
+      "country": "FR",
+      "country_name": "France",
+      "country_ar": "فرنسا",
+      "latitude": 45.972,
+      "longitude": 6.454,
+      "elevation": 1270.0
+    },
+    {
+      "station_key": "109470|99999|47.989000|10.240000",
+      "usaf": "109470",
+      "wban": "99999",
+      "name": "ALLGAU / MEMMINGEN",
+      "country": "DE",
+      "country_name": "Germany",
+      "country_ar": "ألمانيا",
+      "latitude": 47.989,
+      "longitude": 10.24,
+      "elevation": 629.1
+    },
+    {
+      "station_key": "105540|99999|50.980000|10.958000",
+      "usaf": "105540",
+      "wban": "99999",
+      "name": "ERFURT WEIMAR",
+      "country": "DE",
+      "country_name": "Germany",
+      "country_ar": "ألمانيا",
+      "latitude": 50.98,
+      "longitude": 10.958,
+      "elevation": 315.8
+    },
+    {
+      "station_key": "105536|99999|50.982000|12.506000",
+      "usaf": "105536",
+      "wban": "99999",
+      "name": "ALTENBURG NOBITZ / LEIPZIG AL",
+      "country": "DE",
+      "country_name": "Germany",
+      "country_ar": "ألمانيا",
+      "latitude": 50.982,
+      "longitude": 12.506,
+      "elevation": 195.1
+    },
+    {
+      "station_key": "106164|99999|51.855000|11.419000",
+      "usaf": "106164",
+      "wban": "99999",
+      "name": "MAGDEBURG COCHSTEDT",
+      "country": "DE",
+      "country_name": "Germany",
+      "country_ar": "ألمانيا",
+      "latitude": 51.855,
+      "longitude": 11.419,
+      "elevation": 180.0
+    },
+    {
+      "station_key": "106325|99999|49.961000|8.642000",
+      "usaf": "106325",
+      "wban": "99999",
+      "name": "FRANKFURT EGELSBACH",
+      "country": "DE",
+      "country_name": "Germany",
+      "country_ar": "ألمانيا",
+      "latitude": 49.961,
+      "longitude": 8.642,
+      "elevation": 117.3
+    },
+    {
+      "station_key": "103850|99999|52.380000|13.523000",
+      "usaf": "103850",
+      "wban": "99999",
+      "name": "SCHONEFELD / BRANDENBURG",
+      "country": "DE",
+      "country_name": "Germany",
+      "country_ar": "ألمانيا",
+      "latitude": 52.38,
+      "longitude": 13.523,
+      "elevation": 47.9
+    },
+    {
+      "station_key": "869680|99999|-28.126000|-49.479000",
+      "usaf": "869680",
+      "wban": "99999",
+      "name": "URUBICI",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -28.126,
+      "longitude": -49.479,
+      "elevation": 1811.5
+    },
+    {
+      "station_key": "868760|99999|-22.467000|-43.283000",
+      "usaf": "868760",
+      "wban": "99999",
+      "name": "PICO DO COUTO",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -22.467,
+      "longitude": -43.283,
+      "elevation": 1778.5
+    },
+    {
+      "station_key": "868720|99999|-22.750000|-45.600000",
+      "usaf": "868720",
+      "wban": "99999",
+      "name": "CAMPOS DO JORDAO",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -22.75,
+      "longitude": -45.6,
+      "elevation": 1581.5
+    },
+    {
+      "station_key": "837140|99999|-22.733000|-45.583000",
+      "usaf": "837140",
+      "wban": "99999",
+      "name": "CAMPOS DO JORDAO",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -22.733,
+      "longitude": -45.583,
+      "elevation": 1579.0
+    },
+    {
+      "station_key": "869690|99999|-28.283000|-49.933000",
+      "usaf": "869690",
+      "wban": "99999",
+      "name": "SAO JOAQUIM",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -28.283,
+      "longitude": -49.933,
+      "elevation": 1411.5
+    },
+    {
+      "station_key": "839200|99999|-28.283000|-49.917000",
+      "usaf": "839200",
+      "wban": "99999",
+      "name": "S. JOAQUIM",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -28.283,
+      "longitude": -49.917,
+      "elevation": 1402.0
+    },
+    {
+      "station_key": "867810|99999|-18.233000|-43.650000",
+      "usaf": "867810",
+      "wban": "99999",
+      "name": "DIAMANTINA",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -18.233,
+      "longitude": -43.65,
+      "elevation": 1357.5
+    },
+    {
+      "station_key": "835380|99999|-18.250000|-43.600000",
+      "usaf": "835380",
+      "wban": "99999",
+      "name": "DIAMANTINA",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -18.25,
+      "longitude": -43.6,
+      "elevation": 1297.0
+    },
+    {
+      "station_key": "866730|99999|-13.150000|-41.767000",
+      "usaf": "866730",
+      "wban": "99999",
+      "name": "PIATA",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -13.15,
+      "longitude": -41.767,
+      "elevation": 1291.5
+    },
+    {
+      "station_key": "868710|99999|-22.317000|-45.367000",
+      "usaf": "868710",
+      "wban": "99999",
+      "name": "MARIA DA FE",
+      "country": "BR",
+      "country_name": "Brazil",
+      "country_ar": "البرازيل",
+      "latitude": -22.317,
+      "longitude": -45.367,
+      "elevation": 1277.5
+    },
+    {
+      "station_key": "420340|99999|34.150000|77.567000",
+      "usaf": "420340",
+      "wban": "99999",
+      "name": "LEH               &",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.15,
+      "longitude": 77.567,
+      "elevation": 3513.0
+    },
+    {
+      "station_key": "421210|99999|30.117000|80.250000",
+      "usaf": "421210",
+      "wban": "99999",
+      "name": "MUNSYARI",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 30.117,
+      "longitude": 80.25,
+      "elevation": 3414.0
+    },
+    {
+      "station_key": "420630|99999|32.583000|77.067000",
+      "usaf": "420630",
+      "wban": "99999",
+      "name": "KYELONG",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 32.583,
+      "longitude": 77.067,
+      "elevation": 3348.0
+    },
+    {
+      "station_key": "427053|99999|34.136000|77.547000",
+      "usaf": "427053",
+      "wban": "99999",
+      "name": "LEH",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.136,
+      "longitude": 77.547,
+      "elevation": 3255.9
+    },
+    {
+      "station_key": "420300|99999|34.433000|75.767000",
+      "usaf": "420300",
+      "wban": "99999",
+      "name": "DRAS",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.433,
+      "longitude": 75.767,
+      "elevation": 3066.0
+    },
+    {
+      "station_key": "435420|99999|34.433000|75.767000",
+      "usaf": "435420",
+      "wban": "99999",
+      "name": "DRAS",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.433,
+      "longitude": 75.767,
+      "elevation": 3066.0
+    },
+    {
+      "station_key": "420260|99999|34.050000|74.400000",
+      "usaf": "420260",
+      "wban": "99999",
+      "name": "GULMARG",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.05,
+      "longitude": 74.4,
+      "elevation": 2655.0
+    },
+    {
+      "station_key": "420290|99999|34.317000|75.317000",
+      "usaf": "420290",
+      "wban": "99999",
+      "name": "SONAMARG",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.317,
+      "longitude": 75.317,
+      "elevation": 2515.0
+    },
+    {
+      "station_key": "435410|99999|34.317000|75.317000",
+      "usaf": "435410",
+      "wban": "99999",
+      "name": "SONAMARG          &",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 34.317,
+      "longitude": 75.317,
+      "elevation": 2515.0
+    },
+    {
+      "station_key": "423050|99999|27.417000|92.850000",
+      "usaf": "423050",
+      "wban": "99999",
+      "name": "BOMDILA",
+      "country": "IN",
+      "country_name": "India",
+      "country_ar": "الهند",
+      "latitude": 27.417,
+      "longitude": 92.85,
+      "elevation": 2484.0
+    },
+    {
+      "station_key": "949060|99999|-36.967000|147.133000",
+      "usaf": "949060",
+      "wban": "99999",
+      "name": "MOUNT HOTHAM",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -36.967,
+      "longitude": 147.133,
+      "elevation": 1849.0
+    },
+    {
+      "station_key": "949999|00260|-36.430000|148.350000",
+      "usaf": "949999",
+      "wban": "00260",
+      "name": "SPENCERS CREEK",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -36.43,
+      "longitude": 148.35,
+      "elevation": 1767.8
+    },
+    {
+      "station_key": "949030|99999|-36.867000|147.267000",
+      "usaf": "949030",
+      "wban": "99999",
+      "name": "FALLS CREEK AWS",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -36.867,
+      "longitude": 147.267,
+      "elevation": 1767.0
+    },
+    {
+      "station_key": "959250|99999|-35.533000|148.767000",
+      "usaf": "959250",
+      "wban": "99999",
+      "name": "MOUNT GININI",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -35.533,
+      "longitude": 148.767,
+      "elevation": 1760.0
+    },
+    {
+      "station_key": "959120|99999|-36.433000|148.333000",
+      "usaf": "959120",
+      "wban": "99999",
+      "name": "CHARLOTTE PASS (KOSCIUSKO CHA",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -36.433,
+      "longitude": 148.333,
+      "elevation": 1755.0
+    },
+    {
+      "station_key": "949150|99999|-36.400000|148.400000",
+      "usaf": "949150",
+      "wban": "99999",
+      "name": "PERISHER VALLEY AWS",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -36.4,
+      "longitude": 148.4,
+      "elevation": 1735.0
+    },
+    {
+      "station_key": "948940|99999|-37.150000|146.433000",
+      "usaf": "948940",
+      "wban": "99999",
+      "name": "MOUNT BULLER AWS",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -37.15,
+      "longitude": 146.433,
+      "elevation": 1707.0
+    },
+    {
+      "station_key": "959010|99999|-37.833000|146.267000",
+      "usaf": "959010",
+      "wban": "99999",
+      "name": "MT BAW BAW",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -37.833,
+      "longitude": 146.267,
+      "elevation": 1520.0
+    },
+    {
+      "station_key": "959160|99999|-35.933000|148.383000",
+      "usaf": "959160",
+      "wban": "99999",
+      "name": "CABRAMURRA SMHEA",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -35.933,
+      "longitude": 148.383,
+      "elevation": 1483.0
+    },
+    {
+      "station_key": "949160|99999|-35.933000|148.383000",
+      "usaf": "949160",
+      "wban": "99999",
+      "name": "CABRAMURRA",
+      "country": "AS",
+      "country_name": "Australia",
+      "country_ar": "أستراليا",
+      "latitude": -35.933,
+      "longitude": 148.383,
+      "elevation": 1475.0
+    },
+    {
+      "station_key": "013620|99999|61.667000|8.367000",
+      "usaf": "013620",
+      "wban": "99999",
+      "name": "JUVVASSHOE",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 61.667,
+      "longitude": 8.367,
+      "elevation": 1894.0
+    },
+    {
+      "station_key": "014611|99999|59.850000|8.650000",
+      "usaf": "014611",
+      "wban": "99999",
+      "name": "GAUSTATOPPEN",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 59.85,
+      "longitude": 8.65,
+      "elevation": 1803.7
+    },
+    {
+      "station_key": "013660|99999|61.567000|8.000000",
+      "usaf": "013660",
+      "wban": "99999",
+      "name": "SOGNEFJELL",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 61.567,
+      "longitude": 8.0,
+      "elevation": 1413.0
+    },
+    {
+      "station_key": "012200|99999|62.450000|7.767000",
+      "usaf": "012200",
+      "wban": "99999",
+      "name": "MANNEN",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 62.45,
+      "longitude": 7.767,
+      "elevation": 1294.0
+    },
+    {
+      "station_key": "013520|99999|60.183000|7.483000",
+      "usaf": "013520",
+      "wban": "99999",
+      "name": "SANDHAUG",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 60.183,
+      "longitude": 7.483,
+      "elevation": 1250.0
+    },
+    {
+      "station_key": "013510|99999|60.600000|7.500000",
+      "usaf": "013510",
+      "wban": "99999",
+      "name": "FINSE III",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 60.6,
+      "longitude": 7.5,
+      "elevation": 1224.0
+    },
+    {
+      "station_key": "013500|99999|60.600000|7.533000",
+      "usaf": "013500",
+      "wban": "99999",
+      "name": "FINSEVATN",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 60.6,
+      "longitude": 7.533,
+      "elevation": 1208.0
+    },
+    {
+      "station_key": "013460|99999|60.650000|7.267000",
+      "usaf": "013460",
+      "wban": "99999",
+      "name": "MIDTSTOVA",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 60.65,
+      "longitude": 7.267,
+      "elevation": 1162.0
+    },
+    {
+      "station_key": "014400|99999|59.333000|6.867000",
+      "usaf": "014400",
+      "wban": "99999",
+      "name": "BLASJO",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 59.333,
+      "longitude": 6.867,
+      "elevation": 1104.6
+    },
+    {
+      "station_key": "014330|99999|59.833000|6.983000",
+      "usaf": "014330",
+      "wban": "99999",
+      "name": "MIDTLAEGER",
+      "country": "NO",
+      "country_name": "Norway",
+      "country_ar": "النرويج",
+      "latitude": 59.833,
+      "longitude": 6.983,
+      "elevation": 1081.0
+    },
+    {
+      "station_key": "476390|99999|35.367000|138.733000",
+      "usaf": "476390",
+      "wban": "99999",
+      "name": "FUJISAN",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 35.367,
+      "longitude": 138.733,
+      "elevation": 3777.5
+    },
+    {
+      "station_key": "478940|99999|33.850000|134.100000",
+      "usaf": "478940",
+      "wban": "99999",
+      "name": "TSURUGISAN",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 33.85,
+      "longitude": 134.1,
+      "elevation": 1946.0
+    },
+    {
+      "station_key": "476110|99999|36.100000|138.200000",
+      "usaf": "476110",
+      "wban": "99999",
+      "name": "NAGANO/KURUMAYAMA",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 36.1,
+      "longitude": 138.2,
+      "elevation": 1925.0
+    },
+    {
+      "station_key": "477510|99999|35.417000|136.417000",
+      "usaf": "477510",
+      "wban": "99999",
+      "name": "IBUKIYAMA MTN (AUT)",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 35.417,
+      "longitude": 136.417,
+      "elevation": 1377.0
+    },
+    {
+      "station_key": "476900|99999|36.733000|139.500000",
+      "usaf": "476900",
+      "wban": "99999",
+      "name": "NIKKO",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 36.733,
+      "longitude": 139.5,
+      "elevation": 1294.0
+    },
+    {
+      "station_key": "478210|99999|32.883000|131.067000",
+      "usaf": "478210",
+      "wban": "99999",
+      "name": "ASOSAN",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 32.883,
+      "longitude": 131.067,
+      "elevation": 1144.4
+    },
+    {
+      "station_key": "474320|99999|41.933000|140.783000",
+      "usaf": "474320",
+      "wban": "99999",
+      "name": "HAKODATE/YOKOTSUDAKE",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 41.933,
+      "longitude": 140.783,
+      "elevation": 1111.0
+    },
+    {
+      "station_key": "476220|99999|36.350000|138.550000",
+      "usaf": "476220",
+      "wban": "99999",
+      "name": "KARUIZAWA",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 36.35,
+      "longitude": 138.55,
+      "elevation": 1004.8
+    },
+    {
+      "station_key": "478060|99999|33.433000|130.350000",
+      "usaf": "478060",
+      "wban": "99999",
+      "name": "FUKUOKA/SEFURISAN",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 33.433,
+      "longitude": 130.35,
+      "elevation": 960.0
+    },
+    {
+      "station_key": "473070|99999|35.850000|137.633000",
+      "usaf": "473070",
+      "wban": "99999",
+      "name": "MITAKE",
+      "country": "JA",
+      "country_name": "Japan",
+      "country_ar": "اليابان",
+      "latitude": 35.85,
+      "longitude": 137.633,
+      "elevation": 870.0
+    },
+    {
+      "station_key": "030650|99999|57.117000|-3.633000",
+      "usaf": "030650",
+      "wban": "99999",
+      "name": "CAIRNGORM SUMMIT",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 57.117,
+      "longitude": -3.633,
+      "elevation": 1245.0
+    },
+    {
+      "station_key": "030410|99999|56.817000|-4.967000",
+      "usaf": "030410",
+      "wban": "99999",
+      "name": "AONACH MOR",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 56.817,
+      "longitude": -4.967,
+      "elevation": 1130.0
+    },
+    {
+      "station_key": "033080|99999|53.067000|-4.083000",
+      "usaf": "033080",
+      "wban": "99999",
+      "name": "SNOWDON SUMMIT",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 53.067,
+      "longitude": -4.083,
+      "elevation": 1065.0
+    },
+    {
+      "station_key": "030720|99999|56.883000|-3.417000",
+      "usaf": "030720",
+      "wban": "99999",
+      "name": "CAIRNWELL",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 56.883,
+      "longitude": -3.417,
+      "elevation": 933.0
+    },
+    {
+      "station_key": "032290|99999|54.700000|-2.450000",
+      "usaf": "032290",
+      "wban": "99999",
+      "name": "GREAT DUN FELL",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 54.7,
+      "longitude": -2.45,
+      "elevation": 847.0
+    },
+    {
+      "station_key": "032270|99999|54.683000|-2.450000",
+      "usaf": "032270",
+      "wban": "99999",
+      "name": "GREAT DUN FELL NO2",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 54.683,
+      "longitude": -2.45,
+      "elevation": 847.0
+    },
+    {
+      "station_key": "030390|99999|57.417000|-5.683000",
+      "usaf": "030390",
+      "wban": "99999",
+      "name": "BEALACH NA BA NO2",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 57.417,
+      "longitude": -5.683,
+      "elevation": 773.0
+    },
+    {
+      "station_key": "032070|99999|54.267000|-4.467000",
+      "usaf": "032070",
+      "wban": "99999",
+      "name": "SNAEFELL-ISLE",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 54.267,
+      "longitude": -4.467,
+      "elevation": 615.0
+    },
+    {
+      "station_key": "031480|99999|56.417000|-4.317000",
+      "usaf": "031480",
+      "wban": "99999",
+      "name": "GLEN OGLE",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 56.417,
+      "longitude": -4.317,
+      "elevation": 564.0
+    },
+    {
+      "station_key": "030670|99999|56.900000|-3.633000",
+      "usaf": "030670",
+      "wban": "99999",
+      "name": "FEALAR LODGE",
+      "country": "UK",
+      "country_name": "United Kingdom",
+      "country_ar": "المملكة المتحدة",
+      "latitude": 56.9,
+      "longitude": -3.633,
+      "elevation": 560.0
+    }
+  ],
+  "databases": [
+    {
+      "id": "global_ref_gdb",
+      "name": "Global_Climate_Reference.gdb",
+      "type": "File Geodatabase",
+      "path": "C:/MIRSAD_Projects/Databases/Global_Climate_Reference.gdb",
+      "layers": [
+        {
+          "name": "Global_WMO_Weather_Stations",
+          "geometry": "Point",
+          "count": 28066,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-180.0, -85.0, 180.0, 85.0]",
+          "desc": "الشبكة العالمية المعتمدة لمحطات الأرصاد الجوية السطحية (NOAA ISD / WMO)",
+          "defaultRole": "stations"
+        },
+        {
+          "name": "Arab_Region_Synoptic_Stations",
+          "geometry": "Point",
+          "count": 264,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-17.0, 12.0, 60.0, 37.5]",
+          "desc": "محطات الرصد السطحية المعتمدة للدول العربية ومنطقة الشرق الأوسط",
+          "defaultRole": "stations"
+        },
+        {
+          "name": "Global_Country_Boundaries_Admin0",
+          "geometry": "Polygon",
+          "count": 195,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-180.0, -90.0, 180.0, 90.0]",
+          "desc": "الحدود السياسية والإدارية لكافة دول العالم بدقة 1:10M",
+          "defaultRole": "boundary"
+        },
+        {
+          "name": "Arab_Arid_Zone_Study_Boundary",
+          "geometry": "Polygon",
+          "count": 1,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-15.0, 10.0, 58.0, 36.0]",
+          "desc": "مضلع نطاق دراسة النطاق الجاف وشبه الجاف العربي وقناع القص المكاني",
+          "defaultRole": "mask"
+        },
+        {
+          "name": "Major_River_Basins_Watersheds",
+          "geometry": "Polygon",
+          "count": 48,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-180.0, -60.0, 180.0, 75.0]",
+          "desc": "أحواض التصريف المائي والهيدرولوجي الكبرى لأغراض التحليل المناخي المائي",
+          "defaultRole": "mask"
+        },
+        {
+          "name": "WorldClim_BIO01_Annual_Mean_Temp",
+          "geometry": "Raster",
+          "count": "43200 x 21600 (30 arc-sec)",
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-180.0, -60.0, 180.0, 84.0]",
+          "desc": "راستر المعدل السنوي لدرجات الحرارة العالمية بدقة 1 كم",
+          "defaultRole": "raster"
+        },
+        {
+          "name": "SRTM_Global_Elevation_DEM_90m",
+          "geometry": "Raster",
+          "count": "Global Coverage (90m)",
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-180.0, -60.0, 180.0, 60.0]",
+          "desc": "نموذج الارتفاع الرقمي العالمي SRTM DEM للاستيفاء الطبوغرافي",
+          "defaultRole": "raster"
+        }
+      ]
+    },
+    {
+      "id": "regional_project_gpkg",
+      "name": "Regional_Climate_Project.gpkg",
+      "type": "GeoPackage",
+      "path": "C:/MIRSAD_Projects/Regional_Climate_Project.gpkg",
+      "layers": [
+        {
+          "name": "Project_Weather_Stations",
+          "geometry": "Point",
+          "count": 136,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-122.0, -37.0, 146.0, 60.0]",
+          "desc": "محطات الرصد المختارة لمنطقة الدراسة الحالية",
+          "defaultRole": "stations"
+        },
+        {
+          "name": "Study_Area_StudyZone_Mask",
+          "geometry": "Polygon",
+          "count": 1,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-15.0, 12.0, 55.0, 35.0]",
+          "desc": "مضلع قناع القص المعتمد لمنطقة الدراسة الحالية",
+          "defaultRole": "mask"
+        }
+      ]
+    },
+    {
+      "id": "shapefiles_dir",
+      "name": "Shapefiles Directory",
+      "type": "Folder",
+      "path": "C:/MIRSAD_Projects/Shapefiles/",
+      "layers": [
+        {
+          "name": "Climate_Stations_Network.shp",
+          "geometry": "Point",
+          "count": 136,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-180.0, -90.0, 180.0, 90.0]",
+          "desc": "ملف شيب فايل لمحطات الرصد الجوي",
+          "defaultRole": "stations"
+        },
+        {
+          "name": "Study_Area_Clip_Boundary.shp",
+          "geometry": "Polygon",
+          "count": 1,
+          "crs": "EPSG:4326 - WGS 84",
+          "bbox": "[-10.0, 15.0, 50.0, 35.0]",
+          "desc": "شيب فايل مضلع قناع القص ونطاق الدراسة",
+          "defaultRole": "mask"
+        }
+      ]
+    }
+  ],
+  "clip_masks": [
+    {
+      "id": "global_extent",
+      "name_ar": "النطاق العالمي المفتوح (بدون قص)",
+      "name_en": "Global Full Extent (No Clip)",
+      "type": "Global",
+      "bbox": [
+        -180,
+        -90,
+        180,
+        90
+      ],
+      "polygon": [
+        [
+          -180,
+          -90
+        ],
+        [
+          180,
+          -90
+        ],
+        [
+          180,
+          90
+        ],
+        [
+          -180,
+          90
+        ],
+        [
+          -180,
+          -90
+        ]
+      ]
+    },
+    {
+      "id": "arab_region_arid",
+      "name_ar": "نطاق الوطن العربي والشرق الأوسط (النطاق الجاف)",
+      "name_en": "Arab Region & Middle East Arid Zone",
+      "type": "Regional Mask",
+      "bbox": [
+        -17.5,
+        11.5,
+        60.0,
+        37.5
+      ],
+      "polygon": [
+        [
+          -17.5,
+          21.0
+        ],
+        [
+          -13.0,
+          27.5
+        ],
+        [
+          -5.5,
+          36.0
+        ],
+        [
+          11.5,
+          37.2
+        ],
+        [
+          36.0,
+          37.0
+        ],
+        [
+          44.0,
+          37.5
+        ],
+        [
+          60.0,
+          25.5
+        ],
+        [
+          54.0,
+          16.5
+        ],
+        [
+          43.5,
+          12.5
+        ],
+        [
+          31.5,
+          11.5
+        ],
+        [
+          11.0,
+          13.0
+        ],
+        [
+          -17.5,
+          21.0
+        ]
+      ]
+    },
+    {
+      "id": "mediterranean_basin",
+      "name_ar": "حوض البحر الأبيض المتوسط وشمال إفريقيا",
+      "name_en": "Mediterranean Basin & North Africa",
+      "type": "Watershed Basin",
+      "bbox": [
+        -10.0,
+        28.0,
+        37.0,
+        46.0
+      ],
+      "polygon": [
+        [
+          -10.0,
+          36.0
+        ],
+        [
+          0.0,
+          43.5
+        ],
+        [
+          15.0,
+          46.0
+        ],
+        [
+          28.0,
+          42.0
+        ],
+        [
+          36.5,
+          37.0
+        ],
+        [
+          35.0,
+          31.0
+        ],
+        [
+          25.0,
+          30.5
+        ],
+        [
+          10.0,
+          32.0
+        ],
+        [
+          -6.0,
+          34.0
+        ],
+        [
+          -10.0,
+          36.0
+        ]
+      ]
+    },
+    {
+      "id": "european_alpine",
+      "name_ar": "النطاق الأوروبي الألبي",
+      "name_en": "European Alpine & Temperate Region",
+      "type": "Continental Region",
+      "bbox": [
+        -5.0,
+        42.0,
+        25.0,
+        58.0
+      ],
+      "polygon": [
+        [
+          -5.0,
+          48.0
+        ],
+        [
+          2.0,
+          54.0
+        ],
+        [
+          12.0,
+          58.0
+        ],
+        [
+          24.0,
+          55.0
+        ],
+        [
+          22.0,
+          45.0
+        ],
+        [
+          10.0,
+          43.0
+        ],
+        [
+          -2.0,
+          43.5
+        ],
+        [
+          -5.0,
+          48.0
+        ]
+      ]
+    },
+    {
+      "id": "north_america_great_plains",
+      "name_ar": "السهول العظمى بأمريكا الشمالية",
+      "name_en": "North America Great Plains Basin",
+      "type": "Continental Basin",
+      "bbox": [
+        -105.0,
+        25.0,
+        -85.0,
+        49.0
+      ],
+      "polygon": [
+        [
+          -105.0,
+          49.0
+        ],
+        [
+          -85.0,
+          49.0
+        ],
+        [
+          -88.0,
+          28.0
+        ],
+        [
+          -98.0,
+          25.0
+        ],
+        [
+          -104.0,
+          32.0
+        ],
+        [
+          -105.0,
+          49.0
+        ]
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "id": "tool_ground_stations",
+      "name_ar": "أداة محطات الرصد السطحية (Ground Weather Stations Atlas)",
+      "name_en": "Ground Weather Stations Climate Atlas Generator",
+      "category": "Point Climatology",
+      "icon": "📍",
+      "description_ar": "استيراد محطات الرصد السطحية وتنزيل السلاسل الزمنية المناخية من NASA POWER و Open-Meteo و NOAA ISD وحساب المعدلات والمؤشرات والاستيفاء المكاني.",
+      "description_en": "Harvests NOAA/WMO ground weather stations, downloads historical climate time series, calculates bioclimatic normals, and generates interpolated continuous raster surfaces.",
+      "parameters": [
+        {
+          "name": "Station_Selection_Mode",
+          "label_ar": "نمط اختيار المحطات المناخية",
+          "type": "choice",
+          "options": [
+            "Select by Country (National Network)",
+            "Spatial Intersect by Study Area Boundary (Polygon Clip)",
+            "Custom Station IDs (Manual Entry / File)",
+            "Global Network (Worldwide)",
+            "Local Saved Station Layer (Shapefile / Geodatabase)"
+          ]
+        },
+        {
+          "name": "Country_Filter",
+          "label_ar": "الدولة / الإقليم",
+          "type": "choice",
+          "options": [
+            "All / Global",
+            "Saudi Arabia (SA)",
+            "United Arab Emirates (AE)",
+            "Egypt (EG)",
+            "Morocco (MA)",
+            "Algeria (DZ)",
+            "United States (US)",
+            "France (FR)",
+            "Germany (DE)",
+            "Brazil (BR)",
+            "India (IN)",
+            "Australia (AS)",
+            "Norway (NO)",
+            "Japan (JA)",
+            "United Kingdom (UK)"
+          ]
+        },
+        {
+          "name": "Study_Area_Clip_Mask",
+          "label_ar": "مضلع نطاق الدراسة وقناع القص (Clip Mask)",
+          "type": "layer_choice",
+          "role": "mask"
+        },
+        {
+          "name": "Climate_Data_Source",
+          "label_ar": "مصدر البيانات المناخية",
+          "type": "choice",
+          "options": [
+            "NASA POWER (Satellite & Reanalysis - Global)",
+            "Open-Meteo ERA5 Reanalysis (0.1° / 0.25°)",
+            "NOAA ISD Direct Ground Observations"
+          ]
+        },
+        {
+          "name": "Climatological_Period",
+          "label_ar": "الفترة المناخية المرجعية (Normals)",
+          "type": "choice",
+          "options": [
+            "1991-2020 Standard Normal (30-Year WMO Reference)",
+            "1981-2010 Previous Normal Period",
+            "Custom Historical Range (1984 - 2024)"
+          ]
+        },
+        {
+          "name": "Interpolation_Method",
+          "label_ar": "طريقة الاستيفاء المكاني للأسطح",
+          "type": "choice",
+          "options": [
+            "IDW (Inverse Distance Weighting)",
+            "Ordinary Kriging (Spherical Semi-variogram)",
+            "Regularized Spline with Tension",
+            "Topo to Raster (ANUDEM Elevation-Informed)"
+          ]
+        },
+        {
+          "name": "Output_Cell_Size",
+          "label_ar": "دقة الخلية الناتجة (Cell Size)",
+          "type": "string",
+          "default": "0.01 Degrees (~1 km)"
+        },
+        {
+          "name": "Output_Geodatabase",
+          "label_ar": "قاعدة البيانات الجغرافية للمخرجات (.gdb)",
+          "type": "path",
+          "default": "C:/MIRSAD_Projects/Outputs/Climate_Atlas.gdb"
+        },
+        {
+          "name": "Output_GeoPackage",
+          "label_ar": "ملف GeoPackage المفتوح (.gpkg)",
+          "type": "path",
+          "default": "C:/MIRSAD_Projects/Outputs/Climate_Atlas.gpkg"
+        },
+        {
+          "name": "Output_Excel_Folder",
+          "label_ar": "مجلد تصدير مصنفات Excel (.xlsx)",
+          "type": "path",
+          "default": "C:/MIRSAD_Projects/Outputs/Excel_Reports/"
+        }
+      ]
+    },
+    {
+      "id": "tool_raster_atlas",
+      "name_ar": "أداة البيانات المناخية الشبكية (Raster Data Climate Atlas)",
+      "name_en": "Raster Data Climate Atlas Generator",
+      "category": "Raster Analysis",
+      "icon": "🗺️",
+      "description_ar": "معالجة بيانات الراستر المناخية (NetCDF / GeoTIFF / ERA5) وقصها بنطاق الدراسة وحساب الإحصائيات المكانية والمؤشرات المئوية.",
+      "description_en": "Processes continuous gridded climate datasets (NetCDF, GeoTIFF, ERA5 grids), clips them with boundary masks, and calculates regional zonal statistics.",
+      "parameters": [
+        {
+          "name": "Input_Climate_Raster",
+          "label_ar": "طبقة الراستر المناخية المدخلة",
+          "type": "layer_choice",
+          "role": "raster"
+        },
+        {
+          "name": "Study_Area_Boundary",
+          "label_ar": "مضلع نطاق الدراسة والقص",
+          "type": "layer_choice",
+          "role": "mask"
+        },
+        {
+          "name": "Statistical_Reduction",
+          "label_ar": "المعامل الإحصائي المطلوب",
+          "type": "choice",
+          "options": [
+            "Mean (المعدل السنوي والشهري)",
+            "Maximum (القيم القصوى)",
+            "Minimum (القيم الدنيا)",
+            "Standard Anomaly (الشذوذ المعياري)",
+            "95th Percentile (المئين 95)"
+          ]
+        },
+        {
+          "name": "Zonal_Statistics_Units",
+          "label_ar": "وحدات التحليل الإحصائي الإقليمي (Zonal)",
+          "type": "layer_choice",
+          "role": "boundary"
+        },
+        {
+          "name": "Output_Raster_Path",
+          "label_ar": "مسار الراستر الناتج",
+          "type": "path",
+          "default": "C:/MIRSAD_Projects/Outputs/Raster/Zonal_Climate_Surface.tif"
+        }
+      ]
+    },
+    {
+      "id": "tool_bioclimatic_indices",
+      "name_ar": "أداة حساب المؤشرات الحيوية والمناخية الزراعية (Bioclimatic Indices)",
+      "name_en": "Bioclimatic & Agroclimatic Indices Calculator",
+      "category": "Index Modeling",
+      "icon": "🌿",
+      "description_ar": "حساب مؤشرات الجفاف والتصحر والمؤشرات الزراعية الحيوية (De Martonne, Thornthwaite, Lang, Heat Index, GDD, ETCCDI).",
+      "description_en": "Computes global standard agroclimatic and bioclimatic indicators including De Martonne Aridity, Thornthwaite P/E, GDD, Heat Index, and ETCCDI extreme rainfall metrics.",
+      "parameters": [
+        {
+          "name": "Input_Stations_or_Raster",
+          "label_ar": "مصدر البيانات (محطات أو راستر)",
+          "type": "layer_choice",
+          "role": "stations"
+        },
+        {
+          "name": "Target_Indices",
+          "label_ar": "المؤشرات المطلوب حسابها",
+          "type": "multicheck",
+          "options": [
+            "De Martonne Aridity Index",
+            "Thornthwaite Moisture Index",
+            "Lang Regenfaktor",
+            "Bagnouls-Gaussen Xerothermic",
+            "NOAA Heat Index",
+            "Growing Degree Days (GDD - Base 10°C)",
+            "ETCCDI R10mm & R20mm Heavy Rain",
+            "Consecutive Dry Days (CDD)"
+          ]
+        },
+        {
+          "name": "GDD_Base_Temp",
+          "label_ar": "درجة حرارة الأساس لـ GDD (°C)",
+          "type": "string",
+          "default": "10.0"
+        },
+        {
+          "name": "Output_Table_Excel",
+          "label_ar": "مسار تقرير Excel النهائي",
+          "type": "path",
+          "default": "C:/MIRSAD_Projects/Outputs/Excel_Reports/Bioclimatic_Indices.xlsx"
+        }
+      ]
+    },
+    {
+      "id": "tool_spatial_interpolation",
+      "name_ar": "أداة الاستيفاء المكاني وبناء السطوح (Spatial Interpolation Modeler)",
+      "name_en": "Spatial Interpolation & Surface Modeler",
+      "category": "Surface Modeling",
+      "icon": "📐",
+      "description_ar": "إنشاء أسطح راستر مستمرة من النقاط المقاسة باستخدام خوارزميات الاستيفاء الجيوإحصائي والرياضي مع مراعاة قناع القص.",
+      "description_en": "Interpolates measured weather station point parameters into continuous high-resolution surfaces with mask clipping and barrier support.",
+      "parameters": [
+        {
+          "name": "Input_Point_Features",
+          "label_ar": "طبقة النقاط المدخلة",
+          "type": "layer_choice",
+          "role": "stations"
+        },
+        {
+          "name": "Z_Value_Field",
+          "label_ar": "حقل القيمة المراد استيفاؤها (Z-Value)",
+          "type": "choice",
+          "options": [
+            "Annual_Mean_Temp",
+            "Annual_Precipitation",
+            "De_Martonne_Index",
+            "Max_Temp_Summer",
+            "Min_Temp_Winter",
+            "Relative_Humidity"
+          ]
+        },
+        {
+          "name": "Method",
+          "label_ar": "خوارزمية الاستيفاء",
+          "type": "choice",
+          "options": [
+            "Ordinary Kriging (Spherical)",
+            "Universal Kriging (Linear Drift)",
+            "IDW (Power = 2.0)",
+            "Spline (Regularized)"
+          ]
+        },
+        {
+          "name": "Clipping_Mask",
+          "label_ar": "قناع القص للسطح الناتج",
+          "type": "layer_choice",
+          "role": "mask"
+        },
+        {
+          "name": "Output_Surface_Raster",
+          "label_ar": "مسار الراستر الناتج",
+          "type": "path",
+          "default": "C:/MIRSAD_Projects/Outputs/Surfaces/Interpolated_Surface.tif"
+        }
+      ]
+    },
+    {
+      "id": "tool_cartographic_atlas",
+      "name_ar": "أداة إنتاج سلاسل الخرائط والأطلس (Atlas & Map Series Builder)",
+      "name_en": "Automated Map Series & Atlas Builder",
+      "category": "Cartography",
+      "icon": "🖨️",
+      "description_ar": "أتمتة إنتاج صفحات الأطلس والخرائط الكارتوجرافية الشاملة لشبكة المحطات والأسطح المستوفاة مع وسيلة الإيضاح والمقياس وسهم الشمال.",
+      "description_en": "Automates production of publication-ready cartographic atlas sheets, dynamic map series, legends, north arrows, and multi-page PDF/GeoTIFF exports.",
+      "parameters": [
+        {
+          "name": "Map_Document_Layout",
+          "label_ar": "قالب الإخراج الكارتوجرافي",
+          "type": "choice",
+          "options": [
+            "A3 Landscape Atlas (Standard)",
+            "A4 Portrait National Report",
+            "Executive Presentation Layout (16:9)"
+          ]
+        },
+        {
+          "name": "Theme_Color_Ramp",
+          "label_ar": "شريط الألوان الكارتوجرافي (Color Ramp)",
+          "type": "choice",
+          "options": [
+            "Viridis (Scientific Perceptually Uniform)",
+            "Plasma (Thermal Gradient)",
+            "Coolwarm (Temperature Diverging)",
+            "YlGnBu (Precipitation & Moisture)",
+            "Spectral (Multi-class Aridity)"
+          ]
+        },
+        {
+          "name": "DPI_Resolution",
+          "label_ar": "دقة الإخراج للطباعة (DPI)",
+          "type": "choice",
+          "options": [
+            "300 DPI (High Resolution Print)",
+            "600 DPI (Archival Cartographic Quality)",
+            "150 DPI (Screen / Web Preview)"
+          ]
+        },
+        {
+          "name": "Export_Format",
+          "label_ar": "صيغة تصدير الأطلس",
+          "type": "choice",
+          "options": [
+            "Multi-Page PDF Atlas (فيكتور عالي الجودة)",
+            "High-Res GeoTIFF (جيوراستر مسقط)",
+            "PNG / JPEG Bundle"
+          ]
+        }
+      ]
+    }
+  ],
+  "excel_workbooks": [
+    {
+      "id": "wb_temp_normals",
+      "filename": "Monthly_Mean_Temperature_Normals.xlsx",
+      "title_ar": "متوسطات درجات الحرارة الشهرية والسنوية (1991-2020)",
+      "title_en": "Monthly & Annual Mean Temperature Normals (1991-2020)",
+      "tool_source": "tool_ground_stations",
+      "records_count": 136,
+      "columns": [
+        "USAF",
+        "WBAN",
+        "Station_Name",
+        "Country",
+        "Lat",
+        "Lon",
+        "Elev_m",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+        "Annual_Mean"
+      ],
+      "sample_rows": [
+        [
+          "411120",
+          "99999",
+          "ABHA",
+          "Saudi Arabia",
+          "18.2400",
+          "42.6570",
+          "2090.3",
+          "13.2",
+          "14.8",
+          "17.1",
+          "19.4",
+          "22.0",
+          "24.5",
+          "23.8",
+          "23.6",
+          "21.5",
+          "17.8",
+          "15.1",
+          "13.4",
+          "18.9"
+        ],
+        [
+          "404300",
+          "99999",
+          "AL-MADINAH",
+          "Saudi Arabia",
+          "24.5530",
+          "39.7050",
+          "655.0",
+          "18.5",
+          "21.0",
+          "25.2",
+          "30.1",
+          "35.4",
+          "38.8",
+          "39.2",
+          "38.9",
+          "36.5",
+          "30.8",
+          "24.2",
+          "19.8",
+          "29.9"
+        ],
+        [
+          "412170",
+          "99999",
+          "ABU DHABI INTL",
+          "United Arab Emirates",
+          "24.4330",
+          "54.6510",
+          "27.0",
+          "18.8",
+          "20.2",
+          "24.1",
+          "28.9",
+          "33.5",
+          "36.2",
+          "37.1",
+          "36.8",
+          "34.2",
+          "29.8",
+          "24.5",
+          "20.5",
+          "28.7"
+        ],
+        [
+          "601550",
+          "99999",
+          "CASABLANCA",
+          "Morocco",
+          "33.5670",
+          "-7.5830",
+          "50.0",
+          "12.8",
+          "13.5",
+          "15.2",
+          "16.9",
+          "19.4",
+          "22.1",
+          "23.8",
+          "24.2",
+          "23.1",
+          "20.5",
+          "16.4",
+          "13.8",
+          "18.5"
+        ],
+        [
+          "623660",
+          "99999",
+          "CAIRO INTL",
+          "Egypt",
+          "30.1114",
+          "31.3972",
+          "74.0",
+          "14.0",
+          "15.2",
+          "18.0",
+          "22.5",
+          "26.8",
+          "29.5",
+          "30.2",
+          "30.5",
+          "28.1",
+          "25.0",
+          "20.1",
+          "15.8",
+          "23.1"
+        ],
+        [
+          "725030",
+          "14732",
+          "NEW YORK LGA",
+          "United States",
+          "40.7794",
+          "-73.8803",
+          "11.0",
+          "0.5",
+          "1.8",
+          "6.2",
+          "12.1",
+          "17.8",
+          "23.2",
+          "26.1",
+          "25.4",
+          "21.2",
+          "15.0",
+          "9.2",
+          "3.8",
+          "13.5"
+        ],
+        [
+          "071490",
+          "99999",
+          "PARIS ORLY",
+          "France",
+          "48.7233",
+          "2.3794",
+          "89.0",
+          "4.1",
+          "4.8",
+          "8.2",
+          "11.2",
+          "15.1",
+          "18.5",
+          "20.8",
+          "20.5",
+          "16.8",
+          "12.5",
+          "7.8",
+          "4.9",
+          "12.1"
+        ],
+        [
+          "103840",
+          "99999",
+          "BERLIN TEMPELHOF",
+          "Germany",
+          "52.4730",
+          "13.4040",
+          "51.0",
+          "0.6",
+          "1.5",
+          "5.2",
+          "10.1",
+          "14.8",
+          "18.2",
+          "20.2",
+          "19.8",
+          "15.2",
+          "10.1",
+          "5.0",
+          "1.8",
+          "10.2"
+        ],
+        [
+          "837550",
+          "99999",
+          "RIO DE JANEIRO",
+          "Brazil",
+          "-22.9100",
+          "-43.1630",
+          "3.0",
+          "26.5",
+          "27.1",
+          "26.0",
+          "24.5",
+          "22.8",
+          "21.9",
+          "21.5",
+          "22.0",
+          "22.8",
+          "23.5",
+          "24.8",
+          "25.8",
+          "24.1"
+        ],
+        [
+          "421820",
+          "99999",
+          "NEW DELHI SAFDARJUNG",
+          "India",
+          "28.5830",
+          "77.2000",
+          "216.0",
+          "14.2",
+          "17.8",
+          "23.5",
+          "30.1",
+          "34.8",
+          "34.2",
+          "31.5",
+          "30.2",
+          "29.8",
+          "26.1",
+          "20.5",
+          "15.5",
+          "25.7"
+        ],
+        [
+          "947670",
+          "99999",
+          "SYDNEY AIRPORT",
+          "Australia",
+          "-33.9460",
+          "151.1770",
+          "6.0",
+          "23.0",
+          "22.8",
+          "21.5",
+          "18.8",
+          "15.8",
+          "13.5",
+          "12.8",
+          "13.9",
+          "16.2",
+          "18.5",
+          "20.8",
+          "22.1",
+          "18.3"
+        ]
+      ]
+    },
+    {
+      "id": "wb_precip_climatology",
+      "filename": "Precipitation_Climatology_1991_2020.xlsx",
+      "title_ar": "معدلات الهطول المطري الشهري والسنوي (ملم)",
+      "title_en": "Monthly & Annual Precipitation Climatology (mm)",
+      "tool_source": "tool_ground_stations",
+      "records_count": 136,
+      "columns": [
+        "USAF",
+        "WBAN",
+        "Station_Name",
+        "Country",
+        "Lat",
+        "Lon",
+        "P_Jan",
+        "P_Feb",
+        "P_Mar",
+        "P_Apr",
+        "P_May",
+        "P_Jun",
+        "P_Jul",
+        "P_Aug",
+        "P_Sep",
+        "P_Oct",
+        "P_Nov",
+        "P_Dec",
+        "Annual_Sum"
+      ],
+      "sample_rows": [
+        [
+          "411120",
+          "99999",
+          "ABHA",
+          "Saudi Arabia",
+          "18.2400",
+          "42.6570",
+          "18.5",
+          "22.1",
+          "55.4",
+          "68.2",
+          "35.0",
+          "8.5",
+          "15.2",
+          "28.4",
+          "6.2",
+          "4.1",
+          "7.8",
+          "10.2",
+          "279.6"
+        ],
+        [
+          "412170",
+          "99999",
+          "ABU DHABI INTL",
+          "United Arab Emirates",
+          "24.4330",
+          "54.6510",
+          "10.2",
+          "15.8",
+          "12.4",
+          "6.1",
+          "0.2",
+          "0.0",
+          "0.0",
+          "0.1",
+          "0.0",
+          "0.5",
+          "2.1",
+          "8.5",
+          "55.9"
+        ],
+        [
+          "601550",
+          "99999",
+          "CASABLANCA",
+          "Morocco",
+          "33.5670",
+          "-7.5830",
+          "68.2",
+          "55.4",
+          "48.1",
+          "35.2",
+          "15.8",
+          "3.2",
+          "0.5",
+          "0.8",
+          "8.5",
+          "38.0",
+          "65.4",
+          "82.1",
+          "421.2"
+        ],
+        [
+          "623660",
+          "99999",
+          "CAIRO INTL",
+          "Egypt",
+          "30.1114",
+          "31.3972",
+          "5.2",
+          "4.8",
+          "3.5",
+          "1.2",
+          "0.5",
+          "0.0",
+          "0.0",
+          "0.0",
+          "0.1",
+          "1.5",
+          "3.8",
+          "6.1",
+          "26.7"
+        ],
+        [
+          "725030",
+          "14732",
+          "NEW YORK LGA",
+          "United States",
+          "40.7794",
+          "-73.8803",
+          "85.2",
+          "76.4",
+          "98.5",
+          "102.1",
+          "105.4",
+          "98.2",
+          "112.5",
+          "108.4",
+          "105.1",
+          "98.4",
+          "88.5",
+          "95.2",
+          "1173.9"
+        ],
+        [
+          "071490",
+          "99999",
+          "PARIS ORLY",
+          "France",
+          "48.7233",
+          "2.3794",
+          "52.1",
+          "45.2",
+          "48.5",
+          "51.2",
+          "62.4",
+          "55.1",
+          "58.4",
+          "54.2",
+          "50.1",
+          "60.5",
+          "58.2",
+          "62.1",
+          "638.0"
+        ]
+      ]
+    },
+    {
+      "id": "wb_bioclim_aridity",
+      "filename": "Bioclimatic_Aridity_DeMartonne.xlsx",
+      "title_ar": "مؤشرات الجفاف البيومناخية (De Martonne & Thornthwaite)",
+      "title_en": "Bioclimatic Aridity & Moisture Indices",
+      "tool_source": "tool_bioclimatic_indices",
+      "records_count": 136,
+      "columns": [
+        "USAF",
+        "Station_Name",
+        "Country",
+        "Annual_P_mm",
+        "Annual_T_C",
+        "De_Martonne_Index",
+        "Aridity_Class_AR",
+        "Aridity_Class_EN",
+        "Thornthwaite_PE",
+        "Lang_Regenfaktor"
+      ],
+      "sample_rows": [
+        [
+          "411120",
+          "ABHA",
+          "Saudi Arabia",
+          "279.6",
+          "18.9",
+          "9.67",
+          "شديد الجفاف إلى جاف",
+          "Semi-Arid",
+          "14.8",
+          "14.8"
+        ],
+        [
+          "412170",
+          "ABU DHABI",
+          "United Arab Emirates",
+          "55.9",
+          "28.7",
+          "1.44",
+          "شديد الجفاف (صحراوي خالي)",
+          "Hyper-Arid",
+          "1.9",
+          "1.9"
+        ],
+        [
+          "601550",
+          "CASABLANCA",
+          "Morocco",
+          "421.2",
+          "18.5",
+          "14.78",
+          "شبه جاف متوسطي",
+          "Semi-Arid / Sub-Humid",
+          "22.8",
+          "22.8"
+        ],
+        [
+          "623660",
+          "CAIRO INTL",
+          "Egypt",
+          "26.7",
+          "23.1",
+          "0.81",
+          "شديد الجفاف صحراوي",
+          "Hyper-Arid",
+          "1.2",
+          "1.2"
+        ],
+        [
+          "725030",
+          "NEW YORK LGA",
+          "United States",
+          "1173.9",
+          "13.5",
+          "49.95",
+          "رطب جداً مستمر",
+          "Per-Humid",
+          "86.9",
+          "86.9"
+        ],
+        [
+          "071490",
+          "PARIS ORLY",
+          "France",
+          "638.0",
+          "12.1",
+          "28.87",
+          "رطب معتدل",
+          "Humid",
+          "52.7",
+          "52.7"
+        ]
+      ]
+    },
+    {
+      "id": "wb_extreme_events",
+      "filename": "Extreme_Events_ETCCDI.xlsx",
+      "title_ar": "مؤشرات التطرف المناخي المعتمدة (ETCCDI Metrics)",
+      "title_en": "ETCCDI Climate Extremes & Precipitation Anomalies",
+      "tool_source": "tool_bioclimatic_indices",
+      "records_count": 136,
+      "columns": [
+        "USAF",
+        "Station_Name",
+        "Country",
+        "RX1day_mm",
+        "RX5day_mm",
+        "R10mm_days",
+        "R20mm_days",
+        "CDD_days",
+        "CWD_days",
+        "TX90p_pct",
+        "TN10p_pct"
+      ],
+      "sample_rows": [
+        [
+          "411120",
+          "ABHA",
+          "Saudi Arabia",
+          "48.2",
+          "75.4",
+          "8",
+          "3",
+          "85",
+          "4",
+          "14.2",
+          "8.5"
+        ],
+        [
+          "412170",
+          "ABU DHABI",
+          "United Arab Emirates",
+          "32.5",
+          "35.0",
+          "2",
+          "1",
+          "240",
+          "2",
+          "18.5",
+          "7.1"
+        ],
+        [
+          "601550",
+          "CASABLANCA",
+          "Morocco",
+          "58.4",
+          "92.1",
+          "14",
+          "6",
+          "72",
+          "5",
+          "11.8",
+          "9.2"
+        ],
+        [
+          "623660",
+          "CAIRO INTL",
+          "Egypt",
+          "18.5",
+          "22.1",
+          "1",
+          "0",
+          "180",
+          "2",
+          "16.4",
+          "6.8"
+        ],
+        [
+          "725030",
+          "NEW YORK LGA",
+          "United States",
+          "82.5",
+          "135.2",
+          "38",
+          "19",
+          "18",
+          "7",
+          "10.5",
+          "9.8"
+        ],
+        [
+          "071490",
+          "PARIS ORLY",
+          "France",
+          "42.1",
+          "68.5",
+          "22",
+          "8",
+          "24",
+          "6",
+          "9.8",
+          "10.2"
+        ]
+      ]
+    },
+    {
+      "id": "wb_station_audit",
+      "filename": "Station_Inventory_Audit_Report.xlsx",
+      "title_ar": "كتالوج تدقيق المحطات وجودة البيانات المناخية",
+      "title_en": "Station Catalogue Integrity & QA Validation Manifest",
+      "tool_source": "tool_ground_stations",
+      "records_count": 136,
+      "columns": [
+        "Station_Key",
+        "USAF",
+        "WBAN",
+        "Station_Name",
+        "Country_Code",
+        "Country_Name",
+        "Latitude",
+        "Longitude",
+        "Elevation_m",
+        "QA_Status",
+        "Completeness_Pct"
+      ],
+      "sample_rows": [
+        [
+          "411120|99999|18.2400|42.6570",
+          "411120",
+          "99999",
+          "ABHA",
+          "SA",
+          "Saudi Arabia",
+          "18.2400",
+          "42.6570",
+          "2090.3",
+          "VERIFIED_ISD",
+          "99.4%"
+        ],
+        [
+          "404300|99999|24.5530|39.7050",
+          "404300",
+          "99999",
+          "AL-MADINAH",
+          "SA",
+          "Saudi Arabia",
+          "24.5530",
+          "39.7050",
+          "655.0",
+          "VERIFIED_ISD",
+          "98.8%"
+        ],
+        [
+          "412170|99999|24.4330|54.6510",
+          "412170",
+          "99999",
+          "ABU DHABI INTL",
+          "AE",
+          "United Arab Emirates",
+          "24.4330",
+          "54.6510",
+          "27.0",
+          "VERIFIED_ISD",
+          "99.1%"
+        ],
+        [
+          "601550|99999|33.5670|-7.5830",
+          "601550",
+          "99999",
+          "CASABLANCA",
+          "MA",
+          "Morocco",
+          "33.5670",
+          "-7.5830",
+          "50.0",
+          "VERIFIED_ISD",
+          "97.9%"
+        ],
+        [
+          "623660|99999|30.1114|31.3972",
+          "623660",
+          "99999",
+          "CAIRO INTL",
+          "EG",
+          "Egypt",
+          "30.1114",
+          "31.3972",
+          "74.0",
+          "VERIFIED_ISD",
+          "99.8%"
+        ],
+        [
+          "725030|14732|40.7794|-73.8803",
+          "725030",
+          "14732",
+          "NEW YORK LGA",
+          "US",
+          "United States",
+          "40.7794",
+          "-73.8803",
+          "11.0",
+          "VERIFIED_ISD",
+          "100.0%"
+        ]
+      ]
+    }
+  ],
+  "countries": [
+    "SA",
+    "AE",
+    "MA",
+    "EG",
+    "DZ",
+    "US",
+    "FR",
+    "DE",
+    "BR",
+    "IN",
+    "AS",
+    "NO",
+    "JA",
+    "UK"
+  ],
+  "meta": {
+    "version": "2.1.0 Enterprise Desktop",
+    "build": "2026.10.17.Codex",
+    "crs_default": "EPSG:4326 - WGS 84 (Global Lat/Lon)",
+    "project_name": "MIRSAD_Global_Climatology_Project.mxdp"
+  }
+}

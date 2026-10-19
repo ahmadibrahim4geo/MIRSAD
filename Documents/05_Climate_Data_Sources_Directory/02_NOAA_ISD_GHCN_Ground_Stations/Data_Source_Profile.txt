@@ -1,31 +1,35 @@
-================================================================================
-DATA SOURCE PROFILE: NOAA ISD / GHCN GROUND OBSERVATIONS ARCHIVE
-================================================================================
-Source Name           : NOAA ISD / GHCN Direct Station Ground Observations Archive
-Provider Organization : National Oceanic and Atmospheric Administration (NOAA) / NCEI
-Collaborator          : World Meteorological Organization (WMO)
-Coverage Start        : 1901 (Standard Synoptic Digital Archive)
-Coverage End          : Present (Real-Time Ingestion)
-Temporal Resolution   : Sub-hourly, Hourly, 3-hourly, Daily, Monthly
-Spatial Resolution    : Point Station Physical Coordinates (WGS84 EPSG:4326)
-Total Station Network : 35,000+ cataloged stations (28,095 curated in Atlas Hub)
+# MIRSAD climate source profile
 
-WHAT THIS SOURCE CAN PROVIDE:
-[+] 100% Pure Physical Ground Truth from In-Situ Meteorological Instruments
-[+] Ambient Air Temperature at 2m (Mean, Maximum, Minimum)
-[+] Dew Point Temperature and Psychrometric Relative Humidity
-[+] Dual Barometric Pressure: Station Pressure (PS) and Sea Level Pressure (PSL)
-[+] Wind Speed at 10m Mast, Compass Wind Direction, and Peak Wind Gusts
-[+] Liquid Precipitation Accumulation (mm), Rain Day Counts, Extreme Storms
-[+] Total Cloud Cover (Oktas 0-8) and Ceilometer Cloud Base Ceiling Height
-[+] Official Present Weather Phenology (Fog, Dust, Thunderstorm, Rain Types)
-[+] Certified Evidentiary Legal Compliance for Audits and Court Forensics
+2026-10-18 · Implemented development source contract
 
-WHAT THIS SOURCE CANNOT PROVIDE:
-[-] Surface Solar Radiation Flux (W/m2) for Routine Synoptic Stations
-[-] Satellite UV Erythemal Index (Requires Specialized Spectrometers)
-[-] Land Surface Skin Temperature (LST - Satellite Sensor Property)
-[-] Subsurface Multi-Layer Soil Moisture/Temperature Profiles
-[-] 100% Temporal Continuity (Prone to Sensor Outages, Maintenance Gaps, -999)
-[-] Gridded Continuous Coverage Across Deserts, Oceans, or Station Voids
-================================================================================
+## NOAA GSOD
+
+General archive 1929; station/element-specific → Station/year-specific
+
+Station observations | Daily summaries
+
+Exact catalogue station | stations
+
+T2M, T2M_MAX, T2M_MIN, T2MDEW, PRECTOTCORR, PS, SLP, WS10M
+
+USAF, WBAN and location are required together. This is not hourly ISD or GHCN. Hybrid finishes NOAA, then ERA5, then NASA, then optional monthly Gap Fill.
+
+https://www.ncei.noaa.gov/data/global-summary-of-the-day/
+
+## NOAA GHCN-Daily (Station Observations Only)
+
+Station/element-specific → Station/element-specific
+
+Station location | Daily
+
+Catalogue stations only | stations
+
+T2M, T2M_MAX, T2M_MIN, PRECTOTCORR
+
+Requires an explicit 11-character GHCN_ID and matching coordinates. No USAF/WBAN conversion or nearest-station substitution. Nonblank QFLAG values are excluded; absent TAVG is not invented.
+
+https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily
+
+[All sources](../SOURCES_EN.md)
+
+No source guarantees complete coverage. Missing values stay NULL.

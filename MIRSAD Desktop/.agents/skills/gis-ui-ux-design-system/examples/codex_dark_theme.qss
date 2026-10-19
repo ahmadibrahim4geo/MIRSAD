@@ -1,0 +1,124 @@
+/* ==========================================================================
+   OpenAI Codex Dark Mode Theme for PySide6 / PyQt Desktop GIS Applications
+   ========================================================================== */
+
+/* Main Window */
+QMainWindow {
+    background-color: #0d0f12;
+    color: #cbd5e1;
+}
+
+/* Toolbars & Ribbons */
+QToolBar {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1c1d25, stop:1 #14151a);
+    border-bottom: 1px solid #252733;
+    spacing: 6px;
+    padding: 4px 6px;
+}
+
+QToolButton {
+    background-color: #191a22;
+    border: 1px solid #252733;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+QToolButton:hover {
+    background-color: #222430;
+    border-color: #06b6d4;
+}
+
+QToolButton:pressed {
+    background-color: #262938;
+}
+
+/* Dock Widgets */
+QDockWidget {
+    background-color: #14151a;
+    border: 1px solid #252733;
+    color: #ffffff;
+    font-size: 11.5px;
+}
+
+QDockWidget::title {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1c1d25, stop:1 #16171e);
+    padding: 6px 10px;
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 1px solid #252733;
+}
+
+/* Tab Widgets (Document Tabs) */
+QTabWidget::pane {
+    border: 1px solid #252733;
+    background: #0d0f12;
+}
+
+QTabBar::tab {
+    background: #14151b;
+    border: 1px solid #252733;
+    border-bottom: none;
+    padding: 6px 14px;
+    color: #94a3b8;
+    font-size: 11px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+QTabBar::tab:hover {
+    color: #ffffff;
+    background: #1c1d25;
+}
+
+QTabBar::tab:selected {
+    background: #20222d;
+    color: #ffffff;
+    border-color: #333646;
+    border-top: 2px solid #06b6d4;
+    font-weight: 600;
+}
+
+/* Data Tables & Trees (TOC, Catalog, Attribute Table) */
+QTableView, QTreeView {
+    background-color: #101116;
+    border: 1px solid #252733;
+    color: #cbd5e1;
+    gridline-color: #1b1d26;
+    selection-background-color: #262938;
+    selection-color: #ffffff;
+    font-size: 11px;
+}
+
+QHeaderView::section {
+    background-color: #191a22;
+    color: #ffffff;
+    padding: 6px 10px;
+    border: 1px solid #252733;
+    font-weight: 600;
+}
+
+/* Input Fields & Comboboxes */
+QLineEdit, QComboBox, QSpinBox {
+    background-color: #101116;
+    border: 1px solid #252733;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 4px 8px;
+    font-size: 11px;
+}
+
+QLineEdit:focus, QComboBox:focus {
+    border: 1px solid #38bdf8;
+}
+
+/* Status Bar */
+QStatusBar {
+    background-color: #0f1014;
+    border-top: 1px solid #252733;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 10px;
+}

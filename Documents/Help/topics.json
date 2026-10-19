@@ -1,0 +1,311 @@
+{
+  "groups": [
+    {
+      "id": "getting-started",
+      "ar": "ابدأ هنا",
+      "en": "Getting started"
+    },
+    {
+      "id": "toolbox",
+      "ar": "أدوات ArcGIS",
+      "en": "ArcGIS tools"
+    },
+    {
+      "id": "desktop",
+      "ar": "مرصاد Desktop",
+      "en": "MIRSAD Desktop"
+    },
+    {
+      "id": "science",
+      "ar": "المصادر والمنهجية",
+      "en": "Sources and methods"
+    },
+    {
+      "id": "equations",
+      "ar": "المعادلات وربط الأعمدة",
+      "en": "Equations and field mapping"
+    },
+    {
+      "id": "outputs",
+      "ar": "الراستر والمخرجات",
+      "en": "Rasters and outputs"
+    },
+    {
+      "id": "support",
+      "ar": "المساعدة والمساهمة",
+      "en": "Support and contributing"
+    }
+  ],
+  "topics": [
+    {
+      "id": "start",
+      "ar": "ابدأ هنا",
+      "en": "Start here",
+      "group": "getting-started"
+    },
+    {
+      "id": "workspace",
+      "ar": "مساحة العمل والخريطة",
+      "en": "Workspace and map",
+      "group": "desktop"
+    },
+    {
+      "id": "tools",
+      "ar": "الأدوات الثلاث ومساراتها",
+      "en": "The three tools and workflows",
+      "group": "toolbox"
+    },
+    {
+      "id": "inputs",
+      "ar": "المدخلات والتحديد والإحداثيات",
+      "en": "Inputs, selection and coordinates",
+      "group": "desktop"
+    },
+    {
+      "id": "providers",
+      "ar": "المصادر والتغطية والدقة والدخول",
+      "en": "Sources, coverage, resolution and sign-in",
+      "group": "science"
+    },
+    {
+      "id": "hybrid",
+      "ar": "تتابع Hybrid وملء الفجوات",
+      "en": "Hybrid stages and gap filling",
+      "group": "science"
+    },
+    {
+      "id": "modules",
+      "ar": "العناصر والنماذج الـ19",
+      "en": "All 19 module groups",
+      "group": "science"
+    },
+    {
+      "id": "period",
+      "ar": "الفترة والملخصات والوحدات",
+      "en": "Period, summaries and units",
+      "group": "desktop"
+    },
+    {
+      "id": "regional",
+      "ar": "خطوات الشبكة الإقليمية",
+      "en": "Regional grid steps",
+      "group": "toolbox"
+    },
+    {
+      "id": "raster",
+      "ar": "الراستر والإسقاط والتصنيف",
+      "en": "Rasters, CRS and classification",
+      "group": "outputs"
+    },
+    {
+      "id": "outputs",
+      "ar": "قراءة المخرجات والجودة",
+      "en": "Reading outputs and quality",
+      "group": "outputs"
+    },
+    {
+      "id": "results",
+      "ar": "المعاينة والمهام والإلغاء",
+      "en": "Previews, tasks and cancellation",
+      "group": "desktop"
+    },
+    {
+      "id": "examples",
+      "ar": "أمثلة عملية خطوة بخطوة",
+      "en": "Worked workflows",
+      "group": "getting-started"
+    },
+    {
+      "id": "troubleshooting",
+      "ar": "حل المشكلات والحدود",
+      "en": "Troubleshooting and limits",
+      "group": "support"
+    },
+    {
+      "id": "shortcuts",
+      "ar": "الاختصارات والمراجع والدعم",
+      "en": "Shortcuts, references and support",
+      "group": "support"
+    },
+    {
+      "id": "install",
+      "ar": "التثبيت والتشغيل",
+      "en": "Install and run",
+      "group": "getting-started"
+    },
+    {
+      "id": "arcgis",
+      "ar": "المساعدة داخل Pro وArcMap",
+      "en": "Help in Pro and ArcMap",
+      "group": "toolbox"
+    },
+    {
+      "id": "tool-points",
+      "ar": "أداة النقاط: من الإدخال إلى النتائج",
+      "en": "Point tool: inputs to results",
+      "group": "toolbox"
+    },
+    {
+      "id": "tool-stations",
+      "ar": "أداة محطات الأرصاد",
+      "en": "Weather station tool",
+      "group": "toolbox"
+    },
+    {
+      "id": "tool-raster",
+      "ar": "أداة الشبكة والراستر المناخي",
+      "en": "Grid raster climate tool",
+      "group": "toolbox"
+    },
+    {
+      "id": "contributing",
+      "ar": "المساهمة وتطوير مرصاد",
+      "en": "Contributing to MIRSAD",
+      "group": "support"
+    },
+    {
+      "id": "parameters-points",
+      "ar": "مرجع معاملات النقاط",
+      "en": "Point parameter reference",
+      "group": "toolbox"
+    },
+    {
+      "id": "parameters-stations",
+      "ar": "مرجع معاملات المحطات",
+      "en": "Station parameter reference",
+      "group": "toolbox"
+    },
+    {
+      "id": "parameters-raster",
+      "ar": "مرجع معاملات الراستر",
+      "en": "Raster parameter reference",
+      "group": "toolbox"
+    },
+    {
+      "id": "calculation-flow",
+      "ar": "الرموز والمدخلات وتدفق الحساب",
+      "en": "Symbols, inputs and calculation flow",
+      "group": "equations"
+    },
+    {
+      "id": "calculation-units",
+      "ar": "تحويل الوحدات وحدود الحساب",
+      "en": "Unit conversion and calculation limits",
+      "group": "equations"
+    },
+    {
+      "id": "formula-temperature",
+      "ar": "معادلات: درجة حرارة الهواء",
+      "en": "Equations: Temperature",
+      "group": "equations"
+    },
+    {
+      "id": "formula-lst",
+      "ar": "معادلات: درجة حرارة سطح الأرض",
+      "en": "Equations: Land Surface Temperature",
+      "group": "equations"
+    },
+    {
+      "id": "formula-rain",
+      "ar": "معادلات: الأمطار",
+      "en": "Equations: Precipitation",
+      "group": "equations"
+    },
+    {
+      "id": "formula-sea-pressure",
+      "ar": "معادلات: الضغط عند سطح البحر",
+      "en": "Equations: Sea Level Pressure",
+      "group": "equations"
+    },
+    {
+      "id": "formula-surface-pressure",
+      "ar": "معادلات: الضغط السطحي",
+      "en": "Equations: Surface Pressure",
+      "group": "equations"
+    },
+    {
+      "id": "formula-wind",
+      "ar": "معادلات: الرياح: السرعة والاتجاه",
+      "en": "Equations: Wind",
+      "group": "equations"
+    },
+    {
+      "id": "formula-humidity",
+      "ar": "معادلات: الرطوبة النسبية",
+      "en": "Equations: Relative Humidity",
+      "group": "equations"
+    },
+    {
+      "id": "formula-dewpoint",
+      "ar": "معادلات: نقطة الندى",
+      "en": "Equations: Dew Point",
+      "group": "equations"
+    },
+    {
+      "id": "formula-solar",
+      "ar": "معادلات: الإشعاع الشمسي",
+      "en": "Equations: Solar Radiation",
+      "group": "equations"
+    },
+    {
+      "id": "formula-uv",
+      "ar": "معادلات: الأشعة فوق البنفسجية",
+      "en": "Equations: UV Index",
+      "group": "equations"
+    },
+    {
+      "id": "formula-cloud",
+      "ar": "معادلات: الغطاء السحابي",
+      "en": "Equations: Cloud Cover",
+      "group": "equations"
+    },
+    {
+      "id": "formula-heat-index",
+      "ar": "معادلات: مؤشر الحرارة والإجهاد الحراري",
+      "en": "Equations: Heat Index",
+      "group": "equations"
+    },
+    {
+      "id": "formula-wind-chill",
+      "ar": "معادلات: برودة الرياح والإجهاد البارد",
+      "en": "Equations: Wind Chill",
+      "group": "equations"
+    },
+    {
+      "id": "formula-de-martonne",
+      "ar": "معادلات: الجفاف: دي مارتون",
+      "en": "Equations: De Martonne Aridity",
+      "group": "equations"
+    },
+    {
+      "id": "formula-pet",
+      "ar": "معادلات: البخر والنتح: هارجريفز",
+      "en": "Equations: Evapotranspiration",
+      "group": "equations"
+    },
+    {
+      "id": "formula-unep",
+      "ar": "معادلات: الجفاف: UNEP",
+      "en": "Equations: UNEP Aridity",
+      "group": "equations"
+    },
+    {
+      "id": "formula-water-deficit",
+      "ar": "معادلات: العجز المائي",
+      "en": "Equations: Water Deficit",
+      "group": "equations"
+    },
+    {
+      "id": "formula-dry-months",
+      "ar": "معادلات: عدد الأشهر الجافة",
+      "en": "Equations: Dry Months",
+      "group": "equations"
+    },
+    {
+      "id": "formula-trends",
+      "ar": "معادلات: الاتجاهات والشذوذ عن خط الأساس",
+      "en": "Equations: Trends & Anomalies",
+      "group": "equations"
+    }
+  ]
+}

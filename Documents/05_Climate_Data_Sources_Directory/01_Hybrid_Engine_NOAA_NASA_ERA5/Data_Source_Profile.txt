@@ -1,31 +1,7 @@
-================================================================================
-DATA SOURCE PROFILE: HYBRID CLIMATE ENGINE (NOAA GROUND + NASA/ERA5 FUSION)
-================================================================================
-Source Name           : Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling
-Role                  : DEFAULT CLIMATE ENGINE for Ground Weather Stations Tool
-Coverage Start        : 1901 (Station Inception)
-Coverage End          : Present (Near-Real-Time + 2-5 Days Gap-Fill)
-Temporal Resolution   : Hourly, Daily, Monthly, Multi-Year Climatology
-Spatial Format        : Station Physical Points (WGS84 EPSG:4326)
-Total Station Network : 28,095 Verified Ground Stations in Atlas Directory
-Primary Sources       : NOAA NCEI ISD, WMO, NASA POWER MERRA-2, ECMWF ERA5-Land
+# Hybrid source stages
 
-WHAT THIS SOURCE CAN PROVIDE:
-[+] 100% Complete Multi-Year Climatology across all 19 Climate Modules
-[+] True Ground Observations for Air Temp (Mean/Max/Min), Moisture, and Wind
-[+] True Ground Barometric Pressure (Station Pressure & Sea Level Pressure PSL)
-[+] True Ground Liquid Precipitation (Accumulated totals & rain day counts)
-[+] True Ground Cloud Cover (Okta and Area Fraction %)
-[+] Satellite Radiative Irradiance (GHI, DNI, Diffuse) via NASA CERES Fusion
-[+] Satellite UV Erythemal Index via NASA FLASHFlux Fusion
-[+] Satellite Earth Skin Temperature (Land Surface Temperature - LST)
-[+] Full suite of 8 Bioclimatic Submodels (Heat Index, Wind Chill, ET, Aridity)
-[+] 100% Zero-NoData Guarantee for Continuous Raster Surfaces
+NOAA GSOD → Open-Meteo ERA5/Land → NASA POWER → optional monthly Gap Fill.
 
-WHAT THIS SOURCE CANNOT PROVIDE:
-[-] Pure In-Situ Ground Pyranometer Measurements (Relies on CERES Satellite)
-[-] In-Situ Ground UV Spectrophotometer Readings (Relies on Satellite)
-[-] Multi-Layer Physical Soil Moisture Profiles at Standard Airport Towers
-[-] Raw Unadjusted Forensic Court Records (Use NOAA ISD Direct for Legal Audits)
-[-] Gap-Filling Protection for Stations Decommissioned Before 1940
-================================================================================
+Finish each source across the selected network before requesting missing cells from the next source. Any-point Hybrid skips NOAA. Valid higher-priority values remain unchanged. No source or filling method guarantees complete coverage. Raw observations, quality flags, per-value provenance and separate monthly estimates remain inspectable. Never fabricate daily observations from monthly filling.
+
+[Full source directory](../SOURCES_EN.md)

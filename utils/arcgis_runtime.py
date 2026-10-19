@@ -3,6 +3,37 @@
 from functools import wraps
 
 
+def filegdb_raster_workspace(function):
+    """Use geodatabase temporary rasters, avoiding Esri GRID space restrictions.
+
+    Final output paths and scientific inputs are unchanged. Restore both host
+    workspaces on success or failure; the ordinary tool scratch purge owns data.
+    """
+    @wraps(function)
+    def wrapped(self,*args,**kwargs):
+        import inspect
+        import os
+        namespace=getattr(function,"__globals__",None)
+        if namespace is None:namespace=function.func_globals
+        arcpy=namespace["arcpy"]
+        bound=inspect.getcallargs(function,self,*args,**kwargs)
+        folder=bound.get("scratch")
+        if not folder and bound.get("paths"):folder=os.path.join(os.path.dirname(bound["paths"]["vec"]),"_scratch")
+        if not folder:folder=os.path.join(os.path.dirname(bound["out_tif"]),"_scratch")
+        if not os.path.isdir(folder):os.makedirs(folder)
+        database=os.path.join(folder,"spatial_work.gdb")
+        if not arcpy.Exists(database):arcpy.CreateFileGDB_management(folder,"spatial_work.gdb")
+        saved=dict((key,getattr(arcpy.env,key,None)) for key in ("workspace","scratchWorkspace"))
+        try:
+            arcpy.env.workspace=database;arcpy.env.scratchWorkspace=database
+            return function(self,*args,**kwargs)
+        finally:
+            for key,value in saved.items():
+                if value is None:arcpy.ClearEnvironment(key)
+                else:setattr(arcpy.env,key,value)
+    return wrapped
+
+
 _ENVIRONMENTS = (
     "workspace", "overwriteOutput", "mask", "extent", "snapRaster", "cellSize",
     "outputCoordinateSystem", "parallelProcessingFactor", "compression",
@@ -78,16 +109,26 @@ class SpatialLicense(object):
 
 
 def provider_error(provider, raster=False):
-    """Prevent unsupported source labels from silently downloading NASA data."""
+    """Validate provider selection; prevents unsupported source labels from failing silently."""
     if isinstance(provider, bytes):
         provider = provider.decode("utf-8", "replace")
     name = (provider or "").strip()
-    unsupported = any(tag in name for tag in ("Hybrid", "NOAA", "Copernicus", "CDS"))
+    if raster:
+        from utils.climate_products import REGIONAL
+        if name in REGIONAL:return None
+    if not raster:
+        from utils.climate_sources import pipeline_sources
+        if pipeline_sources(name):return None
+        from utils.climate_products import ENABLED
+        if name in ENABLED:return None
+    if not raster and any(tag in name for tag in ("Hybrid", u"هجين")):
+        return None
+    unsupported = any(tag in name for tag in ("NOAA Direct", "Copernicus", "CDS"))
     if not unsupported and "NASA POWER" in name:
         return None
     if not unsupported and not raster and "Open-Meteo" in name:
         return None
-    supported = "NASA POWER Regional Grid" if raster else "NASA POWER or Open-Meteo"
+    supported = "NASA POWER Regional Grid" if raster else "Hybrid, Open-Meteo, or NASA POWER"
     return ("The selected provider '%s' has no direct download implementation in "
             "this tool. Select %s, or use precalculated data in Offline mode. "
             "No substitute source will be downloaded." % (name, supported))

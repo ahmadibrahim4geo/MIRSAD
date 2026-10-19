@@ -23,7 +23,7 @@ import time
 import calendar
 import datetime as _dt
 
-from utils.arcgis_runtime import preserve_arcpy_environment, SpatialLicense, provider_error
+from utils.arcgis_runtime import preserve_arcpy_environment, SpatialLicense, provider_error, filegdb_raster_workspace
 from utils.climate_quality import merge_point_layers, coordinates, derive_from_fields, IDENTITY_FIELDS
 
 PY27 = sys.version_info[0] == 2
@@ -2022,12 +2022,11 @@ class RasterDataClimateAtlasGenerator(object):
             direction="Input"
         )
         p2.filter.type = "ValueList"
-        p2.filter.list = [
-            "NASA POWER Regional Grid"
-        ]
+        from utils.climate_products import REGIONAL
+        p2.filter.list = ["NASA POWER Regional Grid"]+list(REGIONAL)
         p2.value = "NASA POWER Regional Grid"
         p2.category = "Data Provider & Authentication"
-        p2.description = ("NASA POWER Regional Grid is the implemented online source. "
+        p2.description = ("NASA POWER regional data, or CHIRPS/CHELSA original native grid cells inside the download polygon. "
                           "Unimplemented providers are excluded from the list; old saved choices report an error. "
                           "Use Offline mode for existing data from any source.")
 
@@ -2431,6 +2430,15 @@ class RasterDataClimateAtlasGenerator(object):
             "Interpolate existing monthly climatology fields in Offline mode (at least 2 years). "
             "Monthly surfaces use a shared color stretch and are saved in Month/.")
 
+        from utils.climate_sources import POWER_RESOLUTION
+        p_source_resolution=arcpy.Parameter(displayName="Resolution / Native Source Grid",
+            name="Source_Resolution",datatype="GPString",parameterType="Optional",direction="Input")
+        p_source_resolution.filter.type="ValueList"
+        p_source_resolution.filter.list=[POWER_RESOLUTION]
+        p_source_resolution.value=POWER_RESOLUTION;p_source_resolution.enabled=False
+        p_source_resolution.category="Data Provider & Authentication"
+        p_source_resolution.description="Fixed source grids vary by variable. Output raster cell size is a separate processing setting, not new climate information."
+
         return [
             p_mode, p_wf_mode, p_precalc, p0, p1, p_study_name,
             p2, p3, p4, p_cds_key,
@@ -2440,7 +2448,7 @@ class RasterDataClimateAtlasGenerator(object):
             p_interp, p_cell, p_wind_cell,
             p_exp_indiv, p_ws, p_sr,
             p_unit_sys, p_unit_temp, p_unit_precip, p_unit_press, p_unit_wind, p_unit_solar,
-            p_monthly_rasters
+            p_monthly_rasters, p_source_resolution
         ]
 
     def updateParameters(self, parameters):
@@ -2493,7 +2501,8 @@ class RasterDataClimateAtlasGenerator(object):
         if p_pre:
             p_pre.enabled = is_offline
         if pdict.get("Generate_Monthly_Rasters"):
-            pdict["Generate_Monthly_Rasters"].enabled = is_offline
+            from utils.climate_products import REGIONAL
+            pdict["Generate_Monthly_Rasters"].enabled = is_offline or (pdict.get("Climate_Data_Source") and pdict["Climate_Data_Source"].valueAsText in REGIONAL)
 
         p_ext = pdict.get("Download_Extent_Layer")
         if p_ext:
@@ -2504,6 +2513,11 @@ class RasterDataClimateAtlasGenerator(object):
             p_src.enabled = not is_offline
 
         source = p_src.valueAsText if (p_src and p_src.value) else "NASA POWER Regional Grid"
+        if pdict.get("Source_Resolution"):
+            from utils.climate_sources import resolution_options
+            resolution=resolution_options(source)[0]
+            pdict["Source_Resolution"].filter.list=[resolution]
+            pdict["Source_Resolution"].value=resolution
         is_edl = ("Earthdata" in source or "Giovanni" in source) and (not is_offline)
         is_cds = ("Copernicus" in source or "CDS" in source) and (not is_offline)
         if "Earthdata_Username" in pdict:
@@ -2649,6 +2663,82 @@ class RasterDataClimateAtlasGenerator(object):
         finally:
             spatial_license.release()
 
+    def _execute_native_product(self,parameters,messages):
+        """Use the shared point engine at original CHIRPS/CHELSA cell centres."""
+        import tempfile
+        import shutil
+        from utils.climate_products import native_grid_cells
+        pd=dict((p.name,p) for p in parameters)
+        text=lambda name,default="":(pd[name].valueAsText or default) if name in pd else default
+        extent_layer=text("Download_Extent_Layer")
+        if not extent_layer:raise ValueError("Select a download extent polygon")
+        sr=arcpy.Describe(extent_layer).spatialReference
+        if not sr or sr.name=="Unknown":raise ValueError("The download polygon needs an explicit source CRS")
+        wgs=arcpy.SpatialReference(4326)
+        polygons=[row[0].projectAs(wgs) for row in arcpy.da.SearchCursor(extent_layer,["SHAPE@"]) if row[0]]
+        if not polygons:raise ValueError("Empty download polygon")
+        bounds=(min(p.extent.XMin for p in polygons),min(p.extent.YMin for p in polygons),
+            max(p.extent.XMax for p in polygons),max(p.extent.YMax for p in polygons))
+        mode=text("Time_Mode","Single Year")
+        if mode=="Custom Date Range":
+            start,end=parse_gp_date(text("Start_Date")),parse_gp_date(text("End_Date"))
+        else:
+            y0=int(text("Start_Year","2015")) if mode=="Year Range" else int(text("Single_Year","2024"))
+            y1=int(text("End_Year","2024")) if mode=="Year Range" else y0
+            start,end=_dt.date(y0,1,1),_dt.date(y1,12,31)
+        if not start or not end or start>end:raise ValueError("Choose a valid monthly period")
+        root=os.path.dirname(os.path.abspath(__file__))
+        core_path=os.path.join(root,"MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+        if sys.version_info[0]>=3:
+            import importlib.machinery
+            import importlib.util
+            loader=importlib.machinery.SourceFileLoader("mirsad_native_product_point_core",core_path)
+            spec=importlib.util.spec_from_loader(loader.name,loader)
+            core=importlib.util.module_from_spec(spec);loader.exec_module(core)
+        else:
+            import imp
+            core=imp.load_source("mirsad_native_product_point_core",core_path)
+        selected=[m.strip().strip("'\"") for m in text("Climate_Modules","Temperature").split(";")]
+        required=set()
+        for item in selected:
+            sub=core.resolve_submodel_name(item)
+            required.update(core.SUBMODEL_DEPS[sub].get("params",[]) if sub else core.MODULE_PARAMS.get(item,[]))
+        folder=text("Output_Workspace")
+        if not folder:raise ValueError("Select an output workspace")
+        if not os.path.isdir(folder):os.makedirs(folder)
+        cache=os.path.join(folder,"Source_Data","Native_Grid_Cache")
+        if not os.path.isdir(cache):os.makedirs(cache)
+        cancelled=lambda:bool(getattr(arcpy.env,"isCancelled",False))
+        def contains(x,y):
+            point=arcpy.PointGeometry(arcpy.Point(x,y),wgs)
+            return any(p.contains(point) or p.touches(point) for p in polygons)
+        cells=native_grid_cells(text("Climate_Data_Source"),bounds,start,end,sorted(required),cache,cancelled,contains)
+        arcpy.AddMessage("Reading %d original native cells through the shared source/calculation engine"%len(cells))
+        scratch=tempfile.mkdtemp(prefix="mirsad_native_grid_")
+        try:
+            points=os.path.join(scratch,"native_cells.shp")
+            arcpy.CreateFeatureclass_management(scratch,"native_cells.shp","POINT",spatial_reference=wgs)
+            arcpy.AddField_management(points,"Source_ID","TEXT",field_length=80)
+            arcpy.AddField_management(points,"Name","TEXT",field_length=80)
+            with arcpy.da.InsertCursor(points,["SHAPE@XY","Source_ID","Name"]) as cursor:
+                for cell in cells:cursor.insertRow([(cell["longitude"],cell["latitude"]),cell["station_key"],cell["name"]])
+            tool=core.PowerClimateAtlasGenerator();target=tool.getParameterInfo()
+            mapping={"Study_Area_Mask":"Final_Clip_Layer","Base_Cell_Size":"Output_Cell_Size","Export_Shapefiles":"Export_Individual_Shapefiles"}
+            values=dict(Input_Point_Features=points,Output_Workspace=folder,Temporal_Resolution="Monthly",
+                Gap_Fill_Method="No Fill (skip missing)",Save_Daily_Series=False,Add_To_Map=False,
+                Interpolation_Method={"Inverse Distance Weighted (IDW)":"IDW","Ordinary Kriging (Spherical)":"Ordinary Kriging",
+                    "Spline (Regularized)":"Spline","Natural Neighbor":"Natural Neighbor"}[text("Interpolation_Method","Inverse Distance Weighted (IDW)")],
+                IDW_Power=2.0,Spline_Type="Regularized",Spline_Weight=.1)
+            for parameter in target:
+                source=pd.get(mapping.get(parameter.name,parameter.name))
+                if source is not None and source.value is not None:parameter.value=source.value
+                if parameter.name in values:parameter.value=values[parameter.name]
+            return tool.execute(target,messages)
+        finally:
+            try:arcpy.Delete_management(points)
+            except Exception:pass
+            shutil.rmtree(scratch,ignore_errors=True)
+
     def _execute(self, parameters, messages, spatial_license):
         t0 = time.time()
         def msg(m):
@@ -2679,6 +2769,9 @@ class RasterDataClimateAtlasGenerator(object):
         in_clip_layer = _get_text("Final_Clip_Layer")
         study_area_name = _get_text("Study_Area_Name", "").strip()
         source = _get_text("Climate_Data_Source", "NASA POWER Regional Grid")
+        from utils.climate_products import REGIONAL
+        if not is_offline and source in REGIONAL:
+            return self._execute_native_product(parameters,messages)
         if not is_offline:
             problem = provider_error(source, raster=True)
             if problem:
@@ -3954,6 +4047,7 @@ class RasterDataClimateAtlasGenerator(object):
     # -----------------------------------------------------------------------
     # Helper: Spatial Interpolation & Masking with Layer 2
     # -----------------------------------------------------------------------
+    @filegdb_raster_workspace
     def _interpolate_and_clip(self, pts_fc, fld_name, clip_layer, method,
                               cell_size, out_tif, out_sr, msg, warn):
         try:
@@ -4680,6 +4774,121 @@ class RasterDataClimateAtlasGenerator(object):
             fh.write(u"\nQA Status: ALL PASS\n")
 
 
+class RasterDataClimateAtlasGeneratorAR(RasterDataClimateAtlasGenerator):
+    """MIRSAD Gridded & Raster Climate Atlas Generator — Arabic Edition."""
+
+    def __init__(self):
+        super(RasterDataClimateAtlasGeneratorAR, self).__init__() if hasattr(super(RasterDataClimateAtlasGeneratorAR, self), '__init__') else RasterDataClimateAtlasGenerator.__init__(self)
+        self.label = "MIRSAD: Gridded & Raster Climate Atlas Generator (AR)"
+        self.description = (
+            "أداة مِرصاد الجغرافية لتنزيل ومعالجة البيانات الشبكية والراستر من مزودي المناخ (NASA POWER)، "
+            "واستخراج نقاط بدقة Float ثلاثية الأبعاد مع كامل المؤشرات المناخية السنوية والموسمية، "
+            "وإجراء الاستيفاء المكاني عالي الدقة (IDW / Kriging / Spline)، والقص التلقائي بمضلع حدود منطقة الدراسة."
+        )
+        self.category = ""
+        self.canRunInBackground = True
+
+    def getParameterInfo(self):
+        params = RasterDataClimateAtlasGenerator.getParameterInfo(self)
+        pdict = dict((p.name, p) for p in params)
+
+        p_op = pdict.get("Operation_Mode")
+        if p_op:
+            p_op.displayName = "نمط سير العمل والتشغيل"
+            p_op.filter.list = [
+                "تنزيل البيانات الشبكية وإنتاج الأطلس كاملاً (المسار الشامل) [الافتراضي]",
+                "استيفاء ورسم الخرائط لبيانات موجودة مسبقاً (وضع أوفلاين)"
+            ]
+            p_op.value = "تنزيل البيانات الشبكية وإنتاج الأطلس كاملاً (المسار الشامل) [الافتراضي]"
+
+        p_wf = pdict.get("Execution_Workflow_Mode")
+        if p_wf:
+            p_wf.displayName = "نمط تنفيذ المعالجة وتدفق المهام"
+            p_wf.filter.list = [
+                "نمط الدفعات: تنزيل كافة البيانات أولاً ثم المعالجة [موصى به]",
+                "نمط تتابعي: معالجة عنصر بعنصر"
+            ]
+            p_wf.value = "نمط الدفعات: تنزيل كافة البيانات أولاً ثم المعالجة [موصى به]"
+
+        p_precalc = pdict.get("Precalculated_Point_Layers")
+        if p_precalc:
+            p_precalc.displayName = "طبقة نقاط محسوبة مسبقاً (وضع أوفلاين)"
+
+        p0 = pdict.get("Download_Extent_Layer")
+        if p0:
+            p0.displayName = "1. مضلع نطاق التنزيل الشبكي (الطبقة 1 - AOI)"
+
+        p1 = pdict.get("Final_Clip_Layer")
+        if p1:
+            p1.displayName = "2. قناع القص النهائي لحدود منطقة الدراسة (الطبقة 2)"
+
+        p_sname = pdict.get("Study_Area_Name")
+        if p_sname:
+            p_sname.displayName = "اسم منطقة الدراسة (اختياري - لتسمية الطبقات)"
+
+        p2 = pdict.get("Climate_Data_Source")
+        if p2:
+            p2.displayName = "3. مصدر البيانات المناخية ومحرك المعالجة"
+
+        p_tmode = pdict.get("Time_Mode")
+        if p_tmode:
+            p_tmode.displayName = "النمط الزمني للبيانات"
+
+        p_ows = pdict.get("Output_Workspace")
+        if p_ows:
+            p_ows.displayName = "مجلد مساحة عمل المخرجات الرئيسي"
+
+        p_osr = pdict.get("Output_Spatial_Reference")
+        if p_osr:
+            p_osr.displayName = "نظام الإسناد المكاني للمخرجات (Spatial Reference)"
+
+        p_unit = pdict.get("Measurement_Units_System")
+        if p_unit:
+            p_unit.displayName = "نظام وحدات القياس (متري Metric / إمبراطوري Imperial)"
+
+        p_interp = pdict.get("Interpolation_Method")
+        if p_interp:
+            p_interp.displayName = "طريقة الاستيفاء المكاني للراستر"
+
+        p_bcell = pdict.get("Base_Cell_Size")
+        if p_bcell:
+            p_bcell.displayName = "حجم الخلية الأساسي لأسطح الراستر (بالأمتار)"
+
+        p_dly = pdict.get("Save_Daily_Series")
+        if p_dly:
+            p_dly.displayName = "حفظ السلاسل الزمنية اليومية (شيتات Excel + قاعدة البيانات)"
+
+        p_donly = pdict.get("Download_Only")
+        if p_donly:
+            p_donly.displayName = "تنزيل وحفظ بيانات النقاط فقط (تخطي الراسترات والأطلس)"
+
+        p_gen_pts = pdict.get("Generate_Points")
+        if p_gen_pts:
+            p_gen_pts.displayName = "توليد طبقات النقاط في قاعدة البيانات"
+
+        p_gen_rst = pdict.get("Generate_Rasters")
+        if p_gen_rst:
+            p_gen_rst.displayName = "توليد أسطح الراستر المستمرة (GeoTIFF)"
+
+        p_kml = pdict.get("Export_KMZ")
+        if p_kml:
+            p_kml.displayName = "تصدير إلى Google Earth (ملفات KMZ)"
+
+        p_shp = pdict.get("Export_SHP")
+        if p_shp:
+            p_shp.displayName = "تصدير طبقات نقاط إضافية بصيغة Shapefile"
+
+        p_exl = pdict.get("Export_Excel")
+        if p_exl:
+            p_exl.displayName = "تصدير جداول Excel المنظمة"
+
+        p_sum = pdict.get("Export_Summary")
+        if p_sum:
+            p_sum.displayName = "تقرير الملخص التنفيذي والإحصائي"
+
+        return params
+
+
 # ---------------------------------------------------------------------------
 # Python Toolbox wrapper for standalone ArcGIS / Pro usage
 # ---------------------------------------------------------------------------
@@ -4690,5 +4899,4 @@ class Toolbox(object):
     def __init__(self):
         self.label = "MIRSAD - Gridded & Raster Climate Atlas Generator"
         self.alias = "mirsadRasterAtlas"
-        self.tools = [RasterDataClimateAtlasGenerator]
-
+        self.tools = [RasterDataClimateAtlasGenerator, RasterDataClimateAtlasGeneratorAR]

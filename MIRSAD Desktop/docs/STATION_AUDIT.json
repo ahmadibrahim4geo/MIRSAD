@@ -1,0 +1,160 @@
+{
+  "metadata": {
+    "catalogue_version": "2026.10.17.2",
+    "catalogue_hash": "19269c6797e7ce31bf724b4f60b555bd875c63422457c9133d509e3a9556d2ed",
+    "count": 28066,
+    "source": "NOAA ISD station locations; MIRSAD display policy retained",
+    "source_dbf_sha256": "b584ac3742de74b8ba2ef5b938fc95be4d5a0a876489bc55608b808397328f57",
+    "reference_url": "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv",
+    "reference_sha256": "1994747ab4af1b97e63adb434b4d0d022f2daee76f0c144ea9ab46be2d906604",
+    "audited_utc": "2026-10-17T12:20:53.364682+00:00",
+    "qa_counts": {
+      "reference_match": 28064,
+      "review_required": 2
+    },
+    "accuracy_limit": "Catalogue agreement is not ground verification; discrepancies are not silently relocated."
+  },
+  "inventory": [
+    {
+      "path": "Sample Data\\Egypt Case Study\\Egypt_Case_Study.gdb/REC",
+      "layer": "REC",
+      "count": 9,
+      "kind": "not_station_layer"
+    },
+    {
+      "path": "Sample Data\\Egypt Case Study\\Egypt_Case_Study.gdb/Point_Sample_Climate",
+      "layer": "Point_Sample_Climate",
+      "count": 646,
+      "kind": "not_station_layer"
+    },
+    {
+      "path": "Sample Data\\Egypt Case Study\\Egypt_Case_Study.gdb/Egypt_Weather_Stations",
+      "layer": "Egypt_Weather_Stations",
+      "count": 86,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    },
+    {
+      "path": "Sample Data\\Egypt Case Study\\Egypt_Case_Study.gdb/Egypt_With_Islans",
+      "layer": "Egypt_With_Islans",
+      "count": 72,
+      "kind": "not_station_layer"
+    },
+    {
+      "path": "Sample Data\\Egypt_Climate_Stations\\Egypt_Stations.gdb/Egypt_Weather_Stations",
+      "layer": "Egypt_Weather_Stations",
+      "count": 86,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    },
+    {
+      "path": "Sample Data\\Egypt_Climate_Stations\\Export_SHP\\Egypt_Weather_Stations_WGS84.shp/Egypt_Weather_Stations_WGS84",
+      "layer": "Egypt_Weather_Stations_WGS84",
+      "count": 86,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Geodatabase\\Weather_Stations_Directory.gdb/Egypt_Weather_Stations",
+      "layer": "Egypt_Weather_Stations",
+      "count": 86,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Geodatabase\\Weather_Stations_Directory.gdb/Global_Weather_Stations",
+      "layer": "Global_Weather_Stations",
+      "count": 28066,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Shapefiles\\Egypt_Weather_Stations.shp/Egypt_Weather_Stations",
+      "layer": "Egypt_Weather_Stations",
+      "count": 86,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Shapefiles\\Global_Weather_Stations.shp/Global_Weather_Stations",
+      "layer": "Global_Weather_Stations",
+      "count": 28066,
+      "kind": "station_layer",
+      "crs": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]",
+      "issues": []
+    }
+  ],
+  "comparisons": [
+    {
+      "path": "Sample Data\\Egypt Case Study\\Egypt_Case_Study.gdb/Egypt_Weather_Stations",
+      "same_location": 86,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Sample Data\\Egypt_Climate_Stations\\Egypt_Stations.gdb/Egypt_Weather_Stations",
+      "same_location": 86,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Sample Data\\Egypt_Climate_Stations\\Export_SHP\\Egypt_Weather_Stations_WGS84.shp/Egypt_Weather_Stations_WGS84",
+      "same_location": 86,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Geodatabase\\Weather_Stations_Directory.gdb/Egypt_Weather_Stations",
+      "same_location": 86,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Geodatabase\\Weather_Stations_Directory.gdb/Global_Weather_Stations",
+      "same_location": 28066,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Shapefiles\\Egypt_Weather_Stations.shp/Egypt_Weather_Stations",
+      "same_location": 86,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Weather_Stations_Hub\\Shapefiles\\Global_Weather_Stations.shp/Global_Weather_Stations",
+      "same_location": 28066,
+      "unmatched": 0,
+      "different": []
+    },
+    {
+      "path": "Sample Data\\Egypt_Climate_Stations\\Stations_Summary.csv",
+      "same_location": 86,
+      "unmatched": 0,
+      "different": []
+    }
+  ],
+  "noaa_discrepancies": [
+    {
+      "station_key": "749497|99999|34.050000|-6.766000",
+      "name": "SALE  MOROCCO AAB",
+      "distance_km": 7572.385,
+      "latitude": 34.05,
+      "longitude": -6.766
+    },
+    {
+      "station_key": "404710|99999|22.583000|59.500000",
+      "name": "SUR",
+      "distance_km": 5022.237,
+      "latitude": 22.583,
+      "longitude": 59.5
+    }
+  ],
+  "tables_note": "Stations_Summary.csv checked by compound NOAA identifiers and coordinates."
+}

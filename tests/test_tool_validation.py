@@ -6,12 +6,20 @@ import shutil
 import tempfile
 import unittest
 
-import test_runtime_stability as support
+try:
+    import test_runtime_stability as support
+except ImportError:
+    from tests import test_runtime_stability as support
 
 core, stations, raster = support.core, support.stations, support.raster
 
 
 class ToolValidation(unittest.TestCase):
+    def test_three_toolboxes_have_distinct_registrations(self):
+        point=core.Toolbox()
+        self.assertIn("Point",point.label)
+        self.assertEqual(point.tools,[core.PowerClimateAtlasGenerator,core.SpatialClimateAtlasGeneratorAR])
+        self.assertFalse(any("Raster" in cls.__name__ for cls in point.tools))
     def setUp(self):
         self.tmp = tempfile.mkdtemp(prefix="validation_", dir=os.path.join(support.ROOT, "tests", "logs"))
         self.fake = support.ArcPy()
@@ -49,12 +57,11 @@ class ToolValidation(unittest.TestCase):
                 tool.updateMessages(params)
                 self.assertFalse(self.errors(pd), (cls.__name__, source, self.errors(pd)))
 
-    def test_old_hybrid_settings_stay_explicit_errors_and_can_be_corrected(self):
+    def test_unsupported_provider_settings_stay_explicit_errors_and_can_be_corrected(self):
         for cls in self.classes:
             tool, params, pd = self.setup_tool(cls)
             valid = pd["Climate_Data_Source"].value
-            for old in ("Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
-                        "NOAA ISD / GHCN Direct Station Ground Observations Archive", "Copernicus CDS"):
+            for old in ("NOAA Direct Archive", "Copernicus CDS"):
                 pd["Climate_Data_Source"].value = old
                 tool.updateParameters(params)
                 tool.updateMessages(params)
@@ -92,7 +99,7 @@ class ToolValidation(unittest.TestCase):
     def test_offline_ignores_disabled_download_dates_and_provider_in_every_tool(self):
         for cls in self.classes:
             tool, params, pd = self.setup_tool(cls)
-            pd["Climate_Data_Source"].value = "Hybrid"
+            pd["Climate_Data_Source"].value = "Copernicus CDS"
             pd["Time_Mode"].value = "Year Range"
             pd["Start_Year"].value, pd["End_Year"].value = 2025, 2024
             tool.updateMessages(params)
@@ -158,6 +165,24 @@ class ToolValidation(unittest.TestCase):
         tool.updateParameters(params)
         tool.updateMessages(params)
         self.assertFalse(self.errors(pd), self.errors(pd))
+
+    def test_monthly_product_cannot_offer_daily_series_and_restores_daily_provider(self):
+        from utils.climate_products import CHIRPS,MODIS_DAY
+        for cls in self.classes[:-1]:
+            tool,params,pd=self.setup_tool(cls)
+            for provider in (CHIRPS,MODIS_DAY):
+                pd["Climate_Data_Source"].value=provider
+                pd["Temporal_Resolution"].value="Daily"
+                pd["Save_Daily_Series"].value=True
+                tool.updateParameters(params)
+                self.assertEqual(pd["Temporal_Resolution"].value,"Monthly")
+                self.assertFalse(pd["Temporal_Resolution"].enabled)
+                self.assertFalse(pd["Save_Daily_Series"].enabled)
+                self.assertFalse(pd["Save_Daily_Series"].value)
+            pd["Climate_Data_Source"].value="NASA POWER API"
+            tool.updateParameters(params)
+            self.assertIn("Daily",pd["Temporal_Resolution"].filter.list)
+            self.assertTrue(pd["Temporal_Resolution"].enabled)
 
 
 if __name__ == "__main__":

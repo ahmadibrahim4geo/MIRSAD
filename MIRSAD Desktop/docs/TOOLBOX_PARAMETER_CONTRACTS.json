@@ -1,0 +1,1890 @@
+[
+  {
+    "tool": "PowerClimateAtlasGenerator",
+    "count": 69,
+    "reviewed": "2026-10-19",
+    "runtime": "ArcGIS Pro 3.6",
+    "parameters": [
+      {
+        "name": "Operation_Mode",
+        "label": "Operation Mode",
+        "type": "String",
+        "default": "Download & Generate Atlas (Full Pipeline) [Default]",
+        "choices": [
+          "Download & Generate Atlas (Full Pipeline) [Default]",
+          "Interpolate & Map Existing Data (Offline Mode - No Internet)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Execution_Workflow_Mode",
+        "label": "Execution Workflow Mode",
+        "type": "String",
+        "default": "Batch Mode: Download All Then Process [Recommended]",
+        "choices": [
+          "Batch Mode: Download All Then Process [Recommended]",
+          "Sequential Mode: Element by Element"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Download_Only",
+        "label": "Download & Save Point Data Only (Skip Rasters & Atlas)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Input_Point_Features",
+        "label": "Input Point Features",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Point"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Precalculated_Point_Layers",
+        "label": "Precalculated Point Layer(s) (Offline Mode)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Point",
+          "Multipoint"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Study_Area_Mask",
+        "label": "Study Area Mask (optional polygon)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Polygon"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Study_Area_Name",
+        "label": "Study Area Name (Optional)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Output_Workspace",
+        "label": "Output Folder Workspace",
+        "type": "Folder",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Output_Spatial_Reference",
+        "label": "Output Spatial Reference",
+        "type": "Spatial Reference",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Measurement_Units_System",
+        "label": "Measurement Units System",
+        "type": "String",
+        "default": "Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]",
+        "choices": [
+          "Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]",
+          "Imperial (Fahrenheit °F, Inches in, inHg, mph, MJ/m2/day)",
+          "Custom Units"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Temperature_Unit",
+        "label": "Temperature Unit",
+        "type": "String",
+        "default": "Celsius (°C) [Default]",
+        "choices": [
+          "Celsius (°C) [Default]",
+          "Fahrenheit (°F)",
+          "Kelvin (K)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Precipitation_Unit",
+        "label": "Precipitation Unit",
+        "type": "String",
+        "default": "Millimeters (mm) [Default]",
+        "choices": [
+          "Millimeters (mm) [Default]",
+          "Inches (in)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Pressure_Unit",
+        "label": "Pressure Unit",
+        "type": "String",
+        "default": "Hectopascals (hPa) [Default]",
+        "choices": [
+          "Hectopascals (hPa) [Default]",
+          "Millibars (mbar)",
+          "Inches of Mercury (inHg)",
+          "Kilopascals (kPa)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Wind_Speed_Unit",
+        "label": "Wind Speed Unit",
+        "type": "String",
+        "default": "Meters per second (m/s) [Default]",
+        "choices": [
+          "Meters per second (m/s) [Default]",
+          "Kilometers per hour (km/h)",
+          "Knots (kt)",
+          "Miles per hour (mph)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Solar_Radiation_Unit",
+        "label": "Solar Radiation Unit",
+        "type": "String",
+        "default": "Kilowatt-hours per square meter per day (kWh/m2/day) [Default]",
+        "choices": [
+          "Kilowatt-hours per square meter per day (kWh/m2/day) [Default]",
+          "Megajoules per square meter per day (MJ/m2/day)",
+          "Watt-hours per square meter per day (Wh/m2/day)",
+          "Calories per square centimeter per day (cal/cm2/day, Langley)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Export_Shapefiles",
+        "label": "Export Shapefiles (Optional)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Create_Arabic_Database",
+        "label": "Create Arabic-Alias Database Copy (Optional)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Climate_Data_Source",
+        "label": "Climate Data Source",
+        "type": "String",
+        "default": "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+        "choices": [
+          "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+          "Hybrid: ERA5 + NASA POWER (Any Point)",
+          "Open-Meteo ERA5 (Standalone - No NASA Supplement)",
+          "NASA POWER API",
+          "Open-Meteo Historical API (ERA5 Reanalysis)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "OpenMeteo_Model",
+        "label": "Resolution / Native Source Grid",
+        "type": "String",
+        "default": "Auto: Finest suitable model per variable [Default]",
+        "choices": [
+          "Auto: Finest suitable model per variable [Default]",
+          "ERA5-Land (0.1 deg ~11 km API grid) [Manual]",
+          "ERA5-Seamless (0.1-0.25 deg; variable-dependent)",
+          "ERA5 (0.25 deg ~25 km API grid)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "CDS_API_Key",
+        "label": "Copernicus CDS API Key / Personal Token",
+        "type": "String Hidden",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Time_Mode",
+        "label": "Time Mode",
+        "type": "String",
+        "default": "Single Year",
+        "choices": [
+          "Single Year",
+          "Year Range",
+          "Custom Date Range"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Single_Year",
+        "label": "Single Year (type any year)",
+        "type": "Long",
+        "default": "2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Start_Year",
+        "label": "Start Year (type any year)",
+        "type": "Long",
+        "default": "2015",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "End_Year",
+        "label": "End Year (type any year)",
+        "type": "Long",
+        "default": "2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Start_Date",
+        "label": "Start Date",
+        "type": "Date",
+        "default": "01/01/2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "End_Date",
+        "label": "End Date",
+        "type": "Date",
+        "default": "31/12/2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Temporal_Resolution",
+        "label": "Temporal Resolution",
+        "type": "String",
+        "default": "Monthly",
+        "choices": [
+          "Monthly",
+          "Daily"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Gap_Fill_Method",
+        "label": "Gap Fill Method",
+        "type": "String",
+        "default": "Climatological Month Mean (Recommended)",
+        "choices": [
+          "Climatological Month Mean (Recommended)",
+          "Linear + Boundary Interpolation",
+          "Spatial Nearest Neighbor Fallback",
+          "No Fill (skip missing)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Point_Tolerance",
+        "label": "Point Tolerance (0 = off)",
+        "type": "Linear Unit",
+        "default": "0 Meters",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Climate_Modules",
+        "label": "Climate Modules & Models",
+        "type": "String",
+        "default": null,
+        "choices": [
+          "Temperature",
+          "Land Surface Temperature",
+          "Precipitation",
+          "Sea Level Pressure",
+          "Surface Pressure",
+          "Wind",
+          "Relative Humidity",
+          "Dew Point",
+          "Solar Radiation",
+          "UV Index",
+          "Cloud Cover",
+          "Heat Index / Thermal Stress [Requires: Temperature, Relative Humidity]",
+          "Wind Chill / Cold Stress [Requires: Temperature, Wind]",
+          "De Martonne Aridity Index [Requires: Temperature, Precipitation]",
+          "Evapotranspiration (ET) [Requires: Temperature]",
+          "UNEP Aridity Index [Requires: Temperature, Precipitation]",
+          "Water Deficit Annual [Requires: Temperature, Precipitation]",
+          "Walter-Lieth Dry Months Count [Requires: Temperature, Precipitation]",
+          "Trends & Baseline Anomalies [Requires: Temperature, Precipitation]"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Temporal_Scope",
+        "label": "Temporal Scope / Seasons",
+        "type": "String",
+        "default": "Annual;Winter;Spring;Summer;Autumn",
+        "choices": [
+          "Annual",
+          "Winter",
+          "Spring",
+          "Summer",
+          "Autumn"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Generate_Monthly_Rasters",
+        "label": "Generate Monthly Climatology Rasters (Jan-Dec)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Save_Daily_Series",
+        "label": "Save Daily Time Series (Daily sheet)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Extended_WC_Seasons",
+        "label": "Wind Chill Full Suite for Cold Regions (Seasons+Ranges+Monthly)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Monthly_Ranges",
+        "label": "Monthly Ranges - Interannual Variability per Month",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Extended_HI_Months",
+        "label": "Heat Index Monthly Means (Opt-in Suite)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Field_Filter_Scope",
+        "label": "Field Filter Scope",
+        "type": "String",
+        "default": "Full Suite (Annual + Seasonal + Monthly) [Recommended]",
+        "choices": [
+          "Full Suite (Annual + Seasonal + Monthly) [Recommended]",
+          "Annual Summaries Only",
+          "Seasonal Summaries Only",
+          "Monthly Climatology Only (Jan - Dec)",
+          "Filter by Specific Seasons & Aggregations",
+          "Custom Field Checklist"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Included_Aggregations",
+        "label": "Included Summary Periods",
+        "type": "String",
+        "default": "'Annual Summaries';'Seasonal Summaries';'Extreme & Bioclimatic Indices'",
+        "choices": [
+          "Annual Summaries",
+          "Seasonal Summaries",
+          "Detailed Monthly Climatology (Jan-Dec)",
+          "Extreme & Bioclimatic Indices"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Included_Seasons",
+        "label": "Included Seasons",
+        "type": "String",
+        "default": "'Winter (DJF)';'Spring (MAM)';'Summer (JJA)';'Autumn (SON)'",
+        "choices": [
+          "Winter (DJF)",
+          "Spring (MAM)",
+          "Summer (JJA)",
+          "Autumn (SON)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Selected_Fields",
+        "label": "Variables Selection (Checklist)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Interpolation_Method",
+        "label": "Interpolation Method",
+        "type": "String",
+        "default": "IDW",
+        "choices": [
+          "IDW",
+          "Ordinary Kriging",
+          "Spline",
+          "Natural Neighbor"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Base_Cell_Size",
+        "label": "Base Cell Size (Meters) [Default: 500 Meters]",
+        "type": "Linear Unit",
+        "default": "500 Meters",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Wind_Factor_Cell_Size",
+        "label": "Wind Vector Spacing / Cell Size (Meters)",
+        "type": "Linear Unit",
+        "default": "25000 Meters",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Curve_Profile",
+        "label": "IDW Curve Profile",
+        "type": "String",
+        "default": "Gentle / Smooth (Power 1.2)",
+        "choices": [
+          "Gentle / Smooth (Power 1.2)",
+          "Standard Quadratic (Power 2.0)",
+          "Regional Broad (Power 0.7)",
+          "Custom Power"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Power",
+        "label": "IDW Power",
+        "type": "Double",
+        "default": "1.2",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Search_Type",
+        "label": "IDW Search Radius Type",
+        "type": "String",
+        "default": "Variable",
+        "choices": [
+          "Variable",
+          "Fixed"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Num_Points",
+        "label": "IDW Number of Points",
+        "type": "Long",
+        "default": "12",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Max_Distance",
+        "label": "IDW Maximum Distance (metres, optional)",
+        "type": "Double",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Krig_Model",
+        "label": "Kriging Semivariogram Model",
+        "type": "String",
+        "default": "Spherical",
+        "choices": [
+          "Spherical",
+          "Circular",
+          "Exponential",
+          "Gaussian"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Krig_Type",
+        "label": "Kriging Type",
+        "type": "String",
+        "default": "Ordinary",
+        "choices": [
+          "Ordinary",
+          "Universal"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Krig_Num_Points",
+        "label": "Kriging Number of Points",
+        "type": "Long",
+        "default": "12",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Spline_Type",
+        "label": "Spline Type",
+        "type": "String",
+        "default": "Tension",
+        "choices": [
+          "Tension",
+          "Regularized"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Spline_Weight",
+        "label": "Spline Weight",
+        "type": "Double",
+        "default": "5",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Spline_Num_Points",
+        "label": "Spline Number of Points",
+        "type": "Long",
+        "default": "12",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Enable_Raster_Reclass",
+        "label": "Enable Raster Reclassification",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Reclass_Classes_Count",
+        "label": "Number of Classes",
+        "type": "Long",
+        "default": "7",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Reclass_Method",
+        "label": "Classification Method",
+        "type": "String",
+        "default": "Natural Breaks (Jenks)",
+        "choices": [
+          "Natural Breaks (Jenks)",
+          "Equal Interval",
+          "Equal Area (Quantile)",
+          "Geometric Interval",
+          "Standard Deviation"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Create_Isobars",
+        "label": "Create PSL Isobar Contour (Optional)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Pressure_Interval_Scheme",
+        "label": "Pressure Contour Scheme (Optional)",
+        "type": "String",
+        "default": "Global Standard (4 mbar)",
+        "choices": [
+          "Global Standard (4 mbar)",
+          "Local Detailed (2 mbar)",
+          "Custom Interval"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Custom_Pressure_Step",
+        "label": "Custom Pressure Step (mbar) (Optional)",
+        "type": "Double",
+        "default": "4",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Focal_Smoothing",
+        "label": "Apply Focal Smoothing",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Focal_Statistic",
+        "label": "Focal Statistic",
+        "type": "String",
+        "default": "MEAN",
+        "choices": [
+          "MEAN",
+          "MEDIAN",
+          "MINIMUM",
+          "MAXIMUM",
+          "STD"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Focal_Neighborhood",
+        "label": "Focal Neighborhood (cells)",
+        "type": "Long",
+        "default": "3",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Add_To_Map",
+        "label": "Add Results To Current Map",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Map_Add_Modules",
+        "label": "Map Add Modules (elements to add)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Purge_Cache",
+        "label": "Purge Intermediate Cache",
+        "type": "Boolean",
+        "default": "true",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Export_Separate_Years",
+        "label": "Export Separate Excel Workbook per Year (also keep combined workbook)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Source_Username",
+        "label": "NASA Earthdata username / اسم المستخدم — Need Sign In",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Source_Password",
+        "label": "NASA Earthdata password / كلمة المرور — Need Sign In",
+        "type": "String Hidden",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "tool": "WeatherStationsAtlasGenerator",
+    "count": 76,
+    "reviewed": "2026-10-19",
+    "runtime": "ArcGIS Pro 3.6",
+    "parameters": [
+      {
+        "name": "Station_Selection_Mode",
+        "label": "Station Selection Mode",
+        "type": "String",
+        "default": "Select by Country (National Network)",
+        "choices": [
+          "Select by Country (National Network)",
+          "Spatial Intersect by Study Area Boundary (Polygon Clip)",
+          "Custom Station IDs (Manual Entry / From Explorer)",
+          "Global Network (Worldwide - Caution: High Station Count)",
+          "Local Saved Station Layer (Shapefile / Geodatabase)",
+          "Select Specific Stations by Country (Multiple Selection)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Region_Filter",
+        "label": "Geographic Region / Continent Filter",
+        "type": "String",
+        "default": "Arab League Countries (22 Nations)",
+        "choices": [
+          "Arab League Countries (22 Nations)",
+          "All Countries Worldwide (Global Open Dataset)",
+          "Africa",
+          "Asia",
+          "Europe",
+          "North America",
+          "South America",
+          "Oceania",
+          "Antarctica"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Select_Country",
+        "label": "Select Country / Scope",
+        "type": "String",
+        "default": "[All Arab League Countries (ARAB)]",
+        "choices": [
+          "[All Arab League Countries (ARAB)]",
+          "Palestine (PS)",
+          "Egypt (EG)",
+          "Saudi Arabia (SA)",
+          "Algeria (AG)",
+          "Morocco (MO)",
+          "Iraq (IZ)",
+          "Sudan (SU)",
+          "Oman (MU)",
+          "Libya (LY)",
+          "Tunisia (TS)",
+          "Kuwait (KU)",
+          "Syria (SY)",
+          "Somalia (SO)",
+          "Jordan (JO)",
+          "United Arab Emirates (AE)",
+          "Qatar (QA)",
+          "Yemen (YM)",
+          "Mauritania (MR)",
+          "Comoros (CN)",
+          "Bahrain (BA)",
+          "Lebanon (LE)",
+          "Djibouti (DJ)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Selected_Stations",
+        "label": "Select Station(s) from Country (Multiple Selection)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": false
+      },
+      {
+        "name": "Study_Area_Polygon",
+        "label": "Study Area Boundary Polygon (Optional Mask / Clip)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Polygon"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Supplementary_Points",
+        "label": "Supplementary Survey Points (Optional - To Densify Data-Sparse Areas)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Point",
+          "Multipoint"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Include_Buffer_Stations",
+        "label": "Include Neighboring Buffer Stations (30 km Halo for Interpolation)",
+        "type": "Boolean",
+        "default": "true",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Custom_Station_IDs",
+        "label": "Custom Station IDs (Semicolon-Separated USAF Codes)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Local_Station_Features",
+        "label": "Local Station Layer (Optional Point Layer)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Point",
+          "Multipoint"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Operation_Mode",
+        "label": "Operation Mode",
+        "type": "String",
+        "default": "Download & Generate Atlas (Full Pipeline) [Default]",
+        "choices": [
+          "Download & Generate Atlas (Full Pipeline) [Default]",
+          "Interpolate & Map Existing Data (Offline Mode - No Internet)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Execution_Workflow_Mode",
+        "label": "Execution Workflow Mode",
+        "type": "String",
+        "default": "Batch Mode: Download All Then Process [Recommended]",
+        "choices": [
+          "Batch Mode: Download All Then Process [Recommended]",
+          "Sequential Mode: Element by Element"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Download_Only",
+        "label": "Download & Save Point Data Only (Skip Rasters & Atlas)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Precalculated_Point_Layers",
+        "label": "Precalculated Point Layer(s) (Offline Mode)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Point",
+          "Multipoint"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Study_Area_Name",
+        "label": "Study Area Name (Optional)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Output_Workspace",
+        "label": "Output Folder Workspace",
+        "type": "Folder",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Output_Spatial_Reference",
+        "label": "Output Spatial Reference",
+        "type": "Spatial Reference",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Measurement_Units_System",
+        "label": "Measurement Units System",
+        "type": "String",
+        "default": "Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]",
+        "choices": [
+          "Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]",
+          "Imperial (Fahrenheit °F, Inches in, inHg, mph, MJ/m2/day)",
+          "Custom Units"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Temperature_Unit",
+        "label": "Temperature Unit",
+        "type": "String",
+        "default": "Celsius (°C) [Default]",
+        "choices": [
+          "Celsius (°C) [Default]",
+          "Fahrenheit (°F)",
+          "Kelvin (K)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Precipitation_Unit",
+        "label": "Precipitation Unit",
+        "type": "String",
+        "default": "Millimeters (mm) [Default]",
+        "choices": [
+          "Millimeters (mm) [Default]",
+          "Inches (in)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Pressure_Unit",
+        "label": "Pressure Unit",
+        "type": "String",
+        "default": "Hectopascals (hPa) [Default]",
+        "choices": [
+          "Hectopascals (hPa) [Default]",
+          "Millibars (mbar)",
+          "Inches of Mercury (inHg)",
+          "Kilopascals (kPa)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Wind_Speed_Unit",
+        "label": "Wind Speed Unit",
+        "type": "String",
+        "default": "Meters per second (m/s) [Default]",
+        "choices": [
+          "Meters per second (m/s) [Default]",
+          "Kilometers per hour (km/h)",
+          "Knots (kt)",
+          "Miles per hour (mph)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Solar_Radiation_Unit",
+        "label": "Solar Radiation Unit",
+        "type": "String",
+        "default": "Kilowatt-hours per square meter per day (kWh/m2/day) [Default]",
+        "choices": [
+          "Kilowatt-hours per square meter per day (kWh/m2/day) [Default]",
+          "Megajoules per square meter per day (MJ/m2/day)",
+          "Watt-hours per square meter per day (Wh/m2/day)",
+          "Calories per square centimeter per day (cal/cm2/day, Langley)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Export_Shapefiles",
+        "label": "Export Shapefiles (Optional)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Create_Arabic_Database",
+        "label": "Create Arabic-Alias Database Copy (Optional)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Climate_Data_Source",
+        "label": "Climate Data Source",
+        "type": "String",
+        "default": "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+        "choices": [
+          "Hybrid: NOAA Station Observations + NASA / ERA5 Gap-Filling",
+          "NOAA GSOD (Station Observations Only)",
+          "Open-Meteo ERA5 (Standalone - No NASA Supplement)",
+          "Hybrid: ERA5 + NASA POWER (Any Point)",
+          "Open-Meteo Historical API (ERA5 Reanalysis - High-Resolution)",
+          "NASA POWER API (Agroclimatology / MERRA-2)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "OpenMeteo_Model",
+        "label": "Resolution / Native Source Grid",
+        "type": "String",
+        "default": "Auto: Finest suitable model per variable [Default]",
+        "choices": [
+          "Auto: Finest suitable model per variable [Default]",
+          "ERA5-Land (0.1 deg ~11 km API grid) [Manual]",
+          "ERA5-Seamless (0.1-0.25 deg; variable-dependent)",
+          "ERA5 (0.25 deg ~25 km API grid)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "CDS_API_Key",
+        "label": "Copernicus CDS API Key / Personal Token",
+        "type": "String Hidden",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Time_Mode",
+        "label": "Time Mode",
+        "type": "String",
+        "default": "Single Year",
+        "choices": [
+          "Single Year",
+          "Year Range",
+          "Custom Date Range"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Single_Year",
+        "label": "Single Year (type any year)",
+        "type": "Long",
+        "default": "2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Start_Year",
+        "label": "Start Year (type any year)",
+        "type": "Long",
+        "default": "2015",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "End_Year",
+        "label": "End Year (type any year)",
+        "type": "Long",
+        "default": "2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Start_Date",
+        "label": "Start Date",
+        "type": "Date",
+        "default": "01/01/2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "End_Date",
+        "label": "End Date",
+        "type": "Date",
+        "default": "31/12/2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Temporal_Resolution",
+        "label": "Temporal Resolution",
+        "type": "String",
+        "default": "Monthly",
+        "choices": [
+          "Monthly",
+          "Daily"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Gap_Fill_Method",
+        "label": "Gap Fill Method",
+        "type": "String",
+        "default": "Climatological Month Mean (Recommended)",
+        "choices": [
+          "Climatological Month Mean (Recommended)",
+          "Linear + Boundary Interpolation",
+          "Spatial Nearest Neighbor Fallback",
+          "No Fill (skip missing)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Point_Tolerance",
+        "label": "Point Tolerance (0 = off)",
+        "type": "Linear Unit",
+        "default": "0 Meters",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Climate_Modules",
+        "label": "Climate Modules & Models",
+        "type": "String",
+        "default": null,
+        "choices": [
+          "Temperature",
+          "Land Surface Temperature",
+          "Precipitation",
+          "Sea Level Pressure",
+          "Surface Pressure",
+          "Wind",
+          "Relative Humidity",
+          "Dew Point",
+          "Solar Radiation",
+          "UV Index",
+          "Cloud Cover",
+          "Heat Index / Thermal Stress [Requires: Temperature, Relative Humidity]",
+          "Wind Chill / Cold Stress [Requires: Temperature, Wind]",
+          "De Martonne Aridity Index [Requires: Temperature, Precipitation]",
+          "Evapotranspiration (ET) [Requires: Temperature]",
+          "UNEP Aridity Index [Requires: Temperature, Precipitation]",
+          "Water Deficit Annual [Requires: Temperature, Precipitation]",
+          "Walter-Lieth Dry Months Count [Requires: Temperature, Precipitation]",
+          "Trends & Baseline Anomalies [Requires: Temperature, Precipitation]"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Temporal_Scope",
+        "label": "Temporal Scope / Seasons",
+        "type": "String",
+        "default": "Annual;Winter;Spring;Summer;Autumn",
+        "choices": [
+          "Annual",
+          "Winter",
+          "Spring",
+          "Summer",
+          "Autumn"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Generate_Monthly_Rasters",
+        "label": "Generate Monthly Climatology Rasters (Jan-Dec)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Save_Daily_Series",
+        "label": "Save Daily Time Series (Excel Sheets + GDB Table)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Extended_WC_Seasons",
+        "label": "Wind Chill Full Suite for Cold Regions (Seasons+Ranges+Monthly)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Monthly_Ranges",
+        "label": "Monthly Ranges - Interannual Variability per Month",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Extended_HI_Months",
+        "label": "Heat Index Monthly Means (Opt-in Suite)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Field_Filter_Scope",
+        "label": "Field Filter Scope",
+        "type": "String",
+        "default": "Full Suite (Annual + Seasonal + Monthly) [Recommended]",
+        "choices": [
+          "Full Suite (Annual + Seasonal + Monthly) [Recommended]",
+          "Annual Summaries Only",
+          "Seasonal Summaries Only",
+          "Monthly Climatology Only (Jan - Dec)",
+          "Filter by Specific Seasons & Aggregations",
+          "Custom Field Checklist"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Included_Aggregations",
+        "label": "Included Summary Periods",
+        "type": "String",
+        "default": "'Annual Summaries';'Seasonal Summaries';'Extreme & Bioclimatic Indices'",
+        "choices": [
+          "Annual Summaries",
+          "Seasonal Summaries",
+          "Detailed Monthly Climatology (Jan-Dec)",
+          "Extreme & Bioclimatic Indices"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Included_Seasons",
+        "label": "Included Seasons",
+        "type": "String",
+        "default": "'Winter (DJF)';'Spring (MAM)';'Summer (JJA)';'Autumn (SON)'",
+        "choices": [
+          "Winter (DJF)",
+          "Spring (MAM)",
+          "Summer (JJA)",
+          "Autumn (SON)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Selected_Fields",
+        "label": "Variables Selection (Checklist)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Interpolation_Method",
+        "label": "Interpolation Method",
+        "type": "String",
+        "default": "IDW",
+        "choices": [
+          "IDW",
+          "Ordinary Kriging",
+          "Spline",
+          "Natural Neighbor"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Base_Cell_Size",
+        "label": "Base Cell Size (Meters) [Default: 500 Meters]",
+        "type": "Linear Unit",
+        "default": "500 Meters",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Wind_Factor_Cell_Size",
+        "label": "Wind Vector Spacing / Cell Size (Meters)",
+        "type": "Linear Unit",
+        "default": "25000 Meters",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Curve_Profile",
+        "label": "IDW Curve Profile",
+        "type": "String",
+        "default": "Gentle / Smooth (Power 1.2)",
+        "choices": [
+          "Gentle / Smooth (Power 1.2)",
+          "Standard Quadratic (Power 2.0)",
+          "Regional Broad (Power 0.7)",
+          "Custom Power"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Power",
+        "label": "IDW Power",
+        "type": "Double",
+        "default": "1.2",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Search_Type",
+        "label": "IDW Search Radius Type",
+        "type": "String",
+        "default": "Variable",
+        "choices": [
+          "Variable",
+          "Fixed"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Num_Points",
+        "label": "IDW Number of Points",
+        "type": "Long",
+        "default": "12",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "IDW_Max_Distance",
+        "label": "IDW Maximum Distance (metres, optional)",
+        "type": "Double",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Krig_Model",
+        "label": "Kriging Semivariogram Model",
+        "type": "String",
+        "default": "Spherical",
+        "choices": [
+          "Spherical",
+          "Circular",
+          "Exponential",
+          "Gaussian"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Krig_Type",
+        "label": "Kriging Type",
+        "type": "String",
+        "default": "Ordinary",
+        "choices": [
+          "Ordinary",
+          "Universal"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Krig_Num_Points",
+        "label": "Kriging Number of Points",
+        "type": "Long",
+        "default": "12",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Spline_Type",
+        "label": "Spline Type",
+        "type": "String",
+        "default": "Tension",
+        "choices": [
+          "Tension",
+          "Regularized"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Spline_Weight",
+        "label": "Spline Weight",
+        "type": "Double",
+        "default": "5",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Spline_Num_Points",
+        "label": "Spline Number of Points",
+        "type": "Long",
+        "default": "12",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Enable_Raster_Reclass",
+        "label": "Enable Raster Reclassification",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Reclass_Classes_Count",
+        "label": "Number of Classes",
+        "type": "Long",
+        "default": "7",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Reclass_Method",
+        "label": "Classification Method",
+        "type": "String",
+        "default": "Natural Breaks (Jenks)",
+        "choices": [
+          "Natural Breaks (Jenks)",
+          "Equal Interval",
+          "Equal Area (Quantile)",
+          "Geometric Interval",
+          "Standard Deviation"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Create_Isobars",
+        "label": "Create PSL Isobar Contour (Optional)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Pressure_Interval_Scheme",
+        "label": "Pressure Contour Scheme (Optional)",
+        "type": "String",
+        "default": "Global Standard (4 mbar)",
+        "choices": [
+          "Global Standard (4 mbar)",
+          "Local Detailed (2 mbar)",
+          "Custom Interval"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Custom_Pressure_Step",
+        "label": "Custom Pressure Step (mbar) (Optional)",
+        "type": "Double",
+        "default": "4",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Focal_Smoothing",
+        "label": "Apply Focal Smoothing",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Focal_Statistic",
+        "label": "Focal Statistic",
+        "type": "String",
+        "default": "MEAN",
+        "choices": [
+          "MEAN",
+          "MEDIAN",
+          "MINIMUM",
+          "MAXIMUM",
+          "STD"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Focal_Neighborhood",
+        "label": "Focal Neighborhood (cells)",
+        "type": "Long",
+        "default": "3",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Add_To_Map",
+        "label": "Add Results To Current Map",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Map_Add_Modules",
+        "label": "Map Add Modules (elements to add)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Purge_Cache",
+        "label": "Purge Intermediate Cache",
+        "type": "Boolean",
+        "default": "true",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Export_Separate_Years",
+        "label": "Export Separate Excel Workbook per Year (also keep combined workbook)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Source_Username",
+        "label": "NASA Earthdata username / اسم المستخدم — Need Sign In",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Source_Password",
+        "label": "NASA Earthdata password / كلمة المرور — Need Sign In",
+        "type": "String Hidden",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "tool": "RasterDataClimateAtlasGenerator",
+    "count": 36,
+    "reviewed": "2026-10-19",
+    "runtime": "ArcGIS Pro 3.6",
+    "parameters": [
+      {
+        "name": "Operation_Mode",
+        "label": "Operation Mode",
+        "type": "String",
+        "default": "Download Gridded Data & Generate Atlas (Full Pipeline) [Default]",
+        "choices": [
+          "Download Gridded Data & Generate Atlas (Full Pipeline) [Default]",
+          "Interpolate & Map Existing Data (Offline Mode - No Internet)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Execution_Workflow_Mode",
+        "label": "Execution Workflow Mode",
+        "type": "String",
+        "default": "Batch Mode: Download All Then Process [Recommended]",
+        "choices": [
+          "Batch Mode: Download All Then Process [Recommended]",
+          "Sequential Mode: Element by Element"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Precalculated_Point_Layers",
+        "label": "Precalculated Point Layer(s) (Offline Mode)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [
+          "Point",
+          "Multipoint"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Download_Extent_Layer",
+        "label": "1. Download Extent Layer (Layer 1 - Grid AOI)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Final_Clip_Layer",
+        "label": "2. Final Clip Mask Layer (Layer 2 - Study Area)",
+        "type": "Feature Layer",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Study_Area_Name",
+        "label": "Study Area Name (Optional)",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Climate_Data_Source",
+        "label": "3. Climate Data Source",
+        "type": "String",
+        "default": "NASA POWER Regional Grid",
+        "choices": [
+          "NASA POWER Regional Grid",
+          "CHIRPS v3 (Monthly Rainfall)",
+          "CHELSA v2.1 (Monthly Climate)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Earthdata_Username",
+        "label": "NASA Earthdata Username",
+        "type": "String",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Earthdata_Password",
+        "label": "NASA Earthdata Password / Token",
+        "type": "String Hidden",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "CDS_API_Key",
+        "label": "Copernicus CDS API Key / Token",
+        "type": "String Hidden",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Time_Mode",
+        "label": "Time Mode",
+        "type": "String",
+        "default": "Single Year",
+        "choices": [
+          "Single Year",
+          "Year Range",
+          "Custom Date Range"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Single_Year",
+        "label": "Single Year (type any year)",
+        "type": "Long",
+        "default": "2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Start_Year",
+        "label": "Start Year (type any year)",
+        "type": "Long",
+        "default": "2015",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "End_Year",
+        "label": "End Year (type any year)",
+        "type": "Long",
+        "default": "2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Start_Date",
+        "label": "Start Date",
+        "type": "Date",
+        "default": "01/01/2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "End_Date",
+        "label": "End Date",
+        "type": "Date",
+        "default": "31/12/2024",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Temporal_Scope",
+        "label": "Temporal Scope / Seasons",
+        "type": "String",
+        "default": "Annual;Winter;Spring;Summer;Autumn",
+        "choices": [
+          "Annual",
+          "Winter",
+          "Spring",
+          "Summer",
+          "Autumn"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Included_Aggregations",
+        "label": "Included Temporal Aggregations",
+        "type": "String",
+        "default": "'Annual Summaries';'Seasonal Summaries (DJF, MAM, JJA, SON)'",
+        "choices": [
+          "Annual Summaries",
+          "Seasonal Summaries (DJF, MAM, JJA, SON)",
+          "Monthly Climatology (Jan-Dec)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Extended_WC_Seasons",
+        "label": "Wind Chill Full Suite for Cold Regions (Seasons+Ranges+Monthly)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Monthly_Ranges",
+        "label": "Monthly Ranges - Interannual Variability per Month",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Extended_HI_Months",
+        "label": "Heat Index Monthly Means (Opt-in Suite)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Climate_Modules",
+        "label": "Climate Modules & Models",
+        "type": "String",
+        "default": "Temperature",
+        "choices": [
+          "Temperature",
+          "Land Surface Temperature",
+          "Precipitation",
+          "Sea Level Pressure",
+          "Surface Pressure",
+          "Wind",
+          "Relative Humidity",
+          "Dew Point",
+          "Solar Radiation",
+          "UV Index",
+          "Cloud Cover",
+          "Heat Index / Thermal Stress [Requires: Temperature, Relative Humidity]",
+          "Wind Chill / Cold Stress [Requires: Temperature, Wind]",
+          "De Martonne Aridity Index [Requires: Temperature, Precipitation]",
+          "Evapotranspiration (ET) [Requires: Temperature]",
+          "UNEP Aridity Index [Requires: Temperature, Precipitation]",
+          "Water Deficit Annual [Requires: Temperature, Precipitation]",
+          "Walter-Lieth Dry Months Count [Requires: Temperature, Precipitation]",
+          "Trends & Baseline Anomalies [Requires: Temperature, Precipitation]"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Interpolation_Method",
+        "label": "Interpolation Method",
+        "type": "String",
+        "default": "Inverse Distance Weighted (IDW)",
+        "choices": [
+          "Inverse Distance Weighted (IDW)",
+          "Ordinary Kriging (Spherical)",
+          "Spline (Regularized)",
+          "Natural Neighbor"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Output_Cell_Size",
+        "label": "Base Cell Size (Meters) [Default: 500 Meters]",
+        "type": "Double",
+        "default": "500",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Wind_Factor_Cell_Size",
+        "label": "Wind Vector Spacing / Cell Size (Meters)",
+        "type": "Double",
+        "default": "25000",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Export_Individual_Shapefiles",
+        "label": "Export Individual Shapefiles per Season/Indicator",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Output_Workspace",
+        "label": "Output Atlas Folder",
+        "type": "Folder",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Output_Spatial_Reference",
+        "label": "Output Spatial Reference",
+        "type": "Spatial Reference",
+        "default": null,
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Measurement_Units_System",
+        "label": "Measurement Units System",
+        "type": "String",
+        "default": "Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]",
+        "choices": [
+          "Metric (Celsius °C, mm, hPa, m/s, kWh/m2/day) [Default]",
+          "Imperial (Fahrenheit °F, Inches in, inHg, mph, MJ/m2/day)",
+          "Custom Units"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Temperature_Unit",
+        "label": "Temperature Unit",
+        "type": "String",
+        "default": "Celsius (°C) [Default]",
+        "choices": [
+          "Celsius (°C) [Default]",
+          "Fahrenheit (°F)",
+          "Kelvin (K)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Precipitation_Unit",
+        "label": "Precipitation Unit",
+        "type": "String",
+        "default": "Millimeters (mm) [Default]",
+        "choices": [
+          "Millimeters (mm) [Default]",
+          "Inches (in)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Pressure_Unit",
+        "label": "Pressure Unit",
+        "type": "String",
+        "default": "Hectopascals (hPa) [Default]",
+        "choices": [
+          "Hectopascals (hPa) [Default]",
+          "Millibars (mbar)",
+          "Inches of Mercury (inHg)",
+          "Kilopascals (kPa)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Wind_Speed_Unit",
+        "label": "Wind Speed Unit",
+        "type": "String",
+        "default": "Meters per second (m/s) [Default]",
+        "choices": [
+          "Meters per second (m/s) [Default]",
+          "Kilometers per hour (km/h)",
+          "Knots (kt)",
+          "Miles per hour (mph)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Solar_Radiation_Unit",
+        "label": "Solar Radiation Unit",
+        "type": "String",
+        "default": "Kilowatt-hours per square meter per day (kWh/m2/day) [Default]",
+        "choices": [
+          "Kilowatt-hours per square meter per day (kWh/m2/day) [Default]",
+          "Megajoules per square meter per day (MJ/m2/day)",
+          "Watt-hours per square meter per day (Wh/m2/day)",
+          "Calories per square centimeter per day (cal/cm2/day, Langley)"
+        ],
+        "enabled": true
+      },
+      {
+        "name": "Generate_Monthly_Rasters",
+        "label": "Generate Monthly Climatology Rasters (Offline, Jan-Dec)",
+        "type": "Boolean",
+        "default": "false",
+        "choices": [],
+        "enabled": true
+      },
+      {
+        "name": "Source_Resolution",
+        "label": "Resolution / Native Source Grid",
+        "type": "String",
+        "default": "Native POWER grids (meteo 0.5 x 0.625 deg; solar 1 x 1 deg)",
+        "choices": [
+          "Native POWER grids (meteo 0.5 x 0.625 deg; solar 1 x 1 deg)"
+        ],
+        "enabled": false
+      }
+    ]
+  }
+]
