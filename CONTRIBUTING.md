@@ -57,3 +57,5 @@ Each source/element needs dependencies, actual units, temporal/spatial support, 
 ## Development package
 
 Run `MIRSAD Desktop/scripts/build_development.ps1` only after preparing the CHM compiler. It validates assets/help, runs tests, builds and checks the actual EXE, then replaces only `runtime/development/`. Stable promotion and a public binary release require explicit approval of the tested candidate. See the test matrix for the acceptance boundaries; no release is published by CI.
+
+Installer generation additionally requires a local Inno Setup compiler; `scripts/build_installer.py --compiler <ISCC.exe>` accepts its path. The compiler is a build tool, not a runtime dependency.

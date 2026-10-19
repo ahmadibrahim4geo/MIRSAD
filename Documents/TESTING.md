@@ -26,3 +26,6 @@ Each equation page includes normalized input codes, units, its formula, actual f
 ## Current native/account boundaries
 
 See [dev7 native evidence](../MIRSAD%20Desktop/docs/DEV7_SOURCE_ACCEPTANCE.md) and the dev8 help/repository report. Dev7 native Pro source/raster processing evidence remains useful; changing documentation does not rerun or expand it. Native ArcMap end-to-end acceptance and live authenticated CDS/IMERG acceptance remain unconfirmed. Full advanced raster/output parity is a separate open milestone. Stable is not promoted by these checks.
+
+
+Clean-checkout acceptance at commit `625ced7` passed in a new independent venv installed from public PyPI with system site-packages disabled. All 16 legacy suites plus core export readback, both help suites, source/help contracts and standalone Arabic help passed. Legacy test scratch is owned by `tests/.output/`; Desktop tests create their `.test-output/` directory themselves. See the dev8 report for precise scope; a second full binary compilation was not performed in the clone.

@@ -62,4 +62,8 @@ Public PyPI dependency resolution passed for the contributor requirements. Clean
 
 ## Source handoff
 
-Clean-checkout and publication verification pending at the time of this initial report. The tested development candidate and installer are ready locally.
+Clean clone at commit `625ced7` passed all 10 handoff steps. It used a new venv with `include-system-site-packages=false`, dependencies installed from public PyPI, and clean PATH/PYTHONPATH. Source catalogue/science/assets/help generation, all 16 legacy suites, independent core export readback, the help-centre/equation tests, repository contracts and standalone Arabic help passed. The packaged EXE/installer gates above ran in the primary build workspace; a second full PyInstaller build inside the clone was deliberately not repeated.
+
+The clean-checkout audit found and repaired two hidden scratch assumptions: five Desktop test modules now create their owned output directory, and three legacy suites use `tests/.output/` through a Python 2/3 helper instead of requiring Desktop scratch. The latter three suites also passed again on Python 2.7 (23 tests). No scientific assertion was relaxed.
+
+Source implementation: `b8a97c4`. Contribution/readiness setup: `d66f181`. Fresh-checkout fixture fixes: `530a5c0`, `625ced7`. Native/user files excluded from these commits remain untouched in the working tree. Remote publication is verified separately in the final handoff; no GitHub Actions result is implied by this local evidence.
