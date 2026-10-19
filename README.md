@@ -168,7 +168,7 @@
 | MODIS MOD11A2 | حرارة سطح نهارية أو ليلية منفصلة، مع جودة وتغطية السماء الصافية |
 | CDS ERA5-Land / NASA IMERG V07 Final | Need Sign In؛ رمز CDS أو حساب Earthdata الخاص بالمستخدم. المساران منفذان، والتحقق بحساب فعلي ما زال مطلوبًا |
 
-[دليل المصادر العربي](Documents/05_Climate_Data_Sources_Directory/SOURCES_AR.md) · [English source guide](Documents/05_Climate_Data_Sources_Directory/SOURCES_EN.md) · [Bilingual website catalogue](climate-sources.html)
+[دليل المصادر العربي](Documents/05_Climate_Data_Sources_Directory/SOURCES_AR.md) · [English source guide](Documents/05_Climate_Data_Sources_Directory/SOURCES_EN.md) · [Bilingual website catalogue](Documents/07_Climate_Sources_Web_Guide/climate-sources.html)
 
 كل مصدر يوفر اعتماديات محددة؛ غياب البيانات يبقى NULL ولا يفرض تحويل المصدر. المنتجات الشهرية/المركبة لا تصنع سجلات يومية. لا يوجد ضمان اكتمال 100%. المقارنة الكاملة بين أعمدة ومخرجات Toolbox وDesktop ما زالت بوابة قبول مستقلة.
 

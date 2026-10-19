@@ -2,6 +2,8 @@
 ## MIRSAD (مِرصاد) — Climate Atlas & Meteorological Database Platform
 Current manual: [English help centre](../Help/MIRSAD_Help_EN.html) · [English CHM](../Help/MIRSAD_Help_EN.chm) · [Contributing](../CONTRIBUTING.md) · [Testing](TESTING.md).
 
+Current interactive source reference: [07 — Climate sources web guide](07_Climate_Sources_Web_Guide/climate-sources.html?lang=en).
+
 ### Multi-source Integrated Reanalysis & Surface Atlas Database
 #### Comprehensive Scientific, Mathematical, and Technical Reference Manual
 
@@ -76,7 +78,7 @@ By bridging spaceborne satellite observations (NASA CERES), global atmospheric r
 
 ## 2. Master Documentation Directory Structure
 
-The complete documentation suite is organized modularly into 6 structured directories:
+The documentation suite is organized into seven numbered directories, plus shared help:
 
 ### Directory Structure Overview:
 - **`01_Markdown_Manuals/`**: Technical chapters (00–16), master reference manuals (AR/EN), and user guides.
@@ -85,6 +87,7 @@ The complete documentation suite is organized modularly into 6 structured direct
 - **`04_Interactive_HTML_Guides/`**: Interactive web browsers, parameter guides, and dependency maps (.html).
 - **`05_Climate_Data_Sources_Directory/`**: Detailed profiles, temporal ranges, parameters, and comparison for all climate data sources (Hybrid, NOAA ISD, NASA POWER, Open-Meteo ERA5) in AR & EN (MD + DOCX).
 - **`06_Methodology_Adding_New_Climate_Module/`**: Standard Operating Procedure (SOP) manual for adding a new climate module and incremental database updating (AR/EN).
+- **`07_Climate_Sources_Web_Guide/`**: Current searchable bilingual source guide, with coverage, resolution, variables, units and tool/account filters.
 
 | Chapter | Document Title | Primary Scope & Focus |
 |:---:|:---|:---|

@@ -8,6 +8,8 @@ sys.path.insert(0,str(DESKTOP/'scripts'));sys.path.insert(0,str(DESKTOP/'src'))
 def main():
     from check_repository_layout import main as check_layout
     check_layout()
+    from check_website import main as check_website
+    check_website()
     from help_formulas import check_review
     from help_dynamic import parameter_body
     from mirsad_desktop import __version__

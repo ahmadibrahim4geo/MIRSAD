@@ -1,7 +1,7 @@
 """Check active repository paths and Desktop documentation links, without GIS."""
 import re
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import unquote,urlsplit
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -16,7 +16,9 @@ def main():
     assert (ROOT/'mirsad_core/__init__.py').is_file()
     pages=[ROOT/name for name in ('README.md','AGENTS.md','CONTRIBUTING.md','CONTRIBUTING_AR.md',
            'Toolboxes/README.md','Toolboxes/AGENTS.md','mirsad_core/README.md',
-           'MIRSAD Desktop/README.md','MIRSAD Desktop/AGENTS.md','Documents/DEVELOPMENT_PUBLICATION.md')]
+           'MIRSAD Desktop/README.md','MIRSAD Desktop/AGENTS.md','Documents/DEVELOPMENT_PUBLICATION.md',
+           'Documents/00_Documentation_Index.md','Documents/00_Documentation_Index_AR.md',
+           'Documents/05_Climate_Data_Sources_Directory/README.md','Documents/07_Climate_Sources_Web_Guide/README.md')]
     pages+=list((ROOT/'MIRSAD Desktop/docs').rglob('*.md'))
     checked=0;missing=[]
     for path in pages:
@@ -24,7 +26,7 @@ def main():
             target=target.strip('<>').split('#')[0]
             if not target or re.match(r'^[a-zA-Z]+:',target) or target.startswith('/'):continue
             checked+=1
-            if not (path.parent/unquote(target)).exists():missing.append(str(path.relative_to(ROOT))+': '+target)
+            if not (path.parent/unquote(urlsplit(target).path)).exists():missing.append(str(path.relative_to(ROOT))+': '+target)
     if missing:raise AssertionError('Broken documentation links:\n'+'\n'.join(missing))
     print('Layout and',checked,'local documentation links passed.')
 

@@ -3,7 +3,6 @@
 Development-time operation only; Desktop embeds the resulting snapshot.
 """
 import hashlib
-import html
 import json
 from pathlib import Path
 import sys
@@ -50,12 +49,10 @@ def main():
         path.write_text(content,encoding='utf-8')
     ar=['# دليل مصادر مرصاد — الحالة المنفذة','', 'مراجعة 2026-10-18. نهاية الأرشيف متغيرة؛ لا تعني بداية المنتج وجود كل عنصر في كل موقع. بيانات المصدر ومؤشرات التغطية هي المرجع لكل تشغيل.','']
     en=['# MIRSAD climate sources — implemented state','','Reviewed 2026-10-18. Archive ends change; a product start does not guarantee every variable at every location. Inspect per-run provenance and coverage.','']
-    bodies={"ar":[],"en":[]}
     for s in data['sources']:
         common=f"{s['start']} → {s['end']} | {s['resolution']} | {s['temporal']}"
         for language,lines in (('ar',ar),('en',en)):
             note=s['notes_'+language];lines.extend(['## '+s['label'],'',common,'',s['region']+' | '+', '.join(s['tools']),'', '**Variables:** '+', '.join(s['variables']),'',note,'',f"[Official reference]({s['url']})",''])
-            bodies[language].append('<article><h2>'+html.escape(s['label'])+'</h2><p>'+html.escape(common)+'</p><p>'+html.escape(s['region']+' | '+', '.join(s['tools']))+'</p><p><b>Variables:</b> '+html.escape(', '.join(s['variables']))+'</p><p>'+html.escape(note)+'</p><a href="'+html.escape(s['url'])+'">Official reference</a></article>')
     for language,lines in (('AR',ar),('EN',en)):
         (ROOT/('Documents/05_Climate_Data_Sources_Directory/SOURCES_'+language+'.md')).write_text('\n'.join(lines),encoding='utf-8')
         guide=ROOT/('Documents/01_Markdown_Manuals/User_Guide_'+('Arabic' if language=='AR' else 'English')+'.md')
@@ -65,9 +62,9 @@ def main():
             guide.write_text(existing+'\n\n'+marker+'\n\n'+'\n'.join(lines),encoding='utf-8')
         if language=='EN':
             (ROOT/'MIRSAD Desktop/docs/reports/CLIMATE_SOURCES_AND_RESOLUTION.md').write_text('\n'.join(lines)+'\n\nSee [delivery history](../CHANGELOG.md) and [remaining work](../BACKLOG.md).\n',encoding='utf-8')
-    page='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MIRSAD Climate Sources | مصادر مرصاد</title><style>body{font:16px/1.7 system-ui;margin:2rem auto;padding:0 1.2rem;max-width:1100px;background:#f8f8f8;color:#222}article{border:1px solid #ccc;border-radius:12px;padding:1.2rem;margin:1rem 0;background:white}a{color:#075b9f}h2{font-size:1.2rem}p{overflow-wrap:anywhere}@media(prefers-color-scheme:dark){body{background:#181818;color:#eee}article{background:#222;border-color:#444}a{color:#82c4ff}}</style></head><body><a href="index.html">MIRSAD</a><h1>Climate sources | مصادر المناخ</h1><p>2026-10-18 · Development / نسخة التطوير</p><section dir="rtl" lang="ar"><h1>العربية</h1>'+''.join(bodies['ar'])+'</section><section><h1>English</h1>'+''.join(bodies['en'])+'</section></body></html>'
-    (ROOT/'climate-sources.html').write_text(page,encoding='utf-8')
-    (ROOT/'Documents/05_Climate_Data_Sources_Directory/README.md').write_text('# Climate source directory | دليل المصادر\n\n[العربية](SOURCES_AR.md) · [English](SOURCES_EN.md) · [Website](../../climate-sources.html)\n\nGenerated from the implemented adapter registry by `scripts/build_climate_source_catalogue.py`. JSON snapshot: `data/climate_sources.json`; identical embedded Desktop snapshot.\n\nEarlier documents in this directory are historical references, not the implementation contract. The generated guides above supersede older completeness/provider claims. No source guarantees 100% coverage. Account products require the user’s own account; live authenticated verification is pending.\n',encoding='utf-8')
+    from build_website import build_sources_page
+    build_sources_page(data)
+    (ROOT/'Documents/05_Climate_Data_Sources_Directory/README.md').write_text('# Climate source directory | دليل المصادر\n\n[العربية](SOURCES_AR.md) · [English](SOURCES_EN.md) · [Website](../07_Climate_Sources_Web_Guide/climate-sources.html)\n\nGenerated from the implemented adapter registry by `scripts/build_climate_source_catalogue.py`. JSON snapshot: `data/climate_sources.json`; identical embedded Desktop snapshot.\n\nEarlier documents in this directory are historical references, not the implementation contract. The generated guides above supersede older completeness/provider claims. No source guarantees 100% coverage. Account products require the user’s own account; live authenticated verification is pending.\n',encoding='utf-8')
     directory=ROOT/'Documents/05_Climate_Data_Sources_Directory'
     groups={
         '02_NOAA_ISD_GHCN_Ground_Stations':['gsod','ghcnd'],

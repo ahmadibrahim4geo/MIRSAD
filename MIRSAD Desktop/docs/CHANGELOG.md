@@ -158,3 +158,15 @@ points to handoff commit `b4e2a64`; the unchanged runtime remains based on
 `e356ff7`. GitHub sizes/SHA-256 digests match all five allowlisted local assets.
 Repository/desktop landing pages and current status now link to the download.
 No user dataset/XML changes, credentials or runtime/build folders were staged.
+
+## Website and source reference — 19 October 2026
+
+Moved the source HTML into `Documents/07_Climate_Sources_Web_Guide/` and updated
+active documentation links. Rebuilt both web pages with complete Arabic/English
+presentation, shared local assets, light/dark themes, working source/module
+filters and current installer/CHM links. The home page now derives its 19 modules
+from the actual registry, removing obsolete module/formula claims. Source
+coverage, units and account limits are localized without changing the runtime
+snapshot or scientific code. Evidence and maintenance:
+[website guide](../../Documents/07_Climate_Sources_Web_Guide/README.md).
+The accepted development installer and CHMs were not rebuilt or replaced.

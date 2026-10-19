@@ -59,6 +59,16 @@ runtime or authenticated provider has been accepted.
 
 ## Reproducible entry points
 
+Website update, 19 October: the source page now lives in
+`Documents/07_Climate_Sources_Web_Guide/climate-sources.html`; no root duplicate.
+`scripts/build_website.py` renders both pages from `scripts/templates/`, source
+capabilities and the actual 19-module Desktop registry. Keep Arabic coverage,
+periods, resolution, variable explanations and filters fully localized through
+`scripts/website_content.py`. Shared assets are local `assets/site.css/site.js`.
+Update templates instead of editing generated HTML alone. Run
+`scripts/check_website.py` for local links/anchors, translation completeness and
+generated drift. See the new folder's README for maintenance and scope.
+
 Use the independent Desktop `.venv` (Python 3.12 x64) for Desktop checks/builds,
 and a compatible licensed ArcGIS Python for native checks. From repository root:
 

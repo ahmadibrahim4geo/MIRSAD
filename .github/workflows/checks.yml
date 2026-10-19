@@ -22,6 +22,7 @@ jobs:
           python "MIRSAD Desktop/scripts/vendor_science.py"
           python "MIRSAD Desktop/scripts/prepare_assets.py"
           python "MIRSAD Desktop/scripts/build_user_guide.py"
+          python scripts/build_website.py
       - name: Isolated legacy tests (ArcPy doubles are not native verification)
         run: python scripts/run_checks.py
       - name: Desktop deterministic tests
