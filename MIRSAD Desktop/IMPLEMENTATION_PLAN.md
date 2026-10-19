@@ -129,3 +129,8 @@ This is a working first development delivery, not a claim that every master-plan
 - Native ArcMap processing, authenticated CDS/IMERG, advanced output/raster parity, complete DPI/accessibility matrix and visual acceptance of ArcGIS-native help summaries remain separate limits, not falsely closed by help tests.
 
 - Remote handoff accepted: source commit e1f7c26 reached main, hosted deterministic CI and Pages deployment succeeded, and published CHM bytes match the local accepted guide. See the dev8 report for links and the documentation-only publication record.
+
+### Field dictionary clarification — 19 October 2026
+
+- Replaced generic equation-to-field explanations for all 521 fields / 19 modules with specific bilingual names, periods, calculation units and operations. Added field-name, identity, coverage and data-row dictionaries. Scientific functions, technical keys and concise map labels remain unchanged.
+- Evidence and exact scope: [FIELD_REFERENCE_CLARIFICATION.md](docs/FIELD_REFERENCE_CLARIFICATION.md).

@@ -10,6 +10,87 @@ from mirsad_desktop import science as s
 
 
 class EquationManualTests(unittest.TestCase):
+    def test_every_field_has_a_specific_name_period_unit_and_operation(self):
+        count=0
+        for module in manual.MODULES:
+            for lang in ('ar','en'):
+                titles=[]
+                for field in manual.calculation_fields(module.name):
+                    info=manual.field_reference(module.name,field,lang=='ar')
+                    self.assertEqual(set(info),{'title','period','unit','calculation'})
+                    self.assertTrue(all(isinstance(v,str) and v.strip() for v in info.values()),field)
+                    self.assertNotIn('indicated period',info['calculation'])
+                    self.assertNotIn('الشهر، أو',info['calculation'])
+                    titles.append(info['title'])
+                    if lang=='en':count+=1
+                self.assertEqual(len(titles),len(set(titles)),module.name)
+        self.assertEqual(count,521)
+        with self.assertRaises(ValueError):manual.field_reference('Temperature','T_Unknown_Statistic',False)
+        with self.assertRaises(ValueError):manual.field_reference('Temperature','T_Unknown_Mean',False)
+
+    def test_pet_names_separate_month_season_year_and_two_kinds_of_range(self):
+        def info(field,ar=False):return manual.field_reference('Evapotranspiration',field,ar)
+        self.assertEqual(info('ET_Annual_Mean')['title'],'Annual mean potential evapotranspiration')
+        self.assertIn('المتوسط السنوي',info('ET_Annual_Mean',True)['title'])
+        self.assertEqual(info('ET_Annual_Mean')['unit'],'mm/year')
+        self.assertIn('rather than dividing',info('ET_Annual_Mean')['calculation'])
+        self.assertEqual(info('ET_March_Mean')['unit'],'mm/month')
+        self.assertIn('مارس',info('ET_March_Mean',True)['title'])
+        self.assertIn('Hargreaves',info('ET_March_Mean')['calculation'])
+        self.assertIn('31 days',info('ET_March_Mean')['calculation'])
+        self.assertIn('28.25 days',info('ET_February_Mean')['calculation'])
+        self.assertIn('30 days',info('ET_April_Mean')['calculation'])
+        self.assertNotIn('February',info('ET_April_Mean')['calculation'])
+        self.assertEqual(info('ET_Summer_Mean')['period'],'Summer (June, July, August)')
+        self.assertEqual(info('ET_Summer_Mean')['unit'],'mm/season')
+        self.assertIn('Requires all 3 months',info('ET_Summer_Mean')['calculation'])
+        self.assertEqual(info('ET_Annual_Range')['title'],'Annual range of potential evapotranspiration')
+        self.assertEqual(info('ET_Annual_Range')['unit'],'mm/month')
+        self.assertIn('not yearly totals',info('ET_Annual_Range')['calculation'])
+        self.assertIn('actual calendar days',info('ET_March_Range')['calculation'])
+        self.assertIn('two valid years',info('ET_March_Range')['calculation'])
+
+    def test_special_statistics_have_correct_names_and_units(self):
+        cases=[('Relative Humidity','RH_Annual_Range','percentage points','Annual range'),
+               ('Cloud Cover','Cld_March_Range','percentage points','March interannual range'),
+               ('Solar Radiation','Sol_Annual_Mean','kWh/m²/day','Annual mean'),
+               ('Solar Radiation','Sol_Annual_Total','kWh/m²/year','Mean annual total'),
+               ('Wind','W_Dir_Winter_Mean','°','Winter mean wind direction'),
+               ('Heat Index','HI_Winter_Mean','°C','Winter mean Humidex'),
+               ('UNEP Aridity','UNEP_Aridity_Annual','dimensionless ratio','Annual UNEP'),
+               ('Dry Months','Dry_Months_Count','months (0–12)','Number of dry months')]
+        for module,key,unit,title in cases:
+            info=manual.field_reference(module,key,False)
+            self.assertEqual(info['unit'],unit)
+            self.assertIn(title,info['title'])
+        for module,key in [('Temperature','T_Annual_Range'),('Precipitation','R_Annual_Range')]:
+            self.assertNotIn('Rothfusz',manual.field_rule(module,key,False))
+        self.assertIn('not a month number',manual.field_rule('Wind','W_Spd_Annual_Max_Month',False))
+        self.assertIn('T2M_MAX',manual.field_rule('Temperature','T_Annual_Max_Mean',False))
+
+    def test_trend_anomaly_and_month_summary_are_distinct(self):
+        info=manual.field_reference('Trends & Anomalies','R_March_Trend_Decade',False)
+        self.assertEqual(info['unit'],'mm/decade (10 years)')
+        self.assertIn('March rainfall total',info['calculation'])
+        self.assertIn('8 valid years',info['calculation'])
+        info=manual.field_reference('Trends & Anomalies','R_Anom_Summer_Pct',False)
+        self.assertEqual(info['unit'],'%')
+        self.assertIn('June, July, August',info['period'])
+        self.assertIn('1991–2020',info['calculation'])
+        self.assertIn('5 mm',info['calculation'])
+        info=manual.field_reference('Trends & Anomalies','T_Anom_Month',False)
+        self.assertIn('monthly anomalies',info['title'])
+        self.assertIn('T_Anom_March',info['calculation'])
+        self.assertIn('not the annual',info['calculation'])
+
+    def test_annual_rain_mean_is_not_monthly_mean_or_interannual_range(self):
+        rain={(year,month):value for year,value in [(2023,50.),(2024,100.)] for month in range(1,13)}
+        fields=s.compute_point_fields({'PRECTOTCORR':rain},[2023,2024],['Precipitation'],'Monthly',precip_totals=True,gap_method='none',monthly_ranges=True)
+        self.assertEqual(fields['R_Annual_Mean'],900.) # mean(600, 1200)
+        self.assertEqual(fields['R_March_Mean'],75.)
+        self.assertEqual(fields['R_Annual_Range'],0.) # all calendar-month climatologies =75
+        self.assertEqual(fields['R_March_Range'],50.) # 100-50, across years
+
     def test_review_and_every_module_field_is_explained_in_both_languages(self):
         manual.check_review()
         index=json.loads((ROOT/'assets/help_index.json').read_text(encoding='utf-8'))
@@ -24,6 +105,8 @@ class EquationManualTests(unittest.TestCase):
                 for field in manual.calculation_fields(entry['module']):
                     self.assertIn('<code>'+field+'</code>',body)
                     self.assertTrue(manual.field_rule(entry['module'],field,lang=='ar'))
+                    for value in manual.field_reference(entry['module'],field,lang=='ar').values():
+                        self.assertIn(html.escape(value),body)
 
     def test_internal_topic_links_and_legacy_launcher_allowlist(self):
         sys.path.insert(0,str(ROOT.parent))

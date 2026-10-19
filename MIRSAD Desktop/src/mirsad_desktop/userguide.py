@@ -4,7 +4,7 @@ import os
 import re
 import unicodedata
 from PySide6.QtCore import Qt,QUrl,QSettings
-from PySide6.QtGui import QKeySequence,QShortcut,QTextDocument,QTextCursor,QPalette,QPdfWriter
+from PySide6.QtGui import QKeySequence,QShortcut,QTextDocument,QTextCursor,QTextOption,QPalette,QPdfWriter
 from PySide6.QtWidgets import (QDialog,QVBoxLayout,QHBoxLayout,QLabel,QComboBox,QLineEdit,
     QPushButton,QListWidget,QListWidgetItem,QTreeWidget,QTreeWidgetItem,QSplitter,QTextBrowser,
     QWidget,QTabWidget,QToolBar,QFileDialog,QApplication)
@@ -133,6 +133,7 @@ class UserGuideDialog(QDialog):
         self.browser.document().setBaseUrl(QUrl.fromLocalFile(str(asset_dir())+'/'))
         self.browser.setHtml(f'<html dir="{direction}"><body dir="{direction}"><h1>'+html.escape(topic[lang])+'</h1>'+topic[lang+'_body']+'</body></html>')
         option=self.browser.document().defaultTextOption();option.setTextDirection(Qt.RightToLeft if self.arabic else Qt.LeftToRight)
+        option.setWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere)
         self.browser.document().setDefaultTextOption(option)
         from PySide6.QtGui import QTextTable
         frames=list(self.browser.document().rootFrame().childFrames())
@@ -215,6 +216,7 @@ class UserGuideDialog(QDialog):
         document=QTextDocument();document.setDefaultStyleSheet('body{color:#111;font-size:11pt;} a{color:#111;} table{border-collapse:collapse;} th,td{border:1px solid #888;padding:7px;}')
         document.setHtml(f'<body dir="{direction}"><h1>'+html.escape(topic[lang])+'</h1>'+topic[lang+'_body']+'</body>')
         option=document.defaultTextOption();option.setTextDirection(Qt.RightToLeft if self.arabic else Qt.LeftToRight);document.setDefaultTextOption(option)
+        option.setWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere);document.setDefaultTextOption(option)
         return document
 
     def export_pdf(self,path):

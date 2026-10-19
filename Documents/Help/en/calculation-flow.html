@@ -12,6 +12,17 @@
 <tr><td>ALLSKY_SFC_SW_DWN; ALLSKY_SFC_UV_INDEX</td><td>Solar energy in MJ/m²/day before kernel conversion; UV source index, with the source-specific conversion described on its page.</td></tr>
 <tr><td>Latitude, φ; J; D_m; Ra; PET</td><td>Latitude in degrees, or radians as φ; approximate day of year; days/month; extraterrestrial radiation; potential evapotranspiration. See Hargreaves for units at each step.</td></tr>
 <tr><td>Σ, mean, min, max, I(condition), clamp</td><td>Sum, arithmetic mean, minimum, maximum, 1 if condition is true otherwise 0, and a bounded value. sin/cos/tan use radians; atan and acos return radians; sqrt is square root.</td></tr></table>
+<h3>Reading field names and reference rows</h3>
+<p>Each row in an equation reference table defines an output column. A data row in Excel represents a point or station record in that export. ET_March_Mean stores March PET for each point; March is not a station or year identifier. Desktop Daily is different: each row holds one variable value for one point on one date.</p>
+<table><tr><th>Technical name component</th><th>Meaning</th></tr>
+<tr><td>ET / PET</td><td>Potential evapotranspiration, calculated here by Hargreaves. PET is not measured actual evapotranspiration; ET is the legacy prefix for these fields.</td></tr>
+<tr><td>Annual / Winter / Spring / Summer / Autumn</td><td>The year or named season. Each element page lists the months belonging to its fields.</td></tr>
+<tr><td>January … December</td><td>Calendar months; March means March, not a station or year sequence.</td></tr>
+<tr><td>Mean</td><td>A mean interpreted for the specific element and period, not one universal operation: annual rainfall averages yearly totals; annual ET sums PET calculated from climatological months. Read the exact field operation.</td></tr>
+<tr><td>Annual_Range / March_Range</td><td>Annual range compares climatological calendar months within the year; March range compares March values across years. Both subtract the minimum from the maximum, rather than averaging or summing.</td></tr>
+<tr><td>Max / Min / Total / Count</td><td>Maximum / minimum / total / count. Position matters: T_Annual_Max_Mean averages maximum temperatures; W_Spd_Annual_Max_Month is a speed value, not a month number.</td></tr>
+<tr><td>Anom / Pct / Trend_Decade</td><td>Departure from baseline / percentage / linear change per decade (10 years). An anomaly is not annual range; a trend is not a forecast.</td></tr>
+<tr><td>T / LST / R / PSL / PS / W_Spd / W_Dir / RH / Td / Sol / UV / Cld / HI / WC</td><td>Air temperature / land temperature / precipitation / sea-level pressure / surface pressure / wind speed / direction / humidity / dew point / solar radiation / UV index / cloud cover / Heat Index / Wind Chill. Each field’s full name and unit appear on its element page.</td></tr></table>
 <h3>From source record to exported field</h3>
 <ol><li>Read the selected source and preserve identifiers, time, location, units, missing flags and provenance. Source response names can differ from the normalized variable codes above; a Daily sheet may use a long or wide layout.</li>
 <li>Decode missing sentinels to NULL, normalize units and aggregate to monthly input. Daily precipitation needs a complete calendar month before summing. The legacy daily path can average available non-rain days, whereas Desktop daily monthly assembly requires complete months. Native monthly/composite products retain their actual support; they do not fabricate daily observations.</li>
