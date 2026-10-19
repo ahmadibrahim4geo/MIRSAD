@@ -1,0 +1,24 @@
+name: Bug / عطل
+description: Report a reproducible application, calculation or export failure.
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Version and host / الإصدار والمضيف
+      description: Desktop version or ArcGIS version/Python, Windows version, and tool name.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps and sanitized inputs / الخطوات والمدخلات
+      description: Source, period, elements, units, CRS and a small reproducible example. No passwords or tokens.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result / المتوقع والفعلي
+      description: Include units, exact field names and a sanitized error or screenshot.
+    validations:
+      required: true

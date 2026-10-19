@@ -1,5 +1,7 @@
 # 00. الفهرس الشامل للتوثيق وخارطة الطريق المعمارية للمشروع
 ## منظومة مِرصاد (MIRSAD) للأطالس المناخية وقواعد البيانات الجغرافية
+الدليل الحالي: [مركز المساعدة العربي](../Help/MIRSAD_Help_AR.html) · [CHM عربي](../Help/MIRSAD_Help_AR.chm) · [المساهمة](../CONTRIBUTING_AR.md) · [الفحوص](TESTING.md).
+
 ### Multi-source Integrated Reanalysis & Surface Atlas Database
 #### الدليل المرجعي العلمي والرياضي والتقني الشامل
 

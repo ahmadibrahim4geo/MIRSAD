@@ -1,0 +1,16 @@
+name: Idea / فكرة تطوير
+description: Suggest a focused improvement with a clear acceptance criterion.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User need / احتياج المستخدم
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and acceptance / المقترح ومعيار القبول
+      description: For a climate source, link its official documentation and describe variables, coverage, units and account requirements.
+    validations:
+      required: true

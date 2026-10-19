@@ -7,7 +7,9 @@ import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
-TMP = os.path.join(BASE, "TolFocal_TMP")
+TMP = os.path.join(BASE, "tests", ".output", "tolerance")
+if not os.path.isdir(os.path.dirname(TMP)):
+    os.makedirs(os.path.dirname(TMP))
 
 mod = type(sys)("mtf")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)
@@ -54,7 +56,7 @@ except ImportError:
 arcpy.env.overwriteOutput = True
 tool = mod.PowerClimateAtlasGenerator()
 ps = tool.getParameterInfo()
-check("46 params", len(ps) == 46, len(ps))
+check("69 point parameters", len(ps) == 69, len(ps))
 pdict = dict((p.name, p) for p in ps)
 check("tol default 0 Meters", "0" in str(pdict["Point_Tolerance"].value), pdict["Point_Tolerance"].value)
 check("focal defaults", pdict["Focal_Smoothing"].value is False and pdict["Focal_Statistic"].value == "MEAN"

@@ -218,7 +218,7 @@
           <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs text-slate-400">
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-code text-ocean-400 mr-1 ml-1"></i> Python 2.7 & 3.x</span>
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-map text-brand-400 mr-1 ml-1"></i> ArcMap 10.8 & Pro</span>
-            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-satellite text-solar-400 mr-1 ml-1"></i> <span data-i18n="hero_sources_badge">NASA POWER • Open-Meteo</span></span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-satellite text-solar-400 mr-1 ml-1"></i> <span data-i18n="hero_sources_badge">NASA • ERA5 • NOAA • CHIRPS • TerraClimate • MODIS</span></span>
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-palette text-pink-400 mr-1 ml-1"></i> 2,250 Color Ramps</span>
             <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 font-inter"><i class="fa-solid fa-location-dot text-emerald-400 mr-1 ml-1"></i> <span data-i18n="hero_station_badge">دليل 28,066 محطة • اختيار متعدد</span></span>
           </div>
@@ -389,11 +389,12 @@
       <div class="text-center max-w-3xl mx-auto mb-16">
         <h2 class="text-xs uppercase font-extrabold tracking-widest text-ocean-400 mb-2 font-inter" data-i18n="src_tag">المصادر وحالة دعمها</h2>
         <h3 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="src_heading">مصادر البيانات المتاحة والمرجعية</h3>
-        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="src_subheading">التنزيل النقطي وعند مواقع المحطات يدعم NASA POWER وOpen-Meteo. أداة الراستر تدعم NASA POWER إقليميًا. NOAA Direct والدمج الهجين وCDS غير منفذة للتنزيل حاليًا؛ اختيارها يعرض رسالة واضحة.</p>
+        <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed" data-i18n="src_subheading">مصادر منفذة للنقاط والمحطات والشبكات، واختيار Auto لأدق منتج مناسب لكل متغير. راجع دليل المصادر الكامل للتغطية والاعتماديات وشروط الدخول.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
+<!-- SOURCE-CATALOGUE-LINK --><p class="text-center col-span-full"><a href="climate-sources.html" class="text-ocean-400 underline">دليل المصادر الكامل بالعربية والإنجليزية | Full bilingual source directory</a></p>
         <!-- Source 1: Hybrid Engine -->
         <div class="glass-card p-6 rounded-2xl border-2 border-ocean-500/60 relative overflow-hidden group flex flex-col justify-between">
           <div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-ocean-500 via-brand-500 to-solar-500"></div>
@@ -402,17 +403,17 @@
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
               <span class="px-2.5 py-1 rounded-md bg-ocean-500/20 text-ocean-400 border border-ocean-500/30 text-xs font-black font-inter flex items-center gap-1.5">
                 <i class="fa-solid fa-star text-solar-400 text-[10px]"></i>
-                <span data-i18n="src_badge_default">التنزيل الهجين غير متاح حاليًا</span>
+                <span data-i18n="src_badge_default">Hybrid: تنزيل متتابع موثق</span>
               </span>
               <span class="text-xs px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 font-inter font-bold">1901 - Present</span>
             </div>
 
             <!-- Title & Authority -->
-            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_1_title">المحرك الهجين — مرجع للتطوير</h4>
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_1_title">المحرك الهجين للمحطات والنقاط</h4>
             <p class="text-xs font-semibold text-brand-400 mb-3 font-inter" data-i18n="src_1_sub">MIRSAD Multi-Source Fusion Architecture</p>
             
             <!-- Description -->
-            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_1_desc">تصور لدمج أرصاد المحطات مع بيانات الأقمار الصناعية وإعادة التحليل. مسار التنزيل الهجين غير منفذ في النسخة الحالية، ولا يتحول تلقائيًا إلى مصدر آخر.</p>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_1_desc">ينهي NOAA لكل المحطات أولًا، ثم ERA5 للقيم المفقودة، ثم NASA للمتبقي؛ يتبع ذلك Gap Fill الشهري الاختياري. هجين النقاط يبدأ من ERA5. القيم الصحيحة لا تستبدل.</p>
 
             <!-- Technical Specifications Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
@@ -449,7 +450,7 @@
               <i class="fa-solid fa-lightbulb"></i>
               <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
             </div>
-            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_1_best">للتعرف على التصميم المقترح. للتشغيل الحالي اختر NASA POWER أوOpen-Meteo في أداة النقاط أو المحطات.</p>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_1_best">لدمج رصد المحطات وإعادة التحليل بصورة موثقة؛ افحص التغطية والبيانات الخام والتقديرات.</p>
           </div>
         </div>
 
@@ -465,11 +466,11 @@
             </div>
 
             <!-- Title & Authority -->
-            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_2_title">أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)</h4>
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_2_title">أرصاد NOAA GSOD وGHCN-Daily</h4>
             <p class="text-xs font-semibold text-ocean-400 mb-3 font-inter" data-i18n="src_2_sub">National Oceanic & Atmospheric Administration (NOAA NCEI - USA)</p>
             
             <!-- Description -->
-            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_2_desc">دليل مواقع المحطات المرفق مستمد من NOAA/WMO، ويُستخدم لاختيار المواقع والأكواد. تنزيل سجلات NOAA الأرضية المباشرة غير منفذ حاليًا؛ اختيار محطة لا يحول بيانات إعادة التحليل إلى أرصاد أرضية.</p>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_2_desc">تنزيل رصد يومي بمعرف المحطة وموقعها: GSOD يستخدم USAF/WBAN، وGHCN يحتاج GHCN_ID صريحًا. لا تُحوّل نقطة عادية إلى أقرب محطة ولا يُعلن عن ISD الساعي.</p>
 
             <!-- Technical Specifications Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
@@ -506,7 +507,7 @@
               <i class="fa-solid fa-lightbulb"></i>
               <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
             </div>
-            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_2_best">استعرض المحطات والأكواد من الدليل المحلي. لتحليل البيانات اختر مصدرًا منفذًا وحدد المحطات المطلوبة من القائمة المتعددة.</p>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_2_best">اختر الرصد الحقيقي عند وجود هوية محطة مطابقة؛ لا يضمن أرشيف المحطات كل العناصر أو الفترات.</p>
           </div>
         </div>
 
@@ -579,11 +580,11 @@
             </div>
 
             <!-- Title & Authority -->
-            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_4_title">النموذج الأوروبي (Open-Meteo ERA5-Land)</h4>
-            <p class="text-xs font-semibold text-brand-400 mb-3 font-inter" data-i18n="src_4_sub">Open-Meteo & ECMWF IFS Reanalysis (~9 km)</p>
+            <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_4_title">Open-Meteo ERA5 / ERA5-Land</h4>
+            <p class="text-xs font-semibold text-brand-400 mb-3 font-inter" data-i18n="src_4_sub">ERA5-Land 0.1° / ERA5 0.25° — Auto per variable</p>
             
             <!-- Description -->
-            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_4_desc">مزود إعادة التحليل المتاح لأداة النقاط والمحطات. تُستعلم البيانات عند المواقع المختارة، ويحدد إعداد النموذج والفترة نوع البيانات المتاحة.</p>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_4_desc">Auto يختار Land أو ERA5 حسب المتغير والفترة كاملة، مع اختيار يدوي متقدم. الوضع المستقل بلا NASA، والهجين يحتفظ بترتيب مصادره.</p>
 
             <!-- Technical Specifications Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
@@ -637,10 +638,10 @@
 
             <!-- Title & Authority -->
             <h4 class="text-xl font-extrabold text-white mb-1" data-i18n="src_5_title">مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)</h4>
-            <p class="text-xs font-semibold text-ocean-400 mb-3 font-inter" data-i18n="src_5_sub">ECMWF Copernicus Climate Change Service (ERA5 & AgERA5 Official)</p>
+            <p class="text-xs font-semibold text-ocean-400 mb-3 font-inter" data-i18n="src_5_sub">ERA5-Land ARCO — Need Sign In</p>
             
             <!-- Description -->
-            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_5_desc">مرجع لمصدر ERA5 وAgERA5. الاتصال المباشر بـCDS والمصادقة بمفتاحه غير منفذين في هذه النسخة؛ لن يُنسب تنزيل NASA POWER إلى كوبرنيكوس.</p>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="src_5_desc">وصول مباشر إلى ERA5-Land عبر CDS برمز المستخدم وقبول شروط المنتج. التحويل من الساعي منزوع التراكم إلى يوم مكتمل؛ لم يُثبت التنزيل بحساب فعلي بعد.</p>
 
             <!-- Technical Specifications Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-[11px] font-inter">
@@ -677,7 +678,7 @@
               <i class="fa-solid fa-lightbulb"></i>
               <span data-i18n="src_best_for_title">متى تختار هذا النموذج؟</span>
             </div>
-            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_5_best">راجع دليل المصادر لفهم الاختلافات. مسار الراستر الأونلاين الحالي يستخدم NASA POWER Regional Grid.</p>
+            <p class="text-slate-300 text-[11px] leading-relaxed" data-i18n="src_5_best">أدخل رمز حسابك في خانة الدخول. المنتجات الإضافية وتغطيتها: CHIRPS وTerraClimate وCHELSA وMODIS LST وIMERG في دليل المصادر الكامل.</p>
           </div>
         </div>
 
@@ -786,7 +787,7 @@
             </div>
             <span class="text-xs font-bold text-brand-400 font-inter">34 Parameters • NetCDF & Tiling</span>
             <h4 class="text-lg font-bold text-white mt-1 mb-2">Raster Data Climate Atlas Generator</h4>
-            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_raster_desc">تنزيل بيانات NASA POWER الإقليمية وتحويلها إلى نقاط للتحليل والاستيفاء والقص. راستر الشهريات متاح أوفلاين من حقول شهرية محسوبة مسبقًا، لفترة سنتين فأكثر.</p>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="tool_raster_desc">صندوق مستقل للشبكات الإقليمية: NASA POWER وخلايا CHIRPS/CHELSA الأصلية، ثم التحليل والاستيفاء والقص. توجد أيضًا معالجة أوفلاين لحقول نقاط محسوبة مسبقًا.</p>
           </div>
           <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 font-inter">
             <span>Entry: raster_atlas_generator.py</span>
@@ -950,7 +951,17 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-12">
+      <div class="glass-card p-6 rounded-2xl mb-8 border-slate-700">
+        <h4 class="text-xl font-bold text-white mb-3" data-i18n="help_centre_title">مركز المساعدة ومصدر Desktop</h4>
+        <p class="text-sm text-slate-300 mb-4" data-i18n="help_centre_desc">دليل عربي وإنجليزي من 45 موضوعًا، بمعادلات العناصر الـ19 وربطها بأسماء الأعمدة، وفهرس وبحث ومفضلة. مصدر Desktop متاح للمساهمة؛ لا يوجد إصدار ثنائي مستقر منشور بعد.</p>
+        <div class="flex flex-wrap gap-4 text-ocean-300 underline">
+          <a href="Help/MIRSAD_Help_AR.html">العربية (HTML)</a><a href="Help/MIRSAD_Help_EN.html">English (HTML)</a>
+          <a href="Help/MIRSAD_Help_AR.chm">العربية (CHM)</a><a href="Help/MIRSAD_Help_EN.chm">English (CHM)</a>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/tree/main/MIRSAD%20Desktop">Desktop source</a>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/blob/main/CONTRIBUTING_AR.md">المساهمة</a><a href="https://github.com/ahmadibrahim4geo/MIRSAD/blob/main/CONTRIBUTING.md">Contributing</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-12">
         
         <!-- Item 1: Ground Weather Stations PYT -->
         <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-emerald-500/40 transition">
@@ -972,14 +983,20 @@
             <div class="w-10 h-10 rounded-lg bg-ocean-500/20 text-ocean-400 flex items-center justify-center text-lg mb-3">
               <i class="fa-solid fa-toolbox"></i>
             </div>
-            <h5 class="text-sm font-bold text-white mb-1">Spatial Atlas Toolbox</h5>
-            <p class="text-xs text-slate-400 mb-3" data-i18n="down_pyt_desc">صندوق أدوات النقاط والراستر مع الملفات المساعدة. حمّل الحزمة كاملة واحتفظ بهيكل المجلدات.</p>
+            <h5 class="text-sm font-bold text-white mb-1">Point Climate Atlas Toolbox</h5>
+            <p class="text-xs text-slate-400 mb-3" data-i18n="down_pyt_desc">صندوق أطلس النقاط مع الملفات المساعدة؛ أداة الشبكة الإقليمية في صندوق راستر مستقل. حمّل الحزمة كاملة واحتفظ بهيكل المجلدات.</p>
           </div>
           <a href="https://github.com/ahmadibrahim4geo/MIRSAD/archive/refs/heads/main.zip" class="w-full py-2 rounded-lg bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-bold text-center transition">
             <i class="fa-solid fa-download mr-1 ml-1"></i> <span data-i18n="btn_download_package">تحميل الحزمة كاملة</span>
           </a>
         </div>
 
+        <!-- Dedicated regional raster toolbox -->
+        <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between">
+          <div><h5 class="text-sm font-bold text-white mb-3">Grid Raster Climate Atlas Toolbox</h5>
+          <p class="text-xs text-slate-400 mb-3" data-i18n="down_grid_desc">صندوق مستقل للشبكة والراستر المناخي من NASA POWER وCHIRPS وCHELSA، أو نقاط محسوبة مسبقًا. ملف الدخول MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt.</p></div>
+          <a href="https://github.com/ahmadibrahim4geo/MIRSAD/archive/refs/heads/main.zip" class="text-ocean-300 underline" data-i18n="btn_download_package">تحميل الحزمة كاملة</a>
+        </div>
         <!-- Item 3: Weather Stations Hub & Explorers -->
         <div class="glass-card p-5 rounded-2xl border-slate-800 flex flex-col justify-between hover:border-solar-500/40 transition">
           <div>
@@ -1412,7 +1429,7 @@
     const i18n = {
       ar: {
         hero_station_badge: "دليل 28,066 محطة • اختيار متعدد",
-        hero_sources_badge: "NASA POWER • Open-Meteo",
+        hero_sources_badge: "NASA • ERA5 • NOAA • CHIRPS • TerraClimate • MODIS",
         updates_quality_guide: "تفاصيل إصلاحات البيانات",
         updates_quality_desc: "الفترات الناقصة لا تُعرض كإجماليات مكتملة، والدمج المكاني لا يستخدم أرقام الصفوف لربط مواقع مختلفة.",
         updates_quality_title: "مجاميع مكتملة وقيم ناقصة واضحة",
@@ -1467,33 +1484,33 @@
         val_card6_desc: "المطر المرصود صفرًا يظل صفرًا، والقيمة المفقودة تظل خالية. مجاميع المطر تحتاج فترات مكتملة، ومؤشرات الجفاف والاتجاهات لا تُنتج من قيم افتراضية أو أرقام ثابتة.",
         src_tag: "المصادر وحالة دعمها",
         src_heading: "مصادر البيانات المتاحة والمرجعية",
-        src_subheading: "التنزيل النقطي وعند مواقع المحطات يدعم NASA POWER وOpen-Meteo. أداة الراستر تدعم NASA POWER إقليميًا. NOAA Direct والدمج الهجين وCDS غير منفذة للتنزيل حاليًا؛ اختيارها يعرض رسالة واضحة.",
-        src_badge_default: "التنزيل الهجين غير متاح حاليًا",
+        src_subheading: "مصادر منفذة للنقاط والمحطات والشبكات، واختيار Auto لأدق منتج مناسب لكل متغير. راجع دليل المصادر الكامل للتغطية والاعتماديات وشروط الدخول.",
+        src_badge_default: "Hybrid: تنزيل متتابع موثق",
         src_spec_res: "الدقة المكانية",
         src_spec_latency: "سرعة التحديث",
         src_spec_continuity: "جودة الاتصال",
         src_spec_auth: "المصادقة",
         src_best_for_title: "متى تختار هذا النموذج؟",
-        src_1_title: "المحرك الهجين — مرجع للتطوير",
+        src_1_title: "المحرك الهجين للمحطات والنقاط",
         src_1_sub: "MIRSAD Multi-Source Fusion Architecture",
-        src_1_desc: "تصور لدمج أرصاد المحطات مع بيانات الأقمار الصناعية وإعادة التحليل. مسار التنزيل الهجين غير منفذ في النسخة الحالية، ولا يتحول تلقائيًا إلى مصدر آخر.",
-        src_1_best: "للتعرف على التصميم المقترح. للتشغيل الحالي اختر NASA POWER أوOpen-Meteo في أداة النقاط أو المحطات.",
-        src_2_title: "أرشيف الإدارة الوطنية الأمريكية (NOAA ISD)",
+        src_1_desc: "ينهي NOAA لكل المحطات أولًا، ثم ERA5 للقيم المفقودة، ثم NASA للمتبقي؛ يتبع ذلك Gap Fill الشهري الاختياري. هجين النقاط يبدأ من ERA5. القيم الصحيحة لا تستبدل.",
+        src_1_best: "لدمج رصد المحطات وإعادة التحليل بصورة موثقة؛ افحص التغطية والبيانات الخام والتقديرات.",
+        src_2_title: "أرصاد NOAA GSOD وGHCN-Daily",
         src_2_sub: "National Oceanic & Atmospheric Administration (NOAA NCEI - USA)",
-        src_2_desc: "دليل مواقع المحطات المرفق مستمد من NOAA/WMO، ويُستخدم لاختيار المواقع والأكواد. تنزيل سجلات NOAA الأرضية المباشرة غير منفذ حاليًا؛ اختيار محطة لا يحول بيانات إعادة التحليل إلى أرصاد أرضية.",
-        src_2_best: "استعرض المحطات والأكواد من الدليل المحلي. لتحليل البيانات اختر مصدرًا منفذًا وحدد المحطات المطلوبة من القائمة المتعددة.",
+        src_2_desc: "تنزيل رصد يومي بمعرف المحطة وموقعها: GSOD يستخدم USAF/WBAN، وGHCN يحتاج GHCN_ID صريحًا. لا تُحوّل نقطة عادية إلى أقرب محطة ولا يُعلن عن ISD الساعي.",
+        src_2_best: "اختر الرصد الحقيقي عند وجود هوية محطة مطابقة؛ لا يضمن أرشيف المحطات كل العناصر أو الفترات.",
         src_3_title: "وكالة ناسا الفضائية (NASA POWER)",
         src_3_sub: "NASA Langley Research Center & CERES Team (USA)",
         src_3_desc: "مصدر منفذ لتنزيل البيانات المناخية عند النقاط ومواقع المحطات، وكذلك الشبكة الإقليمية في أداة الراستر. تعتمد المؤشرات الناتجة على المتغيرات المتاحة للفترة المختارة.",
         src_3_best: "اختره لبيانات NASA POWER النقطية أو الإقليمية، مع مراجعة المتغيرات والفترة اللازمة للمؤشرات المطلوبة.",
-        src_4_title: "النموذج الأوروبي (Open-Meteo ERA5-Land)",
-        src_4_sub: "Open-Meteo & ECMWF IFS Reanalysis (~9 km)",
-        src_4_desc: "مزود إعادة التحليل المتاح لأداة النقاط والمحطات. تُستعلم البيانات عند المواقع المختارة، ويحدد إعداد النموذج والفترة نوع البيانات المتاحة.",
+        src_4_title: "Open-Meteo ERA5 / ERA5-Land",
+        src_4_sub: "ERA5-Land 0.1° / ERA5 0.25° — Auto per variable",
+        src_4_desc: "Auto يختار Land أو ERA5 حسب المتغير والفترة كاملة، مع اختيار يدوي متقدم. الوضع المستقل بلا NASA، والهجين يحتفظ بترتيب مصادره.",
         src_4_best: "لتحليل إعادة التحليل عند النقاط أو مواقع المحطات، حسب الفترة والمتغيرات المتاحة من المصدر.",
         src_5_title: "مخزن بيانات كوبرنيكوس الأوروبي (Copernicus CDS)",
-        src_5_sub: "ECMWF Copernicus Climate Change Service (ERA5 & AgERA5 Official)",
-        src_5_desc: "مرجع لمصدر ERA5 وAgERA5. الاتصال المباشر بـCDS والمصادقة بمفتاحه غير منفذين في هذه النسخة؛ لن يُنسب تنزيل NASA POWER إلى كوبرنيكوس.",
-        src_5_best: "راجع دليل المصادر لفهم الاختلافات. مسار الراستر الأونلاين الحالي يستخدم NASA POWER Regional Grid.",
+        src_5_sub: "ERA5-Land ARCO — Need Sign In",
+        src_5_desc: "وصول مباشر إلى ERA5-Land عبر CDS برمز المستخدم وقبول شروط المنتج. التحويل من الساعي منزوع التراكم إلى يوم مكتمل؛ لم يُثبت التنزيل بحساب فعلي بعد.",
+        src_5_best: "أدخل رمز حسابك في خانة الدخول. المنتجات الإضافية وتغطيتها: CHIRPS وTerraClimate وCHELSA وMODIS LST وIMERG في دليل المصادر الكامل.",
         mod_tag: "الحزم المناخية الـ 19",
         mod_heading: "استعراض الحزم الـ 19 والمؤشرات العلمية",
         mod_subheading: "تغطي المنظومة 19 حزمة علمية مستقلة يمكن تفعيلها منفردة أو مجتمعة لإنتاج مئات الطبقات المناخية المشتقة.",
@@ -1509,7 +1526,7 @@
         tool_subheading: "تتضمن المنظومة أربع أدوات وركائز متكاملة تغطي محطات الرصد الأرضية، معالجة وتحليل النقاط، استيفاء الراستر الشريطي، وقواعد البيانات الجغرافية.",
         tool_ground_desc: "واجهتان عربية وإنجليزية لاختيار دولة ثم محطة واحدة أو عدة محطات بالأسماء وأكواد USAF/WBAN. تُعالج المحطات المختارة فقط، مع إمكانية إضافة نقاط مسح داعمة اختيارية.",
         tool_point_desc: "الأداة النقطية الرئيسية (.pyt). تتولى استعلام المحطات والنقاط، سحب السلاسل الزمنية، تطبيق المعادلات وحساب المؤشرات، وإجراء الاستيفاء المكاني (IDW, Kriging, Spline)، وإنتاج خرائط متجهات الرياح والآيزوبار والتصدير لـ GDB و Shapefile و Excel.",
-        tool_raster_desc: "تنزيل بيانات NASA POWER الإقليمية وتحويلها إلى نقاط للتحليل والاستيفاء والقص. راستر الشهريات متاح أوفلاين من حقول شهرية محسوبة مسبقًا، لفترة سنتين فأكثر.",
+        tool_raster_desc: "صندوق مستقل للشبكات الإقليمية: NASA POWER وخلايا CHIRPS/CHELSA الأصلية، ثم التحليل والاستيفاء والقص. توجد أيضًا معالجة أوفلاين لحقول نقاط محسوبة مسبقًا.",
         tool_hub_desc: "مركز محطات الرصد الجوي المرجعية عالمياً وعربياً ومحلياً. قاعدة بيانات جغرافية (.gdb) وشيب فايل مع كود WMO والمناسيب، بالإضافة لخرائط HTML تفاعلية تتيح استكشاف المحطات والبحث الفوري في المتصفح.",
         setup_tag: "المتطلبات والتثبيت",
         setup_heading: "متطلبات التشغيل وخطوات التثبيت خطوة بخطوة",
@@ -1527,8 +1544,11 @@
         down_tag: "التحميلات والمستودع",
         down_heading: "حزم التحميل ومحتويات المستودع الرسمي",
         down_subheading: "كافة الأدوات والقواميس والملفات التوثيقية مفتوحة ومتاحة للتحميل المباشر والاستخدام الأكاديمي والمهني.",
+        help_centre_title: "مركز المساعدة ومصدر Desktop",
+        help_centre_desc: "دليل عربي وإنجليزي من 45 موضوعًا، بمعادلات العناصر الـ19 وربطها بأسماء الأعمدة، وفهرس وبحث ومفضلة. مصدر Desktop متاح للمساهمة؛ لا يوجد إصدار ثنائي مستقر منشور بعد.",
+        down_grid_desc: "صندوق مستقل للشبكة والراستر المناخي من NASA POWER وCHIRPS وCHELSA، أو نقاط محسوبة مسبقًا. ملف الدخول MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt.",
         down_ground_pyt_desc: "أداة المحطات بواجهتين عربية وإنجليزية واختيار متعدد حسب الدولة. حمّل الحزمة كاملة لتضم المحرك ودليل المحطات والملفات المساعدة.",
-        down_pyt_desc: "صندوق أدوات النقاط والراستر مع الملفات المساعدة. حمّل الحزمة كاملة واحتفظ بهيكل المجلدات.",
+        down_pyt_desc: "صندوق أطلس النقاط مع الملفات المساعدة؛ أداة الشبكة الإقليمية في صندوق راستر مستقل. حمّل الحزمة كاملة واحتفظ بهيكل المجلدات.",
         down_hub_desc: "قاعدة البيانات الجغرافية (.gdb) والشيب فايل والخرائط التفاعلية لـ 28,066 محطة عالمية و 944 محطة عربية.",
         down_dict_desc: "قاموس الحقول والمؤشرات باللغتين العربية والإنجليزية مع الوحدات الفيزيائية.",
         down_color_desc: "دليل الـ 2,250 تدرج لوني وقواعد التصنيف الكارتوجرافي للطبقات.",
@@ -1559,7 +1579,7 @@
       },
       en: {
         hero_station_badge: "28,066 Station Directory • Multiple Selection",
-        hero_sources_badge: "NASA POWER • Open-Meteo",
+        hero_sources_badge: "NASA • ERA5 • NOAA • CHIRPS • TerraClimate • MODIS",
         updates_quality_guide: "Data Quality Changes",
         updates_quality_desc: "Incomplete periods are not reported as complete totals, and spatial joins do not use row IDs to link different locations.",
         updates_quality_title: "Complete Totals, Explicit Missing Values",
@@ -1614,33 +1634,33 @@
         val_card6_desc: "Observed zero rainfall stays zero and missing values stay NULL. Rainfall totals require complete periods; drought and trend indicators are not produced from invented inputs or fixed values.",
         src_tag: "SOURCES & IMPLEMENTATION STATUS",
         src_heading: "Available and Reference Data Sources",
-        src_subheading: "Point and station-location downloads support NASA POWER and Open-Meteo. The raster tool supports NASA POWER regional data. NOAA Direct, Hybrid and CDS downloads are not currently implemented; those choices return a clear message.",
-        src_badge_default: "Hybrid Download Not Implemented",
+        src_subheading: "Implemented point, station and regional sources, with Auto selecting the finest suitable product per variable. Read the full source directory for coverage, dependencies and sign-in requirements.",
+        src_badge_default: "Hybrid: audited sequential download",
         src_spec_res: "Spatial Resolution",
         src_spec_latency: "Latency & Update",
         src_spec_continuity: "Continuity",
         src_spec_auth: "Authentication",
         src_best_for_title: "When to choose this model?",
-        src_1_title: "Hybrid Climate Engine — Reference",
+        src_1_title: "Station and Any-point Hybrid",
         src_1_sub: "MIRSAD Multi-Source Fusion Architecture",
-        src_1_desc: "A design for combining station observations with satellite and reanalysis data. Hybrid downloads are not implemented in this version and do not silently fall back to another provider.",
-        src_1_best: "Use as a design reference. For current point or station-location processing, choose NASA POWER or Open-Meteo.",
-        src_2_title: "NOAA ISD Ground Station Archive",
+        src_1_desc: "Finish NOAA across the network, ERA5 for missing cells, then NASA for remaining gaps, followed by optional monthly Gap Fill. Any-point Hybrid starts at ERA5. Valid higher-priority values are retained.",
+        src_1_best: "Combine station observations and reanalysis with provenance; inspect coverage, raw records and monthly estimates.",
+        src_2_title: "NOAA GSOD and GHCN-Daily observations",
         src_2_sub: "National Oceanic & Atmospheric Administration (NOAA NCEI - USA)",
-        src_2_desc: "The bundled NOAA/WMO station directory provides locations and station identifiers. Direct NOAA observation downloads are not implemented; selecting a station does not turn reanalysis into ground observations.",
-        src_2_best: "Browse locations and identifiers in the local directory. For analysis, choose an implemented provider and select the required stations from the multiple-selection list.",
+        src_2_desc: "Daily observations require a matching station identity/location: USAF/WBAN for GSOD and explicit GHCN_ID for GHCN. Arbitrary points are never replaced by nearby stations. Hourly ISD is not advertised.",
+        src_2_best: "Choose station observations with verified identifiers; archives do not guarantee all variables or dates.",
         src_3_title: "NASA POWER Agroclimatology",
         src_3_sub: "NASA Langley Research Center & CERES Team (USA)",
         src_3_desc: "An implemented provider for points and station locations, and for regional grids in the raster tool. Outputs depend on the variables available over the selected period.",
         src_3_best: "Choose for NASA POWER point or regional data, after checking the variables and period required by your indicators.",
         src_4_title: "Open-Meteo ERA5 / ERA5-Land",
-        src_4_sub: "Open-Meteo & ECMWF IFS Reanalysis (~9 km)",
-        src_4_desc: "An implemented reanalysis provider for the point and station tools. Data are sampled at selected locations; model and period settings determine available inputs.",
+        src_4_sub: "ERA5-Land 0.1° / ERA5 0.25° — Auto per variable",
+        src_4_desc: "Auto selects Land or ERA5 per variable for the whole interval; advanced manual selection is available. Standalone has no NASA supplement; Hybrid preserves source priority.",
         src_4_best: "Use for reanalysis at points or station locations, within the provider period and variable coverage.",
         src_5_title: "Copernicus Climate Data Store (CDS)",
-        src_5_sub: "ECMWF Copernicus Climate Change Service (ERA5 & AgERA5 Official)",
-        src_5_desc: "A reference for ERA5 and AgERA5 data. Direct CDS access and key authentication are not implemented in this version; NASA POWER downloads are not relabeled as Copernicus.",
-        src_5_best: "Consult the source guide for the differences. The current online raster pipeline uses NASA POWER Regional Grid.",
+        src_5_sub: "ERA5-Land ARCO — Need Sign In",
+        src_5_desc: "Direct ERA5-Land CDS access requires the user’s personal token and accepted terms. Already de-accumulated hourly values become complete UTC days. Live authenticated verification is still pending.",
+        src_5_best: "Enter your own token in the account field. CHIRPS, TerraClimate, CHELSA, MODIS LST and IMERG coverage is documented in the full source directory.",
         mod_tag: "THE 19 CLIMATE MODULES",
         mod_heading: "Interactive 19 Climate Packages Showcase",
         mod_subheading: "Covering 19 distinct physical and bioclimatic domains that can be executed independently or in concert to produce hundreds of thematic map layers.",
@@ -1656,7 +1676,7 @@
         tool_subheading: "Four integrated tools and components covering in-situ ground weather stations, point-based time series modeling, raster grid interpolation, and geospatial station hubs.",
         tool_ground_desc: "Arabic and English interfaces let you choose a country, then one or more named stations with USAF/WBAN codes. Process only selected stations, with optional supplementary survey points.",
         tool_point_desc: "Primary point & station toolbox (.pyt). Handles API queries, time series aggregation, scientific formulas, spatial interpolation (IDW, Kriging, Spline), isobars, and GDB export.",
-        tool_raster_desc: "Download NASA POWER regional data and convert grids to points for analysis, interpolation and clipping. Monthly rasters are available offline from precalculated monthly fields spanning at least two years.",
+        tool_raster_desc: "Separate regional toolbox: NASA POWER and original CHIRPS/CHELSA grid cells, followed by analysis, interpolation and clipping. Offline processing accepts existing calculated point fields.",
         tool_hub_desc: "Global, regional, and national weather station directory. Ready File Geodatabase (.gdb) and Shapefiles with WMO IDs and elevations, plus interactive web HTML map explorers for instant station discovery.",
         setup_tag: "SYSTEM REQUIREMENTS & SETUP",
         setup_heading: "System Requirements & 4-Step Quick Setup",
@@ -1674,8 +1694,11 @@
         down_tag: "DOWNLOADS & PACKAGES",
         down_heading: "Official Release Packages & Downloads",
         down_subheading: "All toolboxes, data dictionaries, and scientific documentation are completely open and available for instant download.",
+        help_centre_title: "Help centre and Desktop source",
+        help_centre_desc: "A 45-topic Arabic/English manual with equations for all 19 climate groups, exact field mapping, contents, search and bookmarks. Desktop source is open to contributors; no stable binary release is published yet.",
+        down_grid_desc: "A separate regional grid/raster toolbox for NASA POWER, CHIRPS, CHELSA or precomputed points. Entry file: MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt.",
         down_ground_pyt_desc: "Station toolbox with Arabic/English interfaces and multiple selection by country. Download the complete package with the engine, station directory and helper files.",
-        down_pyt_desc: "Point and raster toolbox with helper modules. Download the complete package and keep its folder structure.",
+        down_pyt_desc: "Point climate atlas toolbox with helper modules; the regional grid tool has its own raster toolbox. Download the complete package and keep its folder structure.",
         down_hub_desc: "Geodatabase (.gdb), Shapefiles, and interactive HTML explorers for 28,066 global and 944 Arab stations.",
         down_dict_desc: "Bilingual English/Arabic field dictionary with scientific units and abbreviations.",
         down_color_desc: "Complete 2,250 color ramps decision guide and statistical classification rules.",

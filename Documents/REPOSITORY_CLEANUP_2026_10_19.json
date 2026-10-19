@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-19",
+  "scope": "explicit generated root scratch only; no user data, test source or development runtime removed",
+  "retained_local": "MIRSAD Desktop/.test-output/cleanup-retained",
+  "entries": [
+    {
+      "path": "DepthTest_TMP",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "ElementTest_TMP",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "ProvTest_TMP",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": [
+        {
+          "path": "ProvTest_TMP/Field_Dictionary_Arabic.csv",
+          "bytes": 5906,
+          "sha256": "27b700e50edb94dbc7b3717cc773bdb7cce6d077bd59ed8561680a6ca35069ba"
+        },
+        {
+          "path": "ProvTest_TMP/Metadata_Dictionary.csv",
+          "bytes": 9874,
+          "sha256": "052679c84650f3e6eac2f8cf231e202a9825d234ec1d5b64a97ef0547371e1aa"
+        }
+      ]
+    },
+    {
+      "path": "SigTest_TMP",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "TolFocal_TMP",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "pip-build-tracker-_jciuxl4",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "pip-build-tracker-e6emwiiw",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "pip-ephem-wheel-cache-stm9zhhf",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "pip-ephem-wheel-cache-yj_704my",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "pip-install-f4mim7__",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "pip-install-t5rpt5ge",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": []
+    },
+    {
+      "path": "hello.spec",
+      "action": "removed generated scratch; nonempty files retained locally",
+      "files": [
+        {
+          "path": "hello.spec",
+          "bytes": 854,
+          "sha256": "caae8e4c5e7bb62ad7e2db4130c1cabbe4a3d88fc6c42697c6bddd30b27a743e"
+        }
+      ]
+    }
+  ]
+}

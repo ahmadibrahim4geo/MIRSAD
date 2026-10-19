@@ -117,3 +117,13 @@ This is a working first development delivery, not a claim that every master-plan
 - Demonstrates station selection/search/sort, schematic map interaction, manual points, provider-specific availability, output planning, cancellable simulation, and explicit FileGDB partial failure. JSON plan save/load, a developer brief and a session log are real browser downloads; climate/GIS/Excel operations are explicitly simulations.
 - `docs/design/README.md` records the implementation handoff, data provenance and limits. Original station data, scientific services, toolboxes and development/stable binaries were not changed by this design work.
 - Verified the browser interactions for filtering/selection, provider availability, manual points, cancellation and partial output failure, plus JSON download/reload and Arabic/English. Responsive checks at 390/1440 CSS pixels showed no page overflow. Structural checks confirmed JavaScript syntax, unique HTML IDs, no external runtime assets and exact source parity for the embedded 86 records. Direct `file://` automation is blocked by browser policy; visual QA used local HTTP. See the design README and preview image for evidence.
+
+
+### dev8 help and repository handoff — 19 October 2026
+
+- Implemented 45-topic bilingual Qt/standalone/HTML/CHM help, with all 19 equation groups, 521 field mappings, native parameter references and explicit units/coverage examples. Concise map titles remain unchanged; methodology explains means of accumulations.
+- Native Windows CHM Arabic and English display/search accepted; Qt search, language/topic preservation, bookmarks and PDF readback tested. Frozen help loads neither map nor ArcPy.
+- Passed 58 Desktop tests, 16 isolated legacy suites (144 tests), 6 Python 2.7 suites (74 tests), native Pro parameter extraction, frozen export/workspace/help and installer install/uninstall/user-file-preservation gates.
+- Development candidate 0.4.0.dev8 replaced only runtime/development after exact bundle-hash verification. Stable remains unpromoted. Added contributor instructions, issue/PR templates, isolated test runner, CI and explicit scratch cleanup evidence.
+- Source/help implementation recorded in commit b8a97c4. Clean-checkout and remote handoff results are maintained in [DEV8_HELP_AND_REPOSITORY.md](docs/DEV8_HELP_AND_REPOSITORY.md).
+- Native ArcMap processing, authenticated CDS/IMERG, advanced output/raster parity, complete DPI/accessibility matrix and visual acceptance of ArcGIS-native help summaries remain separate limits, not falsely closed by help tests.

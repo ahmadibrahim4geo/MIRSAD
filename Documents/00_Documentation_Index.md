@@ -1,5 +1,7 @@
 # 00. Documentation Index & Master Architectural Roadmap
 ## MIRSAD (مِرصاد) — Climate Atlas & Meteorological Database Platform
+Current manual: [English help centre](../Help/MIRSAD_Help_EN.html) · [English CHM](../Help/MIRSAD_Help_EN.chm) · [Contributing](../CONTRIBUTING.md) · [Testing](TESTING.md).
+
 ### Multi-source Integrated Reanalysis & Surface Atlas Database
 #### Comprehensive Scientific, Mathematical, and Technical Reference Manual
 

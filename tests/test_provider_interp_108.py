@@ -12,7 +12,9 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(PYT):
     PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
-TMP = os.path.join(BASE, "ProvTest_TMP")
+TMP = os.path.join(BASE, "tests", ".output", "provider")
+if not os.path.isdir(os.path.dirname(TMP)):
+    os.makedirs(os.path.dirname(TMP))
 
 if sys.version_info[0] == 2:
     mod = type(sys)("mprov")
@@ -148,7 +150,7 @@ if not _HAS_ARCPY:
 
 # ---------------- 5. toolbox params + dynamic enabling ----------------
 ps = tool.getParameterInfo()
-check("param count >= 53", len(ps) >= 53, len(ps))
+check("69 point parameters", len(ps) == 69, len(ps))
 pdict = dict((p.name, p) for p in ps)
 check("provider default NASA", pdict["Climate_Data_Source"].value == "NASA POWER API"
       and "Open-Meteo Historical API (ERA5 Reanalysis)" in pdict["Climate_Data_Source"].filter.list

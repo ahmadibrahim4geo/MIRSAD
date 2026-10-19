@@ -8,7 +8,9 @@ import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
-TMP = os.path.join(BASE, "DepthTest_TMP")
+TMP = os.path.join(BASE, "tests", ".output", "depth")
+if not os.path.isdir(os.path.dirname(TMP)):
+    os.makedirs(os.path.dirname(TMP))
 
 mod = type(sys)("mdepth")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)
@@ -37,7 +39,7 @@ check("tool help docstring", len((mod.PowerClimateAtlasGenerator.__doc__ or ""))
 for key in ["DATA SOURCES", "OUTPUT LAYOUT", "PERFORMANCE", "SCIENTIFIC NOTES"]:
     check("help has " + key, key in (mod.PowerClimateAtlasGenerator.__doc__ or ""))
 ps = tool.getParameterInfo()
-check("46 params", len(ps) == 46, len(ps))
+check("69 point parameters", len(ps) == 69, len(ps))
 check("all params documented", all((p.description or "").strip() for p in ps),
       [p.name for p in ps if not (p.description or "").strip()])
 pdict = dict((p.name, p) for p in ps)

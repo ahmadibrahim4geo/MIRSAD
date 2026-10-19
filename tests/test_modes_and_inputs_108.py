@@ -63,7 +63,7 @@ class TestModesAndInputs(unittest.TestCase):
 
     def test_parameter_count_and_indices(self):
         params = self.tool.getParameterInfo()
-        self.assertEqual(len(params), 51, "Expected 51 parameters, got %d" % len(params))
+        self.assertEqual(len(params), 69, "Expected 69 parameters, got %d" % len(params))
 
         # Index 0: Operation_Mode
         self.assertEqual(params[0].name, "Operation_Mode")

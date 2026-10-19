@@ -1,0 +1,17 @@
+# Stable source snapshots across clean checkouts and Windows/Python runtimes.
+*.py text eol=lf
+*.pyt text eol=lf
+*.json text eol=lf
+*.md text eol=lf whitespace=-blank-at-eol
+*.html text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.ps1 text eol=crlf
+*.chm binary
+*.sqlite binary
+*.gz binary
+*.png binary
+*.jpg binary
+*.docx binary
+*.xlsx binary

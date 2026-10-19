@@ -1,0 +1,16 @@
+name: Documentation / الدليل
+description: Report an unclear explanation, translation or equation.
+body:
+  - type: input
+    id: topic
+    attributes:
+      label: Topic or file / الموضوع أو الملف
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Explanation and proposed correction / الشرح والتصحيح
+      description: Include the language, equation/field if relevant, and an authoritative reference when available.
+    validations:
+      required: true

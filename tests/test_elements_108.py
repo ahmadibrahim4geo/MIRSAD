@@ -8,7 +8,9 @@ import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
-OUT = os.path.join(BASE, "ElementTest_TMP")
+OUT = os.path.join(BASE, "tests", ".output", "elements")
+if not os.path.isdir(os.path.dirname(OUT)):
+    os.makedirs(os.path.dirname(OUT))
 
 mod = type(sys)("mel")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)

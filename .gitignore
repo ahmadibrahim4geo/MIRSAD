@@ -50,3 +50,27 @@ _tmp_test/
 *Test_TMP/
 scratch/
 *.zip
+
+# MIRSAD Desktop: one source tree, two fixed binary channels
+/MIRSAD Desktop/.venv/
+/MIRSAD Desktop/.build/
+/MIRSAD Desktop/.test-output/
+/MIRSAD Desktop/runtime/development/
+/MIRSAD Desktop/runtime/installers/
+/MIRSAD Desktop/runtime/stable/*
+!/MIRSAD Desktop/runtime/stable/README.md
+/MIRSAD Desktop/assets/stations.sqlite
+/MIRSAD Desktop/assets/licenses/
+/data/stations.new.sqlite
+**/.mirsad-jobs/
+**/.mirsad-cache/
+
+# Local build tooling and isolated legacy test artifacts
+/pip-build-tracker-*/
+/pip-ephem-wheel-cache-*/
+/pip-install-*/
+/hello.spec
+/tests/.output/
+/tests/logs/test_*/
+/MIRSAD Desktop/.build-install.log
+/.agents/
