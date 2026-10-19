@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Independent native-unit/coverage expectations, Python 2.7/3 compatible."""
 from __future__ import unicode_literals
+from legacy_test_support import temporary_workspace
 import datetime as dt
 import json
 import os
@@ -16,7 +17,7 @@ from utils.protected_sources import daily_from_cds,CDS,cds_payload,cds_download,
 
 class ProductTests(unittest.TestCase):
     def setUp(self):
-        self.folder=tempfile.mkdtemp(dir=os.path.join(ROOT,"MIRSAD Desktop",".test-output"))
+        self.folder=temporary_workspace()
         self.old=h._read
         self.station=dict(station_key="fixture",latitude=30.122,longitude=31.406)
     def tearDown(self):h._read=self.old;shutil.rmtree(self.folder)

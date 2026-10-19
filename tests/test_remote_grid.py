@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Independent synthetic TIFF pixels, bounded requests and native cell centres."""
 from __future__ import unicode_literals
+from legacy_test_support import temporary_workspace
 import datetime as dt
 import io
 import os
@@ -45,7 +46,7 @@ class Session(object):
 
 
 class RangeTests(unittest.TestCase):
-    def setUp(self):self.folder=tempfile.mkdtemp(dir=os.path.join(ROOT,'MIRSAD Desktop','.test-output'))
+    def setUp(self):self.folder=temporary_workspace()
     def tearDown(self):shutil.rmtree(self.folder)
     def test_strip_pixels_zero_nodata_edges_and_reusable_cache(self):
         session=Session(tiff());grid=r.RangeGrid('https://fixture/grid',self.folder,lambda:False,session)

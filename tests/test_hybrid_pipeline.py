@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Independent source-order/data-integrity checks, runnable on Python 2.7/3."""
 from __future__ import unicode_literals
+from legacy_test_support import temporary_workspace
 import datetime as dt
 import io
 import json
@@ -18,7 +19,7 @@ from utils import climate_sources as policies
 
 class HybridTests(unittest.TestCase):
     def setUp(self):
-        self.folder=tempfile.mkdtemp(dir=os.path.join(ROOT,"MIRSAD Desktop",".test-output"))
+        self.folder=temporary_workspace()
         self.start=dt.date(2024,1,1)
         self.end=dt.date(2024,1,3)
         self.stations=[dict(station_key=k,usaf="012345",wban="0000"+str(i),latitude=0.,longitude=float(i),name=k)
@@ -160,7 +161,7 @@ class AutomaticFailureTests(unittest.TestCase):
     def test_one_product_failure_preserves_other_variables_and_retries(self):
         import tempfile
         import shutil
-        folder=tempfile.mkdtemp(dir=os.path.join(ROOT,"MIRSAD Desktop",".test-output"))
+        folder=temporary_workspace()
         old=h._read;calls=[];available=[False]
         def read(url,*unused):
             calls.append(url)
