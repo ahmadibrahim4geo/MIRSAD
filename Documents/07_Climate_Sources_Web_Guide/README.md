@@ -88,3 +88,12 @@ The generator derives an asset query version from CSS/JS/vector contents to
 invalidate old cached presentation. Repository checks passed 150 documentation
 links, 63 local HTML references/anchors, the CSS background path, generated-page
 matching and the existing scientific/help/catalogue contracts.
+
+Published design commit: [83e9dec](https://github.com/ahmadibrahim4geo/MIRSAD/commit/83e9dec).
+Both [Pages deployment](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39228387054)
+and [full source checks](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39228387541)
+passed. Public readback matched both pages, CSS, JavaScript, the app image and
+atlas vector background; all **24 distinct local resource URLs returned 200**.
+The live page exposes all three developer contact icons with their existing
+destinations. The 65 pre-existing user dataset/XML changes remained local.
+This publication note is a later documentation-only update.
