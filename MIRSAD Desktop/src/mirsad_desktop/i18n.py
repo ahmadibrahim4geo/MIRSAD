@@ -11,8 +11,8 @@ STRINGS = {
     # App Shell & Header
     "app_title": ("مِرصاد | MIRSAD", "MIRSAD | مِرصاد"),
     "app_subtitle": (
-        "قاعدة بيانات الأطلس المكاني لإعادة التحليل المتكامل للأرصاد الجوية · Meteorological Integrated Reanalysis Spatial Atlas Database",
-        "Meteorological Integrated Reanalysis Spatial Atlas Database · قاعدة بيانات الأطلس المكاني لإعادة التحليل المتكامل للأرصاد الجوية"
+        "قاعدة بيانات الأطلس المكاني لإعادة التحليل المتكامل للأرصاد الجوية",
+        "Meteorological Integrated Reanalysis Spatial Atlas Database"
     ),
     "add_data": ("إضافة بيانات", "Add Data"),
     "add_layer_gdb": ("إضافة طبقة أو قاعدة بيانات…", "Add Layer or Database…"),

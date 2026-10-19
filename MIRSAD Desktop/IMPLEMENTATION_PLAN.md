@@ -134,3 +134,9 @@ This is a working first development delivery, not a claim that every master-plan
 
 - Replaced generic equation-to-field explanations for all 521 fields / 19 modules with specific bilingual names, periods, calculation units and operations. Added field-name, identity, coverage and data-row dictionaries. Scientific functions, technical keys and concise map labels remain unchanged.
 - Evidence and exact scope: [FIELD_REFERENCE_CLARIFICATION.md](docs/FIELD_REFERENCE_CLARIFICATION.md).
+
+### Header subtitle localization — 19 October 2026
+
+- The subtitle under the logo now shows only the approved Arabic expansion in Arabic mode and only “Meteorological Integrated Reanalysis Spatial Atlas Database” in English mode. The title, logo and version are unchanged.
+- Checked the actual header text and screenshots in both languages and passed the existing language-switch/selection check. This is a presentation-only change; no scientific code, tool parameters or help content changed.
+- Rebuilt and replaced development after frozen GUI/export/workspace/help gates passed; the packaged i18n bytecode matches source and help assets are byte-identical to the previous build. Rebuilt the development installer and passed install/readback/workspace/uninstall/user-file-preservation checks. Stable remains unchanged. Development EXE SHA-256: `c5aa43264da4e389a5448ad5ccea5f29fc8c3cf9ac47e1eb2ee9a9bd6532583f`.
