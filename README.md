@@ -12,6 +12,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/ahmadibrahim4geo/MIRSAD/actions/workflows/checks.yml"><img src="https://github.com/ahmadibrahim4geo/MIRSAD/actions/workflows/checks.yml/badge.svg" alt="Deterministic source checks"></a>
   <a href="https://github.com/ahmadibrahim4geo/MIRSAD"><img src="https://img.shields.io/badge/ArcGIS-ArcMap%20%7C%20Pro-0079c1" alt="ArcGIS ArcMap and Pro"></a>
   <a href="#requirements"><img src="https://img.shields.io/badge/Python-2.7%20%7C%203-3776ab" alt="Python 2.7 and 3"></a>
   <a href="#modules"><img src="https://img.shields.io/badge/Climate%20Modules-19-047857" alt="19 climate modules"></a>

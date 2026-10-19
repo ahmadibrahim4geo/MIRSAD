@@ -29,3 +29,5 @@ See [dev7 native evidence](../MIRSAD%20Desktop/docs/DEV7_SOURCE_ACCEPTANCE.md) a
 
 
 Clean-checkout acceptance at commit `625ced7` passed in a new independent venv installed from public PyPI with system site-packages disabled. All 16 legacy suites plus core export readback, both help suites, source/help contracts and standalone Arabic help passed. Legacy test scratch is owned by `tests/.output/`; Desktop tests create their `.test-output/` directory themselves. See the dev8 report for precise scope; a second full binary compilation was not performed in the clone.
+
+Hosted [deterministic CI for source commit e1f7c26](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39193075315) completed successfully after publication. The final Markdown-only handoff record reuses this accepted source result.

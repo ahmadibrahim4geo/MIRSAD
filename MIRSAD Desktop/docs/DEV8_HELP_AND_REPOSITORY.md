@@ -67,3 +67,12 @@ Clean clone at commit `625ced7` passed all 10 handoff steps. It used a new venv 
 The clean-checkout audit found and repaired two hidden scratch assumptions: five Desktop test modules now create their owned output directory, and three legacy suites use `tests/.output/` through a Python 2/3 helper instead of requiring Desktop scratch. The latter three suites also passed again on Python 2.7 (23 tests). No scientific assertion was relaxed.
 
 Source implementation: `b8a97c4`. Contribution/readiness setup: `d66f181`. Fresh-checkout fixture fixes: `530a5c0`, `625ced7`. Native/user files excluded from these commits remain untouched in the working tree. Remote publication is verified separately in the final handoff; no GitHub Actions result is implied by this local evidence.
+
+
+### Published handoff
+
+The source commits were pushed to `main`; local/remote SHA `e1f7c263d5b94a20adc0294ef30daa13605eae27` matched after the push. [Hosted deterministic CI](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39193075315) completed **successfully**, and [Pages deployment](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39193074101) succeeded for that source commit.
+
+Both published CHMs matched the local accepted files byte-for-byte. Published EN/AR HTML matched generated source after Git newline normalization and contained dev8. [Arabic help](https://ahmadibrahim4geo.github.io/MIRSAD/Help/MIRSAD_Help_AR.html) and [English help](https://ahmadibrahim4geo.github.io/MIRSAD/Help/MIRSAD_Help_EN.html) are available on the website; corresponding `.chm` downloads sit beside them.
+
+This final publication record changes Markdown only and reuses the passing CI above rather than repeating the same binary/numerical checks. User Sample Data/GDB changes, prior deletions and unrelated ArcGIS-generated XML remain outside the commits. No stable promotion, public binary Release or production installation was performed.

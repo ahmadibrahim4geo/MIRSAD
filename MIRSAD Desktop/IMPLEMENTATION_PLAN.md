@@ -127,3 +127,5 @@ This is a working first development delivery, not a claim that every master-plan
 - Development candidate 0.4.0.dev8 replaced only runtime/development after exact bundle-hash verification. Stable remains unpromoted. Added contributor instructions, issue/PR templates, isolated test runner, CI and explicit scratch cleanup evidence.
 - Source/help implementation recorded in commit b8a97c4. Clean-checkout and remote handoff results are maintained in [DEV8_HELP_AND_REPOSITORY.md](docs/DEV8_HELP_AND_REPOSITORY.md).
 - Native ArcMap processing, authenticated CDS/IMERG, advanced output/raster parity, complete DPI/accessibility matrix and visual acceptance of ArcGIS-native help summaries remain separate limits, not falsely closed by help tests.
+
+- Remote handoff accepted: source commit e1f7c26 reached main, hosted deterministic CI and Pages deployment succeeded, and published CHM bytes match the local accepted guide. See the dev8 report for links and the documentation-only publication record.
