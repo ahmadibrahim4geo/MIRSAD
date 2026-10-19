@@ -152,3 +152,9 @@ The user explicitly requested the source, documentation and verified current
 development installer on GitHub; this is a development prerelease rather than
 stable promotion. Exact artifact identity and publication verification are in
 [the publication record](../../Documents/DEVELOPMENT_PUBLICATION.md).
+
+Published `desktop-v0.4.0-dev.8` as a public prerelease at 07:59:47 UTC. The tag
+points to handoff commit `b4e2a64`; the unchanged runtime remains based on
+`e356ff7`. GitHub sizes/SHA-256 digests match all five allowlisted local assets.
+Repository/desktop landing pages and current status now link to the download.
+No user dataset/XML changes, credentials or runtime/build folders were staged.

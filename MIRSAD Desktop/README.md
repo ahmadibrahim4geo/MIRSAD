@@ -14,8 +14,10 @@
 مشروعات المستخدم خارج مجلد التثبيت، ولا تُمسح عند تحديث البرنامج أو إزالته.
 لا يوجد إصدار Desktop نهائي منشور على GitHub Releases حتى الآن.
 
-مثبت التطوير المصرح بنشره، وبصمته وحدود قبوله، موثقان في
-[سجل النشر](../Documents/DEVELOPMENT_PUBLICATION.md). النشر التجريبي منفصل عن اعتماد stable.
+[تحميل مثبت التطوير 0.4.0.dev8](https://github.com/ahmadibrahim4geo/MIRSAD/releases/download/desktop-v0.4.0-dev.8/MIRSAD-Desktop-0.4.0.dev8-Windows-x64-Setup.exe)،
+وملفات CHM وبصمات التحقق متاحة في [صفحة الإصدار](https://github.com/ahmadibrahim4geo/MIRSAD/releases/tag/desktop-v0.4.0-dev.8).
+البصمات وحدود القبول موثقة في [سجل النشر](../Documents/DEVELOPMENT_PUBLICATION.md).
+النشر التجريبي منفصل عن اعتماد stable.
 
 ## الدليل والحالة
 

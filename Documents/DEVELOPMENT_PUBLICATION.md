@@ -77,4 +77,31 @@ these items or become an approved stable version.
 Prepare a release draft, upload only the allowlisted installer/help/checksum
 assets, verify remote sizes and SHA-256 digests, then publish as a prerelease
 with `make_latest=false`. Do not replace an existing mismatched asset silently.
-Record actual publication verification after completion.
+
+## Published verification — 19 October 2026
+
+The public prerelease was published at **07:59:47 UTC**. An unauthenticated
+GitHub API read confirmed `draft=false`, `prerelease=true` and all five assets.
+The tag resolves to source/handoff commit
+`b4e2a64e2b9813623cacb1d6205a6cba748db008`; publication-status documentation was
+updated afterward without changing the runtime candidate. Stable was not promoted.
+
+| Asset | Bytes | Verified SHA-256 |
+|---|---:|---|
+| [Windows x64 installer](https://github.com/ahmadibrahim4geo/MIRSAD/releases/download/desktop-v0.4.0-dev.8/MIRSAD-Desktop-0.4.0.dev8-Windows-x64-Setup.exe) | 148745729 | `8740a1d41a5dbe34aba0771fd5a551840208f1e92dbf8a5bcd9b11e1d2d44b5f` |
+| [Arabic CHM](https://github.com/ahmadibrahim4geo/MIRSAD/releases/download/desktop-v0.4.0-dev.8/MIRSAD_Help_AR.chm) | 165364 | `09379511e600f73e087b5742ba5fda777206a6390a3a8784a0afbd0b9acc7394` |
+| [English CHM](https://github.com/ahmadibrahim4geo/MIRSAD/releases/download/desktop-v0.4.0-dev.8/MIRSAD_Help_EN.chm) | 158229 | `483ac7b5ec7e88cf1d915cac54aa5ed66fee78b1023c8536bbd91eb7ef5bb255` |
+| [Release manifest](https://github.com/ahmadibrahim4geo/MIRSAD/releases/download/desktop-v0.4.0-dev.8/release-manifest.json) | 2060 | `36b5993676cf6254c0c25b202e206f54fc96e61fd3def96b76381c8a1b79feb5` |
+| [Checksums](https://github.com/ahmadibrahim4geo/MIRSAD/releases/download/desktop-v0.4.0-dev.8/SHA256SUMS.txt) | 376 | `3d5081b070c7e100160bad0ba1d382bde5483bc89d09e3542e471e72810cac7c` |
+
+GitHub's returned SHA-256 digests and sizes match the local files. The source tag
+was checked against the pushed commit. The runtime-baseline
+[source checks](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39217687126)
+and [Pages build](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39217686545)
+completed successfully. The handoff commit's
+[source checks](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39218992619)
+and [Pages build](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39218992346)
+also passed. Repository contracts and 133 local documentation links passed before
+publication; the final download/status documentation passed 134 local links.
+The 18-module packaged-source equivalence check passed. No application logic or
+packaged asset changed in this handoff.

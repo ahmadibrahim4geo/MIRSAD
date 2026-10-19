@@ -31,8 +31,10 @@ Updated: 19 October 2026. Development version: **0.4.0.dev8**.
 
 - Development: `runtime/development/MIRSAD.exe`.
 - Development installer: `runtime/installers/development/MIRSAD-Setup.exe`.
-- Stable: `runtime/stable/` reserved; no approved stable binary or public Desktop
-  binary release has been published.
+- Public development preview: [0.4.0.dev8](https://github.com/ahmadibrahim4geo/MIRSAD/releases/tag/desktop-v0.4.0-dev.8),
+  published with the Windows x64 installer, Arabic/English CHMs and SHA-256 manifest.
+  [Publication evidence](../../Documents/DEVELOPMENT_PUBLICATION.md) identifies the exact candidate.
+- Stable: `runtime/stable/` reserved; no approved stable binary has been published.
 - Build: `scripts/build_development.ps1`; compile help from the shared source,
   verify the candidate outside the checkout, then replace development only.
   Preserve the full executable directory, including `_internal`.
