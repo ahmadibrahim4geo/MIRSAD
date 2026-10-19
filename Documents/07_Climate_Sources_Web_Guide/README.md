@@ -47,3 +47,21 @@ rebuild or replace the accepted installer or the CHM files.
   Dedicated device emulation and a full accessibility audit were not performed.
 - Runtime source snapshots, scientific code, help resources and binaries remain
   unchanged. Screenshots and local preview files remain in ignored QA space.
+
+## Published verification
+
+Website source commit: `a97ec9023ac324959a65160b4a23ea542f241a45`.
+The [Pages deployment](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39226077314)
+completed successfully. Public readback matched both HTML pages, CSS, JavaScript
+and the app screenshot (text normalized to LF); all **23 distinct local resource
+URLs returned HTTP 200**. Arabic source fields and monthly rainfall units were
+also reviewed on the live site. The 65 existing user dataset/XML changes stayed
+local and were not included. Full
+[source checks](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39226077535)
+are recorded separately from the successful website deployment.
+
+- [Published home page](https://ahmadibrahim4geo.github.io/MIRSAD/).
+- [Published source guide](https://ahmadibrahim4geo.github.io/MIRSAD/Documents/07_Climate_Sources_Web_Guide/climate-sources.html).
+
+This verification note was added after deployment; it does not change the two
+reviewed pages or any application binary.
