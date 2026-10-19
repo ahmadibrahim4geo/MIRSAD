@@ -65,3 +65,26 @@ are recorded separately from the successful website deployment.
 
 This verification note was added after deployment; it does not change the two
 reviewed pages or any application binary.
+
+## Atlas design revision — 19 October 2026
+
+Reworked the visual direction with a navy/teal/gold atlas cover, local vector
+graticule/contour artwork, a larger app preview and clearer section hierarchy.
+Restored the full developer biography, circular portrait, GitHub/email/WhatsApp
+icon buttons and a dedicated hydrology/infrastructure consulting panel. The
+icons are inline local SVGs and require no external font/icon service.
+
+Fixed the Hybrid monthly-fill double frame: only direct `.pipeline-step`
+children receive the border/background. Browser readback in Arabic and English
+confirmed four 1px outer borders and 0px borders on both translated inner labels.
+The Arabic/light Hybrid view and English/light and Arabic/dark author views were
+visually reviewed; the 969px viewport had no horizontal overflow. Language
+switching retains the current anchored section. Source filters and calculated
+data remain the existing implementation.
+
+Maintenance still starts from the templates. `site-icons.html` supplies the
+shared inline symbols; `atlas-lines.svg` is the local decorative background.
+The generator derives an asset query version from CSS/JS/vector contents to
+invalidate old cached presentation. Repository checks passed 150 documentation
+links, 63 local HTML references/anchors, the CSS background path, generated-page
+matching and the existing scientific/help/catalogue contracts.

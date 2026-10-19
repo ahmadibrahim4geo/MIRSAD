@@ -5,9 +5,10 @@
   <title>دليل مصادر المناخ | مرصاد</title>
   <meta name="description" content="مصادر المناخ المدعومة في مرصاد: العناصر والتغطية والدقة وتسجيل الدخول، بالعربية والإنجليزية.">
   <link rel="icon" href="../../assets/mirsad-favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/site.css"><script src="../../assets/site.js" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v={{ASSET_VERSION}}"><script src="../../assets/site.js?v={{ASSET_VERSION}}" defer></script>
 </head>
 <body>
+{{ICON_SPRITE}}
 <a class="skip" href="#content"><span data-language="ar" lang="ar">انتقل إلى المحتوى</span><span data-language="en" lang="en">Skip to content</span></a>
 <header class="site-header"><div class="wrap header-row">
   <a class="brand" href="../../index.html" data-keep-language><img src="../../assets/mirsad-icon-dark.svg" alt="" width="37" height="37"><span>MIRSAD<small><span data-language="ar" lang="ar">مرصاد · دليل المصادر</span><span data-language="en" lang="en">Climate source directory</span></small></span></a>
@@ -42,7 +43,7 @@
       <div class="empty" data-filter-empty="sources" hidden><span data-language="ar" lang="ar">لا توجد نتائج بهذه الاختيارات. جرّب مسح البحث أو تغيير الأداة.</span><span data-language="en" lang="en">No matching sources. Clear the search or choose another tool.</span></div>
       <section class="card" id="hybrid">
         <h2><span data-language="ar" lang="ar">النمط الهجين: تتابع واضح للمصادر</span><span data-language="en" lang="en">Hybrid: an ordered source pipeline</span></h2>
-        <div class="pipeline guide-intro"><span>NOAA GSOD</span><i>→</i><span>ERA5 / ERA5-Land</span><i>→</i><span>NASA POWER</span><i>→</i><span><span data-language="ar" lang="ar">استكمال شهري اختياري</span><span data-language="en" lang="en">Optional monthly fill</span></span></div>
+        <div class="pipeline"><span class="pipeline-step">NOAA GSOD</span><i aria-hidden="true">→</i><span class="pipeline-step">ERA5 / ERA5-Land</span><i aria-hidden="true">→</i><span class="pipeline-step">NASA POWER</span><i aria-hidden="true">→</i><span class="pipeline-step"><span data-language="ar" lang="ar">استكمال شهري اختياري</span><span data-language="en" lang="en">Optional monthly fill</span></span></div>
         <p><span data-language="ar" lang="ar">ينتهي كل مصدر لجميع المواقع المختارة، ثم يُطلب من التالي استكمال الخلايا المفقودة فقط. هجين النقاط العادية يبدأ من ERA5 دون رصد NOAA. القيم الصالحة الأعلى أولوية لا تتغير، ويُحفظ مصدر كل قيمة. الاستكمال الشهري منفصل عن الرصد اليومي ولا يضمن اكتمال جميع الفترات.</span><span data-language="en" lang="en">Finish each source across the selected network, then ask the next source for missing cells only. Arbitrary-point Hybrid starts with ERA5 and skips NOAA observations. Valid higher-priority values and per-value provenance remain intact. Monthly filling is separate from daily observations and does not guarantee complete periods.</span></p>
         <div class="callout"><span data-language="ar" lang="ar">مهم عند قراءة النتائج: يُحسب متوسط المطر من مجاميع الفترات الصالحة. يمكن تسمية الخريطة «متوسط هطول الأمطار»؛ المعادلات وتفسير كل عمود يوضحان فترة التجميع ووحدتها. قيمة المطر المفقودة تظل مفقودة، وليست صفرًا.</span><span data-language="en" lang="en">Reading the output: mean precipitation summarizes valid period totals. Concise mean-rainfall map titles are appropriate; the formula/field reference explains the accumulation period and unit. Missing rainfall remains missing, never zero.</span></div>
         <div class="actions"><a class="button" href="../../Help/index.html#providers"><span data-language="ar" lang="ar">شرح المصادر في المساعدة</span><span data-language="en" lang="en">Sources in the help centre</span></a><a class="button" href="../05_Climate_Data_Sources_Directory/SOURCES_AR.md">الدليل العربي (Markdown)</a><a class="button" href="../05_Climate_Data_Sources_Directory/SOURCES_EN.md">English guide (Markdown)</a></div>

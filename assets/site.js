@@ -48,7 +48,11 @@
     });
     document.querySelectorAll('[data-filter-controls]').forEach(controls => filter(controls.dataset.filterControls));
     save('mirsad.site.language', language);
-    if (updateURL) { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url); }
+    if (updateURL) {
+      const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url);
+      const anchor = document.getElementById(location.hash.slice(1));
+      if (anchor) requestAnimationFrame(() => anchor.scrollIntoView({block:'start', behavior:'instant'}));
+    }
   }
   if (languageButton) languageButton.addEventListener('click', () => { language = language === 'ar' ? 'en' : 'ar'; applyLanguage(true); });
   document.querySelector('[data-toggle-theme]')?.addEventListener('click', () => { root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; save('mirsad.site.theme', root.dataset.theme); });
@@ -71,5 +75,13 @@
     document.querySelectorAll('[data-filter-controls="sources"] input,[data-filter-controls="sources"] select').forEach(field => { field.value = ''; });
     filter('sources');
   }));
+  function markCurrentSource() {
+    document.querySelectorAll('.directory-nav a[href^="#"]').forEach(link => {
+      if (link.hash === location.hash) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('hashchange', markCurrentSource);
+  markCurrentSource();
   applyLanguage();
 })();

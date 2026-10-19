@@ -2,6 +2,7 @@
 from collections import Counter
 from html.parser import HTMLParser
 import json
+import re
 from urllib.parse import unquote, urlsplit
 
 from build_website import ROOT, SOURCE_PAGE, render, source_cards, MODULES, home_cards
@@ -60,6 +61,12 @@ def main():
                     assert unquote(url.fragment) in parsed.ids,(path,link)
     assert documents[SOURCE_PAGE].source_ids==[s['id'] for s in data['sources']]
     assert documents[ROOT/'index.html'].modules==len(MODULES)==19
+    css=(ROOT/'assets/site.css').read_text(encoding='utf-8')
+    assert not re.search(r'\.pipeline\s+span\s*\{',css),'Only direct pipeline steps may be framed; translated labels must not get a second border'
+    for resource in re.findall(r"url\(['\"]?([^)'\"]+)",css):
+        assert (ROOT/'assets'/resource).is_file(),resource
+    home=(ROOT/'index.html').read_text(encoding='utf-8')
+    assert all(key in home for key in ('class="author-bio"','class="consultation"','#icon-github','#icon-mail','#icon-whatsapp'))
     for path in (ROOT/'Documents/04_Interactive_HTML_Guides').glob('*.html'):
         assert 'href="../../climate-sources.html"' not in path.read_text(encoding='utf-8-sig'),path
     print('Website passed:',checked,'local links/assets/anchors;',len(data['sources']),'fully localized source profiles; 19 registry modules; generated pages and runtime snapshots unchanged.')

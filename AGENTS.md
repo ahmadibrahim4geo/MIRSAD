@@ -69,6 +69,12 @@ Update templates instead of editing generated HTML alone. Run
 `scripts/check_website.py` for local links/anchors, translation completeness and
 generated drift. See the new folder's README for maintenance and scope.
 
+The subsequent design revision restores the full developer biography, consulting
+panel and local SVG contact icons. Atlas-themed styles use paired light/dark
+tokens; Hybrid borders target `.pipeline > .pipeline-step` only, never every
+nested span. Asset query versions derive from CSS/JS/vector content during page
+generation so published changes do not reuse cached old styles.
+
 Use the independent Desktop `.venv` (Python 3.12 x64) for Desktop checks/builds,
 and a compatible licensed ArcGIS Python for native checks. From repository root:
 

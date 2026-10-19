@@ -3,6 +3,7 @@
 No runtime/scientific data is changed. Local assets also work with file:// URLs.
 """
 import html
+import hashlib
 from pathlib import Path
 import sys
 
@@ -52,6 +53,9 @@ def source_cards(data):
 
 def render(template, values):
     text=(ROOT/'scripts/templates'/template).read_text(encoding='utf-8')
+    signature=''.join((ROOT/'assets'/name).read_text(encoding='utf-8') for name in ('site.css','site.js','atlas-lines.svg'))
+    text=text.replace('{{ASSET_VERSION}}',hashlib.sha256(signature.encode('utf-8')).hexdigest()[:12])
+    text=text.replace('{{ICON_SPRITE}}',(ROOT/'scripts/templates/site-icons.html').read_text(encoding='utf-8'))
     for key,value in values.items():text=text.replace('{{'+key+'}}',str(value))
     if '{{' in text:raise ValueError('Unresolved website template placeholder')
     return text

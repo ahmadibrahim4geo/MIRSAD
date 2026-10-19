@@ -5,9 +5,17 @@
   <title>دليل مصادر المناخ | مرصاد</title>
   <meta name="description" content="مصادر المناخ المدعومة في مرصاد: العناصر والتغطية والدقة وتسجيل الدخول، بالعربية والإنجليزية.">
   <link rel="icon" href="../../assets/mirsad-favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/site.css"><script src="../../assets/site.js" defer></script>
+  <link rel="stylesheet" href="../../assets/site.css?v=a31c0186c412"><script src="../../assets/site.js?v=a31c0186c412" defer></script>
 </head>
 <body>
+<svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><defs>
+  <symbol id="icon-github" viewBox="0 0 24 24"><path d="M9 19c-4 1-4-2-5-2m10 5v-3.5c0-1 .1-1.5-.5-2 3-.3 6-1.4 6-6a4.8 4.8 0 0 0-1.3-3.4c.1-.4.6-1.8-.2-3.5 0 0-1.1-.4-3.6 1.3a12 12 0 0 0-6.8 0C5.1 3.2 4 3.6 4 3.6c-.8 1.7-.3 3.1-.2 3.5A4.8 4.8 0 0 0 2.5 10.5c0 4.6 3 5.7 6 6-.5.5-.5 1.1-.5 2V22"/></symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+  <symbol id="icon-whatsapp" viewBox="0 0 24 24"><path d="M20.7 11.5a8.8 8.8 0 0 1-13 8L3 21l1.5-4.6a8.8 8.8 0 1 1 16.2-4.9Z"/><path d="M8 7.5c-1 3 2.5 6.8 5.5 8l2-1.5-2-2-1 1c-1.5-.8-2.7-2-3.5-3.5l1-1-2-2Z"/></symbol>
+  <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="icon-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16"/></symbol>
+</defs></svg>
+
 <a class="skip" href="#content"><span data-language="ar" lang="ar">انتقل إلى المحتوى</span><span data-language="en" lang="en">Skip to content</span></a>
 <header class="site-header"><div class="wrap header-row">
   <a class="brand" href="../../index.html" data-keep-language><img src="../../assets/mirsad-icon-dark.svg" alt="" width="37" height="37"><span>MIRSAD<small><span data-language="ar" lang="ar">مرصاد · دليل المصادر</span><span data-language="en" lang="en">Climate source directory</span></small></span></a>
@@ -106,7 +114,7 @@
       <div class="empty" data-filter-empty="sources" hidden><span data-language="ar" lang="ar">لا توجد نتائج بهذه الاختيارات. جرّب مسح البحث أو تغيير الأداة.</span><span data-language="en" lang="en">No matching sources. Clear the search or choose another tool.</span></div>
       <section class="card" id="hybrid">
         <h2><span data-language="ar" lang="ar">النمط الهجين: تتابع واضح للمصادر</span><span data-language="en" lang="en">Hybrid: an ordered source pipeline</span></h2>
-        <div class="pipeline guide-intro"><span>NOAA GSOD</span><i>→</i><span>ERA5 / ERA5-Land</span><i>→</i><span>NASA POWER</span><i>→</i><span><span data-language="ar" lang="ar">استكمال شهري اختياري</span><span data-language="en" lang="en">Optional monthly fill</span></span></div>
+        <div class="pipeline"><span class="pipeline-step">NOAA GSOD</span><i aria-hidden="true">→</i><span class="pipeline-step">ERA5 / ERA5-Land</span><i aria-hidden="true">→</i><span class="pipeline-step">NASA POWER</span><i aria-hidden="true">→</i><span class="pipeline-step"><span data-language="ar" lang="ar">استكمال شهري اختياري</span><span data-language="en" lang="en">Optional monthly fill</span></span></div>
         <p><span data-language="ar" lang="ar">ينتهي كل مصدر لجميع المواقع المختارة، ثم يُطلب من التالي استكمال الخلايا المفقودة فقط. هجين النقاط العادية يبدأ من ERA5 دون رصد NOAA. القيم الصالحة الأعلى أولوية لا تتغير، ويُحفظ مصدر كل قيمة. الاستكمال الشهري منفصل عن الرصد اليومي ولا يضمن اكتمال جميع الفترات.</span><span data-language="en" lang="en">Finish each source across the selected network, then ask the next source for missing cells only. Arbitrary-point Hybrid starts with ERA5 and skips NOAA observations. Valid higher-priority values and per-value provenance remain intact. Monthly filling is separate from daily observations and does not guarantee complete periods.</span></p>
         <div class="callout"><span data-language="ar" lang="ar">مهم عند قراءة النتائج: يُحسب متوسط المطر من مجاميع الفترات الصالحة. يمكن تسمية الخريطة «متوسط هطول الأمطار»؛ المعادلات وتفسير كل عمود يوضحان فترة التجميع ووحدتها. قيمة المطر المفقودة تظل مفقودة، وليست صفرًا.</span><span data-language="en" lang="en">Reading the output: mean precipitation summarizes valid period totals. Concise mean-rainfall map titles are appropriate; the formula/field reference explains the accumulation period and unit. Missing rainfall remains missing, never zero.</span></div>
         <div class="actions"><a class="button" href="../../Help/index.html#providers"><span data-language="ar" lang="ar">شرح المصادر في المساعدة</span><span data-language="en" lang="en">Sources in the help centre</span></a><a class="button" href="../05_Climate_Data_Sources_Directory/SOURCES_AR.md">الدليل العربي (Markdown)</a><a class="button" href="../05_Climate_Data_Sources_Directory/SOURCES_EN.md">English guide (Markdown)</a></div>
