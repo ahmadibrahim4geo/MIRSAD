@@ -1,5 +1,7 @@
 # ArcGIS toolboxes
 
+Developer handoff and completed work: [AGENTS.md](AGENTS.md).
+
 Open these Python toolboxes from the Catalog pane in ArcMap or ArcGIS Pro:
 
 | File | Purpose |

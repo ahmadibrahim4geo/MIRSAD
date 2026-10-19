@@ -2,6 +2,96 @@
 
 Read the root AGENTS.md, `docs/STATUS.md` and `docs/BACKLOG.md` first. Original product requirements are retained under `docs/architecture/` and `docs/design/reference/`. This file describes the development contract; it does not authorize publishing an unapproved release.
 
+## Development history and current handoff — 19 October 2026
+
+The detailed record is [docs/CHANGELOG.md](docs/CHANGELOG.md), with evidence in
+[docs/reports/](docs/reports/). The root handoff records the shared chronology;
+these are the Desktop-specific implementation decisions future work must retain.
+
+1. **Foundation, 17 October:** audited the legacy data/contracts and created an
+   independent x64 app, approved branding, embedded catalogue and FileGDB/GPKG/
+   Excel exports. Vendored 38 pure calculations rather than importing ArcGIS.
+   Early 0.1/0.2 milestones are dated local deliveries consolidated into the
+   first source commit `b8a97c4` on 19 October.
+2. **Workspace and isolation:** native map/layer controls, Add Data, coordinate
+   and file inputs, study boundaries, multi-station selection, projected outputs,
+   interpolation/GeoTIFF/PDF and read-only result previews. Bounded JSON workers
+   isolate native parsing/calculation/export crashes; cancellation and a later
+   successful job were tested. The browser design concept is a reference only,
+   not the application engine or an additional executable.
+3. **UI rework/dev1–dev4, 18 October:** neutral dark/light themes, native resize
+   behavior, compact map navigation and basemap icon/gallery, transient outside-
+   click dismissal, translated controls and guide. Removed Google/Microsoft/API-
+   key basemap connections. Three tools own independent input/climate/raster/
+   output drafts; switching tools retains them. Raster controls are explicit.
+4. **CRS/dev5:** embedded Pro/Esri hierarchy, geographic/projected categories,
+   continental/UTM branches and hemispheres, favorites, layer CRS and search.
+   Read `docs/reports/CRS_BROWSER_REWORK.md`; missing datum grids still matter.
+5. **Sources/dev6–dev7:** independent sources, staged station Hybrid, any-point
+   Hybrid and per-variable/whole-interval Auto resolution. Implemented product
+   adapters and native regional extraction; monthly/composite coverage remains
+   explicit. Need Sign In is per source, with user credentials in memory/stdin,
+   never saved to jobs/projects/logs. Live CDS/IMERG acceptance is still open.
+6. **Help/dev8, 19 October:** 45 bilingual topics in native Qt, standalone mode
+   of the same EXE, offline HTML and two real CHMs. Tree/search/favorites,
+   history, font/theme controls and PDF/printing use the same content. Help-only
+   launch does not import the map or ArcPy. Build-time CHM compiler is pinned,
+   signature-checked and locally extracted with local COM activation; do not
+   install/replace system DLLs or commit its binaries.
+7. **Scientific field dictionary:** 19 groups/521 possible fields have formulas,
+   source variables, coverage, examples and specific bilingual names/periods/
+   units/operations. `ET_Annual_Mean` is the documented climatological PET sum;
+   annual and monthly interannual ranges differ. Keep concise mean map names
+   and explain accumulation in methodology. See commit `fd8dae1` and the field
+   clarification report. Scientific functions and field names were not changed
+   by that documentation correction.
+8. **Header and repository:** `5856e98` limits the subtitle to the active
+   language; `e356ff7` moves ArcGIS files to `../Toolboxes/`, renames shared
+   support to `../mirsad_core/`, groups maintenance scripts and reorganizes docs.
+   Completed/redundant plans became status/backlog/change log. Product/design
+   requirements remain marked reference material, not fresh execution prompts.
+
+## Current acceptance and unresolved work
+
+- Version **0.4.0.dev8**; all current binary paths below are development unless
+  an explicitly approved stable release is present. Later help/layout changes
+  retained this version, so identify candidates by exact hashes as well.
+- Latest organization baseline: **63 Desktop tests**, real frozen worker/GIS/
+  raster/PDF/workspace/help gates and installer installation/readback/uninstall/
+  user-file preservation passed. 18 packaged runtime modules matched source.
+- A clean staged-source export passed asset/catalogue prep, scientific vendoring,
+  help/contracts, documentation links and cold tool imports using the existing
+  QA interpreter. This was not a new-environment full PyInstaller rebuild.
+- Catalogue has 28,066 location records; preserve current country policy and
+  station keys. Historical reports/design examples with 86 Egyptian stations
+  do not override the current 85-entry display. No field verification is implied.
+- Remaining: native ArcMap processing, exact advanced Toolbox/Desktop input/
+  output/raster parity, authenticated CDS/IMERG, full DPI/accessibility matrix,
+  ArcGIS-native help rendering and the documented legacy LST delta-unit defect.
+  Keep these in `docs/BACKLOG.md`; do not describe the platform as fully accepted.
+
+## Build, evidence and publication entry points
+
+- `scripts/build_development.ps1 -PrepareOnly`: prepare/validate sources, assets
+  and shared help, run tests, build and accept a candidate without replacing the
+  current development app. Normal build replaces only after validation.
+- `scripts/finalize_build.py --install-verified`: install the unchanged accepted
+  candidate; it verifies the recorded bundle/EXE hashes before replacement.
+- `scripts/build_installer.py` and `scripts/verify_installer.py`: build one
+  development installer, exercise disposable QA installation and preserve user
+  files. Never run a production install as an automated acceptance shortcut.
+- `scripts/verify_packaged_source_equivalence.py`: read-only comparison of
+  packaged Python against current source; do not execute extracted code.
+- Shared help sources are in `../Documents/Help/`; generation uses
+  `scripts/build_user_guide.py` and `scripts/build_chm.py`. Browser guides are in
+  `docs/user/`; current reports are in `docs/reports/`. Do not recreate old plans
+  or the retired flat report locations.
+- The user explicitly authorized source/docs plus the current verified installer
+  on GitHub on 19 October 2026. That candidate is a development prerelease, not
+  a stable promotion. `../Documents/DEVELOPMENT_PUBLICATION.md` records the exact
+  tag, source revision, installer checksum, acceptance and remaining limits.
+  Runtime folders stay out of Git; publish binaries as release assets.
+
 ## Product requirements
 - One Windows application with a professional, direct Arabic/English interface using the approved MIRSAD identity.
 - No ArcGIS, ArcPy, toolbox path, ArcGIS Python, or ArcGIS DLL dependency at runtime.

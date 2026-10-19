@@ -142,3 +142,13 @@ Moved ArcGIS entry points/metadata to `Toolboxes/`, renamed runtime support to
 Consolidated obsolete execution plans into status, backlog and this delivery log.
 Native Pro parameter definitions and reviewed scientific signatures are unchanged.
 Validation and preservation evidence: [reorganization report](reports/REPOSITORY_REORGANIZATION.md).
+
+## Agent handoff and development distribution — 19 October 2026
+
+Expanded the root and Desktop AGENTS.md and added a scoped Toolbox AGENTS.md.
+They record the implementation chronology, current architecture/source/scientific
+contracts, actual acceptance, build/verification entry points and remaining work.
+The user explicitly requested the source, documentation and verified current
+development installer on GitHub; this is a development prerelease rather than
+stable promotion. Exact artifact identity and publication verification are in
+[the publication record](../../Documents/DEVELOPMENT_PUBLICATION.md).

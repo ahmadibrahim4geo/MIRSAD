@@ -14,8 +14,9 @@ def main():
            'MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt')
     for name in names:assert (ROOT/'Toolboxes'/name).is_file(),name
     assert (ROOT/'mirsad_core/__init__.py').is_file()
-    pages=[ROOT/name for name in ('README.md','CONTRIBUTING.md','CONTRIBUTING_AR.md',
-           'Toolboxes/README.md','mirsad_core/README.md','MIRSAD Desktop/README.md')]
+    pages=[ROOT/name for name in ('README.md','AGENTS.md','CONTRIBUTING.md','CONTRIBUTING_AR.md',
+           'Toolboxes/README.md','Toolboxes/AGENTS.md','mirsad_core/README.md',
+           'MIRSAD Desktop/README.md','MIRSAD Desktop/AGENTS.md','Documents/DEVELOPMENT_PUBLICATION.md')]
     pages+=list((ROOT/'MIRSAD Desktop/docs').rglob('*.md'))
     checked=0;missing=[]
     for path in pages:
