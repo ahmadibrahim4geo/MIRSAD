@@ -10,8 +10,8 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from utils.climate_products import PRODUCTS,REGIONAL,GHCN
-from utils.hybrid_pipeline import OM_DAILY,OM_HOURLY
+from mirsad_core.climate_products import PRODUCTS,REGIONAL,GHCN
+from mirsad_core.hybrid_pipeline import OM_DAILY,OM_HOURLY
 
 UNITS={"T2M":"deg C","T2M_MAX":"deg C","T2M_MIN":"deg C","T2MDEW":"deg C","TS":"deg C",
        "PRECTOTCORR":"mm per day or native month total","RH2M":"percent","CLOUD_AMT":"percent",
@@ -64,7 +64,7 @@ def main():
             if marker in existing:existing=existing[:existing.index(marker)].rstrip()
             guide.write_text(existing+'\n\n'+marker+'\n\n'+'\n'.join(lines),encoding='utf-8')
         if language=='EN':
-            (ROOT/'MIRSAD Desktop/docs/CLIMATE_SOURCES_AND_RESOLUTION.md').write_text('\n'.join(lines)+'\n\nSee IMPLEMENTATION_PLAN.md for acceptance evidence and remaining output-parity work.\n',encoding='utf-8')
+            (ROOT/'MIRSAD Desktop/docs/reports/CLIMATE_SOURCES_AND_RESOLUTION.md').write_text('\n'.join(lines)+'\n\nSee [delivery history](../CHANGELOG.md) and [remaining work](../BACKLOG.md).\n',encoding='utf-8')
     page='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MIRSAD Climate Sources | مصادر مرصاد</title><style>body{font:16px/1.7 system-ui;margin:2rem auto;padding:0 1.2rem;max-width:1100px;background:#f8f8f8;color:#222}article{border:1px solid #ccc;border-radius:12px;padding:1.2rem;margin:1rem 0;background:white}a{color:#075b9f}h2{font-size:1.2rem}p{overflow-wrap:anywhere}@media(prefers-color-scheme:dark){body{background:#181818;color:#eee}article{background:#222;border-color:#444}a{color:#82c4ff}}</style></head><body><a href="index.html">MIRSAD</a><h1>Climate sources | مصادر المناخ</h1><p>2026-10-18 · Development / نسخة التطوير</p><section dir="rtl" lang="ar"><h1>العربية</h1>'+''.join(bodies['ar'])+'</section><section><h1>English</h1>'+''.join(bodies['en'])+'</section></body></html>'
     (ROOT/'climate-sources.html').write_text(page,encoding='utf-8')
     (ROOT/'Documents/05_Climate_Data_Sources_Directory/README.md').write_text('# Climate source directory | دليل المصادر\n\n[العربية](SOURCES_AR.md) · [English](SOURCES_EN.md) · [Website](../../climate-sources.html)\n\nGenerated from the implemented adapter registry by `scripts/build_climate_source_catalogue.py`. JSON snapshot: `data/climate_sources.json`; identical embedded Desktop snapshot.\n\nEarlier documents in this directory are historical references, not the implementation contract. The generated guides above supersede older completeness/provider claims. No source guarantees 100% coverage. Account products require the user’s own account; live authenticated verification is pending.\n',encoding='utf-8')

@@ -12,7 +12,7 @@ DOCS = os.path.join(BASE, "Documents")
 
 
 def load_defs():
-    txt = open(os.path.join(BASE, "utils", "generate_climate_styles.py"),
+    txt = open(os.path.join(BASE, "scripts", "styles", "generate_climate_styles.py"),
                encoding="utf-8", errors="ignore").read()
     styles = []
     for m in re.finditer(r"\{\s*\"category\":\s*\"([^\"]+)\"(.*?)\"id\":\s*\"([^\"]+)\"",

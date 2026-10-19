@@ -1,7 +1,7 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Test Suite: Multi-Level Smart Variable, Season, and Field Filtering System
-Target: POWER_Climate_Atlas_Generator_10_8.pyt
+Target: Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt
 Environment: ArcGIS Desktop 10.8 (Python 2.7)
 """
 import os
@@ -9,9 +9,9 @@ import sys
 
 _test_dir = os.path.dirname(os.path.abspath(__file__))
 BASE = os.path.dirname(_test_dir)
-PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+PYT = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(PYT):
-    PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
+    PYT = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt"))
 
 mod = type(sys)("mfilter")
 exec(compile(open(PYT, "rb").read(), PYT, "exec"), mod.__dict__)

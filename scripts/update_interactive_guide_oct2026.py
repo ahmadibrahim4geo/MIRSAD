@@ -160,9 +160,9 @@ def tab_inner(txt, tab_id):
 
 def build_fields_js():
     import re as _re
-    pyt_file = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+    pyt_file = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
     if not os.path.exists(pyt_file):
-        pyt_file = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+        pyt_file = os.path.join(BASE, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
     txt = open(pyt_file,
                encoding="utf-8", errors="ignore").read()
     m = _re.search(r"FIELD_DEFS = \[(.*?)\n\]", txt, re.S)

@@ -42,7 +42,7 @@ class TestDualLanguageMirsadTools(unittest.TestCase):
         mock_arcpy.da = types.SimpleNamespace()
 
         from importlib.machinery import SourceFileLoader
-        pyt_path = os.path.join(BASE_DIR, "MIRSAD_Weather_Stations_Atlas_Generator.pyt")
+        pyt_path = os.path.join(BASE_DIR, "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt")
         cls.mod = SourceFileLoader("mirsad_st_test", pyt_path).load_module("mirsad_st_test")
         cls.mod.arcpy = mock_arcpy
         cls.mod._core.arcpy = mock_arcpy

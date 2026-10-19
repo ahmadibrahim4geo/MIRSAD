@@ -10,8 +10,8 @@ This document formally certifies that an exhaustive, automated **Code-to-Documen
 
 - **Date of Audit**: October 2026
 - **Audited Source Code Files**:
-  1. `POWER_Climate_Atlas_Generator_10_8.pyt` (4,500+ lines)
-  2. `raster_atlas_generator.py` (2,800+ lines)
+  1. `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (4,500+ lines)
+  2. `Toolboxes/raster_atlas_generator.py` (2,800+ lines)
   3. `generate_excel_dictionary.py`
   4. `generate_master_atlas_excel.py`
   5. `migrate_legacy_database.py`

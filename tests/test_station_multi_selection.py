@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 import test_runtime_stability as support
-from utils.station_catalogue import load_catalogue, station_choices
+from mirsad_core.station_catalogue import load_catalogue, station_choices
 
 stations = support.stations
 

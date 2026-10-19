@@ -8,4 +8,4 @@ For a vulnerability, use GitHub's private reporting option **if enabled** on thi
 
 لا تنشر كلمات المرور أو رموز الدخول أو بيانات المشروعات الحساسة في Issues. استخدم الإبلاغ الخاص إن كان مفعّلًا، وإلا اطلب قناة خاصة برسالة عامة موجزة بلا تفاصيل استغلال أو أسرار. لا تعطل حماية Windows أو التحقق من الشهادات لتجاوز عطل تشغيل.
 
-See [Desktop boundaries and prior audit scope](MIRSAD%20Desktop/docs/SECURITY.md). A dependency audit is dated evidence, not a guarantee that the application is free of defects.
+See [Desktop boundaries and prior audit scope](MIRSAD%20Desktop/docs/development/SECURITY.md). A dependency audit is dated evidence, not a guarantee that the application is free of defects.

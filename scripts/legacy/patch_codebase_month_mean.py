@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Patches POWER_Climate_Atlas_Generator_10_8.pyt and raster_atlas_generator.py
+Patches Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt and Toolboxes/raster_atlas_generator.py
 to fully integrate *_Month_Mean fields, descriptive Arabic aliases, and shapefile mappings.
 """
 
 import sys
 import os
 
-PYT_FILE = r"d:\My Software\NASA POWER Climate Atlas Generator\POWER_Climate_Atlas_Generator_10_8.pyt"
-RAG_FILE = r"d:\My Software\NASA POWER Climate Atlas Generator\raster_atlas_generator.py"
+PYT_FILE = r"d:\My Software\NASA POWER Climate Atlas Generator\Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt"
+RAG_FILE = r"d:\My Software\NASA POWER Climate Atlas Generator\Toolboxes/raster_atlas_generator.py"
 
-# --- 1. PATCH POWER_Climate_Atlas_Generator_10_8.pyt ---
-print("Patching POWER_Climate_Atlas_Generator_10_8.pyt...")
+# --- 1. PATCH Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt ---
+print("Patching Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt...")
 with open(PYT_FILE, "r", encoding="utf-8") as f:
     pyt_content = f.read()
 
@@ -198,11 +198,11 @@ if old_code_2 in pyt_content:
 
 with open(PYT_FILE, "w", encoding="utf-8") as f:
     f.write(pyt_content)
-print("Finished patching POWER_Climate_Atlas_Generator_10_8.pyt\n")
+print("Finished patching Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt\n")
 
 
-# --- 2. PATCH raster_atlas_generator.py ---
-print("Patching raster_atlas_generator.py...")
+# --- 2. PATCH Toolboxes/raster_atlas_generator.py ---
+print("Patching Toolboxes/raster_atlas_generator.py...")
 with open(RAG_FILE, "r", encoding="utf-8") as f:
     rag_content = f.read()
 
@@ -285,5 +285,5 @@ if 'u"T_Month_Mean"' not in rag_content:
 
 with open(RAG_FILE, "w", encoding="utf-8") as f:
     f.write(rag_content)
-print("Finished patching raster_atlas_generator.py\n")
+print("Finished patching Toolboxes/raster_atlas_generator.py\n")
 print("ALL CODEBASE INTEGRATION COMPLETE!")

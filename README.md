@@ -28,6 +28,22 @@
 
 ---
 
+## تنظيم المستودع | Repository layout
+
+| Folder | Purpose |
+|---|---|
+| [Toolboxes](Toolboxes/README.md) | أدوات النقاط والمحطات والراستر وملفات ArcGIS المرافقة |
+| [mirsad_core](mirsad_core/README.md) | دعم المصادر والتنزيل والجودة والتكامل المشترك؛ الاسم البديل لـ utils |
+| [MIRSAD Desktop](MIRSAD%20Desktop/README.md) | التطبيق المستقل ومصدره وبناؤه واختباراته |
+| [Desktop documentation](MIRSAD%20Desktop/docs/README.md) | الحالة الحالية والمتبقي وسجل التغييرات والتقارير |
+| [Documents](Documents/) / [Help](Help/) | المنهجية والمحتوى المشترك والمساعدة العربية والإنجليزية وCHM |
+| [scripts](scripts/) / [tests](tests/) | الصيانة والبناء والتحقق؛ مولدات الستايل والتوثيق في مجلدات فرعية |
+| data / assets / style / Weather_Stations_Hub / Sample Data | الكتالوج والأصول ومراجع الستايل وبيانات المحطات والأمثلة |
+
+تغيّرت مسارات التولبوكس من جذر المستودع إلى `Toolboxes/`، واسم الحزمة من
+`utils` إلى `mirsad_core`. حدّث اتصال المجلد في ArcGIS، واحتفظ ببنية المستودع
+كاملة. ملفات المستخدم وقواعد البيانات لم تُنقل ضمن هذا التنظيم.
+
 ## ابدأ من هنا | Start here
 
 [نظرة عامة](#overview) · [التثبيت](#requirements) · [اختيار المحطات](#stations) · [الحزم](#modules) · [المصادر](#sources) · [النتائج](#outputs) · [التوثيق والتحقق](#documentation) · [English](#english)
@@ -42,16 +58,16 @@
 
 | المكوّن | الوظيفة | نقطة الدخول |
 | --- | --- | --- |
-| أداة المحطات | اختيار دولة ومحطة واحدة أو عدة محطات بالأسماء والأكواد؛ واجهتان عربية وإنجليزية | `MIRSAD_Weather_Stations_Atlas_Generator.pyt` |
-| صندوق أطلس النقاط | السلاسل الزمنية، حساب المؤشرات، التصدير والاستيفاء | `MIRSAD_Climate_Atlas_Generator_10_8.pyt` |
-| أداة الراستر | شبكات NASA POWER وCHIRPS وCHELSA أو نقاط محسوبة مسبقًا، ثم الاستيفاء والقص | `MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt` — صندوق مستقل |
+| أداة المحطات | اختيار دولة ومحطة واحدة أو عدة محطات بالأسماء والأكواد؛ واجهتان عربية وإنجليزية | `Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt` |
+| صندوق أطلس النقاط | السلاسل الزمنية، حساب المؤشرات، التصدير والاستيفاء | `Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt` |
+| أداة الراستر | شبكات NASA POWER وCHIRPS وCHELSA أو نقاط محسوبة مسبقًا، ثم الاستيفاء والقص | `Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt` — صندوق مستقل |
 | دليل المحطات | مواقع وأكواد المحطات وطبقاتها ومستكشفات HTML | `Weather_Stations_Hub/` |
 
 ## MIRSAD Desktop — نسخة التطوير المستقلة
 
 خطة دورة التطوير التالية، وتنظيم صناديق النقاط والمحطات والراستر، واختيار الدقة تلقائيًا لكل عنصر، وإضافة المصادر ومزامنة الأدلة والموقع مسجلة في [خطة التطوير المشتركة وسجل القرارات](Documents/DEVELOPMENT_ROADMAP.md). البنود المخططة ليست إعلانًا عن وظائف منفذة.
 
-بدأ تطوير تطبيق Windows مستقل داخل [MIRSAD Desktop](MIRSAD%20Desktop/README.md)، بكتالوج محطات مضمن وواجهة عربية/إنجليزية، وتصدير FileGDB وGeoPackage وExcel. يوجد مكان ثابت للتطوير ومكان ثابت للنسخة المعتمدة بعد الموافقة؛ لا يوجد إصدار Desktop منشور على GitHub Releases حتى الآن. راجع [خطة التنفيذ وحالة الوظائف](MIRSAD%20Desktop/IMPLEMENTATION_PLAN.md) و[دليل التطوير](AGENTS.md).
+بدأ تطوير تطبيق Windows مستقل داخل [MIRSAD Desktop](MIRSAD%20Desktop/README.md)، بكتالوج محطات مضمن وواجهة عربية/إنجليزية، وتصدير FileGDB وGeoPackage وExcel. يوجد مكان ثابت للتطوير ومكان ثابت للنسخة المعتمدة بعد الموافقة؛ لا يوجد إصدار Desktop منشور على GitHub Releases حتى الآن. راجع [الحالة الحالية والمتبقي](MIRSAD%20Desktop/docs/STATUS.md) و[دليل التطوير](AGENTS.md).
 
 تحديث dev8: مركز مساعدة محلي عربي/إنجليزي، 45 موضوعًا، ومعادلات العناصر الـ19 مرتبطة بـ521 حقلًا محسوبًا ممكنًا. يوجد فهرس وبحث ومفضلة وتنقل وطباعة داخل Desktop، وملفا Windows CHM ونسخة HTML من المحتوى نفسه. تبقى عناوين الخرائط موجزة مثل «متوسط هطول الأمطار»، ويشرح الدليل متوسط التراكميات والوحدات وشروط التغطية.
 
@@ -74,7 +90,7 @@
    git clone https://github.com/ahmadibrahim4geo/MIRSAD.git
    ```
 
-2. احتفظ بهيكل المجلدات؛ ملفات `.pyt` تعتمد على المحرك وملفات `utils/`، وأداة المحطات تعتمد على `Weather_Stations_Hub/`. تنزيل ملف `.pyt` منفرد لا يكفي.
+2. احتفظ بهيكل المجلدات؛ ملفات `.pyt` تعتمد على المحرك وملفات `mirsad_core/`، وأداة المحطات تعتمد على `Weather_Stations_Hub/`. تنزيل ملف `.pyt` منفرد لا يكفي.
 3. أضف صندوق الأدوات المطلوب عبر **Catalog / ArcToolbox → Add Toolbox**.
 4. افتح الأداة، وحدد المدخلات والمصدر والفترة والحزم ومجلد الإخراج، ثم شغّلها.
 
@@ -171,10 +187,10 @@
 
 ```text
 MIRSAD/
-├── MIRSAD_Climate_Atlas_Generator_10_8.pyt
-├── MIRSAD_Weather_Stations_Atlas_Generator.pyt
-├── raster_atlas_generator.py
-├── utils/                  # ملفات التشغيل المساعدة
+├── Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt
+├── Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt
+├── Toolboxes/raster_atlas_generator.py
+├── mirsad_core/                  # ملفات التشغيل المساعدة
 ├── Weather_Stations_Hub/   # دليل المحطات وطبقاتها ومستكشفاتها
 ├── assets/                 # الشعار المعتمد وملفات الموقع
 ├── Documents/              # الأدلة العلمية والتقنية
@@ -223,7 +239,7 @@ python -B tests/verify_native_offline.py
 
 **MIRSAD — Meteorological Integrated Reanalysis Spatial Atlas Database** is an ArcGIS toolkit for climate time series, station-location analysis, thematic atlases and geodatabases. The approved bilingual logo appears first in this README; its Arabic full name is **قاعدة بيانات الأطلس المكاني لإعادة التحليل المتكامل للأرصاد الجوية**.
 
-1. Download the **complete repository** and keep its folder structure, including `utils/`, the core engine and `Weather_Stations_Hub/`.
+1. Download the **complete repository** and keep its folder structure, including `mirsad_core/`, the core engine and `Weather_Stations_Hub/`.
 2. Add either Python toolbox through **Catalog / ArcToolbox → Add Toolbox**. Use the Python environment supplied with ArcMap or ArcGIS Pro and Spatial Analyst for the operations that require it.
 3. For a station subset, select **Select Specific Stations by Country (Multiple Selection)**, choose a region and country, then one or more named stations. Empty or stale selections never broaden into a whole-country run. Existing country-network, manual-ID and local-layer modes remain available.
 4. Select the provider, period, climate modules and output workspace, then run. NASA POWER and Open-Meteo are implemented for point/station-location queries; the online raster pipeline uses NASA POWER Regional. Direct NOAA, Hybrid and CDS downloads are not implemented.

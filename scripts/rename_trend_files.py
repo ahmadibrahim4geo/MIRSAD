@@ -49,7 +49,7 @@ from importlib.machinery import SourceFileLoader
 import xlrd
 pyt = SourceFileLoader(
     "pytmod",
-    r"D:\My Software\NASA POWER Climate Atlas Generator\POWER_Climate_Atlas_Generator_10_8.pyt").load_module()
+    r"D:\My Software\NASA POWER Climate Atlas Generator\Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt").load_module()
 xls = os.path.join(TABLES, "Trends_And_Anomalies.xls")
 wb = xlrd.open_workbook(xls)
 sheets = []

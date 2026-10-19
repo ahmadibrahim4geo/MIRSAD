@@ -5,8 +5,8 @@ patch_codebase_seasonal_and_monthly.py
 Applies all code modifications to:
 1. generate_excel_dictionary.py
 2. generate_master_atlas_excel.py
-3. POWER_Climate_Atlas_Generator_10_8.pyt
-4. raster_atlas_generator.py
+3. Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt
+4. Toolboxes/raster_atlas_generator.py
 """
 import io
 import os
@@ -74,13 +74,13 @@ if '"full_name": "T_Seasonal_Range"' not in dict_content:
     print("generate_excel_dictionary.py updated successfully.")
 
 # -------------------------------------------------------------
-# 2. Update POWER_Climate_Atlas_Generator_10_8.pyt
+# 2. Update Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt
 # -------------------------------------------------------------
-pyt_path = os.path.join(BASE_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+pyt_path = os.path.join(BASE_DIR, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
 with io.open(pyt_path, "r", encoding="utf-8") as f:
     pyt_content = f.read()
 
-print("Patching POWER_Climate_Atlas_Generator_10_8.pyt...")
+print("Patching Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt...")
 
 # 2A. Update point computation functions to calculate *_Seasonal_Range
 # Temperature
@@ -236,16 +236,16 @@ if '"PSL_Month_Mean": "Isobars_PSL_Month_Mean"' not in pyt_content:
 
 with io.open(pyt_path, "w", encoding="utf-8") as f:
     f.write(pyt_content)
-print("POWER_Climate_Atlas_Generator_10_8.pyt updated successfully.")
+print("Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt updated successfully.")
 
 # -------------------------------------------------------------
-# 3. Update raster_atlas_generator.py
+# 3. Update Toolboxes/raster_atlas_generator.py
 # -------------------------------------------------------------
-rag_path = os.path.join(BASE_DIR, "raster_atlas_generator.py")
+rag_path = os.path.join(BASE_DIR, "Toolboxes/raster_atlas_generator.py")
 with io.open(rag_path, "r", encoding="utf-8") as f:
     rag_content = f.read()
 
-print("Patching raster_atlas_generator.py...")
+print("Patching Toolboxes/raster_atlas_generator.py...")
 
 # Add Seasonal Range fields to MODULE_INDICATOR_FIELDS
 rag_mod_updates = [
@@ -264,11 +264,11 @@ for old_s, new_s in rag_mod_updates:
     if new_s not in rag_content and old_s in rag_content:
         rag_content = rag_content.replace(old_s, new_s, 1)
 
-# Add to SHP_FIELD_MAP in raster_atlas_generator.py
+# Add to SHP_FIELD_MAP in Toolboxes/raster_atlas_generator.py
 if '"T_Seasonal_Range": "T_SeaRng"' not in rag_content:
     rag_content = rag_content.replace('    "T_Month_Mean": "T_MonMean",\n', '    "T_Month_Mean": "T_MonMean",\n' + shp_ranges, 1)
 
-# Add Generate_Monthly_Rasters parameter to getParameterInfo() in raster_atlas_generator.py
+# Add Generate_Monthly_Rasters parameter to getParameterInfo() in Toolboxes/raster_atlas_generator.py
 rag_param_target = '''        p_tscope.category = "Time Window"
         p_tscope.description = (
             "TEMPORAL MATRIX SCOPE. Select which temporal scopes and seasons to compute and map "
@@ -298,7 +298,7 @@ if 'p_monthly_rasters = arcpy.Parameter(' not in rag_content:
     rag_content = rag_content.replace(rag_param_target, rag_param_target + rag_param_addition, 1)
     rag_content = rag_content.replace('p_tscope, p_filter_scope,', 'p_tscope, p_monthly_rasters, p_filter_scope,', 1)
 
-# In _build_wind_vectors in raster_atlas_generator.py
+# In _build_wind_vectors in Toolboxes/raster_atlas_generator.py
 rag_wv_target = '''        periods = [
             ("Annual", "W_Spd_Annual_Mean", "W_Dir_Annual_Mean"),'''
 rag_wv_repl = '''        periods = [
@@ -309,4 +309,4 @@ if '("Month", "W_Spd_Month_Mean", "W_Dir_Month_Mean")' not in rag_content:
 
 with io.open(rag_path, "w", encoding="utf-8") as f:
     f.write(rag_content)
-print("raster_atlas_generator.py updated successfully.")
+print("Toolboxes/raster_atlas_generator.py updated successfully.")

@@ -1,6 +1,6 @@
 # 06. دليل منهجية إضافة عنصر مناخي جديد للأطلس والتطبيق التدريجي على قواعد البيانات المكتملة
 
-> **تحديث تطوير — 17 أكتوبر 2026:** هذا دليل للـToolbox ويتضمن أعدادًا وافتراضات تاريخية. قبل تنفيذ تعديلات جديدة، راجع [ملحق MIRSAD Desktop والمنهجية الحالية](../../MIRSAD%20Desktop/docs/METHODOLOGY_REVIEW.md)؛ أعداد المعاملات الحالية تُفحص من الكود، وتنزيل Hybrid/NOAA المباشر غير منفذ، وExcel هو التصدير المعتاد. تبقى أمثلة ArcPy مرجعًا للمسار القديم.
+> **تحديث تطوير — 17 أكتوبر 2026:** هذا دليل للـToolbox ويتضمن أعدادًا وافتراضات تاريخية. قبل تنفيذ تعديلات جديدة، راجع [ملحق MIRSAD Desktop والمنهجية الحالية](../../MIRSAD%20Desktop/docs/reports/METHODOLOGY_REVIEW.md)؛ أعداد المعاملات الحالية تُفحص من الكود، وتنزيل Hybrid/NOAA المباشر غير منفذ، وExcel هو التصدير المعتاد. تبقى أمثلة ArcPy مرجعًا للمسار القديم.
 ## منظومة مِرصاد (MIRSAD) للأطالس المناخية وقواعد البيانات الجغرافية
 ### Multi-source Integrated Reanalysis & Surface Atlas Database — SOP Manual
 
@@ -71,9 +71,9 @@
 
 ```
 MIRSAD Platform Codebase
-├── MIRSAD_Climate_Atlas_Generator_10_8.pyt   (الأداة الرئيسية: سحب، حساب المؤشرات، تصدير GDB وإكسل)
-├── MIRSAD_Weather_Stations_Atlas_Generator.pyt (أداة المحطات الأرضية: استخلاص وفلترة المحطات)
-├── raster_atlas_generator.py                (محرك الراستر: استيفاء IDW/Kriging/Spline، تقطيع وماسك)
+├── Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt   (الأداة الرئيسية: سحب، حساب المؤشرات، تصدير GDB وإكسل)
+├── Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt (أداة المحطات الأرضية: استخلاص وفلترة المحطات)
+├── Toolboxes/raster_atlas_generator.py                (محرك الراستر: استيفاء IDW/Kriging/Spline، تقطيع وماسك)
 ├── generate_excel_dictionary.py             (مولد القواميس الشاملة وحقول الأطلس)
 └── generate_master_atlas_excel.py           (مولد دليل التصنيف الماستر وفئات التلوين)
 ```
@@ -91,7 +91,7 @@ MIRSAD Platform Codebase
 
 ---
 
-### الخطوة 1.2: تعديل الأداة الرئيسية `POWER_Climate_Atlas_Generator_10_8.pyt`
+### الخطوة 1.2: تعديل الأداة الرئيسية `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 
 افتح الملف وقم بإجراء الإضافات في المواقع المحددة أدناه:
 
@@ -254,7 +254,7 @@ if "LST_Annual_Mean" in row:
 
 ---
 
-### الخطوة 1.3: تعديل أداة الراستر `raster_atlas_generator.py`
+### الخطوة 1.3: تعديل أداة الراستر `Toolboxes/raster_atlas_generator.py`
 
 1. سجل الموديول في القوائم الرئيسية (`PRIMARY_MODULES_ALL`، `MODULE_FOLDER`، `MODULE_SHORT`، `POWER_PRIMARY_PARAM`، `COLOR_RAMPS`).
 2. أضف الموديول في دالة `get_element_source_metadata` الخاصة بأداة الراستر.
@@ -309,7 +309,7 @@ _MONTHLY_LABEL_BASE["Land Surface Temperature"] = ("LST", "Mean Land Surface Tem
 ### الخطوة 1.5: الاختبار والتحقق الآلي للكود
 شغل حزم الاختبارات للتأكد من سلامة الكود بنسبة 100%:
 ```powershell
-python -m py_compile MIRSAD_Climate_Atlas_Generator_10_8.pyt MIRSAD_Weather_Stations_Atlas_Generator.pyt raster_atlas_generator.py
+python -m py_compile Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt Toolboxes/raster_atlas_generator.py
 python tests/test_power_atlas_108_offline.py
 python tests/test_weather_stations_atlas.py
 python tests/test_excel_export_108.py
@@ -492,7 +492,7 @@ python generate_master_atlas_excel.py --base_dir "C:\Users\ahmad\Desktop\Egypt C
 | # | عنصر الفحص | المعيار المقبول | أداة التحقق |
 |:---:|:---|:---|:---|
 | **1** | عدد باراميترات الأداة الرئيسية | 65 باراميتر بالضبط | كود `.pyt` في ArcMap |
-| **2** | عدد باراميترات أداة الراستر | 33 باراميتر بالضبط | كود `raster_atlas_generator.py` |
+| **2** | عدد باراميترات أداة الراستر | 33 باراميتر بالضبط | كود `Toolboxes/raster_atlas_generator.py` |
 | **3** | عدد سجلات الـ Feature Class | 646 نقطة (مطابق لطبقة العينة) | `arcpy.GetCount_management` |
 | **4** | إجمالي حقول الـ Feature Class | 47 حقلاً (12 إداري + 35 مؤشر) | `arcpy.ListFields` |
 | **5** | تطابق أسماء الحقول مع الألياس | `name == aliasName` بنسبة 100% | `arcpy.ListFields` |

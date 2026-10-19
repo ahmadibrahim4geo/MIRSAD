@@ -31,7 +31,7 @@ The shared `data/stations.sqlite` snapshot and NOAA audit reference are versione
 
 Legacy suites run in separate processes because their ArcPy doubles differ. Never use an all-files root discovery as a substitute: that folder also contains explicit licensed native scripts. Native Pro/ArcMap acceptance and live account downloads are distinct checks; ordinary CI does not establish them.
 
-Use a focused branch and PR with the user-visible problem, final behavior, evidence and limits. Preserve Python 2.7 syntax in shared toolboxes and `utils/`. Put independent UI/runtime code only under `MIRSAD Desktop/`. Keep downloads, calculations, storage and UI separate. Follow [AGENTS.md](AGENTS.md) and the Desktop guide. Do not add generated test workspaces, virtual environments, credentials, application binaries, installers, or user project/data changes.
+Use a focused branch and PR with the user-visible problem, final behavior, evidence and limits. Preserve Python 2.7 syntax in shared toolboxes and `mirsad_core/`. Put independent UI/runtime code only under `MIRSAD Desktop/`. Keep downloads, calculations, storage and UI separate. Follow [AGENTS.md](AGENTS.md) and the Desktop guide. Do not add generated test workspaces, virtual environments, credentials, application binaries, installers, or user project/data changes.
 
 ## Editing the bilingual help
 
@@ -50,7 +50,7 @@ The downloader pins the Microsoft installer hash, validates its signature and ex
 
 ## Climate and data changes
 
-Read the [English methodology](Documents/06_Methodology_Adding_New_Climate_Module/Adding_New_Climate_Module_Guide_EN.md), its Arabic companion and [current review](MIRSAD%20Desktop/docs/METHODOLOGY_REVIEW.md). Check historical claims against code.
+Read the [English methodology](Documents/06_Methodology_Adding_New_Climate_Module/Adding_New_Climate_Module_Guide_EN.md), its Arabic companion and [current review](MIRSAD%20Desktop/docs/reports/METHODOLOGY_REVIEW.md). Check historical claims against code.
 
 Each source/element needs dependencies, actual units, temporal/spatial support, missing-value rules, provenance, independent expected values and failure tests. Missing precipitation is never zero. Retain station IDs as text, including leading zeros, and retain WBAN/location with USAF. Coordinate corrections require explicit evidence and a reproducible migration; never rewrite original geodatabases during an audit. A successful GeoPackage must not conceal a failed FileGDB export.
 

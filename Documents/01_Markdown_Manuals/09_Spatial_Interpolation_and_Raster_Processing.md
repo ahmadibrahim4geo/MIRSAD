@@ -34,7 +34,7 @@ The platform integrates three spatial interpolation algorithms via ArcGIS Spatia
 To eliminate spatial distortion when calculating cell sizes in metric units (e.g. 1000m resolution) from geographic degrees (WGS84 EPSG:4326):
 
 ```python
-# Implemented in raster_atlas_generator.py (Line 833)
+# Implemented in Toolboxes/raster_atlas_generator.py (Line 833)
 def safe_project_fc(in_fc, out_fc, target_sr):
     # Determines if reprojection is necessary
     desc = arcpy.Describe(in_fc)

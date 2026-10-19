@@ -42,7 +42,7 @@ The methodology addresses two complementary operational tracks:
 
 > [!IMPORTANT]
 > **Rule 5: Strict Parameter Count Invariance**  
-> The main Python toolbox (`POWER_Climate_Atlas_Generator_10_8.pyt`) must strictly maintain exactly **65 parameters**, and the raster engine (`raster_atlas_generator.py`) must strictly maintain exactly **33 parameters**. Never alter parameter indices or counts in `ArcToolbox`.
+> The main Python toolbox (`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`) must strictly maintain exactly **65 parameters**, and the raster engine (`Toolboxes/raster_atlas_generator.py`) must strictly maintain exactly **33 parameters**. Never alter parameter indices or counts in `ArcToolbox`.
 
 ---
 
@@ -52,8 +52,8 @@ Adding a new module requires coordinated updates across four core codebase files
 
 ```
 NASA POWER Climate Atlas Generator Codebase
-├── POWER_Climate_Atlas_Generator_10_8.pyt   (Main toolbox: harvesting, computation, export)
-├── raster_atlas_generator.py                (Raster interpolation & masking engine)
+├── Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt   (Main toolbox: harvesting, computation, export)
+├── Toolboxes/raster_atlas_generator.py                (Raster interpolation & masking engine)
 ├── generate_excel_dictionary.py             (Field dictionary generator)
 └── generate_master_atlas_excel.py           (Classification guide builder)
 ```
@@ -69,7 +69,7 @@ Prior to writing code, establish:
 
 ---
 
-### Step 1.2: Main Toolbox Updates (`POWER_Climate_Atlas_Generator_10_8.pyt`)
+### Step 1.2: Main Toolbox Updates (`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`)
 
 #### 1. Register Module Dictionaries:
 ```python
@@ -212,7 +212,7 @@ if "LST_Annual_Mean" in row:
 
 ---
 
-### Step 1.3: Raster Generator Updates (`raster_atlas_generator.py`)
+### Step 1.3: Raster Generator Updates (`Toolboxes/raster_atlas_generator.py`)
 
 1. Register module in `PRIMARY_MODULES_ALL`, `MODULE_FOLDER`, `MODULE_SHORT`, `POWER_PRIMARY_PARAM`, and `COLOR_RAMPS`.
 2. Add shapefile mapping in `SHP_FIELD_MAP`.
@@ -444,7 +444,7 @@ Prior to signing off on any module addition, verify against this complete audit 
 | # | Audit Item | Expected Standard | Verification Method |
 |:---:|:---|:---|:---|
 | **1** | Main Toolbox Parameters | Strictly 65 parameters | `.pyt` in ArcMap / ArcToolbox |
-| **2** | Raster Tool Parameters | Strictly 33 parameters | `raster_atlas_generator.py` |
+| **2** | Raster Tool Parameters | Strictly 33 parameters | `Toolboxes/raster_atlas_generator.py` |
 | **3** | Feature Class Record Count | 646 rows (matching sample points) | `arcpy.GetCount_management` |
 | **4** | Feature Class Field Count | 47 fields (12 admin + 35 indicators) | `arcpy.ListFields` |
 | **5** | Alias Parity Verification | `field_name == field_alias` (100%) | `arcpy.ListFields` comparison |

@@ -79,7 +79,7 @@ def new_cards_en():
                mod="09_UV_Index", period="Annual", typ="Range", unit="Index",
                src="NASA POWER ALLSKY_SFC_UV_INDEX converted to WHO noon-maximum",
                calc="Highest seasonal noon-max mean minus lowest seasonal noon-max mean",
-               ref="POWER_Climate_Atlas_Generator_10_8.pyt: uv_mean24_to_noonmax",
+               ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: uv_mean24_to_noonmax",
                form="UV_{Seasonal\\_Range} = \\max(DJF,MAM,JJA,SON) - \\min(DJF,MAM,JJA,SON)",
                note="Seasonal amplitude of noon UV exposure; fixed WHO scale applies.",
                search="uv seasonal range noon maximum who")]
@@ -88,7 +88,7 @@ def new_cards_en():
                mod="11_Heat_Index", period="Spring", typ="Mean", unit="°C",
                src="Derived from T2M and RH2M (Rothfusz)",
                calc="Mean of monthly Rothfusz HI for months 3,4,5",
-               ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_thermal_stress_fields",
+               ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_thermal_stress_fields",
                form="HI_{Spring} = (HI_{Mar}+HI_{Apr}+HI_{May})/3",
                note="Spring heat-stress build-up.",
                search="hi spring mean heat index rothfusz"),
@@ -97,7 +97,7 @@ def new_cards_en():
                mod="11_Heat_Index", period="Autumn", typ="Mean", unit="°C",
                src="Derived from T2M and RH2M (Rothfusz)",
                calc="Mean of monthly Rothfusz HI for months 9,10,11",
-               ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_thermal_stress_fields",
+               ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_thermal_stress_fields",
                form="HI_{Autumn} = (HI_{Sep}+HI_{Oct}+HI_{Nov})/3",
                note="Autumn heat (September peak).",
                search="hi autumn mean heat index rothfusz"),
@@ -106,7 +106,7 @@ def new_cards_en():
                mod="11_Heat_Index", period="Annual", typ="Range", unit="°C",
                src="Derived from seasonal HI means",
                calc="Highest seasonal HI mean minus lowest seasonal HI mean",
-               ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_thermal_stress_fields",
+               ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_thermal_stress_fields",
                form="HI_{Seasonal\\_Range} = \\max(seasons) - \\min(seasons)",
                note="Seasonal heat-stress amplitude.",
                search="hi seasonal range amplitude")]
@@ -118,7 +118,7 @@ def new_cards_en():
                        mod="12_Wind_Chill", period=p, typ="Mean", unit="°C",
                        src="Derived from T2M and WS10M (NWS 2001); opt-in",
                        calc="Mean of monthly WC; equals T when T>10C or calm",
-                       ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
+                       ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
                        form="WC_{%s} = mean(monthly\\ WC)" % p,
                        note="Published only with the cold-regions opt-in toggle.",
                        search="wc wind chill %s opt-in" % p.lower()))
@@ -127,7 +127,7 @@ def new_cards_en():
                 mod="12_Wind_Chill", period="Annual", typ="Range", unit="°C",
                 src="Derived from monthly WC (opt-in)",
                 calc="Highest monthly WC minus lowest monthly WC",
-                ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
+                ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
                 form="WC_{Annual\\_Range} = \\max(monthly) - \\min(monthly)",
                 note="Opt-in only.", search="wc annual range opt-in"),
            dict(fld="WC_Seasonal_Range", en="Seasonal Wind Chill Range",
@@ -135,7 +135,7 @@ def new_cards_en():
                 mod="12_Wind_Chill", period="Annual", typ="Range", unit="°C",
                 src="Derived from seasonal WC means (opt-in)",
                 calc="Highest seasonal WC mean minus lowest seasonal WC mean",
-                ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
+                ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
                 form="WC_{Seasonal\\_Range} = \\max(seasons) - \\min(seasons)",
                 note="Opt-in only.", search="wc seasonal range opt-in")]
     for m in MONTHS_EN:
@@ -145,7 +145,7 @@ def new_cards_en():
                        mod="12_Wind_Chill", period="Monthly", typ="Mean", unit="°C",
                        src="Derived from T2M and WS10M (NWS 2001); opt-in",
                        calc="Mean of valid %s WC values" % m,
-                       ref="POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
+                       ref="Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_winter_chill_fields",
                        form="WC_{%s} = monthly\\ WC" % m[:3],
                        note="Month/ raster when the monthly option is enabled.",
                        search="wc %s monthly wind chill opt-in" % m.lower()))

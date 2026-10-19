@@ -11,7 +11,7 @@ if not os.path.isdir(os.path.dirname(OUT)):
     os.makedirs(os.path.dirname(OUT))
 
 mod = type(sys)("msig")
-exec(compile(open((os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")), "rb").read(),
+exec(compile(open((os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")), "rb").read(),
              "sig", "exec"), mod.__dict__)
 try:
     import arcpy

@@ -3,7 +3,7 @@
 Build 12-month climatology tables from Egypt_Monthly_Raw_1996_2025.json.
 
 Uses the atlas tool's OWN formulas (compute_point_fields from
-POWER_Climate_Atlas_Generator_10_8.pyt) so values are bit-consistent with
+Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt) so values are bit-consistent with
 the published GDB/rasters (verified: OBJECTID=1 reproduces the xls exactly).
 
 Outputs (under 00_Tables_And_Reports):
@@ -54,7 +54,7 @@ ALL_MODULES = ["Temperature", "Precipitation", "Sea Level Pressure",
 
 def load_tool():
     return SourceFileLoader(
-        "pytmod", os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
+        "pytmod", os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
 
 
 def read_coords_from_temperature_xlsx():

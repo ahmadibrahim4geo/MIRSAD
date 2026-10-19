@@ -1,6 +1,7 @@
 # MIRSAD development guide
 
 ## Scope and project layout
+- ArcGIS entry points and matching metadata live in `Toolboxes/`; shared Python 2.7/3 support is `mirsad_core/`. Maintenance generators live under `scripts/`.
 - The existing Python toolboxes support ArcMap/Python 2.7 and ArcGIS Pro/Python 3. Preserve those runtimes.
 - The independent application lives only in `MIRSAD Desktop/`. Read its `AGENTS.md` before changing it.
 - Preserve user changes in Sample Data, geodatabases, and ArcGIS-generated XML. Never stage them incidentally.

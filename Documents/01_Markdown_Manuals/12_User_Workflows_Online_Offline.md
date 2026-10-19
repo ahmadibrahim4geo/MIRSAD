@@ -49,7 +49,7 @@ Operating in air-gapped secure facilities, remote field laptops without internet
 
 ### 3.2 Execution Steps
 1. Copy previous session cache or populated `Climate_Atlas_Points` feature class to the local machine.
-2. Open `Raster Data Climate Atlas Generator` standalone tool (`raster_atlas_generator.py`).
+2. Open `Raster Data Climate Atlas Generator` standalone tool (`Toolboxes/raster_atlas_generator.py`).
 3. Point **Input Feature Class** to the local points table.
 4. Select target **Modules to Interpolate** (e.g. `All`, `Temperature`, or `Precipitation`).
 5. Choose **Interpolation Method** and **Cell Size**.

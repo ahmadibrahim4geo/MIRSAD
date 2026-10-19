@@ -209,7 +209,7 @@ def main():
     output.replace(final_output)
     report = dict(metadata=metadata, inventory=inventory, comparisons=comparison, noaa_discrepancies=discrepancies,
                   tables_note="Stations_Summary.csv checked by compound NOAA identifiers and coordinates.")
-    (DESKTOP / "docs/STATION_AUDIT.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    (DESKTOP / "docs/reports/STATION_AUDIT.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(dict(catalogue=str(final_output), **metadata), ensure_ascii=True, indent=2))
 
 

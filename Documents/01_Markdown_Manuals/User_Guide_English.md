@@ -63,11 +63,11 @@ The codebase features a cross-compatible hybrid engine providing seamless operat
 ## 3. The Dual-Tool Workflow Architecture
 
 The platform operates via two complementary tools:
-1. **`POWER_Climate_Atlas_Generator_10_8.pyt` (Feature Atlas Generator)**:
+1. **`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (Feature Atlas Generator)**:
    - Primary user-facing Geoprocessing Toolbox.
    - Handles API communications, rate-limiting, quality control, calendar GUI interactions, and 96 climatological indicators.
    - Generates the authoritative `Climate_Database.gdb` with 18 structured feature classes.
-2. **`raster_atlas_generator.py` (Raster Surface Engine)**:
+2. **`Toolboxes/raster_atlas_generator.py` (Raster Surface Engine)**:
    - Core backend spatial processing engine.
    - Executes spatial surface interpolation (IDW with smooth power profiles, Ordinary Kriging, Spline with Tension, Natural Neighbor).
    - Manages focal smoothing filters, polygon boundary clipping, isobar contouring, wind vector arrow grids, and lossless LZW compression.

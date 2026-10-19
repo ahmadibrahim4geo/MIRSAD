@@ -15,9 +15,9 @@ def load(name,path):
 
 def main():
     import arcpy
-    configs=[('points','MIRSAD_Climate_Atlas_Generator_10_8.pyt','PowerClimateAtlasGenerator','SpatialClimateAtlasGeneratorAR'),
-        ('stations','MIRSAD_Weather_Stations_Atlas_Generator.pyt','WeatherStationsAtlasGenerator','WeatherStationsAtlasGeneratorAR'),
-        ('raster','MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt','RasterDataClimateAtlasGenerator','RasterDataClimateAtlasGeneratorAR')]
+    configs=[('points','Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt','PowerClimateAtlasGenerator','SpatialClimateAtlasGeneratorAR'),
+        ('stations','Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt','WeatherStationsAtlasGenerator','WeatherStationsAtlasGeneratorAR'),
+        ('raster','Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt','RasterDataClimateAtlasGenerator','RasterDataClimateAtlasGeneratorAR')]
     tools=[]
     for key,filename,english,arabic in configs:
         module=load('help_metadata_'+key,ROOT/filename)
@@ -31,7 +31,7 @@ def main():
                 enabled=bool(p.enabled),choices=[] if hidden else list(getattr(p.filter,'list',[]) or []),
                 description=getattr(p,'description','') or '',sensitive=hidden))
         tools.append(dict(id=key,file=filename,en=en.label,ar=ar.label,parameters=parameters))
-    names=[item[1] for item in configs]+['raster_atlas_generator.py']
+    names=[item[1] for item in configs]+['Toolboxes/raster_atlas_generator.py']
     result=dict(reviewed='2026-10-19',runtime='ArcGIS Pro '+arcpy.GetInstallInfo()['Version'],
         source_hash_policy='normalized-utf8-lf-v1',
         source_raw_sha256={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in names},

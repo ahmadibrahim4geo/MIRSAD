@@ -1,7 +1,7 @@
 # معادلات الحرارة المحسوسة (Heat Index) — مرجع ثنائي اللغة
 # Felt-Temperature Equations Reference (bilingual)
 
-> المصدر الوحيد للمعادلات: `POWER_Climate_Atlas_Generator_10_8.pyt`
+> المصدر الوحيد للمعادلات: `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 > (single source of truth). القيم المحسوبة بالأسفل مُتحقق منها بتنفيذ الكود مباشرة.
 
 المدخلات لجميع المعادلات: `T` حرارة الهواء (°C) عند 2م، `RH` الرطوبة النسبية (%).

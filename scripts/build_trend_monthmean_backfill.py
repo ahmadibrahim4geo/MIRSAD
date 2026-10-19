@@ -26,7 +26,7 @@ FIELDS = ["T_Anom_Month", "R_Anom_Month", "R_Anom_Month_Pct",
           "T_Month_Trend_Decade", "R_Month_Trend_Decade"]
 
 pyt = SourceFileLoader(
-    "pytmod", os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
+    "pytmod", os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
 
 raw = json.load(open(os.path.join(TABLES, "Egypt_Monthly_Raw_1996_2025.json"),
                      "r", encoding="utf-8-sig"))

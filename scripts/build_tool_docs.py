@@ -150,9 +150,9 @@ def esc(s):
 def build_params(lang, other):
     import sys
     sys.path.insert(0, BASE)
-    src = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+    src = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
     if not os.path.exists(src):
-        src = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+        src = os.path.join(BASE, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
     params = parse_params(src)
     cards = []
     for p in params:
@@ -208,9 +208,9 @@ AR_MOD = {"Temperature": u"الحرارة", "Precipitation": u"الأمطار",
 def build_deps(lang, other):
     import sys
     sys.path.insert(0, BASE)
-    pyt_file = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+    pyt_file = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
     if not os.path.exists(pyt_file):
-        pyt_file = os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt")
+        pyt_file = os.path.join(BASE, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
     txt = open(pyt_file,
                encoding="utf-8", errors="ignore").read()
     ns = {}

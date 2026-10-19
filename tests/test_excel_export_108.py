@@ -20,9 +20,10 @@ if ROOT not in sys.path:
 
 import types
 mod = types.ModuleType("pyt_tool")
-_pyt_file = os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+_pyt_file = os.path.join(ROOT, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(_pyt_file):
-    _pyt_file = os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    _pyt_file = os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
+mod.__file__ = _pyt_file
 exec(compile(open(_pyt_file, "rb").read(), "pyt_tool", "exec"), mod.__dict__)
 pyt_mod = mod
 

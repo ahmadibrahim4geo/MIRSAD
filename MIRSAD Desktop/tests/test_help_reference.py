@@ -110,7 +110,7 @@ class EquationManualTests(unittest.TestCase):
 
     def test_internal_topic_links_and_legacy_launcher_allowlist(self):
         sys.path.insert(0,str(ROOT.parent))
-        from utils.help_viewer import TOPICS,help_path
+        from mirsad_core.help_viewer import TOPICS,help_path
         index=json.loads((ROOT/'assets/help_index.json').read_text(encoding='utf-8'))
         ids={t['id'] for t in index['sections']}
         self.assertEqual(ids,set(TOPICS))

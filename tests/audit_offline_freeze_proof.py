@@ -20,7 +20,7 @@ else:
     import imp
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT = os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+PYT = os.path.join(ROOT, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 
 # ---------------------------------------------------------------- mock arcpy
 OPS = []            # (op, target, detail)

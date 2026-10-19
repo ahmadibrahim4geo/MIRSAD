@@ -60,10 +60,10 @@ def main():
         cursor.insertRow([arcpy.Polygon(ring, sr)])
     if sys.version_info[0] >= 3:
         from importlib.machinery import SourceFileLoader
-        core = SourceFileLoader("native_test_core", os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")).load_module()
+        core = SourceFileLoader("native_test_core", os.path.join(ROOT, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")).load_module()
     else:
         import imp
-        core = imp.load_source("native_test_core", os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt"))
+        core = imp.load_source("native_test_core", os.path.join(ROOT, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt"))
     import raster_atlas_generator as raster
     cases = [(core.PowerClimateAtlasGenerator(), "points",
               {"Study_Area_Mask": mask, "Base_Cell_Size": "1000 Meters",

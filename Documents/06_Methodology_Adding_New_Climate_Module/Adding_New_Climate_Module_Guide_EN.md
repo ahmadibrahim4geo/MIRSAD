@@ -1,6 +1,6 @@
 # 06. Methodology Guide for Adding a New Climate Module and Incremental Database Updating
 
-> **Development update — 17 October 2026:** This legacy toolbox guide includes historical counts and assumptions. Read the [MIRSAD Desktop methodology review](../../MIRSAD%20Desktop/docs/METHODOLOGY_REVIEW.md) before new development. Verify parameter counts from code; direct Hybrid/NOAA downloads are not implemented, and Excel is the normal tabular export. ArcPy examples remain references for the legacy workflow.
+> **Development update — 17 October 2026:** This legacy toolbox guide includes historical counts and assumptions. Read the [MIRSAD Desktop methodology review](../../MIRSAD%20Desktop/docs/reports/METHODOLOGY_REVIEW.md) before new development. Verify parameter counts from code; direct Hybrid/NOAA downloads are not implemented, and Excel is the normal tabular export. ArcPy examples remain references for the legacy workflow.
 ## MIRSAD (مِرصاد) — Climate Atlas & Meteorological Database Platform
 ### Multi-source Integrated Reanalysis & Surface Atlas Database — SOP Architecture Manual
 
@@ -53,7 +53,7 @@ The methodology addresses two complementary operational tracks:
 
 > [!IMPORTANT]
 > **Rule 5: Strict Parameter Count Invariance**  
-> The main Python toolbox (`POWER_Climate_Atlas_Generator_10_8.pyt`) must strictly maintain exactly **65 parameters**, and the raster engine (`raster_atlas_generator.py`) must strictly maintain exactly **33 parameters**. Never alter parameter indices or counts in `ArcToolbox`.
+> The main Python toolbox (`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`) must strictly maintain exactly **65 parameters**, and the raster engine (`Toolboxes/raster_atlas_generator.py`) must strictly maintain exactly **33 parameters**. Never alter parameter indices or counts in `ArcToolbox`.
 
 > [!IMPORTANT]
 > **Rule 6: Mandatory Source Data Provenance Tracking**  
@@ -71,9 +71,9 @@ Adding a new module requires coordinated updates across the core MIRSAD codebase
 
 ```
 MIRSAD Platform Codebase
-├── MIRSAD_Climate_Atlas_Generator_10_8.pyt   (Primary toolbox: harvesting, computation, GDB/Excel export)
-├── MIRSAD_Weather_Stations_Atlas_Generator.pyt (Ground stations: harvesting, filtering, atlas generation)
-├── raster_atlas_generator.py                (Raster engine: IDW/Kriging/Spline interpolation, clipping)
+├── Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt   (Primary toolbox: harvesting, computation, GDB/Excel export)
+├── Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt (Ground stations: harvesting, filtering, atlas generation)
+├── Toolboxes/raster_atlas_generator.py                (Raster engine: IDW/Kriging/Spline interpolation, clipping)
 ├── generate_excel_dictionary.py             (Master field dictionary generator)
 └── generate_master_atlas_excel.py           (Classification guide builder & raster symbology)
 ```
@@ -91,7 +91,7 @@ Prior to writing code, establish:
 
 ---
 
-### Step 1.2: Main Toolbox Updates (`POWER_Climate_Atlas_Generator_10_8.pyt`)
+### Step 1.2: Main Toolbox Updates (`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`)
 
 #### 1. Register Module Dictionaries:
 ```python
@@ -251,7 +251,7 @@ if "LST_Annual_Mean" in row:
 
 ---
 
-### Step 1.3: Raster Engine Updates (`raster_atlas_generator.py`)
+### Step 1.3: Raster Engine Updates (`Toolboxes/raster_atlas_generator.py`)
 
 1. Register module in core registries (`PRIMARY_MODULES_ALL`, `MODULE_FOLDER`, `MODULE_SHORT`, `POWER_PRIMARY_PARAM`, `COLOR_RAMPS`).
 2. Add module entry to `get_element_source_metadata`.
@@ -306,7 +306,7 @@ _MONTHLY_LABEL_BASE["Land Surface Temperature"] = ("LST", "Mean Land Surface Tem
 ### Step 1.5: Verification & Automated Regression Testing
 Run the complete automated test suite to confirm 100% clean execution:
 ```powershell
-python -m py_compile MIRSAD_Climate_Atlas_Generator_10_8.pyt MIRSAD_Weather_Stations_Atlas_Generator.pyt raster_atlas_generator.py
+python -m py_compile Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt Toolboxes/raster_atlas_generator.py
 python tests/test_power_atlas_108_offline.py
 python tests/test_weather_stations_atlas.py
 python tests/test_excel_export_108.py
@@ -460,7 +460,7 @@ The script reads raster statistics and creates the `19_Land_Surface_Temperature`
 | # | Inspection Item | Acceptance Criteria | Verification Method |
 |:---:|:---|:---|:---|
 | **1** | Primary Toolbox Parameter Count | Exactly 65 parameters | ArcMap GP Tool Properties |
-| **2** | Raster Engine Parameter Count | Exactly 33 parameters | `raster_atlas_generator.py` inspect |
+| **2** | Raster Engine Parameter Count | Exactly 33 parameters | `Toolboxes/raster_atlas_generator.py` inspect |
 | **3** | Feature Class Record Count | Exactly matches input points (e.g. 646) | `arcpy.GetCount_management` |
 | **4** | Feature Class Total Field Count | Exactly 47 fields (12 admin + 35 indicators) | `arcpy.ListFields` |
 | **5** | Field Name & Alias Parity | `name == aliasName` (100% identical) | ArcPy validation loop |

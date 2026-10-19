@@ -12,7 +12,7 @@ import tempfile
 import unittest
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,ROOT)
-from utils import remote_grid as r,climate_products as p
+from mirsad_core import remote_grid as r,climate_products as p
 
 
 def tiff(compression=1):

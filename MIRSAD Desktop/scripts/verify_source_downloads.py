@@ -6,8 +6,8 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT.parent))
-from utils import hybrid_pipeline as h
-from utils.station_catalogue import load_shared_catalogue
+from mirsad_core import hybrid_pipeline as h
+from mirsad_core.station_catalogue import load_shared_catalogue
 
 row=next(s for s in load_shared_catalogue(str(ROOT.parent/"data/stations.sqlite"))["EG"]
          if s["Station_ID"]=="623660" and s["WBAN"]=="99999")

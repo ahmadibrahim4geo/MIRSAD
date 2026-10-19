@@ -27,7 +27,7 @@ BASE_COLS = ["OBJECTID", "Source_ID", "Point_Lat", "Point_Lon"]
 
 def load_tool():
     return SourceFileLoader(
-        "pytmod", os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
+        "pytmod", os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
 
 
 def is_monthly_header(h):

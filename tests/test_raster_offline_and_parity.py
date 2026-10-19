@@ -32,9 +32,9 @@ def run_parity_tests():
     print("TESTING TOOL 1 & TOOL 2 PARITY AND OFFLINE MULTI-LAYER CAPABILITIES")
     print("=" * 70)
 
-    pyt_path = os.path.join(PROJ_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+    pyt_path = os.path.join(PROJ_DIR, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
     if not os.path.exists(pyt_path):
-        pyt_path = os.path.join(PROJ_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+        pyt_path = os.path.join(PROJ_DIR, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
     pyt_mod = _load_source("pyt_mod", pyt_path)
     from raster_atlas_generator import RasterDataClimateAtlasGenerator, SHP_FIELD_MAP, REV_SHP_MAP
 

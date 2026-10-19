@@ -8,7 +8,7 @@
 Satellite and numerical weather reanalysis APIs convey missing, corrupt, or uncalculated grid observations through specific numerical sentinels. The platform detects and sanitizes these sentinels during ingestion via `is_missing(v)` (line 612):
 
 ```python
-# Implemented in POWER_Climate_Atlas_Generator_10_8.pyt (Line 612)
+# Implemented in Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt (Line 612)
 MISSING_SENTINELS = {-999.0, -99.0, -9999.0, -99999.0}
 
 def is_missing(v):
@@ -35,7 +35,7 @@ In strict accordance with World Meteorological Organization (WMO) guidelines for
 This rule is enforced computationally via `safe_sum` (line 642):
 
 ```python
-# Implemented in POWER_Climate_Atlas_Generator_10_8.pyt (Line 642)
+# Implemented in Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt (Line 642)
 def safe_sum(values, expected, min_frac=0.75):
     valid = [v for v in values if not is_missing(v)]
     if len(valid) < expected * min_frac:

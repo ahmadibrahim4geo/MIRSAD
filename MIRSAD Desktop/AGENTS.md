@@ -1,6 +1,6 @@
 # MIRSAD Desktop — implementation and maintenance
 
-Read the root AGENTS.md and `MIRSAD_DESKTOP_MASTER_PLAN.md` first. This file describes the development contract; it does not authorize publishing an unapproved release.
+Read the root AGENTS.md, `docs/STATUS.md` and `docs/BACKLOG.md` first. Original product requirements are retained under `docs/architecture/` and `docs/design/reference/`. This file describes the development contract; it does not authorize publishing an unapproved release.
 
 ## Product requirements
 - One Windows application with a professional, direct Arabic/English interface using the approved MIRSAD identity.
@@ -47,7 +47,7 @@ Read the root AGENTS.md and `MIRSAD_DESKTOP_MASTER_PLAN.md` first. This file des
 4. Test coordinate parity, stable IDs, CRS, field types, NULLs, Arabic strings, and export readback.
 5. Test the packaged executable from a directory outside the repository and check that ArcGIS is absent from loaded module paths.
 6. Visually inspect a UI screenshot and exercise the main workflow. Offscreen smoke checks alone are not proof of actual desktop usability.
-7. Update `IMPLEMENTATION_PLAN.md` with completed work and actual limitations. A working first slice is not the whole climate atlas.
+7. Update `docs/STATUS.md`, `docs/BACKLOG.md` and `docs/CHANGELOG.md` with completed work and actual limitations. Put acceptance evidence in `docs/reports/`. A working first slice is not the whole climate atlas.
 8. Rebuild only development. Report the fixed EXE path and evidence; wait for approval before promotion.
 9. Build one candidate installer at `runtime/installers/development/MIRSAD-Setup.exe`. Installer smoke tests use disposable `.build/` space and a separate QA AppId. Never install a production copy or alter stable as part of a test. The normal per-user installer destination is one fixed `%LOCALAPPDATA%/Programs/MIRSAD`; the approved package remains in the stable distribution channel.
 

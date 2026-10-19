@@ -21,7 +21,7 @@ for _mn in MONTHS:
                 "R_Trend_%s" % _mn]
 
 pyt = SourceFileLoader(
-    "pytmod", os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
+    "pytmod", os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
 
 wb = xlrd.open_workbook(XLS)
 sh = wb.sheet_by_name("Data")

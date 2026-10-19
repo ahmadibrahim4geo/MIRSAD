@@ -32,7 +32,7 @@ The Climate Atlas Generator produces multi-tiered geospatial deliverables to sup
 Because the dBASE IV format underlying Shapefiles strictly limits field names to **10 ASCII characters**, the platform implements an immutable, deterministic mapping dictionary:
 
 ```python
-# Implemented in POWER_Climate_Atlas_Generator_10_8.pyt and raster_atlas_generator.py
+# Implemented in Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt and Toolboxes/raster_atlas_generator.py
 SHP_FIELD_MAP = {
     # Temperature
     "T_Annual_Mean": "T_AnnMean",

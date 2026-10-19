@@ -22,7 +22,7 @@ def calculation_fields(module):
 def evidence():
     spec=json.loads((SOURCE/'formulas.json').read_text(encoding='utf-8'))
     if {e['module'] for e in spec['entries']}!={m.name for m in MODULES}:raise ValueError('Equation manual must cover all module groups')
-    source=ROOT.parent/'MIRSAD_Climate_Atlas_Generator_10_8.pyt'
+    source=ROOT.parent/'Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt'
     tree=ast.parse(source.read_text(encoding='utf-8-sig'));functions={n.name:n for n in tree.body if isinstance(n,ast.FunctionDef)}
     names=sorted({name for e in spec['entries'] for name in e['functions']}|{'climat_monthly_means','monthly_interannual_ranges','convert_fields_to_user_units','safe_mean','safe_sum','is_missing','daylength_hours','uv_mean24_to_noonmax','circular_mean_deg'})
     signatures={name:hashlib.sha256(ast.dump(functions[name],include_attributes=False).encode('utf-8')).hexdigest() for name in names}
@@ -71,6 +71,6 @@ def formula_body(module,language):
         info=field_reference(module,field,arabic)
         parts.append('<tr><td><p dir="ltr"><code>'+html.escape(field)+'</code></p><p><b>'+html.escape(info['title'])+'</b><br>'+html.escape(info['period'])+'</p></td><td>'+html.escape(info['unit'])+'</td><td>'+html.escape(info['calculation'])+'</td></tr>')
     parts.append('</table>'+heading('مرجع التنفيذ','Implementation reference'))
-    parts.append('<p dir="ltr">MIRSAD_Climate_Atlas_Generator_10_8.pyt → '+html.escape(', '.join(item['functions']))+'<br>MIRSAD Desktop/src/mirsad_desktop/science.py</p>')
+    parts.append('<p dir="ltr">Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt → '+html.escape(', '.join(item['functions']))+'<br>MIRSAD Desktop/src/mirsad_desktop/science.py</p>')
     parts.append('<p>'+('المعادلات من النواة المشتركة. تجهيز البيانات، حراس التغطية، ترشيح الحقول والوحدات النهائية قد تختلف بين الواجهتين؛ لا تعني مشاركة النواة تطابق جميع ملفات الإخراج.' if arabic else 'Equations come from the shared kernel. Input preparation, coverage guards, field filtering and final units can differ between hosts; a common kernel does not establish identical output files.')+'</p>')
     return ''.join(parts)

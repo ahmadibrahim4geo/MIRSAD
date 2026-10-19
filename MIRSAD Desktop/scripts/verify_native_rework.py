@@ -14,9 +14,9 @@ def load(name,path):
     return module
 
 checks=[]
-for filename,classes in (("MIRSAD_Climate_Atlas_Generator_10_8.pyt",("PowerClimateAtlasGenerator","SpatialClimateAtlasGeneratorAR")),
-                         ("MIRSAD_Weather_Stations_Atlas_Generator.pyt",("WeatherStationsAtlasGenerator","WeatherStationsAtlasGeneratorAR")),
-                         ("MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt",("RasterDataClimateAtlasGenerator","RasterDataClimateAtlasGeneratorAR"))):
+for filename,classes in (("Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt",("PowerClimateAtlasGenerator","SpatialClimateAtlasGeneratorAR")),
+                         ("Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt",("WeatherStationsAtlasGenerator","WeatherStationsAtlasGeneratorAR")),
+                         ("Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt",("RasterDataClimateAtlasGenerator","RasterDataClimateAtlasGeneratorAR"))):
     module=load("native_"+filename.replace(".","_"),REPO/filename)
     for cls in classes:
         try:

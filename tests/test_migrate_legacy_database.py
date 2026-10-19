@@ -9,7 +9,7 @@ PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJ_DIR not in sys.path:
     sys.path.insert(0, PROJ_DIR)
 
-from migrate_legacy_database import (
+from scripts.migrate_legacy_database import (
     MODULES_INFO, SHP_FIELD_MAP, REV_SHP_MAP,
     heat_index_c, humidex_c, wbgt_shade_c, wind_chill_c,
     extraterrestrial_radiation_ra, LegacyAtlasMigrator

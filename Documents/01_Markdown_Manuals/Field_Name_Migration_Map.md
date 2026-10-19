@@ -11,8 +11,8 @@
 
 يوثق هذا المستند عملية التحديث المعيارية الشاملة لأسماء مؤشرات وحقول تساقط الأمطار الفصلية والسنوية في مشروع **Climate Atlas Generator**.
 تم استبدال الأسماء القديمة التي كانت تحتوي على كلمة `Total` بالأسماء المعتمدة الجديدة `Mean` لتعكس بدقة المفهوم الإحصائي والعلمي المحسوب فعليًا عبر السنوات المتعددة، وتوحيدها عبر:
-1. كود الأداة (`POWER_Climate_Atlas_Generator_10_8.pyt`)
-2. محرك الراستر (`raster_atlas_generator.py`)
+1. كود الأداة (`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`)
+2. محرك الراستر (`Toolboxes/raster_atlas_generator.py`)
 3. قواعد البيانات الجغرافية (`File Geodatabase - .gdb`)
 4. ملفات قواميس الحقول (`Excel / CSV Dictionaries`)
 5. ملفات الراستر ومجلدات المخرجات (`GeoTIFF Rasters`)
@@ -81,7 +81,7 @@
 ## 5. التوافق العكسي البرمجي (Backward Compatibility in Code & Data)
 
 لضمان عدم توقف المشاريع أو النماذج القديمة المبنية على الإصدارات السابقة للأداة، تم تضمين آليات توافق عكسي ذكية:
-1. **في كود البايثون (`POWER_Climate_Atlas_Generator_10_8.pyt`)**:
+1. **في كود البايثون (`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`)**:
    - يتم تخزين القيم بالحقول الجديدة `R_*_Mean`.
    - يتم عمل تعيين تلقائي للأسماء القديمة كـ Aliases:
      ```python

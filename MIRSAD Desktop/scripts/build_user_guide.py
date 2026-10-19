@@ -39,7 +39,7 @@ def build():
         page='<!doctype html><html lang="'+language+'" dir="'+('rtl' if language=='ar' else 'ltr')+'"><head><meta charset="utf-8"></head><body><h1>'+title+'</h1>'+body+'</body></html>'
         (ROOT/('assets/help_'+language+'.html')).write_text(page,encoding='utf-8')
         browser=template.replace('@@LANG@@',language).replace('@@PAYLOAD@@',payload)
-        (ROOT/('docs/USER_GUIDE_'+language.upper()+'.html')).write_text(browser,encoding='utf-8')
+        (ROOT/('docs/user/USER_GUIDE_'+language.upper()+'.html')).write_text(browser,encoding='utf-8')
         (output/('MIRSAD_Help_'+language.upper()+'.html')).write_text(browser,encoding='utf-8')
     (output/'index.html').write_text(template.replace('@@LANG@@','en').replace('@@PAYLOAD@@',payload),encoding='utf-8')
     (ROOT/'assets/help.html').write_text('<!doctype html><meta charset="utf-8"><a href="help_ar.html">العربية</a> · <a href="help_en.html">English</a>',encoding='utf-8')

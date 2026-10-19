@@ -1,7 +1,7 @@
 # 📋 تقرير الفحص الشامل — NASA POWER Climate Atlas Generator
 
 > **تاريخ الفحص:** 30 سبتمبر 2026  
-> **الملفات المفحوصة:** `POWER_Climate_Atlas_Generator_10_8.pyt` (5828 سطر) + `raster_atlas_generator.py` (2371 سطر) + 15 ملف `utils/` + 20 ملف `tests/`  
+> **الملفات المفحوصة:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (5828 سطر) + `Toolboxes/raster_atlas_generator.py` (2371 سطر) + 15 ملف `mirsad_core/` + 20 ملف `tests/`  
 > **المدققون:** 3 فرق تدقيق متوازية + فحص يدوي عميق
 
 ---
@@ -22,7 +22,7 @@
 ## 🔴 مشاكل حرجة (Critical) — يجب إصلاحها فوراً
 
 ### 1. خطأ `unicode()` يُعطّل Excel Export في Python 3 / ArcGIS Pro
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **الأسطر:** 292, 314, 364, 386
 - **الوصف:** الدوال `write_excel_file()` و `write_master_excel_workbook()` تستخدم `unicode()` مباشرة بدون فحص `PY27`. في Python 3 (ArcGIS Pro)، ده هيسبب `NameError: name 'unicode' is not defined` وتعطّل تصدير Excel تماماً.
 - **الحل:**
@@ -35,7 +35,7 @@ else:
 ```
 
 ### 2. خطأ `dict.values()[0]` يُعطّل Offline Mode في Python 3
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 3979
 - **الوصف:** الكود يستخدم `element_fcs.values()[0]` وده بيشتغل في Python 2 بس. في Python 3، `dict.values()` بيرجع view object مش list، فهيطلع `TypeError`.
 - **الحل:**
@@ -48,7 +48,7 @@ _first_fc = list(element_fcs.values())[0] if element_fcs else None
 ## 🟠 مشاكل عالية الخطورة (High) — مهمة جداً
 
 ### 3. `str.decode()` بتتعطل في Python 3
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **الأسطر:** 304, 376
 - **الوصف:** داخل `write_excel_file()` و `write_master_excel_workbook()`:
 ```python
@@ -58,13 +58,13 @@ val = cell.decode("utf-8")
 - **الحل:** لف الجزء ده بشرط `if PY27:` أو ألغيه تماماً لأن Python 3 النصوص فيها Unicode أصلاً.
 
 ### 4. حساب الشتاء (DJF) بيستخدم ديسمبر من نفس السنة
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 72-77) و `raster_atlas_generator.py` (أسطر 1512-1515)
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 72-77) و `Toolboxes/raster_atlas_generator.py` (أسطر 1512-1515)
 - **الوصف:** تعريف الشتاء هو `"Winter": (1, 2, 12)` — يعني بيجمع يناير + فبراير + ديسمبر **من نفس السنة**. حسب معايير WMO، الشتاء المناخي هو ديسمبر السنة **السابقة** + يناير + فبراير السنة الحالية. مثلاً شتاء 2024 = ديسمبر 2023 + يناير 2024 + فبراير 2024.
 - **تأثير:** للمعدلات المناخية الطويلة (30 سنة مثلاً) الفرق ضئيل. لكن لسنة واحدة الخطأ ممكن يكون واضح.
 - **التوصية:** مقبول كتقريب مع إضافة تعليق توضيحي، أو تعديل المنطق لسحب ديسمبر من السنة السابقة.
 
 ### 5. Hargreaves PET: أيام الشهور ثابتة (لا تراعي السنوات الكبيسة)
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 959
 - **الوصف:** القائمة `days_in_m = [31, 28, 31, 30, ...]` ثابتة — فبراير دايماً 28 يوم. في السنوات الكبيسة، ده بيخسّر يوم كامل من حساب PET.
 - **الحل:** استخدم `calendar.monthrange()` أو المتوسط 28.25 يوم لفبراير:
@@ -73,7 +73,7 @@ days_in_m = [31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 ```
 
 ### 6. Open-Meteo: تحويل وحدات الضغط بحد تعسفي
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 536-543)
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 536-543)
 - **الوصف:** دالة `pressure_kpa_to_mbar()` بتفترض إن القيمة < 200 تبقى kPa وتضربها × 10. Open-Meteo بيرجع الضغط بـ hPa (~1013)، فالدالة بتسيبها كما هي (صح). لكن لو NASA POWER غيّرت الوحدات في المستقبل أو لو القيمة بين 100-200، ممكن تحصل مشكلة. القيمة 200 كحد فاصل ضعيفة — ممكن تبقى 150 hPa (فعلاً) فتتعامل معاها غلط كـ kPa.
 - **التوصية:** أضف parameter لتحديد الوحدة بشكل صريح بدل الاعتماد على حد تعسفي:
 ```python
@@ -87,7 +87,7 @@ def pressure_kpa_to_mbar(v, source_unit="auto"):
 ```
 
 ### 7. `safe_sum()` بتحسب مجموع حتى لو فيه قيم مفقودة
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 431-435)
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 431-435)
 - **الوصف:** `safe_sum()` بتتجاهل القيم المفقودة وتجمع الموجود فقط. للأمطار، لو شهر واحد ناقص من 12 شهر، المجموع السنوي هيطلع أقل من الحقيقة بدون أي تحذير. ده ممكن يعطي نتائج مضللة.
 - **التوصية:** أضف حد أدنى لنسبة القيم الموجودة (مثلاً 75%) قبل حساب المجموع، أو أرجع `None` لو عدد القيم الموجودة أقل من المطلوب.
 
@@ -96,7 +96,7 @@ def pressure_kpa_to_mbar(v, source_unit="auto"):
 ## 🟡 مشاكل متوسطة الخطورة (Medium)
 
 ### 8. `urllib2` غير موجود في Python 3
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 1356
 - **الوصف:** في `_http_get_json()`, الكود بيعمل `import urllib2` مباشرة كـ fallback. في Python 3 المكتبة اسمها `urllib.request`. لو `requests` مش متاحة في بيئة Python 3، الأداة هتتعطل.
 - **الحل:** أضف:
@@ -106,16 +106,16 @@ if PY27:
 else:
     import urllib.request as urllib2
 ```
-> **ملاحظة:** ملف `raster_atlas_generator.py` عامل ده صح (سطر 44-47) ✅
+> **ملاحظة:** ملف `Toolboxes/raster_atlas_generator.py` عامل ده صح (سطر 44-47) ✅
 
 ### 9. المعدل السنوي للأمطار (R_Annual_Mean) — منطق غير واضح
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 1863
-- **الوصف:** `R_Annual_Mean` بيتحسب كمتوسط الـ 12 إجمالي شهري مناخي. ده رياضياً = R_Annual_Total ÷ 12. الاسم "Mean Monthly Precipitation" ممكن يتلخبط مع المتوسط المرجح. في ملف `raster_atlas_generator.py` سطر 1528 نفس المنطق.
+- **الوصف:** `R_Annual_Mean` بيتحسب كمتوسط الـ 12 إجمالي شهري مناخي. ده رياضياً = R_Annual_Total ÷ 12. الاسم "Mean Monthly Precipitation" ممكن يتلخبط مع المتوسط المرجح. في ملف `Toolboxes/raster_atlas_generator.py` سطر 1528 نفس المنطق.
 - **التوصية:** ده مقبول علمياً لكن يفضل توضيح في الوصف: "Mean of 12 climatological monthly totals = Annual Total / 12".
 
 ### 10. Spatial Impute (IDW) يستخدم مسافات جغرافية بالدرجات مباشرة
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 1536
 - **الوصف:** `spatial_impute_missing()` بتحسب المسافة بـ `math.hypot(rlat - vlat, rlon - vlon)` — يعني بالدرجات مش بالمتر. ده بيعطي أوزان خاطئة عند خطوط العرض العالية حيث درجة الطول أصغر بكتير. دالة `thin_points_tolerance()` (سطر 821) بتعمل ده صح باستخدام `cos(mlat)`.
 - **الحل:** استخدم نفس منطق `thin_points_tolerance`:
@@ -127,18 +127,18 @@ d = math.sqrt(dx * dx + dy * dy)
 ```
 
 ### 11. Raster Generator: `write_excel_file()` — نفس خطأ `unicode()`
-- **الملف:** `raster_atlas_generator.py`
+- **الملف:** `Toolboxes/raster_atlas_generator.py`
 - **السطر:** ~633
 - **الوصف:** نفس المشكلة الحرجة #1 موجودة هنا كمان. استخدام `unicode()` بدون فحص `PY27`.
 
 ### 12. Drought: قيم افتراضية لما يكون فيه بيانات مفقودة
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **الأسطر:** 971-978
 - **الوصف:** في `compute_drought_fields()`, لو الحرارة أو المطر ناقصين، بيتم استبدالهم بقيم افتراضية (`t=20°C`, `p=0mm`, `tx=t+5`, `tn=t-5`). ده بيخلي المؤشرات تطلع أرقام بدل `None`، ممكن يضلل المستخدم.
 - **التوصية:** أرجع `None` للمؤشر لو البيانات المطلوبة مش موجودة بدل استخدام قيم وهمية، أو أضف علامة تحذير في النتائج.
 
 ### 13. De Martonne: قسمة على صفر ممكنة
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 1001-1002
 - **الوصف:** `denom_dm = t_annual + 10.0` — لو `t_annual = -10°C` بالظبط (ممكن في المناطق القطبية)، المقام = 0. الكود بيفحص `> 0.01` بس لو `t = -10.005°C`، المقام = -0.005 (سالب) فالمؤشر هيطلع سالب وده غلط علمياً.
 - **الحل:**
@@ -147,16 +147,16 @@ dm_aridity = (p_annual / denom_dm) if denom_dm > 0.01 else None
 ```
 
 ### 14. الأمطار في raster_atlas_generator: المتوسط بقسمة على 12 بدل CellStatistics
-- **الملف:** `raster_atlas_generator.py`
+- **الملف:** `Toolboxes/raster_atlas_generator.py`
 - **السطر:** ~1528
 - **الوصف:** المتوسط السنوي للهطول بيتحسب بجمع 12 شهر ÷ 12. لو شهر واحد فيه NoData، النتيجة هتبقى NoData كلها بدل ما تتجاهل الشهر الناقص. استخدم `CellStatistics` مع خيار `"MEAN"` و `"DATA"`.
 
 ### 15. Raster: حساب شتاء DJF
-- **الملف:** `raster_atlas_generator.py` (أسطر 1512-1515)
+- **الملف:** `Toolboxes/raster_atlas_generator.py` (أسطر 1512-1515)
 - **الوصف:** نفس مشكلة #4 — ديسمبر من نفس السنة بدل السنة السابقة.
 
 ### 16. `launch_calendar_picker()`: مشكلة في Python 3
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **السطر:** 745-746
 - **الوصف:** `out` في Python 3 هيكون `bytes` مش `str`. الشرط `if out and "{" in out` هيفشل لأن Python 3 مش بيقارن bytes مع str.
 - **الحل:**
@@ -166,7 +166,7 @@ if isinstance(out, bytes):
 ```
 
 ### 17. تكرار كبير في الكود (DRY Violation)
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt`
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 - **الأسطر:** 1894-1908 vs 843-866
 - **الوصف:** حسابات Heat Index و WBGT في `compute_point_fields()` (أسطر 1894-1908) متكررة بالنص مع اللي في `compute_temperature_fields()` (أسطر 843-866). لو عدلت واحدة ونسيت التانية، هتطلع نتائج مختلفة حسب إزاي المستخدم اختار الوحدات.
 - **الحل:** وحّد المنطق في دالة واحدة واستدعيها من المكانين.
@@ -176,7 +176,7 @@ if isinstance(out, bytes):
 ## 🟢 ملاحظات منخفضة الخطورة (Low) وتحسينات مقترحة
 
 ### 18. ملفات `.pyc` ملهاش لازمة في الـ repo
-- عدد ملفات `.pyc`: 11 ملف في `tests/` و `utils/`
+- عدد ملفات `.pyc`: 11 ملف في `tests/` و `mirsad_core/`
 - **التوصية:** أضفهم لـ `.gitignore` واحذفهم من المستودع.
 
 ### 19. أداء `thin_points_tolerance()` — O(n²) بدل O(n log n)
@@ -201,11 +201,11 @@ if isinstance(out, bytes):
 - **الوصف:** `import re` موجود داخل `for row in cur:` loop. Python بتعمل cache للـ imports لكنه أنظف وأسرع لو اتعمل في أول الملف.
 
 ### 24. Extraterrestrial Radiation (Ra): دقيقة علمياً ✅
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 924-944)
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 924-944)
 - **التحقق:** معادلة FAO-56 مطبقة صح: solar constant (Gsc = 0.0820 MJ/m²/min)، inverse square distance (dr)، solar declination (delta)، sunset hour angle (omega_s)، والتحويل بـ 0.408 (MJ → mm equivalent). ✅
 
 ### 25. Heat Index (Rothfusz): دقيقة علمياً ✅
-- **الملف:** `POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 563-585)
+- **الملف:** `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt` (أسطر 563-585)
 - **التحقق:** المعاملات مطابقة لمعادلة NOAA/Rothfusz regression. التعديلات (low RH adjustment عند 80-112°F و high RH adjustment عند 80-87°F) مطبقة صح. حد الـ 80°F (26.7°C) صحيح. ✅
 
 ### 26. Wet-Bulb Globe Temperature: دقيقة علمياً ✅

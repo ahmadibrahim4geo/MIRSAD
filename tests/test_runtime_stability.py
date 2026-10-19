@@ -144,10 +144,10 @@ def load(name, path):
     return imp.load_source(name, path)
 
 
-core = load("stability_core", os.path.join(ROOT, "MIRSAD_Climate_Atlas_Generator_10_8.pyt"))
+core = load("stability_core", os.path.join(ROOT, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt"))
 import raster_atlas_generator as raster
-stations = load("stability_stations", os.path.join(ROOT, "MIRSAD_Weather_Stations_Atlas_Generator.pyt"))
-from utils.arcgis_runtime import SpatialLicense, preserve_arcpy_environment, provider_error, filegdb_raster_workspace
+stations = load("stability_stations", os.path.join(ROOT, "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt"))
+from mirsad_core.arcgis_runtime import SpatialLicense, preserve_arcpy_environment, provider_error, filegdb_raster_workspace
 
 
 class Messages(object):

@@ -14,17 +14,17 @@
 
 | المكوّن | نقطة الدخول والمسؤولية |
 | --- | --- |
-| `MIRSAD_Climate_Atlas_Generator_10_8.pyt` | المصدر الفعلي لمحرك النقاط: `PowerClimateAtlasGenerator`؛ حوالي 9,804 أسطر. يحتوي الحسابات والمخطط والتحميل والإخراج والاستيفاء. |
-| `raster_atlas_generator.py` | `RasterDataClimateAtlasGenerator`؛ حوالي 4,912 سطرًا. مسار مستقل للشبكات الإقليمية وNetCDF، وله وضع دمج نقاط أوفلاين. |
-| `MIRSAD_Weather_Stations_Atlas_Generator.pyt` | حوالي 1,143 سطرًا. يحمّل محرك النقاط، ويرث منه، ويضيف اختيار المحطات والبيانات الوصفية وواجهة عربية. |
-| `POWER_Climate_Atlas_Generator_10_8.py` | محوّل توافق يستورد ملف MIRSAD الأساسي؛ ليس محركًا مستقلاً ينبغي تطويره وحده. |
-| `NOAA_WMO_Weather_Stations_Atlas_Generator.py` | محوّل توافق لصندوق المحطات. |
+| `Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt` | المصدر الفعلي لمحرك النقاط: `PowerClimateAtlasGenerator`؛ حوالي 9,804 أسطر. يحتوي الحسابات والمخطط والتحميل والإخراج والاستيفاء. |
+| `Toolboxes/raster_atlas_generator.py` | `RasterDataClimateAtlasGenerator`؛ حوالي 4,912 سطرًا. مسار مستقل للشبكات الإقليمية وNetCDF، وله وضع دمج نقاط أوفلاين. |
+| `Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt` | حوالي 1,143 سطرًا. يحمّل محرك النقاط، ويرث منه، ويضيف اختيار المحطات والبيانات الوصفية وواجهة عربية. |
+| `Toolboxes/POWER_Climate_Atlas_Generator_10_8.py` | محوّل توافق يستورد ملف MIRSAD الأساسي؛ ليس محركًا مستقلاً ينبغي تطويره وحده. |
+| `Toolboxes/NOAA_WMO_Weather_Stations_Atlas_Generator.py` | محوّل توافق لصندوق المحطات. |
 | `generate_excel_dictionary.py` | قاموس حقول مستقل في `FIELDS_DATA` وإنشاء XLSX عبر openpyxl؛ يحتاج مزامنة مع الكود. |
 | `generate_master_atlas_excel.py` | إنشاء دليل التصنيف؛ 19 صفحة للعناصر مع صفحات تمهيدية، ومقارنة الفواصل الصحيحة والعشرية. |
 | `migrate_legacy_database.py` | ترحيل المخططات القديمة عبر ArcPy أو قراءة SHP/CSV؛ مخططه التاريخي ليس المخطط الحالي ذي 19 حزمة. |
 | `Weather_Stations_Hub/` | SHP وGDB ومستكشفات HTML لدليل المحطات. |
 | `scripts/` | أدوات بناء التوثيق والمستكشفات وعمليات backfill لدراسات سابقة. |
-| `utils/` | أدوات الستايلات والألوان والتحقق والتقويم. |
+| `mirsad_core/` | أدوات الستايلات والألوان والتحقق والتقويم. |
 | `tests/` | خليط اختبارات حسابات واختبارات نصية ومحاكاة ArcPy واختبارات GIS فعلية؛ ليست كلها متزامنة مع الواجهة الحالية. |
 
 صندوق المناخ يسجل أداتين جنبًا إلى جنب إذا نجح استيراد محرك الراستر. صندوق المحطات يسجل `WeatherStationsAtlasGenerator` و`WeatherStationsAtlasGeneratorAR`. النسخة العربية تستخدم نفس مسار التنفيذ والحسابات، وليست نسخة مستقلة من المعادلات.

@@ -14,7 +14,7 @@ sys.path.insert(0,REPO)
 parser=argparse.ArgumentParser();parser.add_argument('--arcgis',action='store_true');parser.add_argument('--annual',action='store_true');args=parser.parse_args()
 out=os.path.join(ROOT,'.test-output','regional-products','run-'+str(int(time.time()*1000)))
 os.makedirs(out)
-from utils.climate_products import CHIRPS
+from mirsad_core.climate_products import CHIRPS
 if not args.arcgis:
     sys.path.insert(0,os.path.join(ROOT,'src'))
     from shapely.geometry import box,mapping
@@ -31,7 +31,7 @@ if not args.arcgis:
 else:
     print('Importing native ArcGIS runtime');sys.stdout.flush()
     import arcpy
-    toolbox_path=os.path.join(REPO,'MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt')
+    toolbox_path=os.path.join(REPO,'Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt')
     if sys.version_info[0]>=3:
         import importlib.machinery
         import importlib.util

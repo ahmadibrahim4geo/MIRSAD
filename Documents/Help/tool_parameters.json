@@ -1,16 +1,23 @@
 {
   "reviewed": "2026-10-19",
   "runtime": "ArcGIS Pro 3.6",
+  "source_hash_policy": "normalized-utf8-lf-v1",
+  "source_raw_sha256": {
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "e1624a71c0b2b4ca6215927a32edf9616ed8e92c6d7f0a241d3318efd4b469d4",
+    "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "1e39af687de23bdbc1c3c87f22bb539cfc280b73bed0110d602c4e52aed252ae",
+    "Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt": "4994ee7c40606a0b25f9372dc9481689455537ea2a801eb3375bbae374de82e3",
+    "Toolboxes/raster_atlas_generator.py": "cbd0cf3814713e82bb47a8944710063ce0a575c4898fa162d6a1985b708aac4b"
+  },
   "source_sha256": {
-    "MIRSAD_Climate_Atlas_Generator_10_8.pyt": "3eb7039b6ace7b9428a62d517d69826f9c07a6dd3f83b2ab9c801895c14d732f",
-    "MIRSAD_Weather_Stations_Atlas_Generator.pyt": "a202f4375bb89626b72a530acd861bc6a61362fa90e54b4b9d0f0f8b02bdc5a9",
-    "MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt": "4994ee7c40606a0b25f9372dc9481689455537ea2a801eb3375bbae374de82e3",
-    "raster_atlas_generator.py": "1c34683dda358c27d5bdd3a4d52ed2c68f2f6ea23b32b2d446db845d89d958a9"
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "659f93c9414381979f946e42da4dcff4cb66547f56f3fdd4898aa2eaf4d11e65",
+    "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "4b9813bd740c4ee30ec9e96b056dc9abf5386c09b56352783ecdc7ee867e5cc6",
+    "Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt": "4994ee7c40606a0b25f9372dc9481689455537ea2a801eb3375bbae374de82e3",
+    "Toolboxes/raster_atlas_generator.py": "e28c8686d908e528a7c478d55e3a8fe92c94a6b8d8d2dcf88def8fd9eff1867a"
   },
   "tools": [
     {
       "id": "points",
-      "file": "MIRSAD_Climate_Atlas_Generator_10_8.pyt",
+      "file": "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt",
       "en": "MIRSAD: Point Climate Atlas Generator",
       "ar": "MIRSAD: Point Climate Atlas Generator (AR)",
       "parameters": [
@@ -1129,7 +1136,7 @@
     },
     {
       "id": "stations",
-      "file": "MIRSAD_Weather_Stations_Atlas_Generator.pyt",
+      "file": "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt",
       "en": "MIRSAD: Ground Weather Stations Climate Atlas Generator",
       "ar": "MIRSAD: Ground Weather Stations Climate Atlas Generator (AR)",
       "parameters": [
@@ -2392,7 +2399,7 @@
     },
     {
       "id": "raster",
-      "file": "MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt",
+      "file": "Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt",
       "en": "MIRSAD: Gridded & Raster Climate Atlas Generator",
       "ar": "MIRSAD: Gridded & Raster Climate Atlas Generator (AR)",
       "parameters": [
@@ -2982,12 +2989,5 @@
         }
       ]
     }
-  ],
-  "source_raw_sha256": {
-    "MIRSAD_Climate_Atlas_Generator_10_8.pyt": "9a028ab2d327a3f1a94566c8905d99f5ef6306b3237b327f841728b950d0ee85",
-    "MIRSAD_Weather_Stations_Atlas_Generator.pyt": "389bf211099fc1eeda6f4e55755d909d008cfba1922ee69ec9e58b0e33e8c7bc",
-    "MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt": "4994ee7c40606a0b25f9372dc9481689455537ea2a801eb3375bbae374de82e3",
-    "raster_atlas_generator.py": "4673c8fccabeefcc95d99bff64c244d80730fca2a110db0de865eca981cfe144"
-  },
-  "source_hash_policy": "normalized-utf8-lf-v1"
+  ]
 }

@@ -4,8 +4,8 @@ Tests for:
 1. Execution Workflow Pipeline Mode (Batch Mode vs Sequential Mode)
 2. Decoupled Temporal Scope Matrix (Annual, Winter, Spring, Summer, Autumn)
 3. Both Climate Toolbox Tools:
-   - POWER_Climate_Atlas_Generator_10_8.pyt
-   - raster_atlas_generator.py
+   - Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt
+   - Toolboxes/raster_atlas_generator.py
 """
 
 import unittest
@@ -13,9 +13,9 @@ import sys
 import os
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT_PATH = os.path.join(ROOT_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+PYT_PATH = os.path.join(ROOT_DIR, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(PYT_PATH):
-    PYT_PATH = os.path.join(ROOT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    PYT_PATH = os.path.join(ROOT_DIR, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
 
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
@@ -88,6 +88,7 @@ sys.modules["arcpy"] = mock_arcpy
 
 # Load pyt module dynamically
 pyt_mod = type(sys)("power_atlas_pyt")
+pyt_mod.__file__ = PYT_PATH
 pyt_mod.__dict__["arcpy"] = mock_arcpy
 raw_pyt = open(PYT_PATH, "rb").read()
 if sys.version_info[0] == 3:

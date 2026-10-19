@@ -11,8 +11,8 @@ import tempfile
 import unittest
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,ROOT)
-from utils import climate_products as p,hybrid_pipeline as h
-from utils.protected_sources import daily_from_cds,CDS,cds_payload,cds_download,cds_csv
+from mirsad_core import climate_products as p,hybrid_pipeline as h
+from mirsad_core.protected_sources import daily_from_cds,CDS,cds_payload,cds_download,cds_csv
 
 
 class ProductTests(unittest.TestCase):
@@ -77,7 +77,7 @@ class ProductTests(unittest.TestCase):
         self.assertEqual(cds_payload("2m_temperature",self.station)["inputs"]["area"],[30.122,31.406,30.122,31.406])
 
     def test_credential_errors_are_redacted_from_product_summaries(self):
-        from utils import protected_sources
+        from mirsad_core import protected_sources
         old=protected_sources.protected_fetch
         def fail(*unused):raise ValueError("denied EXAMPLE_SECRET_123")
         protected_sources.protected_fetch=fail

@@ -59,7 +59,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: OBJECTID='Sample_OBJECTID_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -85,7 +85,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Source_ID='Sample_Source_ID_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -111,7 +111,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Point_Lat='Sample_Point_Lat_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -137,7 +137,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Point_Lon='Sample_Point_Lon_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -163,7 +163,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Data_Start='Sample_Data_Start_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -189,7 +189,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Data_End='Sample_Data_End_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -215,7 +215,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Temporal='Sample_Temporal_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -241,7 +241,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Intrp_Meth='Sample_Intrp_Meth_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -267,7 +267,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Cell_Size='Sample_Cell_Size_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -293,7 +293,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Wind_Cell='Sample_Wind_Cell_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -319,7 +319,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Status='Sample_Status_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -345,7 +345,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Example value: Error_Msg='Sample_Error_Msg_Value' |
 | **17** | **Scientific Interpretation** | Provides spatial traceability, projection metadata, date ranges, and processing status for reproducibility. |
 | **18** | **Warnings & Cautions** | Do not delete or alter admin fields; required for raster interpolation and database indexing. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: execute() lines 4070-4200` |
 
 ---
 
@@ -371,7 +371,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly means [12.0, 13.5, 17.0, 21.5, 26.0, 29.5, 31.0, 31.0, 28.0, 24.0, 18.5, 14.0] -> Sum = 246.0 -> Mean = 20.5 °C. |
 | **17** | **Scientific Interpretation** | Baseline thermal state of the atmosphere, fundamental for ecological classification, energy demand, and comfort. |
 | **18** | **Warnings & Cautions** | Represents screen-level air temperature (2m above ground), not surface skin temperature (LST). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -397,7 +397,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=14.0 °C, Jan=12.0 °C, Feb=13.5 °C -> Mean = (14.0 + 12.0 + 13.5)/3 = 13.17 °C. |
 | **17** | **Scientific Interpretation** | Indicates cold-season thermal severity, crucial for crop vernalization, heating degree days, and frost risk. |
 | **18** | **Warnings & Cautions** | Uses climatological winter (DJF); spans calendar year boundaries in time series. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -423,7 +423,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=17.0 °C, Apr=21.5 °C, May=26.0 °C -> Mean = (17.0 + 21.5 + 26.0)/3 = 21.50 °C. |
 | **17** | **Scientific Interpretation** | Represents spring transitional warming, governing the onset of the agricultural growing season. |
 | **18** | **Warnings & Cautions** | Subject to rapid synoptic shifts (e.g. desert Khamaseen heat waves). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -449,7 +449,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=29.5 °C, Jul=31.0 °C, Aug=31.0 °C -> Mean = (29.5 + 31.0 + 31.0)/3 = 30.50 °C. |
 | **17** | **Scientific Interpretation** | Peak summer thermal loading, driving cooling degree days, peak agricultural water demand, and heat stress. |
 | **18** | **Warnings & Cautions** | Reanalysis may underestimate localized urban heat island (UHI) peaks. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -475,7 +475,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=28.0 °C, Oct=24.0 °C, Nov=18.5 °C -> Mean = (28.0 + 24.0 + 18.5)/3 = 23.50 °C. |
 | **17** | **Scientific Interpretation** | Autumn transitional cooling, marking crop harvesting and the start of winter cropping seasons. |
 | **18** | **Warnings & Cautions** | Transition speed varies significantly between maritime and continental desert regimes. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -501,7 +501,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** |  |
 | **17** | **Scientific Interpretation** |  |
 | **18** | **Warnings & Cautions** |  |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -527,7 +527,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** |  |
 | **17** | **Scientific Interpretation** |  |
 | **18** | **Warnings & Cautions** |  |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -553,7 +553,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=14.0 °C, Jan=12.0 °C, Feb=13.5 °C -> Mean = (14.0 + 12.0 + 13.5)/3 = 13.17 °C. |
 | **17** | **Scientific Interpretation** | Indicates cold-season thermal severity, crucial for crop vernalization, heating degree days, and frost risk. |
 | **18** | **Warnings & Cautions** | Uses climatological winter (DJF); spans calendar year boundaries in time series. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -579,7 +579,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** |  |
 | **17** | **Scientific Interpretation** |  |
 | **18** | **Warnings & Cautions** |  |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -605,7 +605,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** |  |
 | **17** | **Scientific Interpretation** |  |
 | **18** | **Warnings & Cautions** |  |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 1850-1920` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 1850-1920` |
 
 ---
 
@@ -631,7 +631,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly HI values calculated -> Annual Mean = 22.4 °C. |
 | **17** | **Scientific Interpretation** | Mean apparent temperature experienced by the human body considering evaporative cooling inhibition by ambient moisture. |
 | **18** | **Warnings & Cautions** | Applies strictly to human biometeorological comfort in shade with light breeze. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); raster_atlas_generator.py: lines 962-1015` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); Toolboxes/raster_atlas_generator.py: lines 962-1015` |
 
 ---
 
@@ -657,7 +657,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=32.5, Jul=36.8, Aug=37.2 °C -> Summer Mean = 35.50 °C. |
 | **17** | **Scientific Interpretation** | Summer thermal discomfort level. NOAA Warning thresholds: Caution (27-32°C), Extreme Caution (32-41°C), Danger (41-54°C). |
 | **18** | **Warnings & Cautions** | Coastal zones experience massive HI amplification due to high humidity. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); raster_atlas_generator.py: lines 962-1015` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); Toolboxes/raster_atlas_generator.py: lines 962-1015` |
 
 ---
 
@@ -683,7 +683,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=14.0, Jan=12.0, Feb=13.5 °C -> Winter Mean = 13.17 °C. |
 | **17** | **Scientific Interpretation** | Winter apparent temperature; under cool conditions (T < 20°C), HI defaults to dry-bulb temperature. |
 | **18** | **Warnings & Cautions** | Heat index formula is dormant at low temperatures. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); raster_atlas_generator.py: lines 962-1015` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); Toolboxes/raster_atlas_generator.py: lines 962-1015` |
 
 ---
 
@@ -709,7 +709,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max (Aug) = 37.2 °C, Min (Jan) = 12.0 °C -> Range = 25.2 °C. |
 | **17** | **Scientific Interpretation** | Annual biometeorological apparent temperature swing. |
 | **18** | **Warnings & Cautions** | Exceeds dry-bulb temperature range in humid climates due to non-linear humidity weighting. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); raster_atlas_generator.py: lines 962-1015` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); Toolboxes/raster_atlas_generator.py: lines 962-1015` |
 
 ---
 
@@ -735,7 +735,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | T=32.0 °C, RH=60% -> Tw (Stull) = 25.4 °C -> WBGT = 0.7(25.4) + 0.3(32.0) = 17.78 + 9.60 = 27.38 °C. |
 | **17** | **Scientific Interpretation** | Gold standard occupational and athletic thermal heat strain metric (ISO 7243 / ACGIH). Thresholds: 28°C (heavy labor limit), 32°C (extreme risk). |
 | **18** | **Warnings & Cautions** | Calculated for outdoor shade / indoor conditions without direct solar radiation load (no black globe term). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); raster_atlas_generator.py: lines 962-1015` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: heat_index_c (line 797), wetbulb_stull_c (line 840), wbgt_shade_c (line 858); Toolboxes/raster_atlas_generator.py: lines 962-1015` |
 
 ---
 
@@ -761,7 +761,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly dew points [7.2, 7.5, 9.8, 12.0, 15.1, 18.5, 21.2, 21.8, 19.5, 16.0, 12.2, 8.8] -> Mean = 14.13 °C. |
 | **17** | **Scientific Interpretation** | Direct measure of absolute atmospheric water vapor mass (specific humidity proxy). Unlike RH, dew point is temperature-independent. |
 | **18** | **Warnings & Cautions** | Values exceeding 20°C cause severe oppressive sultry discomfort in humans. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2165-2200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2165-2200` |
 
 ---
 
@@ -787,7 +787,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=8.8, Jan=7.2, Feb=7.5 °C -> Winter Mean = 7.83 °C. |
 | **17** | **Scientific Interpretation** | Winter absolute moisture content. Low dew points indicate dry air masses. |
 | **18** | **Warnings & Cautions** | Dew points below 0°C indicate frost risk when air temperature drops. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2165-2200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2165-2200` |
 
 ---
 
@@ -813,7 +813,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=9.8, Apr=12.0, May=15.1 °C -> Spring Mean = 12.30 °C. |
 | **17** | **Scientific Interpretation** | Spring moisture build-up as regional surface heating increases evaporation. |
 | **18** | **Warnings & Cautions** | Subject to sudden shifts during dry continental Khamaseen incursions. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2165-2200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2165-2200` |
 
 ---
 
@@ -839,7 +839,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=18.5, Jul=21.2, Aug=21.8 °C -> Summer Mean = 20.50 °C. |
 | **17** | **Scientific Interpretation** | Summer peak absolute atmospheric humidity, driving coastal sultry conditions. |
 | **18** | **Warnings & Cautions** | Dew points >21°C severely impair human evaporative thermoregulation. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2165-2200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2165-2200` |
 
 ---
 
@@ -865,7 +865,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=19.5, Oct=16.0, Nov=12.2 °C -> Autumn Mean = 15.90 °C. |
 | **17** | **Scientific Interpretation** | Autumn atmospheric moisture decline. |
 | **18** | **Warnings & Cautions** | High nighttime radiation cooling relative to high dew points triggers dense radiation fog. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2165-2200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2165-2200` |
 
 ---
 
@@ -891,7 +891,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max month (Aug) = 21.8 °C, Min month (Jan) = 7.2 °C -> Range = 14.6 °C. |
 | **17** | **Scientific Interpretation** | Annual absolute atmospheric moisture swing. |
 | **18** | **Warnings & Cautions** | Reflects seasonal changes in water vapor content. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2165-2200` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2165-2200` |
 
 ---
 
@@ -917,7 +917,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Climatological monthly totals: Jan=45, Feb=35, Mar=25, Apr=15, May=5, Jun=0, Jul=0, Aug=0, Sep=2, Oct=12, Nov=35, Dec=50 mm -> Annual Sum = 224.0 mm/year. |
 | **17** | **Scientific Interpretation** | Mean annual accumulated precipitation volume over the 30-year climatological normal. Critical benchmark for hydrological water balance, reservoir design, and agricultural rainfed viability. |
 | **18** | **Warnings & Cautions** | CRITICAL: Named 'R_Annual_Mean' because it is the 30-year MEAN of annual accumulations (~224 mm/year in northern Egypt). In legacy versions of the tool it was labeled 'R_Annual_Total'. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -946,7 +946,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | R_Annual_Mean = 224.0 mm -> R_Month_Mean = 224.0 / 12 = 18.67 mm/month. |
 | **17** | **Scientific Interpretation** | Mean monthly rainfall rate averaged across the 12 months of the year. Provides a standardized monthly baseline rate. |
 | **18** | **Warnings & Cautions** | CRITICAL: In strongly seasonal Mediterranean and arid climates where summer has 0 mm, this value does not represent actual rain falling in dry months; it is an annual average divided by 12. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -972,7 +972,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Wettest month (Dec) = 50.0 mm, Driest month (Jul) = 0.0 mm -> Range = 50.0 - 0.0 = 50.0 mm. |
 | **17** | **Scientific Interpretation** | Measures monthly rainfall seasonality and intra-annual precipitation contrast. |
 | **18** | **Warnings & Cautions** | In arid zones where the driest month is 0 mm, the range equals the wettest month total. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -1001,7 +1001,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Win=130 mm, Spr=45 mm, Sum=0 mm, Aut=49 mm -> Season Range = 130 - 0 = 130.0 mm. |
 | **17** | **Scientific Interpretation** | Quantifies seasonal regime contrast (e.g. Mediterranean winter concentration vs summer drought). |
 | **18** | **Warnings & Cautions** | Calculated on 3-month seasonal sums, not individual months. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -1027,7 +1027,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=50.0, Jan=45.0, Feb=35.0 mm -> Winter Seasonal Total = 130.0 mm. Multi-year Mean = 130.0 mm/season. |
 | **17** | **Scientific Interpretation** | Mean precipitation depth falling during meteorological winter (DJF), primary recharge season in Mediterranean climates. |
 | **18** | **Warnings & Cautions** | CRITICAL: Named 'R_Winter_Mean' because it is the multi-year AVERAGE of winter seasonal accumulations. Unit is mm/season (مم/فصل). In legacy versions it was labeled 'R_Winter_Total'. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -1053,7 +1053,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=25.0, Apr=15.0, May=5.0 mm -> Spring Seasonal Total = 45.0 mm. Multi-year Mean = 45.0 mm/season. |
 | **17** | **Scientific Interpretation** | Mean precipitation depth falling during meteorological spring (MAM). |
 | **18** | **Warnings & Cautions** | Convective spring storm events may exhibit high spatial heterogeneity. Unit is mm/season (مم/فصل). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -1079,7 +1079,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=0.0, Jul=0.0, Aug=0.0 mm -> Summer Seasonal Total = 0.0 mm. Multi-year Mean = 0.0 mm/season. |
 | **17** | **Scientific Interpretation** | Mean precipitation depth falling during meteorological summer (JJA), often near 0 in arid/Mediterranean domains. |
 | **18** | **Warnings & Cautions** | In arid Mediterranean regions, summer mean is typically 0.0 mm/season. Unit is mm/season (مم/فصل). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -1105,7 +1105,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=2.0, Oct=12.0, Nov=35.0 mm -> Autumn Seasonal Total = 49.0 mm. Multi-year Mean = 49.0 mm/season. |
 | **17** | **Scientific Interpretation** | Mean precipitation depth falling during meteorological autumn (SON), early season recharge. |
 | **18** | **Warnings & Cautions** | Autumn convective storms can trigger flash flooding in arid wadis. Unit is mm/season (مم/فصل). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); raster_atlas_generator.py: lines 1925-1980` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: monthly_precip_total_from_rate (line 749), seasonal_totals_from_monthly_totals (line 721), safe_sum (line 642); Toolboxes/raster_atlas_generator.py: lines 1925-1980` |
 
 ---
 
@@ -1131,7 +1131,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly hPa: [1018, 1017, 1015, 1013, 1011, 1009, 1008, 1008, 1011, 1014, 1016, 1018] -> Annual Mean = 1013.17 hPa. |
 | **17** | **Scientific Interpretation** | Mean barometric atmospheric pressure at Mean Sea Level (MSL). Reflects synoptic pressure systems and atmospheric circulation cells. |
 | **18** | **Warnings & Cautions** | PS is strongly dependent on station elevation; PSL removes elevation effects using the hypsometric reduction. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1157,7 +1157,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=1018.0, Jan=1018.5, Feb=1017.0 hPa -> Winter Mean = 1017.83 hPa. |
 | **17** | **Scientific Interpretation** | Winter synoptic pressure regime, indicating Azores/Siberian high-pressure dominance or Mediterranean cyclonic activity. |
 | **18** | **Warnings & Cautions** | Averaged across meteorological winter months (DJF). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1183,7 +1183,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=1015.0, Apr=1013.0, May=1011.0 hPa -> Spring Mean = 1013.00 hPa. |
 | **17** | **Scientific Interpretation** | Spring synoptic pressure regime, characterized by transitioning thermal depressions. |
 | **18** | **Warnings & Cautions** | Captures rapid pressure drops associated with spring desert depressions. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1209,7 +1209,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=1009.0, Jul=1008.0, Aug=1008.0 hPa -> Summer Mean = 1008.33 hPa. |
 | **17** | **Scientific Interpretation** | Summer synoptic pressure regime, reflecting the extension of the Indian Monsoon Thermal Low across North Africa and the Middle East. |
 | **18** | **Warnings & Cautions** | Typically the lowest sea level pressure period in the subtropical desert belt. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1235,7 +1235,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=1011.0, Oct=1014.0, Nov=1016.0 hPa -> Autumn Mean = 1013.67 hPa. |
 | **17** | **Scientific Interpretation** | Autumn pressure recovery, with the retreat of the summer monsoon trough and building continental ridges. |
 | **18** | **Warnings & Cautions** | May feature Red Sea Trough extensions producing unstable weather. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1261,7 +1261,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max month (Jan) = 1018.5 hPa, Min month (Jul) = 1008.0 hPa -> Range = 10.5 hPa. |
 | **17** | **Scientific Interpretation** | Annual barometric pressure swing, reflecting the seasonal shift between winter anticyclonic ridges and summer thermal troughs. |
 | **18** | **Warnings & Cautions** | Reflects seasonal climatological amplitude, not daily synoptic variance. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1287,7 +1287,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly hPa: [1018, 1017, 1015, 1013, 1011, 1009, 1008, 1008, 1011, 1014, 1016, 1018] -> Annual Mean = 1013.17 hPa. |
 | **17** | **Scientific Interpretation** | Mean barometric atmospheric pressure at ground surface elevation. Reflects synoptic pressure systems and atmospheric circulation cells. |
 | **18** | **Warnings & Cautions** | PS is strongly dependent on station elevation; PSL removes elevation effects using the hypsometric reduction. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1313,7 +1313,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=1018.0, Jan=1018.5, Feb=1017.0 hPa -> Winter Mean = 1017.83 hPa. |
 | **17** | **Scientific Interpretation** | Winter synoptic pressure regime, indicating Azores/Siberian high-pressure dominance or Mediterranean cyclonic activity. |
 | **18** | **Warnings & Cautions** | Averaged across meteorological winter months (DJF). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1339,7 +1339,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=1015.0, Apr=1013.0, May=1011.0 hPa -> Spring Mean = 1013.00 hPa. |
 | **17** | **Scientific Interpretation** | Spring synoptic pressure regime, characterized by transitioning thermal depressions. |
 | **18** | **Warnings & Cautions** | Captures rapid pressure drops associated with spring desert depressions. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1365,7 +1365,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=1009.0, Jul=1008.0, Aug=1008.0 hPa -> Summer Mean = 1008.33 hPa. |
 | **17** | **Scientific Interpretation** | Summer synoptic pressure regime, reflecting the extension of the Indian Monsoon Thermal Low across North Africa and the Middle East. |
 | **18** | **Warnings & Cautions** | Typically the lowest sea level pressure period in the subtropical desert belt. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1391,7 +1391,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=1011.0, Oct=1014.0, Nov=1016.0 hPa -> Autumn Mean = 1013.67 hPa. |
 | **17** | **Scientific Interpretation** | Autumn pressure recovery, with the retreat of the summer monsoon trough and building continental ridges. |
 | **18** | **Warnings & Cautions** | May feature Red Sea Trough extensions producing unstable weather. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1417,7 +1417,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max month (Jan) = 1018.5 hPa, Min month (Jul) = 1008.0 hPa -> Range = 10.5 hPa. |
 | **17** | **Scientific Interpretation** | Annual barometric pressure swing, reflecting the seasonal shift between winter anticyclonic ridges and summer thermal troughs. |
 | **18** | **Warnings & Cautions** | Reflects seasonal climatological amplitude, not daily synoptic variance. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); raster_atlas_generator.py: lines 1985-2060` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: pressure_kpa_to_mbar (line 761), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 1985-2060` |
 
 ---
 
@@ -1443,7 +1443,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly speeds [4.2, 4.5, 4.8, 4.6, 4.3, 4.1, 3.9, 3.8, 3.9, 4.0, 4.1, 4.2] -> Mean = 4.20 m/s. |
 | **17** | **Scientific Interpretation** | Climatological baseline kinetic energy of near-surface airflow, critical for wind energy feasibility, evaporation, and aeolian erosion. |
 | **18** | **Warnings & Cautions** | Standard height is 10 meters above ground level (WS10M). Roughness effects can reduce speed near ground. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1469,7 +1469,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=4.2, Jan=4.2, Feb=4.5 m/s -> Winter Mean = 4.30 m/s. |
 | **17** | **Scientific Interpretation** | Winter wind regime driven by Mediterranean frontal systems and pressure gradients. |
 | **18** | **Warnings & Cautions** | Averaged across DJF. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1495,7 +1495,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=4.8, Apr=4.6, May=4.3 m/s -> Spring Mean = 4.57 m/s. |
 | **17** | **Scientific Interpretation** | Spring wind peak, often the windiest season in North Africa due to intense desert cyclogenesis (Khamaseen storms). |
 | **18** | **Warnings & Cautions** | Associated with high dust and sandstorm activity. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1521,7 +1521,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=4.1, Jul=3.9, Aug=3.8 m/s -> Summer Mean = 3.93 m/s. |
 | **17** | **Scientific Interpretation** | Summer wind regime, dominated by steady Etesian northerly winds over the eastern Mediterranean. |
 | **18** | **Warnings & Cautions** | Provides beneficial natural ventilation in coastal zones. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1547,7 +1547,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=3.9, Oct=4.0, Nov=4.1 m/s -> Autumn Mean = 4.00 m/s. |
 | **17** | **Scientific Interpretation** | Autumn transitional wind conditions. |
 | **18** | **Warnings & Cautions** | Relatively calm season before winter cyclonic reactivation. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1573,7 +1573,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly values -> Maximum month is March with 4.8 m/s. |
 | **17** | **Scientific Interpretation** | Identifies the month with the highest sustained climatological wind energy potential. |
 | **18** | **Warnings & Cautions** | Represents monthly mean, not instantaneous maximum gust speed. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1599,7 +1599,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly values -> Minimum month is August with 3.8 m/s. |
 | **17** | **Scientific Interpretation** | Identifies the month of greatest atmospheric stagnation and lowest wind generation. |
 | **18** | **Warnings & Cautions** | Low wind speeds correlate with poor air pollution dispersion. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1625,7 +1625,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max (4.8) - Min (3.8) = 1.0 m/s. |
 | **17** | **Scientific Interpretation** | Intra-annual wind speed seasonality and variability. |
 | **18** | **Warnings & Cautions** | Low range indicates steady, year-round wind resource. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1651,7 +1651,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Angles: [350°, 360°, 10°] -> circular mean = 360.0° (Due North). |
 | **17** | **Scientific Interpretation** | Prevailing annual wind trajectory, governing sand dune migration, industrial plume dispersion, and runway alignments. |
 | **18** | **Warnings & Cautions** | CRITICAL: Direction indicates the direction FROM which the wind blows (meteorological convention: 0°=North, 90°=East, 180°=South, 270°=West). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1677,7 +1677,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Winter angles [315°, 330°, 340°] -> circular mean = 328.3° (North-Northwest). |
 | **17** | **Scientific Interpretation** | Prevailing winter wind direction, typically northwest to west in the Levant and Egypt. |
 | **18** | **Warnings & Cautions** | CRITICAL: Direction indicates the direction FROM which the wind blows (meteorological convention: 0°=North, 90°=East, 180°=South, 270°=West). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1703,7 +1703,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Spring angles [220°, 240°, 260°] -> circular mean = 240.0° (Southwest). |
 | **17** | **Scientific Interpretation** | Spring prevailing wind direction, reflecting southerly/southwesterly desert winds. |
 | **18** | **Warnings & Cautions** | CRITICAL: Direction indicates the direction FROM which the wind blows (meteorological convention: 0°=North, 90°=East, 180°=South, 270°=West). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1729,7 +1729,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Summer angles [350°, 355°, 5°] -> circular mean = 356.7° (Northerly). |
 | **17** | **Scientific Interpretation** | Summer prevailing direction, reflecting constant northerly maritime trade/Etesian winds. |
 | **18** | **Warnings & Cautions** | CRITICAL: Direction indicates the direction FROM which the wind blows (meteorological convention: 0°=North, 90°=East, 180°=South, 270°=West). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1755,7 +1755,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Autumn angles [0°, 15°, 30°] -> circular mean = 15.0° (North-Northeast). |
 | **17** | **Scientific Interpretation** | Autumn prevailing wind direction, shifting from north to northeast. |
 | **18** | **Warnings & Cautions** | CRITICAL: Direction indicates the direction FROM which the wind blows (meteorological convention: 0°=North, 90°=East, 180°=South, 270°=West). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2065-2120` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: circular_mean_deg (line 663), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2065-2120` |
 
 ---
 
@@ -1781,7 +1781,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly RH: [68, 65, 60, 52, 48, 50, 55, 58, 60, 62, 65, 69]% -> Annual Mean = 60.17%. |
 | **17** | **Scientific Interpretation** | Mean atmospheric moisture saturation ratio. Strongly modulates human comfort, crop transpiration, and corrosion rates. |
 | **18** | **Warnings & Cautions** | Relative humidity is strongly inversely correlated with air temperature over diurnal cycles. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2125-2160` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2125-2160` |
 
 ---
 
@@ -1807,7 +1807,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=69%, Jan=68%, Feb=65% -> Winter Mean = 67.33%. |
 | **17** | **Scientific Interpretation** | Winter moisture saturation, typically the highest RH season due to lower ambient temperatures. |
 | **18** | **Warnings & Cautions** | High winter humidity increases fog occurrence and damp cold sensation. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2125-2160` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2125-2160` |
 
 ---
 
@@ -1833,7 +1833,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=60%, Apr=52%, May=48% -> Spring Mean = 53.33%. |
 | **17** | **Scientific Interpretation** | Spring moisture transition, showing sharp drops during continental desert wind advection. |
 | **18** | **Warnings & Cautions** | Sudden drops below 20% can cause crop desiccation. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2125-2160` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2125-2160` |
 
 ---
 
@@ -1859,7 +1859,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=50%, Jul=55%, Aug=58% -> Summer Mean = 54.33%. |
 | **17** | **Scientific Interpretation** | Summer moisture regime; coastal areas experience intense sultry humidity while inland deserts remain arid. |
 | **18** | **Warnings & Cautions** | High summer RH exacerbates heat stress by suppressing sweat evaporation. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2125-2160` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2125-2160` |
 
 ---
 
@@ -1885,7 +1885,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=60%, Oct=62%, Nov=65% -> Autumn Mean = 62.33%. |
 | **17** | **Scientific Interpretation** | Autumn humidity recovery as temperatures cool and Mediterranean evaporation remains active. |
 | **18** | **Warnings & Cautions** | Contributes to morning dew and condensation formation. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2125-2160` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2125-2160` |
 
 ---
 
@@ -1911,7 +1911,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max month (Dec) = 69%, Min month (May) = 48% -> Range = 21.0%. |
 | **17** | **Scientific Interpretation** | Intra-annual seasonal swing in atmospheric moisture saturation. |
 | **18** | **Warnings & Cautions** | Calculated on monthly averages, not daily extremes. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2125-2160` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2125-2160` |
 
 ---
 
@@ -1937,7 +1937,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly means [3.2, 4.3, 5.8, 6.9, 7.6, 8.2, 8.1, 7.5, 6.4, 5.0, 3.8, 3.0] kWh/m²/day -> Mean = 5.82 kWh/m²/day. |
 | **17** | **Scientific Interpretation** | Mean daily all-sky solar insolation received on a horizontal surface. Primary metric for photovoltaic (PV) and solar thermal energy sizing. |
 | **18** | **Warnings & Cautions** | Represents global horizontal irradiance (GHI) under all-sky conditions (including cloud attenuation). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -1963,7 +1963,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sum of (Monthly mean * days) across 12 months = 2,128.5 kWh/m²/year. |
 | **17** | **Scientific Interpretation** | Total annual solar energy yield per square meter, the benchmark parameter for utility-scale solar farm yield modeling. |
 | **18** | **Warnings & Cautions** | Expressed in kWh/m²/year. Multiply by 3.6 to convert to MJ/m²/year. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -1989,7 +1989,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=3.0, Jan=3.2, Feb=4.3 kWh/m²/day -> Winter Mean = 3.50 kWh/m²/day. |
 | **17** | **Scientific Interpretation** | Winter baseline solar resource, determining off-grid solar battery storage requirements during lowest sun elevation. |
 | **18** | **Warnings & Cautions** | Lowest insolation season due to low solar zenith angle and winter cloudiness. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -2015,7 +2015,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=5.8, Apr=6.9, May=7.6 kWh/m²/day -> Spring Mean = 6.77 kWh/m²/day. |
 | **17** | **Scientific Interpretation** | Spring insolation surge, driving rapid photosynthetic activity and surface warming. |
 | **18** | **Warnings & Cautions** | Atmospheric aerosol and dust storms (Khamaseen) can cause temporary sharp dips. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -2041,7 +2041,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=8.2, Jul=8.1, Aug=7.5 kWh/m²/day -> Summer Mean = 7.93 kWh/m²/day. |
 | **17** | **Scientific Interpretation** | Peak summer solar resource under high sun elevation and minimal cloudiness. |
 | **18** | **Warnings & Cautions** | High ambient temperatures cause photovoltaic panel efficiency degradation (temperature coefficient loss). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -2067,7 +2067,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=6.4, Oct=5.0, Nov=3.8 kWh/m²/day -> Autumn Mean = 5.07 kWh/m²/day. |
 | **17** | **Scientific Interpretation** | Autumn declining insolation trajectory. |
 | **18** | **Warnings & Cautions** | Steadily decreasing day length reduces daily energy totals. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -2093,7 +2093,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max (Jun) = 8.2, Min (Dec) = 3.0 -> Range = 5.20 kWh/m²/day. |
 | **17** | **Scientific Interpretation** | Seasonal solar insolation amplitude, a function of latitude and seasonal cloud cover variations. |
 | **18** | **Warnings & Cautions** | Higher latitudes exhibit dramatically higher solar seasonality. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); raster_atlas_generator.py: lines 2205-2245` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: solar_mj_to_kwh (line 755), climat_monthly_means (line 700); Toolboxes/raster_atlas_generator.py: lines 2205-2245` |
 
 ---
 
@@ -2119,7 +2119,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly UV [3.1, 4.5, 6.8, 8.9, 10.5, 11.8, 11.7, 10.6, 8.7, 6.2, 4.1, 2.8] -> Mean = 7.48. |
 | **17** | **Scientific Interpretation** | Mean annual solar erythemal UV radiation intensity, measuring sunburn risk and skin damage potential. |
 | **18** | **Warnings & Cautions** | WHO UV categories: Low (<2), Moderate (3-5), High (6-7), Very High (8-10), Extreme (11+). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2250-2285` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2250-2285` |
 
 ---
 
@@ -2145,7 +2145,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=2.8, Jan=3.1, Feb=4.5 -> Winter Mean = 3.47 (Moderate). |
 | **17** | **Scientific Interpretation** | Winter UV exposure level; typically the only season in the subtropics where UV drops below the High category. |
 | **18** | **Warnings & Cautions** | Even in winter, subtropical midday UV can reach Moderate risk. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2250-2285` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2250-2285` |
 
 ---
 
@@ -2171,7 +2171,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=6.8, Apr=8.9, May=10.5 -> Spring Mean = 8.73 (Very High). |
 | **17** | **Scientific Interpretation** | Rapid spring surge into dangerous UV categories as solar zenith angle steepens. |
 | **18** | **Warnings & Cautions** | Sun protection required; rapid burn times. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2250-2285` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2250-2285` |
 
 ---
 
@@ -2197,7 +2197,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=11.8, Jul=11.7, Aug=10.6 -> Summer Mean = 11.37 (Extreme). |
 | **17** | **Scientific Interpretation** | Sustained extreme UV radiation hazard, with peak daily noon indices routinely exceeding 11-12. |
 | **18** | **Warnings & Cautions** | Extreme sunburn hazard; skin damage occurs in under 10-15 minutes of unprotected midday exposure. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2250-2285` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2250-2285` |
 
 ---
 
@@ -2223,7 +2223,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=8.7, Oct=6.2, Nov=4.1 -> Autumn Mean = 6.33 (High). |
 | **17** | **Scientific Interpretation** | Autumn UV decline as sun moves toward the southern hemisphere. |
 | **18** | **Warnings & Cautions** | High category persists into October. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2250-2285` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2250-2285` |
 
 ---
 
@@ -2249,7 +2249,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max (Jun) = 11.8, Min (Dec) = 2.8 -> Range = 9.0. |
 | **17** | **Scientific Interpretation** | Annual UV amplitude, driven primarily by seasonal change in solar elevation angle. |
 | **18** | **Warnings & Cautions** | Reflects seasonal variation in solar noon UV intensity. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2250-2285` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2250-2285` |
 
 ---
 
@@ -2275,7 +2275,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly cloud % [35, 30, 25, 18, 12, 5, 2, 3, 8, 15, 22, 32]% -> Annual Mean = 17.25%. |
 | **17** | **Scientific Interpretation** | Mean fraction of the sky obscured by clouds. Inversely proportional to sunshine duration. |
 | **18** | **Warnings & Cautions** | Values in subtropical deserts are among the lowest globally (<20%), indicating exceptionally clear skies. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2290-2325` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2290-2325` |
 
 ---
 
@@ -2301,7 +2301,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=32%, Jan=35%, Feb=30% -> Winter Mean = 32.33%. |
 | **17** | **Scientific Interpretation** | Winter cloudiness maximum, associated with mid-latitude Mediterranean frontal cyclones. |
 | **18** | **Warnings & Cautions** | Highest cloud cover season in Mediterranean climates. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2290-2325` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2290-2325` |
 
 ---
 
@@ -2327,7 +2327,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=25%, Apr=18%, May=12% -> Spring Mean = 18.33%. |
 | **17** | **Scientific Interpretation** | Spring cloud decline, featuring scattered cirrus and dust hazes. |
 | **18** | **Warnings & Cautions** | Dust plumes can sometimes be classified as aerosol rather than cloud. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2290-2325` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2290-2325` |
 
 ---
 
@@ -2353,7 +2353,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=5%, Jul=2%, Aug=3% -> Summer Mean = 3.33%. |
 | **17** | **Scientific Interpretation** | Summer extreme sky clarity due to intense large-scale Hadley cell atmospheric subsidence. |
 | **18** | **Warnings & Cautions** | Nearly cloudless conditions prevail across the Saharan-Arabian desert belt. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2290-2325` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2290-2325` |
 
 ---
 
@@ -2379,7 +2379,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=8%, Oct=15%, Nov=22% -> Autumn Mean = 15.00%. |
 | **17** | **Scientific Interpretation** | Autumn gradual increase in cloudiness with the return of Mediterranean trough systems. |
 | **18** | **Warnings & Cautions** | Early autumn remains mostly clear. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2290-2325` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2290-2325` |
 
 ---
 
@@ -2405,7 +2405,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max (Jan) = 35%, Min (Jul) = 2% -> Range = 33.0%. |
 | **17** | **Scientific Interpretation** | Annual cloud cover seasonality, showing the contrast between winter frontal activity and summer subsidence. |
 | **18** | **Warnings & Cautions** | Reflects monthly mean variations. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); raster_atlas_generator.py: lines 2290-2325` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: climat_monthly_means (line 700), seasonal_means_from_monthly (line 709); Toolboxes/raster_atlas_generator.py: lines 2290-2325` |
 
 ---
 
@@ -2431,7 +2431,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | T=8.0 °C, WS=5.0 m/s (18 km/h) -> V^0.16 = 1.587 -> WC = 13.12 + 0.6215(8) - 11.37(1.587) + 0.3965(8)(1.587) = 5.08 °C. |
 | **17** | **Scientific Interpretation** | Apparent cold temperature experienced on exposed skin due to convective heat dissipation accelerated by wind. |
 | **18** | **Warnings & Cautions** | Does not cause inanimate objects (e.g. car radiators) to cool below actual air temperature. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: windchill_c (line 872); raster_atlas_generator.py: lines 2360-2390` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: windchill_c (line 872); Toolboxes/raster_atlas_generator.py: lines 2360-2390` |
 
 ---
 
@@ -2457,7 +2457,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Average of 12 monthly wind chill values = 18.9 °C. |
 | **17** | **Scientific Interpretation** | Annual average apparent convective thermal sensation. |
 | **18** | **Warnings & Cautions** | In warm months (T > 10°C), wind chill equals ambient temperature T. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: windchill_c (line 872); raster_atlas_generator.py: lines 2360-2390` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: windchill_c (line 872); Toolboxes/raster_atlas_generator.py: lines 2360-2390` |
 
 ---
 
@@ -2483,7 +2483,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | P = 224.0 mm, T = 20.5 °C -> I_DM = 224.0 / (20.5 + 10) = 224.0 / 30.5 = 7.34. |
 | **17** | **Scientific Interpretation** | De Martonne (1926) aridity index classifying climatic drought regimes. Classification: Hyper-arid (<5), Arid (5-10), Semi-arid (10-20), Mediterranean/Sub-humid (20-30), Humid (30-55), Extremely Humid (>55). |
 | **18** | **Warnings & Cautions** | Empirical formulation; in extremely hot deserts where T > 30°C, the +10 denominator provides a dampening offset. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); raster_atlas_generator.py: lines 2395-2420` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 2395-2420` |
 
 ---
 
@@ -2509,7 +2509,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sum of 12 monthly ET totals = 1,930.0 mm/year. |
 | **17** | **Scientific Interpretation** | Mean annual accumulated atmospheric evaporative demand (one typical year). |
 | **18** | **Warnings & Cautions** | Replaces the retired `ET_Annual_Total` (identical values, renamed Oct 2026 to mirror precipitation convention). Identical to `PET_Hargreaves_Annual`. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 > **Retired:** `ET_Annual_Total` (`ET_AnnTot`) was renamed to `ET_Annual_Mean` (same values, mm/year). The former monthly-rate meaning of `ET_Annual_Mean` now lives only in `ET_Month_Mean` (mm/month).
 
@@ -2540,7 +2540,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | 1,930.0 mm / 12 = 160.83 mm/month. |
 | **17** | **Scientific Interpretation** | Mean monthly rate of reference crop evapotranspiration. |
 | **18** | **Warnings & Cautions** | Monthly rate averaged over the whole year. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2566,7 +2566,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Max month (Jul) = 260 mm, Min month (Dec) = 58 mm -> Range = 202.0 mm. |
 | **17** | **Scientific Interpretation** | Measures the seasonal amplitude in crop water demand. |
 | **18** | **Warnings & Cautions** | Reflects the swing between winter low-demand and summer peak-demand months. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2595,7 +2595,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Summer (755 mm) - Winter (205 mm) = 550.0 mm. |
 | **17** | **Scientific Interpretation** | Seasonal swing in evaporative demand across 3-month blocks. |
 | **18** | **Warnings & Cautions** | Calculated on 3-month seasonal sums. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2621,7 +2621,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Dec=58, Jan=62, Feb=85 mm -> Winter Total = 205.0 mm. |
 | **17** | **Scientific Interpretation** | Total atmospheric evaporative demand during meteorological winter (DJF), the period of lowest crop water consumption. |
 | **18** | **Warnings & Cautions** | Winter crops require minimum irrigation water. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2647,7 +2647,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Mar=135, Apr=180, May=225 mm -> Spring Total = 540.0 mm. |
 | **17** | **Scientific Interpretation** | Spring evaporative demand build-up as ambient temperatures and solar radiation escalate. |
 | **18** | **Warnings & Cautions** | Sharp increase in crop irrigation requirements. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2673,7 +2673,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Jun=255, Jul=260, Aug=240 mm -> Summer Total = 755.0 mm. |
 | **17** | **Scientific Interpretation** | Peak summer crop water demand, representing over 40% of the entire annual irrigation duty. |
 | **18** | **Warnings & Cautions** | Canal irrigation systems and pumps operate at maximum design capacity. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2699,7 +2699,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Sep=195, Oct=145, Nov=90 mm -> Autumn Total = 430.0 mm. |
 | **17** | **Scientific Interpretation** | Autumn evaporative demand decline. |
 | **18** | **Warnings & Cautions** | Irrigation intervals can be steadily extended. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2725,7 +2725,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Monthly PET values [62, 85, 135, 180, 225, 255, 260, 240, 195, 145, 90, 58] mm -> Annual PET = 1,930.0 mm/year. |
 | **17** | **Scientific Interpretation** | Theoretical maximum atmospheric evaporative demand for an extensive, well-watered reference grass crop. Primary baseline for agricultural crop irrigation water duty sizing. |
 | **18** | **Warnings & Cautions** | Empirical temperature-difference proxy for solar radiation; can overestimate in windy arid conditions and underestimate in cloudy humid tropics. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); raster_atlas_generator.py: lines 939-960, 2425-2480` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: extraterrestrial_radiation_ra (line 1350), compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 939-960, 2425-2480` |
 
 ---
 
@@ -2751,7 +2751,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | P = 224.0 mm, PET = 1,930.0 mm -> AI_UNEP = 224.0 / 1930.0 = 0.116. |
 | **17** | **Scientific Interpretation** | Official United Nations Environment Programme (UNEP, 1992) and UNCCD Aridity Index. Standard bioclimatic classes: Hyper-arid (<0.05), Arid (0.05 - 0.20), Semi-arid (0.20 - 0.50), Dry sub-humid (0.50 - 0.65), Humid (>0.65). |
 | **18** | **Warnings & Cautions** | Value of 0.116 classifies the location strictly as 'Arid' (0.05 - 0.20). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); raster_atlas_generator.py: lines 2485-2510` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 2485-2510` |
 
 ---
 
@@ -2777,7 +2777,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | P = 224.0 mm, PET = 1,930.0 mm -> CWD = 224.0 - 1,930.0 = -1,706.0 mm/year. |
 | **17** | **Scientific Interpretation** | Net climatic water balance deficit or surplus. Negative values represent an absolute net atmospheric water deficit that must be supplemented by irrigation or groundwater to sustain vegetation. |
 | **18** | **Warnings & Cautions** | In arid zones, deficit is large and negative (-1,706 mm indicates severe net hydrological deficit). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); raster_atlas_generator.py: lines 2515-2540` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 2515-2540` |
 
 ---
 
@@ -2803,7 +2803,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Months with P < 2T: Jan(45>24 -> 0), Feb(35>27 -> 0), Mar(25<34 -> 1), Apr(15<43 -> 1), May(5<52 -> 1), Jun(0<59 -> 1), Jul(0<62 -> 1), Aug(0<62 -> 1), Sep(2<56 -> 1), Oct(12<48 -> 1), Nov(35<37 -> 1), Dec(50>28 -> 0) -> Dry Months = 9. |
 | **17** | **Scientific Interpretation** | Bagnouls-Gaussen (1953) xerothermic index criterion. Months where rainfall is less than twice the temperature (P < 2T) experience severe biological moisture stress where vegetation cannot meet transpirational demand. |
 | **18** | **Warnings & Cautions** | Integer count ranging between 0 (perhumid) and 12 (hyper-arid desert). |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); raster_atlas_generator.py: lines 2545-2570` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: compute_drought_fields (line 1373); Toolboxes/raster_atlas_generator.py: lines 2545-2570` |
 
 ---
 
@@ -2829,7 +2829,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Annual slope = +0.028 °C/year -> Decadal Trend = +0.28 °C/decade. |
 | **17** | **Scientific Interpretation** | Long-term rate of regional climate warming per decade over the observation record. Benchmark for IPCC climate change detection and attribution. |
 | **18** | **Warnings & Cautions** | Requires at least 10 complete years; vulnerable to endpoint selection bias in short time series. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -2855,7 +2855,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Annual slope = -0.52 mm/year -> Decadal Trend = -5.2 mm/decade. |
 | **17** | **Scientific Interpretation** | Long-term rate of annual precipitation change per decade. Indicates regional wetting or drying trends. |
 | **18** | **Warnings & Cautions** | High interannual rainfall variability in arid zones can yield statistically insignificant slopes. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -2881,7 +2881,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent (2011-2020) = 21.1 °C, Baseline (1991-2020) = 20.5 °C -> Anomaly = 21.1 - 20.5 = +0.60 °C. |
 | **17** | **Scientific Interpretation** | Shift in recent annual thermal state relative to the standard climatological normal. |
 | **18** | **Warnings & Cautions** | Positive values indicate recent warming above the normal. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -2907,7 +2907,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent Winter = 13.6 °C, Baseline Winter = 13.1 °C -> Anomaly = +0.50 °C. |
 | **17** | **Scientific Interpretation** | Winter seasonal thermal shift. |
 | **18** | **Warnings & Cautions** | Winter warming reduces chill hours for fruit trees. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -2933,7 +2933,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent Summer = 31.4 °C, Baseline Summer = 30.5 °C -> Anomaly = +0.90 °C. |
 | **17** | **Scientific Interpretation** | Summer seasonal thermal shift, showing amplified summer warming rates. |
 | **18** | **Warnings & Cautions** | Intensifies peak electricity demand for air conditioning. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -2959,7 +2959,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent = 210.0 mm, Baseline = 224.0 mm -> Absolute Anomaly = 210.0 - 224.0 = -14.0 mm. |
 | **17** | **Scientific Interpretation** | Absolute volume change in annual precipitation over the recent decade. |
 | **18** | **Warnings & Cautions** | Negative values denote rainfall deficit relative to normal. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -2985,7 +2985,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent = 210.0 mm, Baseline = 224.0 mm -> Relative Anomaly = (-14.0 / 224.0) * 100 = -6.25%. |
 | **17** | **Scientific Interpretation** | Percentage anomaly in annual rainfall relative to climatological normal. |
 | **18** | **Warnings & Cautions** | Guarded with None when baseline < 5 mm in hyper-arid zones to prevent division by near-zero. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -3011,7 +3011,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent Winter = 120.0 mm, Baseline Winter = 130.0 mm -> Winter Anomaly = -10.0 mm. |
 | **17** | **Scientific Interpretation** | Absolute change in winter recharge precipitation. |
 | **18** | **Warnings & Cautions** | Directly impacts winter crop yields and dam inflows. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -3037,7 +3037,7 @@ This chapter provides the definitive, mathematically verified, and code-audited 
 | **16** | **Numerical Example** | Recent = 120.0 mm, Baseline = 130.0 mm -> Relative Anomaly = (-10.0 / 130.0) * 100 = -7.69%. |
 | **17** | **Scientific Interpretation** | Percentage departure in winter rainfall from the 30-year normal. |
 | **18** | **Warnings & Cautions** | Guarded with None when baseline winter total < 5 mm. |
-| **19** | **Implementation Reference** | `POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); raster_atlas_generator.py: lines 2575-2630` |
+| **19** | **Implementation Reference** | `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt: _lin_trend_per_decade (line 1185), _recent_minus_baseline (line 1201); Toolboxes/raster_atlas_generator.py: lines 2575-2630` |
 
 ---
 
@@ -3054,7 +3054,7 @@ rasters like the monthly means, published only with the independent Monthly Rang
 ### A.1 UV Index: 24h-mean → WHO noon-maximum conversion
 NASA POWER `ALLSKY_SFC_UV_INDEX` daily/monthly values are 24-hour means including night zeros.
 `compute_point_fields` converts each monthly value via `uv_mean24_to_noonmax`
-(`POWER_Climate_Atlas_Generator_10_8.pyt`, `daylength_hours` + `uv_mean24_to_noonmax`)
+(`Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`, `daylength_hours` + `uv_mean24_to_noonmax`)
 before seasonal/annual aggregation; Open-Meteo `uv_index_max` is averaged directly
 (`uv_source` flag). New field `UV_Seasonal_Range` (max seasonal noon-max minus min).
 Classification Guide generator emits the fixed WHO 5-band scale for all UV rows
@@ -3075,7 +3075,7 @@ ranges, and the 12 monthly means. `FIELD_DEFS` + `SHP_FIELD_MAP`
 `WC_JanMean`…`WC_DecMean`) document all 19; the `Extended_WC_Seasons` parameter
 (`Wind Chill Full Suite for Cold Regions…`, default False) gates publication via
 `wanted_fields_by_module` stripping, so default runs stay byte-identical (Winter+Annual).
-Raster mirror (`raster_atlas_generator.py`) applies the same gate; dictionary count 2→19.
+Raster mirror (`Toolboxes/raster_atlas_generator.py`) applies the same gate; dictionary count 2→19.
 
 ### A.4 Optional Daily sheet
 `Save_Daily_Series` (`GPBoolean`, default False): with Temporal=Daily, `_build_daily_table`

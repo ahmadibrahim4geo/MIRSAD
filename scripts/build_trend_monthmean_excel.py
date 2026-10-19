@@ -15,7 +15,7 @@ F = ["T_Anom_Month", "R_Anom_Month", "R_Anom_Month_Pct",
      "T_Month_Trend_Decade", "R_Month_Trend_Decade"]
 
 pyt = SourceFileLoader(
-    "pytmod", os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
+    "pytmod", os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
 
 wb = xlrd.open_workbook(XLS)
 parts = []

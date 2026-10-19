@@ -12,9 +12,9 @@ import sys
 import unittest
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT_PATH = os.path.join(ROOT_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+PYT_PATH = os.path.join(ROOT_DIR, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(PYT_PATH):
-    PYT_PATH = os.path.join(ROOT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    PYT_PATH = os.path.join(ROOT_DIR, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
 
 # Mock arcpy for headless unit testing
 class MockFilter(object):
@@ -82,6 +82,7 @@ mock_arcpy = MockArcPy()
 
 # Load pyt module dynamically
 pyt_mod = type(sys)("power_atlas_pyt")
+pyt_mod.__file__ = PYT_PATH
 pyt_mod.__dict__["arcpy"] = mock_arcpy
 exec(compile(open(PYT_PATH, "rb").read(), PYT_PATH, "exec"), pyt_mod.__dict__)
 pyt_mod.arcpy = mock_arcpy
@@ -270,27 +271,27 @@ class TestClimateToolboxModifications(unittest.TestCase):
 
     def test_06_wind_vector_standard_naming(self):
         """Verify standard naming for the 5 wind vector layers in code."""
-        # Check in POWER_Climate_Atlas_Generator_10_8.pyt
+        # Check in Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt
         with io.open(PYT_PATH, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
         self.assertIn('fc = os.path.join(gdb_path, "Wind_Vector_%s" % suffix)', content)
 
-        # Check in raster_atlas_generator.py
-        with io.open(os.path.join(ROOT_DIR, "raster_atlas_generator.py"), "r", encoding="utf-8", errors="ignore") as f:
+        # Check in Toolboxes/raster_atlas_generator.py
+        with io.open(os.path.join(ROOT_DIR, "Toolboxes/raster_atlas_generator.py"), "r", encoding="utf-8", errors="ignore") as f:
             rag_content = f.read()
         self.assertIn('fc = os.path.join(gdb_path, "Wind_Vector_%s" % suffix)', rag_content)
         self.assertIn('arcpy.analysis.Clip(fish_pts, in_clip_layer, clipped_pts)', rag_content)
 
     def test_07_strict_mask_and_clip_in_code(self):
         """Verify arcpy.env.extent and ExtractByMask usage."""
-        # In POWER_Climate_Atlas_Generator_10_8.pyt
+        # In Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt
         with io.open(PYT_PATH, "r", encoding="utf-8", errors="ignore") as f:
             pyt_content = f.read()
         self.assertIn('arcpy.env.extent = mask', pyt_content)
         self.assertIn('ExtractByMask(surf, effective_mask)', pyt_content)
 
-        # In raster_atlas_generator.py
-        with io.open(os.path.join(ROOT_DIR, "raster_atlas_generator.py"), "r", encoding="utf-8", errors="ignore") as f:
+        # In Toolboxes/raster_atlas_generator.py
+        with io.open(os.path.join(ROOT_DIR, "Toolboxes/raster_atlas_generator.py"), "r", encoding="utf-8", errors="ignore") as f:
             rag_content = f.read()
         self.assertIn('arcpy.env.extent = clip_layer', rag_content)
         self.assertIn('clipped = ExtractByMask(raw_interp, clip_layer)', rag_content)
@@ -515,7 +516,7 @@ class TestClimateToolboxModifications(unittest.TestCase):
         for _m in ("January", "July", "December"):
             self.assertIn(_m, "HI_%s_Mean" % _m)
         # Raster tool: alias = field name
-        rag_src_path = os.path.join(ROOT_DIR, "raster_atlas_generator.py")
+        rag_src_path = os.path.join(ROOT_DIR, "Toolboxes/raster_atlas_generator.py")
         with open(rag_src_path, encoding="utf-8") as _fh:
             rag_src = _fh.read()
         self.assertIn("new_field_alias=fld", rag_src)

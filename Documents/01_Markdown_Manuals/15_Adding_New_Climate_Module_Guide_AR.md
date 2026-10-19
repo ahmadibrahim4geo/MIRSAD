@@ -52,8 +52,8 @@
 
 ```
 NASA POWER Climate Atlas Generator Codebase
-├── POWER_Climate_Atlas_Generator_10_8.pyt   (الأداة الرئيسية: سحب، حساب، تصدير)
-├── raster_atlas_generator.py                (أداة الراستر والاستيفاء)
+├── Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt   (الأداة الرئيسية: سحب، حساب، تصدير)
+├── Toolboxes/raster_atlas_generator.py                (أداة الراستر والاستيفاء)
 ├── generate_excel_dictionary.py             (مولد القواميس الشاملة)
 └── generate_master_atlas_excel.py           (مولد دليل التصنيف الماستر)
 ```
@@ -69,7 +69,7 @@ NASA POWER Climate Atlas Generator Codebase
 
 ---
 
-### الخطوة 1.2: تعديل الأداة الرئيسية `POWER_Climate_Atlas_Generator_10_8.pyt`
+### الخطوة 1.2: تعديل الأداة الرئيسية `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
 
 افتح الملف وقم بإجراء الإضافات في المواقع المحددة أدناه:
 
@@ -217,7 +217,7 @@ if "LST_Annual_Mean" in row:
 
 ---
 
-### الخطوة 1.3: تعديل أداة الراستر `raster_atlas_generator.py`
+### الخطوة 1.3: تعديل أداة الراستر `Toolboxes/raster_atlas_generator.py`
 
 1. سجل الموديول في القوائم الرئيسية (`PRIMARY_MODULES_ALL`، `MODULE_FOLDER`، `MODULE_SHORT`، `POWER_PRIMARY_PARAM`، `COLOR_RAMPS`).
 2. أضف أسماء حقول الـ Shapefile في `SHP_FIELD_MAP`.
@@ -453,7 +453,7 @@ python generate_master_atlas_excel.py --base_dir "C:\Users\ahmad\Desktop\Egypt C
 | # | عنصر الفحص | المعيار المقبول | أداة التحقق |
 |:---:|:---|:---|:---|
 | **1** | عدد باراميترات الأداة الرئيسية | 65 باراميتر بالضبط | كود `.pyt` في ArcMap |
-| **2** | عدد باراميترات أداة الراستر | 33 باراميتر بالضبط | كود `raster_atlas_generator.py` |
+| **2** | عدد باراميترات أداة الراستر | 33 باراميتر بالضبط | كود `Toolboxes/raster_atlas_generator.py` |
 | **3** | عدد سجلات الـ Feature Class | 646 نقطة (مطابق لطبقة العينة) | `arcpy.GetCount_management` |
 | **4** | إجمالي حقول الـ Feature Class | 47 حقلاً (12 إداري + 35 مؤشر) | `arcpy.ListFields` |
 | **5** | تطابق أسماء الحقول مع الألياس | `name == aliasName` بنسبة 100% | `arcpy.ListFields` |

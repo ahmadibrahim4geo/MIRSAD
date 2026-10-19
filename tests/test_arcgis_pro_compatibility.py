@@ -10,9 +10,9 @@ import sys
 import os
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PYT_PATH = os.path.join(ROOT_DIR, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+PYT_PATH = os.path.join(ROOT_DIR, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(PYT_PATH):
-    PYT_PATH = os.path.join(ROOT_DIR, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    PYT_PATH = os.path.join(ROOT_DIR, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
 
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
@@ -109,6 +109,7 @@ sys.modules["arcpy"] = mock_arcpy
 
 # Dynamically load the pyt module
 pyt_mod = type(sys)("power_atlas_pyt")
+pyt_mod.__file__ = PYT_PATH
 pyt_mod.__dict__["arcpy"] = mock_arcpy
 raw_pyt = open(PYT_PATH, "rb").read()
 if sys.version_info[0] == 3:
@@ -156,7 +157,7 @@ class TestArcGISProCompatibility(unittest.TestCase):
         self.assertNotIn("RasterDataClimateAtlasGenerator", tool_classes)
 
     def test_05_rag_standalone_toolbox(self):
-        """Verify raster_atlas_generator.py provides a valid Toolbox class for standalone Pro use."""
+        """Verify Toolboxes/raster_atlas_generator.py provides a valid Toolbox class for standalone Pro use."""
         self.assertTrue(hasattr(rag_mod, "Toolbox"))
         tb = rag_mod.Toolbox()
         self.assertTrue("MIRSAD" in tb.label or "ArcGIS Pro" in tb.label)

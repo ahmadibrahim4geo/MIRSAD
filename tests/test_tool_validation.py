@@ -167,7 +167,7 @@ class ToolValidation(unittest.TestCase):
         self.assertFalse(self.errors(pd), self.errors(pd))
 
     def test_monthly_product_cannot_offer_daily_series_and_restores_daily_provider(self):
-        from utils.climate_products import CHIRPS,MODIS_DAY
+        from mirsad_core.climate_products import CHIRPS,MODIS_DAY
         for cls in self.classes[:-1]:
             tool,params,pd=self.setup_tool(cls)
             for provider in (CHIRPS,MODIS_DAY):

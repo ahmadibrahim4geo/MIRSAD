@@ -1,5 +1,5 @@
-﻿# -*- coding: utf-8 -*-
-"""Offline QA tests for POWER_Climate_Atlas_Generator_10_8.pyt (new 104-column schema).
+# -*- coding: utf-8 -*-
+"""Offline QA tests for Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt (new 104-column schema).
 Runs with ArcMap 10.x python (2.7) WITHOUT network and WITHOUT arcpy.
 Covers: seasons, missing values, circular mean, precip monthly/daily + rain days,
 solar, pressure conversion + ranges, temperature range, Heat Index, wind
@@ -12,9 +12,9 @@ import sys
 
 _test_dir = os.path.dirname(os.path.abspath(__file__))
 BASE = os.path.dirname(_test_dir)
-PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+PYT = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(PYT):
-    PYT = os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "POWER_Climate_Atlas_Generator_10_8.pyt"))
+    PYT = os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else (os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt") if os.path.exists(os.path.join(BASE, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")) else os.path.join(BASE, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt"))
 
 mod = type(sys)("power_pyt_108")
 mod.__dict__["__name__"] = "power_pyt_108"

@@ -13,8 +13,8 @@ import unittest
 
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,ROOT)
-from utils import hybrid_pipeline as h
-from utils import climate_sources as policies
+from mirsad_core import hybrid_pipeline as h
+from mirsad_core import climate_sources as policies
 
 
 class HybridTests(unittest.TestCase):
@@ -137,7 +137,7 @@ class HybridTests(unittest.TestCase):
         self.assertEqual(policies.canonical_resolution("era5_seamless"),policies.ERA5_MODELS[2])
         with open(os.path.join(ROOT,"MIRSAD Desktop","src","mirsad_desktop","climate_sources.py"),"rb") as f:
             bundled=f.read()
-        with open(os.path.join(ROOT,"utils","climate_sources.py"),"rb") as f:
+        with open(os.path.join(ROOT,"mirsad_core","climate_sources.py"),"rb") as f:
             self.assertEqual(bundled,f.read())
 
     def test_auto_resolution_per_variable_and_whole_period(self):

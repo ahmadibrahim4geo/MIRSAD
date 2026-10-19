@@ -17,9 +17,9 @@ except ImportError:  # Python 2.7 fallback
     import imp as _imp
     _load_source = _imp.load_source
 _base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-pyt_path = os.path.join(_base, "MIRSAD_Climate_Atlas_Generator_10_8.pyt")
+pyt_path = os.path.join(_base, "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt")
 if not os.path.exists(pyt_path):
-    pyt_path = os.path.join(_base, "POWER_Climate_Atlas_Generator_10_8.pyt")
+    pyt_path = os.path.join(_base, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")
 mod = _load_source("power_atlas_108", pyt_path)
 
 passed = 0

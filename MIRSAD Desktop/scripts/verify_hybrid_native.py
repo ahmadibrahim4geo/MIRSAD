@@ -11,13 +11,13 @@ import argparse
 ROOT=Path(__file__).resolve().parents[1]
 REPO=ROOT.parent
 sys.path.insert(0,str(REPO))
-from utils.station_catalogue import load_shared_catalogue
-from utils.climate_sources import NOAA_ONLY,ERA5_ONLY,ERA5_MODELS
-from utils.climate_products import CHIRPS,TERRA,CHELSA
+from mirsad_core.station_catalogue import load_shared_catalogue
+from mirsad_core.climate_sources import NOAA_ONLY,ERA5_ONLY,ERA5_MODELS
+from mirsad_core.climate_products import CHIRPS,TERRA,CHELSA
 parser=argparse.ArgumentParser()
 parser.add_argument("--provider",choices=("hybrid","noaa","era5","chirps","terra","chelsa"),default="hybrid")
 args=parser.parse_args()
-stations_module=importlib.machinery.SourceFileLoader("hybrid_native_stations",str(REPO/"MIRSAD_Weather_Stations_Atlas_Generator.pyt")).load_module()
+stations_module=importlib.machinery.SourceFileLoader("hybrid_native_stations",str(REPO/"Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt")).load_module()
 target=ROOT/".test-output/hybrid-live"/("Native_"+str(time.time_ns()))
 target.mkdir(parents=True)
 all_stations=load_shared_catalogue(str(REPO/"data/stations.sqlite"))["EG"]

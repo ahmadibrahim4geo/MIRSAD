@@ -3,7 +3,7 @@
 import unittest
 import test_runtime_stability as support
 import os
-from utils.climate_quality import PointIndex, derive_from_fields, merge_point_layers
+from mirsad_core.climate_quality import PointIndex, derive_from_fields, merge_point_layers
 
 core, raster = support.core, support.raster
 

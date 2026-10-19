@@ -41,9 +41,9 @@ class TestWeatherStationsRegistry(unittest.TestCase):
         self.assertEqual(get_country_info("AY")[2], "Antarctica")
 
     def test_pyt_compilation_and_parameters(self):
-        pyt_path = os.path.join(BASE_DIR, "MIRSAD_Weather_Stations_Atlas_Generator.pyt")
+        pyt_path = os.path.join(BASE_DIR, "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt")
         if not os.path.exists(pyt_path):
-            pyt_path = os.path.join(BASE_DIR, "NOAA_WMO_Weather_Stations_Atlas_Generator.pyt")
+            pyt_path = os.path.join(BASE_DIR, "Toolboxes/NOAA_WMO_Weather_Stations_Atlas_Generator.pyt")
         self.assertTrue(os.path.exists(pyt_path))
 
         with open(pyt_path, "r", encoding="utf-8") as f:

@@ -34,7 +34,7 @@ YEARS = list(range(1996, 2026))
 
 def load_tool():
     return SourceFileLoader(
-        "pytmod", os.path.join(ROOT, "POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
+        "pytmod", os.path.join(ROOT, "Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt")).load_module()
 
 
 def build_monthly(pyt, series):

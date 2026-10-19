@@ -5,8 +5,8 @@ These scripts were manual, one-time helpers used during atlas construction
 behavior is now implemented **inside the tools themselves**:
 
 - `Generate Monthly Climatology Rasters (Jan–Dec)` option (default OFF,
-  requires ≥ 2 years) in both `POWER_Climate_Atlas_Generator_10_8.pyt`
-  (online) and `raster_atlas_generator.py` (offline)
+  requires ≥ 2 years) in both `Toolboxes/POWER_Climate_Atlas_Generator_10_8.pyt`
+  (online) and `Toolboxes/raster_atlas_generator.py` (offline)
 - `Month/` subfolder routing + unified monthly color stretch
 - `Wind_Vector_Month` from `W_*_Month_Mean` rasters; PSL/PS month isobars
 - Main-GDB alias = field name (Arabic aliases only in `<base>_AR.gdb`)
