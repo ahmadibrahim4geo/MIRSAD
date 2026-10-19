@@ -1,6 +1,7 @@
 import json,os,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'src'))
+(ROOT/".test-output").mkdir(exist_ok=True)
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt,QUrl
 from PySide6.QtPdf import QPdfDocument

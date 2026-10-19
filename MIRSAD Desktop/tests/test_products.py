@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
+(ROOT/".test-output").mkdir(exist_ok=True)
 sys.path.insert(0,str(ROOT/'src'))
 from mirsad_desktop import climate,climate_products as p
 from mirsad_desktop.inputs import make_point
