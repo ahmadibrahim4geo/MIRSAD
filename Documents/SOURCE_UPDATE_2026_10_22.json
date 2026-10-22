@@ -424,7 +424,7 @@
     "Documents/05_Climate_Data_Sources_Directory/SOURCES_AR.md": "f3e4d184224a7b74f9ceaa60a474c071ae1f9fdd71dfc5090e2dc643105ef3b0",
     "Documents/05_Climate_Data_Sources_Directory/SOURCES_EN.md": "5a4f7b070548d647486cb9a7eee676fda2cc7c58c03f707d9d718d88866665dd",
     "Documents/07_Climate_Sources_Web_Guide/climate-sources.html": "7cc2df64f7313cb4c10988ebd51c57382f592424cc650e5d59742f36e26b6020",
-    "Documents/DEVELOPMENT_PUBLICATION.md": "0a36c933b8808a5ef80a49861a6144a0c1030bff589ae15590a856fbf6663946",
+    "Documents/DEVELOPMENT_PUBLICATION.md": "cdc15792efc0b52729aa15a6a15ee48ee7a4bd1f572dca05822a998ade05fd2a",
     "Documents/Help/ar/modules.html": "e730d6685340f781d2ca2f0a7da11709fd75b7ce864c3ed5f6fd05313165aa84",
     "Documents/Help/en/modules.html": "bdf1a4f39acb6e377a8f1d433cd9d6c3e54931f3a68f477d49345dc3f60a21fa",
     "Documents/Help/parameter_notes_ar.json": "22a2830d0833c3b454feca0e680d1de1c22267f759465357843b130c95bf9b61",
@@ -553,12 +553,64 @@
   ],
   "final_repository_contracts": {
     "passed": true,
-    "documentation_links": 287,
+    "documentation_links": 289,
     "website_references": 65,
     "command": "scripts/check_repository.py",
     "scope": "After final index/template/CHM-download refinements; no calculation changes"
   },
   "delivery_hash_policy": "UTF-8 text (.py/.pyt/.md/.json/.html/.txt) normalized without BOM and with LF newlines; other files raw SHA-256. Receipt itself excluded.",
   "source_publication_commit": "6874eccaacf9954d93340242275e219038d0bb7b",
-  "documentation_followup": "Readable GitHub index links and optional PM module-card description; no runtime changes. Receipt updated for final documentation bytes."
+  "documentation_followup": "Readable GitHub index links and optional PM module-card description; no runtime changes. Receipt updated for final documentation bytes.",
+  "published_verification": {
+    "recorded": "2026-10-22T13:27:50.316332+00:00",
+    "runs": [
+      {
+        "id": 39752205832,
+        "name": "Deterministic source checks",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39752205832",
+        "head_sha": "007ecba22a9d8e75bad1c262008f985c699d6db3",
+        "updated_at": "2026-10-22T09:09:11Z"
+      },
+      {
+        "id": 39752204957,
+        "name": "pages build and deployment",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39752204957",
+        "head_sha": "007ecba22a9d8e75bad1c262008f985c699d6db3",
+        "updated_at": "2026-10-22T09:02:24Z"
+      }
+    ],
+    "live_pages": [
+      {
+        "path": "index.html",
+        "sha256": "3ab9807f1bdfe08eb1af9f877b2363322220c19a336c3c36bbf5b11082787591",
+        "bytes": 53738,
+        "passed": true
+      },
+      {
+        "path": "Documents/07_Climate_Sources_Web_Guide/climate-sources.html",
+        "sha256": "7cc2df64f7313cb4c10988ebd51c57382f592424cc650e5d59742f36e26b6020",
+        "bytes": 92284,
+        "passed": true
+      }
+    ],
+    "help_files": [
+      {
+        "path": "Help/MIRSAD_Help_AR.chm",
+        "bytes": 175318,
+        "sha256": "fc6d9aaaaecd644b9e5bb61a38a536ed6357b51d887d0eec6b07286bf3cae71b",
+        "passed": true
+      },
+      {
+        "path": "Help/MIRSAD_Help_EN.chm",
+        "bytes": 171645,
+        "sha256": "7f1dbf76276859c3180d8d7fd9a9c70cace9ddd1e897a127ab8490f522d95e37",
+        "passed": true
+      }
+    ],
+    "scope": "Verification of 007ecba; later receipt-only commit changes no application or website assets."
+  }
 }
