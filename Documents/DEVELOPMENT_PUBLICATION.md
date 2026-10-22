@@ -1,5 +1,29 @@
 # Development handoff and GitHub distribution
 
+## Source published — 22 October 2026
+
+The enrichment source, bilingual indices, generated help, website and acceptance
+records were pushed to `main` in
+[`6874eccaacf9954d93340242275e219038d0bb7b`](https://github.com/ahmadibrahim4geo/MIRSAD/commit/6874eccaacf9954d93340242275e219038d0bb7b).
+Local acceptance passed 88 Desktop tests and 22 isolated suites / 189 tests.
+A clean staged-source export passed generation/contracts and the same 189 tests;
+these are overlapping scopes. The final committed-source export passed 287
+documentation links, 67 website references and the unchanged 19-module baseline.
+See [the acceptance receipt](SOURCE_UPDATE_2026_10_22.json).
+
+The [Pages build and deployment](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39751585875)
+passed, and the published update section was inspected in Arabic and English.
+The corresponding [GitHub source-check run](https://github.com/ahmadibrahim4geo/MIRSAD/actions/runs/39751586508)
+records the fresh-runner checks separately from local acceptance.
+A subsequent documentation/site refinement links both indices to GitHub's
+readable Markdown pages and describes optional PM in the module card; its local
+contracts pass 287 documentation links and 65 website references.
+
+No installer/release asset was replaced, no new binary release was published and
+stable was not promoted. Unrelated local Sample Data, station explorer deletions
+and generated ArcGIS XML were excluded. Outstanding implementation and acceptance
+remain in [the delivery scope](SOURCE_UPDATE_2026_10_22.md) and backlog.
+
 22 October source/docs follow-up: the user authorized updating and pushing the
 current source, website index and explanations. See [delivery scope and final checks](SOURCE_UPDATE_2026_10_22.md).
 The installer and release assets identified below remain the 19 October preview;

@@ -53,7 +53,7 @@ MODULE_DESCRIPTIONS = {
     'Heat Index': ('تقدير الإجهاد من الحرارة والرطوبة؛ نواتج WBGT تقريبية وليست قياس جهاز.', 'Heat/humidity stress estimates; WBGT outputs are approximate, not instrument readings.'),
     'Wind Chill': ('برودة الرياح ضمن مجال تطبيق المعادلة.', 'Wind chill within the formula’s domain.'),
     'De Martonne Aridity': ('مؤشر دي مارتون من المطر وحرارة الهواء.', 'De Martonne aridity from rainfall and air temperature.'),
-    'Evapotranspiration': ('البخر والنتح المحتمل بطريقة Hargreaves، من الحرارة ودائرة العرض.', 'Hargreaves potential evapotranspiration from temperature and latitude.'),
+    'Evapotranspiration': ('Hargreaves هو الافتراضي من الحرارة ودائرة العرض. المصدر الحالي يتيح أيضًا Penman–Monteith يوميًا عند اكتمال مدخلاته، كحساب مستقل في Desktop والنقاط والمحطات.', 'Hargreaves is the default, from temperature and latitude. Current source also offers independent daily Penman–Monteith in Desktop and point/station tools when its inputs are complete.'),
     'UNEP Aridity': ('نسبة المطر إلى البخر والنتح المحتمل، عند اكتمال المدخلات.', 'Precipitation / potential evapotranspiration when inputs are valid.'),
     'Water Deficit': ('العجز المائي وفق المطر والبخر والنتح في المحرك.', 'Water deficit from the kernel’s rainfall/PET calculations.'),
     'Dry Months': ('عدد الأشهر الجافة وفق مقارنة المطر بالحرارة.', 'Dry-month count from precipitation and temperature.'),

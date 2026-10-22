@@ -424,7 +424,7 @@
     "Documents/05_Climate_Data_Sources_Directory/SOURCES_AR.md": "f3e4d184224a7b74f9ceaa60a474c071ae1f9fdd71dfc5090e2dc643105ef3b0",
     "Documents/05_Climate_Data_Sources_Directory/SOURCES_EN.md": "5a4f7b070548d647486cb9a7eee676fda2cc7c58c03f707d9d718d88866665dd",
     "Documents/07_Climate_Sources_Web_Guide/climate-sources.html": "7cc2df64f7313cb4c10988ebd51c57382f592424cc650e5d59742f36e26b6020",
-    "Documents/DEVELOPMENT_PUBLICATION.md": "891b361ced3620b70f9ca993ac0a9660576b67ef1be123f250f9d62f294d40b4",
+    "Documents/DEVELOPMENT_PUBLICATION.md": "0a36c933b8808a5ef80a49861a6144a0c1030bff589ae15590a856fbf6663946",
     "Documents/Help/ar/modules.html": "e730d6685340f781d2ca2f0a7da11709fd75b7ce864c3ed5f6fd05313165aa84",
     "Documents/Help/en/modules.html": "bdf1a4f39acb6e377a8f1d433cd9d6c3e54931f3a68f477d49345dc3f60a21fa",
     "Documents/Help/parameter_notes_ar.json": "22a2830d0833c3b454feca0e680d1de1c22267f759465357843b130c95bf9b61",
@@ -500,7 +500,7 @@
     "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "bb052f1cab3068a7eeeb3a3497f8f9bb24045e8cc50ec7154d0941fb01801b50",
     "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "fb8963f4ebd95a2eb116c3ed227646bc0447025632a8f67fc77290329c591f5f",
     "data/climate_sources.json": "1a9e1400e234c96ee81b4bb7f08626d29ef3ca53afbd72d243cdb493c34e2e4f",
-    "index.html": "cb633cf677bc4322304a61a7f60aebd1b2045b1304cc68984f0e3cf9679855b3",
+    "index.html": "3ab9807f1bdfe08eb1af9f877b2363322220c19a336c3c36bbf5b11082787591",
     "mirsad_core/climate_sources.py": "f116b57cb0a338161df26c383c45b14d36ea20ddc919874a05c67d4a6e53997a",
     "mirsad_core/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
     "mirsad_core/hybrid_pipeline.py": "26181b83451362837b4bde6344e76edb092095d36a1ca8a8c792baf88e14d4c9",
@@ -519,13 +519,13 @@
     "scripts/record_toolbox_enrichment_acceptance.py": "abf92114e4141f215779d93509f460687e63a4fac6e296704359c34e46ad5023",
     "scripts/record_toolbox_pm_acceptance.py": "2f18370cd7b3ed624a248e38d0891ade7860b605ec7a3c6ada2b758ce7360839",
     "scripts/run_checks.py": "74fae57e8843b33d563130980642598d1f8785301455aa4443de5d83f28082f7",
-    "scripts/templates/index.html": "f18c01cf38ac48be4b9016d3bd57218ab92fe4a68f13c3a32f526a24a47fdb32",
+    "scripts/templates/index.html": "8cd3f856af3440896d460d65e40c867e09a70f52d11e60b8aa0e8268064785d9",
     "scripts/verify_legacy_excel_streaming.py": "5406ce2793188a5c6535d50fc08030519682c9cb63c4a4c75fe61fdd79e32364",
     "scripts/verify_native_xlsx.py": "aae318124471a43d5bfe55718a772a9b5fa95dd8801b41bdc220fbd74e00a83c",
     "scripts/verify_toolbox_enrichment.py": "a3a7c5ace9b90b3e78c0a6ffefd0314092fee0df599867078dc65e5789fad75e",
     "scripts/verify_toolbox_enrichment_qa.py": "0aaf25e19dff382c36271a55617e0fe7a9e6aebd698c08dd7e7e7771b513b431",
     "scripts/verify_toolbox_pm.py": "356b5878c4a8c04b44aaf0d5ef5ec44a17ff023f21dc80ee41548f817044c392",
-    "scripts/website_content.py": "66c52cb22124fe2aea19fa0b96bc23b1ab1d32ed374628b1185ce9961a7a1679",
+    "scripts/website_content.py": "dccfd9432240c29ca288d2946185eb4d075988bff0154ced956fdcae6654affb",
     "tests/fixtures/climate_enrichment_baseline.json": "eea3aec663b901e34d07bbd3502616903c5e8a0e7692ec53637e93fd78bd9fa6",
     "tests/test_climate_enrichment_baseline.py": "1335adc56414935f13be9459c7c689cb78929723090cfa45a4712b95329d2853",
     "tests/test_daily_climate.py": "997faed71500b73dc64329dc269edb35ce94ad4bf702806c64f4507ab1200c10",
@@ -554,9 +554,11 @@
   "final_repository_contracts": {
     "passed": true,
     "documentation_links": 287,
-    "website_references": 67,
+    "website_references": 65,
     "command": "scripts/check_repository.py",
     "scope": "After final index/template/CHM-download refinements; no calculation changes"
   },
-  "delivery_hash_policy": "UTF-8 text (.py/.pyt/.md/.json/.html/.txt) normalized without BOM and with LF newlines; other files raw SHA-256. Receipt itself excluded."
+  "delivery_hash_policy": "UTF-8 text (.py/.pyt/.md/.json/.html/.txt) normalized without BOM and with LF newlines; other files raw SHA-256. Receipt itself excluded.",
+  "source_publication_commit": "6874eccaacf9954d93340242275e219038d0bb7b",
+  "documentation_followup": "Readable GitHub index links and optional PM module-card description; no runtime changes. Receipt updated for final documentation bytes."
 }
