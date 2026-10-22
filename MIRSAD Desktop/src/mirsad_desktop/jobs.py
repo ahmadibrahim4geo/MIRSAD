@@ -212,8 +212,13 @@ def execute(request,workdir,progress,cancelled,credentials=None):
     if operation not in ("export","climate","analysis"):raise ValueError("Unsupported job operation.")
     points=validate_points(request["points"])
     options=dict(request.get("options",{}));metadata=request.get("metadata",{})
+    elevation_report=None
+    if operation!="climate" and options.get("elevation_options"):
+        from .elevation import enrich_points
+        points,elevation_report=enrich_points(points,options.pop("elevation_options"),Path(request["folder"])/".mirsad-cache/elevation",progress,cancelled)
     from .exports import export_project
-    if operation=="export":result=export_project(points,request["folder"],request["name"],metadata,progress=progress,cancelled=cancelled,**options)
+    if operation=="export":result=export_project(points,request["folder"],request["name"],metadata,progress=progress,cancelled=cancelled,**options,
+        **(dict(elevation_metadata=elevation_report) if elevation_report else {}))
     elif operation=="climate":
         from .services import run_climate_project
         from shapely.geometry import shape
@@ -226,7 +231,14 @@ def execute(request,workdir,progress,cancelled,credentials=None):
         from .analysis import run_existing_project
         from shapely.geometry import shape
         if options.get("boundary"):options["boundary"]=shape(options["boundary"])
-        result=run_existing_project(points,request["folder"],request["name"],metadata,progress=progress,cancelled=cancelled,**options)
+        result=run_existing_project(points,request["folder"],request["name"],metadata,progress=progress,cancelled=cancelled,**options,
+            **(dict(elevation_metadata=elevation_report) if elevation_report else {}))
+    if elevation_report:
+        result[1]["elevation"]=elevation_report
+        for p in elevation_report["points"]:
+            if p["status"]!="OK":result[1]["errors"].append(dict(stage="elevation",station_key=p["station_key"],error=p["reason"]))
+        if result[1]["errors"] and result[1]["status"]=="complete":result[1]["status"]="partial"
+        (Path(result[0])/"manifest.json").write_text(json.dumps(result[1],ensure_ascii=False,indent=2),encoding="utf-8")
     return {"kind":"project","output":str(result[0]),"manifest":result[1]}
 
 def run_request(path):

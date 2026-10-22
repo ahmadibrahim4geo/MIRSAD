@@ -6,7 +6,7 @@ SOURCE=ROOT.parent/'Documents/Help'
 sys.path.insert(0,str(ROOT/'src'))
 from mirsad_desktop import __version__
 from mirsad_desktop.registry import MODULES
-from help_dynamic import provider_body,module_table,parameter_body
+from help_dynamic import provider_body,module_table,parameter_body,supplementary_body
 from help_formulas import check_review,formula_body
 
 def build():
@@ -19,6 +19,7 @@ def build():
         for language in ('ar','en'):
             text=(SOURCE/language/(key+'.html')).read_text(encoding='utf-8')
             text=text.replace('{{VERSION}}',__version__).replace('{{PROVIDERS}}',provider_body(language)).replace('{{MODULE_TABLE}}',module_table(language=='ar'))
+            text=text.replace('{{SUPPLEMENTARY}}',supplementary_body(language))
             for tool in ('points','stations','raster'):
                 marker='{{PARAMETERS:'+tool+'}}'
                 if marker in text:text=text.replace(marker,parameter_body(tool,language))
@@ -28,7 +29,7 @@ def build():
             if '{{' in text:raise ValueError('Unresolved help template '+key)
             section[language+'_body']=text
         sections.append(section)
-    index=dict(version=__version__,reviewed='2026-10-19',modules=[m.name for m in MODULES],groups=manifest['groups'],sections=sections)
+    index=dict(version=__version__,reviewed=json.loads((SOURCE/'tool_parameters.json').read_text(encoding='utf-8'))['reviewed'],modules=[m.name for m in MODULES],groups=manifest['groups'],sections=sections)
     (ROOT/'assets/help_index.json').write_text(json.dumps(index,ensure_ascii=False,indent=2),encoding='utf-8')
     template=(SOURCE/'viewer.html').read_text(encoding='utf-8')
     payload=json.dumps(index,ensure_ascii=False).replace('</','<\\/')

@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-18",
+  "reviewed": "2026-10-21",
   "sources": [
     {
       "auth": null,
@@ -65,17 +65,22 @@
         "PRECTOTCORR": "mm per day or native month total",
         "PS": "kPa",
         "RH2M": "percent",
+        "RH2M_MAX": "percent",
+        "RH2M_MIN": "percent",
         "SLP": "kPa",
+        "SUNSHINE_DURATION": "seconds/day",
         "T2M": "deg C",
         "T2MDEW": "deg C",
         "T2M_MAX": "deg C",
         "T2M_MIN": "deg C",
         "TS": "deg C",
+        "VPD_SOURCE": "kPa; daily maximum",
         "WD10M": "degree",
-        "WS10M": "m/s"
+        "WS10M": "m/s",
+        "WS10M_CONFIRMED": "m/s at confirmed 10m"
       },
-      "notes_ar": "Auto يستخدم Land للحرارة والرطوبة والندى، وERA5 لبقية المتغيرات المدعومة. للفترة التي تبدأ قبل 1950 يستخدم ERA5 كاملًا. الوضع المستقل لا يستكمل NASA؛ المسار القديم والهجين لهما سياسة معلنة منفصلة.",
-      "notes_en": "Auto uses Land for temperature, RH and dewpoint and ERA5 for other supported variables. An interval beginning before 1950 uses ERA5 throughout. Standalone never supplements NASA; legacy and Hybrid retain explicitly separate policies.",
+      "notes_ar": "Auto يستخدم Land للحرارة والرطوبة والندى، وERA5 لبقية المتغيرات المدعومة. للفترة التي تبدأ قبل 1950 يستخدم ERA5 كاملًا. الوضع المستقل لا يستكمل NASA؛ المسار القديم والهجين لهما سياسة معلنة منفصلة. إضافات RHmax/RHmin وVPD وساعات السطوع والرياح ذات ارتفاع القياس المؤكد مدمجة في Desktop وأداتَي Point وStation بالمسار اليومي؛ لا تشمل الشبكة الإقليمية. ملخصات الساعات تشترط 24 ساعة UTC صحيحة؛ counts وعمليات الاشتقاق محفوظة في Excel.",
+      "notes_en": "Auto uses Land for temperature, RH and dewpoint and ERA5 for other supported variables. An interval beginning before 1950 uses ERA5 throughout. Standalone never supplements NASA; legacy and Hybrid retain explicitly separate policies. New RH extrema, VPD, sunshine and confirmed-height wind options are integrated in Desktop and the Daily Point/Station tools; regional activation is not included. Hourly aggregation requires 24 valid UTC hours; sample counts and operations are exported in Excel.",
       "region": "Global; Land variables require valid land cells",
       "resolution": "Auto: Land 0.1 degree or ERA5 0.25 degree per variable and full interval",
       "start": "ERA5 1940; Land 1950",
@@ -91,13 +96,18 @@
         "T2M_MIN",
         "PRECTOTCORR",
         "ALLSKY_SFC_SW_DWN",
+        "SUNSHINE_DURATION",
         "RH2M",
         "T2MDEW",
         "PS",
         "SLP",
         "WS10M",
         "WD10M",
-        "CLOUD_AMT"
+        "CLOUD_AMT",
+        "RH2M_MAX",
+        "RH2M_MIN",
+        "VPD_SOURCE",
+        "WS10M_CONFIRMED"
       ]
     },
     {
@@ -385,5 +395,5 @@
       ]
     }
   ],
-  "version": "2026-10-18-products-v1"
+  "version": "2026-10-22-products-v3"
 }

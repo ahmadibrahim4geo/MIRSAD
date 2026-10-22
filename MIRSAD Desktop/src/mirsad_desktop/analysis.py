@@ -129,6 +129,9 @@ def build_atlas(layers,output,manifest,progress,cancelled,crs="EPSG:32636",cell_
     tasks=[]
     excluded={"Point_Lat","Point_Lon","Elevation_m","Valid_Days","Expected_Days","Coverage_Fraction"}
     for module,records in layers.items():
+        et_selection=extra.get("et_raster_methods")
+        if et_selection is not None and ((module=="Evapotranspiration" and "HG" not in et_selection) or
+                (module=="Evapotranspiration_Penman_Monteith" and "PM" not in et_selection)):continue
         keys=list(records[0]["properties"]) if records else []
         for key in keys:
             if key in excluded or (fields is not None and key not in fields):continue
@@ -185,11 +188,16 @@ def build_atlas(layers,output,manifest,progress,cancelled,crs="EPSG:32636",cell_
                 from .exports import safe_name
                 filename=safe_name(module)+"__"+safe_name(key)+".tif"
                 path=target/filename
+                if "Evapotranspiration_Penman_Monteith" in layers and module in ("Evapotranspiration","Evapotranspiration_Penman_Monteith"):
+                    path=target/("Hargreaves" if module=="Evapotranspiration" else "Penman_Monteith")/filename
+                    path.parent.mkdir(parents=True,exist_ok=True)
                 stored=np.where(np.isfinite(surface),surface,-9999).astype("float32")
+                from .enrichment import field_unit
+                output_unit=field_unit(module,key,layers[module][0]["properties"])
                 with rasterio.open(path,"w",driver="GTiff",width=width,height=height,count=1,dtype="float32",
                                    crs=projection,transform=affine,nodata=-9999,compress="deflate") as dataset:
                     dataset.write(stored,1);dataset.update_tags(MIRSAD_Field=key,Module=module,Method=method,
-                        Cell_Size_m=cell_size,Source_Points=len(samples),Run_ID=manifest["run_id"])
+                        Cell_Size_m=cell_size,Source_Points=len(samples),Run_ID=manifest["run_id"],MIRSAD_Unit=output_unit)
                 with rasterio.open(path) as dataset:
                     if dataset.crs is None or dataset.shape!=surface.shape or not np.allclose(dataset.read(1),stored,equal_nan=True):
                         raise RuntimeError("GeoTIFF readback mismatch")
@@ -224,7 +232,7 @@ def build_atlas(layers,output,manifest,progress,cancelled,crs="EPSG:32636",cell_
                     ax.scatter(xy[:,0],xy[:,1],s=7,c="white",edgecolors="#183b4b",linewidths=.4)
                     ax.set_title("MIRSAD | "+module+"\n"+key,loc="left",fontsize=16,color="#08273d")
                     ax.set_xlabel(projection.to_string()+" · Easting (m)");ax.set_ylabel("Northing (m)")
-                    fig.colorbar(image,ax=ax,shrink=.8,label=layers[module][0]["properties"].get("Measurement_Unit",""))
+                    fig.colorbar(image,ax=ax,shrink=.8,label=output_unit)
                     fig.text(.1,.025,"Ahmad Ibrahim · MIRSAD | "+method+" | "+str(len(samples))+" points | RMSE: "+str(validation["RMSE"]),fontsize=8)
                     fig.tight_layout(rect=(0,.04,1,1));book.savefig(fig)
             except InterruptedError:raise
@@ -233,7 +241,7 @@ def build_atlas(layers,output,manifest,progress,cancelled,crs="EPSG:32636",cell_
         manifest["outputs"]["Atlas/MIRSAD_Climate_Atlas.pdf"]={"type":"PDF climate atlas"}
     progress({"stage":"raster","completed":len(tasks),"total":len(tasks),"message":"Raster processing finished"})
 
-def run_existing_project(points,folder,name,metadata,fields,crs="EPSG:32636",progress=None,cancelled=None,**options):
+def run_existing_project(points,folder,name,metadata,fields,crs="EPSG:32636",progress=None,cancelled=None,elevation_metadata=None,**options):
     from .exports import export_project,station_properties
     progress=progress or (lambda message:None);cancelled=cancelled or (lambda:False)
     records=[]
@@ -245,7 +253,8 @@ def run_existing_project(points,folder,name,metadata,fields,crs="EPSG:32636",pro
             props[key]=value if value is not None and math.isfinite(value) else None
         props["Measurement_Unit"]="As supplied by input; verify units"
         records.append(dict(latitude=point["latitude"],longitude=point["longitude"],properties=props))
-    output,manifest=export_project(points,folder,name,metadata,climate_layers={"Input_Climate":records},source="User data (no download)",crs=crs,progress=progress,cancelled=cancelled)
+    output,manifest=export_project(points,folder,name,metadata,climate_layers={"Input_Climate":records},source="User data (no download)",crs=crs,progress=progress,cancelled=cancelled,
+        **(dict(elevation_metadata=elevation_metadata) if elevation_metadata else {}))
     try:
         build_atlas({"Input_Climate":records},output,manifest,progress,cancelled,crs=crs,fields=fields,**options)
         manifest["status"]="partial" if manifest["errors"] else "complete"

@@ -37,7 +37,7 @@ def fresh_draft(tool):
                 project="MIRSAD_" + tool.key.title(),
                 provider="NASA POWER Regional Grid" if tool.key=="raster" else STATION_HYBRID if tool.key=="stations" else GRID_HYBRID,
                 om_model=ERA5_MODELS[0],era5_resolution=ERA5_MODELS[0],
-                start="2024-01-01", end="2024-12-31", modules=[],
+                start="2024-01-01", end="2024-12-31", modules=[],extra_variables=[],elevation_options=None,et_methods=["HG"],et_raster_methods=["HG","PM"],
                 crs="EPSG:4326", processing_crs="EPSG:6933", units="Metric",unit_options={},
                 gap="Climatological Month Mean (Recommended)",
                 operation="Online Download & Full Processing",

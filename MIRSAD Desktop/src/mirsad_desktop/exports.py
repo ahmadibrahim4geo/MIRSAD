@@ -15,7 +15,7 @@ def safe_name(value):
 
 
 def station_properties(row):
-    return {
+    props = {
         "Station_Key": row["station_key"], "Station_ID": row["usaf"], "WBAN": row["wban"],
         "Station_Name": row["name"], "Country": row["country"],
         "Source_Country": row.get("source_country", ""),
@@ -23,6 +23,8 @@ def station_properties(row):
         "Elevation_m": row.get("elevation"), "Coordinate_QA": row.get("qa_status", "unverified")
         ,"Point_Type":row.get("point_type","Catalogue station"),"Input_Source":row.get("input_source","Embedded NOAA location catalogue")
     }
+    if "dem_elevation" in row:props.update(Z_Elev_m=row["dem_elevation"],Z_Source=row.get("dem_source"))
+    return props
 
 
 def write_layer(path, driver, layer, records, crs="EPSG:4326"):
@@ -45,7 +47,7 @@ def write_layer(path, driver, layer, records, crs="EPSG:4326"):
         values = [row.get(field) for row in properties]
         valid = [v for v in values if v is not None]
         numeric = field not in ("Station_Key", "Station_ID", "WBAN", "Station_Name", "Country", "Source_Country", "Coordinate_QA",
-                                "Data_Start", "Data_End", "Source", "Measurement_Unit", "Status", "Error_Msg","Point_Type","Input_Source","Gap_Fill_Method","Source_Temporal_Resolution")
+                                "Data_Start", "Data_End", "Source", "Measurement_Unit", "Status", "Error_Msg","Point_Type","Input_Source","Gap_Fill_Method","Source_Temporal_Resolution","Z_Source")
         if numeric or (valid and all(isinstance(v, (int, float)) for v in valid)):
             arrays.append(np.array([float(v) if v is not None else np.nan for v in values], dtype="float64"))
         else:
@@ -85,7 +87,8 @@ def write_layer(path, driver, layer, records, crs="EPSG:4326"):
     return {"layer": layer, "features": len(records), "crs": meta["crs"], "readback": "passed"}
 
 
-def element_sheets(records, source, catalogue_metadata, run_id, daily=None,source_resolutions=None):
+def element_sheets(records, source, catalogue_metadata, run_id, daily=None,source_resolutions=None,
+                   enrichment_metadata=None,layer_name=None,elevation_metadata=None):
     from .climate_products import descriptor
     product=descriptor(source)
     props = [row["properties"] for row in records]
@@ -112,40 +115,59 @@ def element_sheets(records, source, catalogue_metadata, run_id, daily=None,sourc
             for variable,sources in variables.items():
                 for actual,info in sources.items():rows.append([station_key,variable,actual,info.get("product"),info.get("spatial"),info.get("temporal")])
         sheets.append(("Source_Resolution",["Station_Key","Variable","Actual_Source","Product","Native_Resolution","Native_Temporal_Resolution"],rows))
+    if enrichment_metadata:
+        from .daily_climate import VARIABLES,PM_PRODUCT
+        definitions=[r for r in enrichment_metadata["dictionary"] if r[0]==layer_name]
+        methods=[r for r in enrichment_metadata["methods"] if (PM_PRODUCT if r[1]=="ET0_PM" else VARIABLES[r[1]]["module"])==layer_name]
+        if definitions:
+            sheets.append(("Field_Dictionary",["Module","Field_Name","Default_Alias","Variable","Unit","Statistic","Missing_Rule","Method",
+                "Period","Description_EN","Description_AR","Inputs","Origin","Actual_Sources","Formula","Reference"],definitions))
+            sheets.append(("Methodology",["Station_Key","Variable","Start","End","Actual_Sources","Hourly_Operation","Timezone","Valid_Days","Expected_Days","ea_Method","Input_Elevation_m","Formula_Version","Notes"],methods))
+            processing=enrichment_metadata.get("hourly_processing",())
+            if len(processing):
+                sheets.append(("Hourly_Processing",["Module","Station_Key","Output_Variable","Input_Parameter","Date","Actual_Source",
+                    "Input_Temporal","Output_Temporal","Operation","Timezone","Valid_Samples","Expected_Samples","Unit","Scale","Status","Notes_EN","Notes_AR"],
+                    (row for row in processing if row[0]==layer_name)))
+    if elevation_metadata:
+        identities={p["Station_Key"] for p in props}
+        rows=[[p.get("station_key"),p.get("value_m"),p.get("source"),p.get("requested_source"),p.get("surface_type"),
+               p.get("vertical_datum"),p.get("sampling"),p.get("status"),p.get("reason"),
+               json.dumps(p.get("product",{}),ensure_ascii=False,sort_keys=True)]
+              for p in elevation_metadata["points"] if p["station_key"] in identities]
+        sheets.append(("Elevation_Source",["Station_Key","Z_Elev_m","Z_Source","Requested_Source","Surface_Type","Vertical_Datum",
+            "Sampling","Status","Reason","Product_Metadata"],rows))
+        sheets.append(("Elevation_Fields",["Field_Name","Default_Alias","Unit","Description_EN","Description_AR","Missing_Rule","Notes"],[
+            ["Z_Elev_m","Z_Elev_m","m","Optional DEM elevation","الارتفاع الاختياري المستخرج من نموذج الارتفاع","NULL for unavailable/NoData; zero is valid",elevation_metadata["notes"]],
+            ["Z_Source","Z_Source","text","Actual elevation product","المنتج الفعلي لمصدر الارتفاع","NULL when Z_Elev_m is NULL","See Elevation_Source for DSM/DTM, datum and product metadata; original Elevation_m unchanged"]]))
     return sheets
 
 
-def workbook(path, sheets):
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
-    book = Workbook(write_only=False)
-    book.remove(book.active)
-    for name, headers, rows in sheets:
-        # Keep complete daily records even beyond Excel's per-sheet capacity.
-        capacity = 1000000
-        for offset in range(0, max(1, len(rows)), capacity):
-            suffix = "" if offset == 0 else "_" + str(offset // capacity + 1)
-            ws = book.create_sheet(name[:31-len(suffix)] + suffix)
-            ws.append(headers)
-            for cell in ws[1]:
-                cell.font = Font(bold=True, color="FFFFFF")
-                cell.fill = PatternFill("solid", fgColor="08273D")
-                cell.alignment = Alignment(wrap_text=True)
-            for row in rows[offset:offset+capacity]:
-                # Raw strings are values, never Excel formulas from external data.
-                ws.append(row)
-                for cell in ws[ws.max_row]:
-                    if cell.data_type == "f":
-                        cell.data_type = "s"
-            ws.freeze_panes = "A2"
-            ws.auto_filter.ref = ws.dimensions
-            for column in ws.columns:
-                ws.column_dimensions[column[0].column_letter].width = min(48, max(16, len(str(column[0].value)) + 3))
-    book.save(path)
+def workbook(path,sheets,**options):
+    from .excel_stream import write_workbook
+    return write_workbook(path,sheets,**options)
+
+
+def file_sha256(path):
+    digest=hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda:handle.read(1024*1024),b""):digest.update(chunk)
+    return digest.hexdigest()
+
+
+def export_workbook(path,sheets,output,manifest):
+    from .excel_stream import ExcelWriteError
+    try:
+        result=workbook(path,sheets)
+    except ExcelWriteError as exc:
+        for saved in exc.files:manifest["outputs"][str(saved.relative_to(output))]={"sha256":file_sha256(saved),"partial_excel_export":True}
+        raise
+    for saved in result["files"]:manifest["outputs"][str(saved.relative_to(output))]={"sha256":file_sha256(saved)}
+    if result["split"]:manifest["outputs"][str(Path(path).relative_to(output))]["excel_export_index"]=result["index"]
+    return result
 
 
 def export_project(stations, folder, name, catalogue_metadata, climate_layers=None, daily=None, source=None,
-                   progress=None, cancelled=None, crs="EPSG:4326",source_resolutions=None):
+                   progress=None, cancelled=None, crs="EPSG:4326",source_resolutions=None,enrichment_metadata=None,elevation_metadata=None):
     if not stations:
         raise ValueError("Choose at least one station.")
     progress = progress or (lambda message: None)
@@ -160,6 +182,7 @@ def export_project(stations, folder, name, catalogue_metadata, climate_layers=No
     from . import __version__
     manifest = dict(run_id=run_id,job_id=os.environ.get("MIRSAD_JOB_ID"), version=__version__,output_crs=crs, created_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
                     catalogue=catalogue_metadata, outputs={}, errors=[], status="running")
+    if elevation_metadata:manifest["elevation"]=elevation_metadata
     def save():
         (output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     save()
@@ -185,11 +208,16 @@ def export_project(stations, folder, name, catalogue_metadata, climate_layers=No
         for layer, records in layers.items():
             if cancelled(): raise InterruptedError("Export cancelled")
             progress({"stage":"export","completed":completed,"total":total,"message":"Excel / " + layer})
-            sheets = element_sheets(records,source,catalogue_metadata,run_id,(daily or {}).get(layer),source_resolutions=source_resolutions)
+            sheets = element_sheets(records,source,catalogue_metadata,run_id,(daily or {}).get(layer),source_resolutions=source_resolutions,
+                                     **(dict(elevation_metadata=elevation_metadata) if elevation_metadata else {}),
+                                     **(dict(enrichment_metadata=enrichment_metadata,layer_name=layer) if enrichment_metadata else {}))
             path = output / (layer + ".xlsx")
+            from .daily_climate import PM_PRODUCT
+            if PM_PRODUCT in layers and layer in ("Evapotranspiration",PM_PRODUCT):
+                path=output/"15_Evapotranspiration"/("Hargreaves" if layer=="Evapotranspiration" else "Penman_Monteith")/(layer+".xlsx")
+                path.parent.mkdir(parents=True,exist_ok=True)
             try:
-                workbook(path, sheets)
-                manifest["outputs"][path.name] = {"sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+                export_workbook(path,sheets,output,manifest)
             except Exception as exc:
                 manifest["errors"].append({"output":path.name,"error":str(exc)})
             completed+=1

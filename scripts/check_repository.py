@@ -12,6 +12,8 @@ def main():
     check_website()
     from help_formulas import check_review
     from help_dynamic import parameter_body
+    from audit_climate_enrichment import check as check_climate_baseline
+    check_climate_baseline()
     from mirsad_desktop import __version__
     check_review()
     index=json.loads((DESKTOP/'assets/help_index.json').read_text(encoding='utf-8'))
@@ -26,7 +28,7 @@ def main():
         assert all(('/'+key+'.html').encode() in data for key in ids)
         assert '<script' in (ROOT/('Help/MIRSAD_Help_'+language.upper()+'.html')).read_text(encoding='utf-8')
         for tool in ('points','stations','raster'):assert parameter_body(tool,language)
-    for name in ('hybrid_pipeline.py','climate_sources.py','climate_products.py','remote_grid.py','protected_sources.py'):
+    for name in ('hybrid_pipeline.py','climate_sources.py','climate_products.py','remote_grid.py','protected_sources.py','daily_climate.py'):
         assert (ROOT/'mirsad_core'/name).read_bytes()==(DESKTOP/'src/mirsad_desktop'/name).read_bytes(),name
     source=ast.parse((ROOT/'Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt').read_text(encoding='utf-8-sig'))
     functions={n.name:ast.dump(ast.parse(ast.unparse(n)).body[0],include_attributes=False) for n in source.body if isinstance(n,ast.FunctionDef)}

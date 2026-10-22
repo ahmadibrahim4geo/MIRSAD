@@ -646,7 +646,7 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
         stations = []
         if local_layer and HAS_ARCPY:
             try:
-                fields = ["Station_ID", "Name", "Country", "Country_Nm", "Continent", "Is_Arab", "Lat", "Lon", "Elev_m"]
+                fields = ["Station_ID", "WBAN", "Name", "Country", "Country_Nm", "Continent", "Is_Arab", "Lat", "Lon", "Elev_m"]
                 actual_fields = [f.name for f in arcpy.ListFields(local_layer)]
                 valid_fields = [f for f in fields if f in actual_fields]
                 with arcpy.da.SearchCursor(local_layer, valid_fields + ["SHAPE@XY"]) as cur:
@@ -659,8 +659,10 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                         ctry = str(rdict.get("Country", "")).strip().upper()
                         
                         en_name, ar_name, cont, is_arab = get_country_info(ctry, lat, lon)
+                        known_z = _core.enrichment.number(rdict.get("Elev_m"))
                         stations.append({
                             "Station_ID": str(rdict.get("Station_ID", "")),
+                            "WBAN": _core._excel_text(rdict.get("WBAN", "")),
                             "Name": name_val,
                             "Country": ctry,
                             "Country_Nm": en_name,
@@ -668,7 +670,10 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
                             "Is_Arab": is_arab,
                             "Lat": lat,
                             "Lon": lon,
-                            "Elev_m": float(rdict.get("Elev_m", 0.0))
+                            # A missing local height must not discard the user's
+                            # layer and silently substitute the global catalogue.
+                            "Elev_m": known_z if known_z is not None else 0.0,
+                            "Z_Known": known_z is not None
                         })
                 if stations:
                     return stations
@@ -796,13 +801,20 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
             arcpy.management.AddField(out_shp, "Point_Type", "TEXT", field_length=30)
 
             fields = ["SHAPE@XY", "Station_ID", "Station_Nm", "Country_Cd", "Elev_m", "Source_ID", "Point_Type", "WBAN"]
+            extra_elevation = bool(getattr(self, "_supplementary_selected", []) or getattr(self, "_daily_reference_et", False))
+            if extra_elevation:
+                arcpy.management.AddField(out_shp, "Z_Known", "SHORT")
+                fields.append("Z_Known")
             with arcpy.da.InsertCursor(out_shp, fields) as cur:
                 for idx, s in enumerate(stations):
                     xy = (s["Lon"], s["Lat"])
                     pt_type = "Supplementary Point" if s.get("Is_Supplementary") else "Ground Station"
                     st_name = (s.get("Name") or s.get("Station_Nm") or "")[:100]
                     st_ctry = (s.get("Country") or s.get("Country_Cd") or "")[:10]
-                    cur.insertRow([xy, s["Station_ID"], st_name, st_ctry, float(s.get("Elev_m", 0.0)), idx + 1, pt_type, s.get("WBAN", "")])
+                    values = [xy, s["Station_ID"], st_name, st_ctry, float(s.get("Elev_m", 0.0)), idx + 1, pt_type, s.get("WBAN", "")]
+                    if extra_elevation:
+                        values.append(int(not s.get("Is_Supplementary") and s.get("Z_Known", _core.enrichment.number(s.get("Elev_m")) is not None)))
+                    cur.insertRow(values)
         else:
             import pyogrio
             from shapely.geometry import Point
@@ -883,6 +895,8 @@ class WeatherStationsAtlasGenerator(_core.PowerClimateAtlasGenerator):
     @_core.preserve_arcpy_environment
     def execute(self, parameters, messages):
         pdict = dict((p.name, p) for p in parameters)
+        self._supplementary_selected = _core.enrichment.selection(pdict)
+        self._daily_reference_et = "PM" in _core.pm.values(pdict.get(_core.pm.METHODS_PARAMETER), ["HG"])
 
         try:
             p_op = pdict.get("Operation_Mode")
@@ -1093,6 +1107,15 @@ class WeatherStationsAtlasGeneratorAR(WeatherStationsAtlasGenerator):
 
     def getParameterInfo(self):
         params = WeatherStationsAtlasGenerator.getParameterInfo(self)
+        extra_pdict = dict((p.name, p) for p in params)
+        for translated in _core.enrichment.parameters(arcpy, arabic=True):
+            extra_pdict[translated.name].displayName = translated.displayName
+            extra_pdict[translated.name].category = translated.category
+            extra_pdict[translated.name].description = translated.description
+        for translated in _core.pm.parameters(arcpy, arabic=True):
+            extra_pdict[translated.name].displayName = translated.displayName
+            extra_pdict[translated.name].category = translated.category
+            extra_pdict[translated.name].description = translated.description
         pdict = dict((p.name, p) for p in params)
 
         # 1. Station_Selection_Mode

@@ -65,6 +65,19 @@
 
 ## MIRSAD Desktop — نسخة التطوير المستقلة
 
+**تحديث المصدر والشروحات — 22 أكتوبر 2026:** أُضيفت 11 قيمة مناخية اختيارية،
+وحساب HG وPM مستقلان في Desktop وأداتي النقاط والمحطات، وتصدير XLSX تدريجي
+للجداول الكبيرة. إثراء المناسيب المحلي/الشبكي متاح لنقاط Desktop، مع حفظ الأصل
+وتوثيق النموذج. [فهرس التحديث وأدلته والمتبقي](Documents/SOURCE_UPDATE_2026_10_22.md).
+المثبت العام dev8 أدناه يخص 19 أكتوبر ولا يتضمن هذه الإضافات. DEM في Toolbox،
+والإضافات الإقليمية، وقبول الراستر وArcMap والأداء الكبير ما زالت مفتوحة.
+
+**Source/documentation update — 22 October 2026:** 11 optional variables,
+independent HG/PM in Desktop and the point/station toolboxes, streaming XLSX,
+and Desktop point DEM enrichment are implemented in source. The public dev8
+installer below is the 19 October build and does not include these additions.
+See the [delivery scope and remaining acceptance](Documents/SOURCE_UPDATE_2026_10_22.md).
+
 خطة دورة التطوير التالية، وتنظيم صناديق النقاط والمحطات والراستر، واختيار الدقة تلقائيًا لكل عنصر، وإضافة المصادر ومزامنة الأدلة والموقع مسجلة في [خطة التطوير المشتركة وسجل القرارات](Documents/DEVELOPMENT_ROADMAP.md). البنود المخططة ليست إعلانًا عن وظائف منفذة.
 
 تطبيق Windows مستقل داخل [MIRSAD Desktop](MIRSAD%20Desktop/README.md)، بكتالوج محطات مضمن وواجهة عربية/إنجليزية، وتصدير FileGDB وGeoPackage وExcel. [نسخة التطوير 0.4.0.dev8](https://github.com/ahmadibrahim4geo/MIRSAD/releases/tag/desktop-v0.4.0-dev.8) متاحة على GitHub، ومعها المثبت وملفا المساعدة CHM بالعربية والإنجليزية وبصمات التحقق. يوجد مكان ثابت للتطوير ومكان ثابت للنسخة المعتمدة بعد الموافقة؛ لم تُعتمد نسخة stable. راجع [الحالة الحالية والمتبقي](MIRSAD%20Desktop/docs/STATUS.md) و[دليل التطوير](AGENTS.md).

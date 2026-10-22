@@ -1,12 +1,42 @@
 # Current Desktop status
 
-Updated: 19 October 2026. Development version: **0.4.0.dev8**.
+Updated: 22 October 2026. Existing development binary version: **0.4.0.dev8**.
+Climate enrichment has a verified candidate in build scratch; the existing development app has not been replaced.
 
 مرصاد Desktop نسخة تطوير مستقلة عن ArcGIS، وليست إصدارًا نهائيًا معتمدًا.
 الأدوات والمساعدة تعمل بالمسارات الموضحة أدناه. المتبقي في [BACKLOG](BACKLOG.md)،
 والتسليمات السابقة في [CHANGELOG](CHANGELOG.md).
 
 ## Implemented
+
+Climate enrichment, 21 October: Desktop source now integrates 11 optional variables,
+strict hourly-to-daily provenance, local/web DEM enrichment, independent HG/PM products
+and raster choices, and streaming/split XLSX for old and new modules. Real Excel/GPKG/
+FileGDB exports, a live leap-month fixture, million-row readback and Pro field-alias
+readback passed. Bilingual Qt/HTML/CHM help describes these options. The immutable
+pre-change baseline still passes with defaults off. See [source acceptance and limits](reports/climate-enrichment/DESKTOP_SOURCE_ACCEPTANCE.md)
+and [the tracker](reports/climate-enrichment/IMPLEMENTATION_TRACKER.md). Toolbox DEM,
+regional additions, optional localized aliases in Desktop and complete DPI remain outstanding.
+The candidate installer also passed disposable QA install/readback/uninstall and user-file preservation; no production install or publication was performed.
+
+22 October Toolbox follow-up: the 11 daily additions now have append-only EN/AR
+Point/Station parameters, conservative summaries, separate canonical source audit,
+year-specific XLSX and optional supplementary raster controls. Default-off behavior
+retains the 19-module baseline. See [Toolbox acceptance](reports/climate-enrichment/TOOLBOX_ACCEPTANCE.md)
+for native Pro fixture scope and remaining raster/ArcMap limits. Current source/help
+changes are later than the verified 21 October frozen candidate and installer.
+
+Later on 22 October, HG/PM calculation and raster selections were separated in
+Point/Station (83/90 parameters; regional 36). PM uses daily FAO56 and its own
+inputs, fields, workbook/yearly exports and folders; HG-only retains its prior
+contract. Six native Pro method fixtures passed, including unchanged HG and the
+FAO56 example after native Excel readback. See [PM acceptance](reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.md).
+
+Legacy Excel follow-up: point/station Daily tables above 60,000 rows now use a
+standard-library streaming XLSX writer on Python 2.7/3. Small XLS contracts remain.
+A million-row Python 2.7 boundary and native Pro ExcelToTable readback passed;
+native ArcMap geoprocessor initialization remains unaccepted. See
+[legacy Excel evidence](reports/climate-enrichment/LEGACY_EXCEL_ACCEPTANCE.md).
 
 - One independent Windows x64 application, Arabic/English workspace, light/dark
   themes, map, layer/result previews, CRS browser and isolated processing workers.

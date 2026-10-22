@@ -1,0 +1,463 @@
+{
+  "recorded": "2026-10-22T08:20:30.720875+00:00",
+  "passed": true,
+  "scope": "11 optional daily variables in Point/Station source; native Pro with synthetic offline source responses",
+  "evidence": {
+    "points": {
+      "passed": true,
+      "kind": "points",
+      "runtime": {
+        "LicenseLevel": "Advanced",
+        "InstallDir": "c:\\program files\\arcgis\\pro\\",
+        "Installer": "ahmad",
+        "ProductName": "ArcGISPro",
+        "Version": "3.6",
+        "SourceDir": "D:\\New folder (2)\\Be GISer ArcGIS Pro 3.6\\1 Arcgis pro 3.6\\ArcGISPro\\",
+        "InstallType": "N/A",
+        "BuildNumber": "59527",
+        "InstallDate": "11/08/2026",
+        "InstallTime": "14:35:07",
+        "SPNumber": "N/A",
+        "SPBuild": "N/A",
+        "LicenseType": ""
+      },
+      "source_network": "Synthetic offline responses; no live provider acceptance",
+      "added_fields": 220,
+      "points": 3,
+      "parameters": 81,
+      "requests": 6,
+      "warnings": [
+        "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+        "QA FAIL: shapefile name length<=10 (or mapped) mapped=528 fields",
+        "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+      ],
+      "checks": [
+        "Actual Toolbox execute with native ArcPy",
+        "11 additions in parent layers",
+        "English default aliases",
+        "Native XLSX daily readback",
+        "Known zero / unknown elevation distinguished",
+        "Input geometry/attributes unchanged",
+        "Per-day input provenance retained"
+      ],
+      "limits": [
+        "Supplementary rasters were disabled",
+        "No authenticated providers",
+        "Fixture period is February 2024"
+      ]
+    },
+    "stations": {
+      "passed": true,
+      "kind": "stations",
+      "runtime": {
+        "LicenseLevel": "Advanced",
+        "InstallDir": "c:\\program files\\arcgis\\pro\\",
+        "Installer": "ahmad",
+        "ProductName": "ArcGISPro",
+        "Version": "3.6",
+        "SourceDir": "D:\\New folder (2)\\Be GISer ArcGIS Pro 3.6\\1 Arcgis pro 3.6\\ArcGISPro\\",
+        "InstallType": "N/A",
+        "BuildNumber": "59527",
+        "InstallDate": "11/08/2026",
+        "InstallTime": "14:35:07",
+        "SPNumber": "N/A",
+        "SPBuild": "N/A",
+        "LicenseType": ""
+      },
+      "source_network": "Synthetic offline responses; no live provider acceptance",
+      "added_fields": 220,
+      "points": 3,
+      "parameters": 88,
+      "requests": 6,
+      "warnings": [
+        "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+        "QA FAIL: shapefile name length<=10 (or mapped) mapped=528 fields",
+        "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+      ],
+      "checks": [
+        "Actual Toolbox execute with native ArcPy",
+        "11 additions in parent layers",
+        "English default aliases",
+        "Native XLSX daily readback",
+        "Known zero / unknown elevation distinguished",
+        "Input geometry/attributes unchanged",
+        "Per-day input provenance retained"
+      ],
+      "limits": [
+        "Supplementary rasters were disabled",
+        "No authenticated providers",
+        "Fixture period is February 2024"
+      ]
+    },
+    "current_qa": {
+      "passed": true,
+      "reports": {
+        "points": {
+          "checks": [
+            [
+              "element layers",
+              true,
+              "counts={'Temperature': 3, 'Wind': 3, 'Relative Humidity': 3, 'Solar Radiation': 3}"
+            ],
+            [
+              "field names present",
+              true,
+              "(364/364, missing=[])"
+            ],
+            [
+              "shapefile name length<=10 (or mapped)",
+              true,
+              "mapped=528 fields"
+            ],
+            [
+              "required columns present",
+              true,
+              "missing=[]"
+            ],
+            [
+              "no -999 sentinel values",
+              true,
+              "(bad=0)"
+            ],
+            [
+              "Metadata_Dictionary.xls",
+              true,
+              ""
+            ],
+            [
+              "Field_Dictionary_Arabic.xls",
+              true,
+              ""
+            ],
+            [
+              "tif per raster",
+              true,
+              "(0/0, missing=[])"
+            ],
+            [
+              "raster processing failures",
+              true,
+              "failed=0"
+            ],
+            [
+              "outputs match selected modules",
+              true,
+              "raster modules=[]"
+            ],
+            [
+              "value ranges sane",
+              true,
+              ""
+            ]
+          ],
+          "output_database": "D:\\My Software\\MIRSAD Climate Atlas Generator\\tests\\.output\\native-point-enrichment-final\\Atlas\\Climate_Database_From_20240201_To_20240229.gdb",
+          "original_warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "QA FAIL: shapefile name length<=10 (or mapped) mapped=528 fields",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "passed": true,
+          "scope": "Read-only current QA on the existing native fixture output; no new processing or raster acceptance"
+        },
+        "stations": {
+          "checks": [
+            [
+              "element layers",
+              true,
+              "counts={'Temperature': 3, 'Wind': 3, 'Relative Humidity': 3, 'Solar Radiation': 3}"
+            ],
+            [
+              "field names present",
+              true,
+              "(364/364, missing=[])"
+            ],
+            [
+              "shapefile name length<=10 (or mapped)",
+              true,
+              "mapped=528 fields"
+            ],
+            [
+              "required columns present",
+              true,
+              "missing=[]"
+            ],
+            [
+              "no -999 sentinel values",
+              true,
+              "(bad=0)"
+            ],
+            [
+              "Metadata_Dictionary.xls",
+              true,
+              ""
+            ],
+            [
+              "Field_Dictionary_Arabic.xls",
+              true,
+              ""
+            ],
+            [
+              "tif per raster",
+              true,
+              "(0/0, missing=[])"
+            ],
+            [
+              "raster processing failures",
+              true,
+              "failed=0"
+            ],
+            [
+              "outputs match selected modules",
+              true,
+              "raster modules=[]"
+            ],
+            [
+              "value ranges sane",
+              true,
+              ""
+            ]
+          ],
+          "output_database": "D:\\My Software\\MIRSAD Climate Atlas Generator\\tests\\.output\\native-station-enrichment-verified\\Atlas\\Climate_Database_From_20240201_To_20240229.gdb",
+          "original_warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "QA FAIL: shapefile name length<=10 (or mapped) mapped=528 fields",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "passed": true,
+          "scope": "Read-only current QA on the existing native fixture output; no new processing or raster acceptance"
+        }
+      },
+      "recorded": "2026-10-22T08:16:52.898689+00:00",
+      "source_sha256": "0104d1bfa2cdef89e39ce7ac43e20080e57613c4efd2e6522e56541d034f787a",
+      "note": "Original native runs flagged old static SHP-name QA; current QA recognizes the actual supplementary mapping. Original evidence is retained."
+    },
+    "isolated": {
+      "python": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.venv\\Scripts\\python.exe",
+      "isolated": true,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_arcgis_pro_compatibility.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.64
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_climate_enrichment_baseline.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 1.56
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.2
+        },
+        {
+          "suite": "test_data_quality.py",
+          "exit": 0,
+          "tests": 16,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.33
+        },
+        {
+          "suite": "test_excel_export_108.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.48
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_migrate_legacy_database.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.14
+        },
+        {
+          "suite": "test_modifications.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.39
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 1.0
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.47
+        },
+        {
+          "suite": "test_station_multi_selection.py",
+          "exit": 0,
+          "tests": 17,
+          "seconds": 0.52
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.72
+        },
+        {
+          "suite": "test_weather_stations_atlas.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 0.53
+        },
+        {
+          "suite": "test_weather_stations_dual_lang.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.5
+        },
+        {
+          "suite": "test_workflow_and_temporal_scope.py",
+          "exit": 0,
+          "tests": 6,
+          "seconds": 0.41
+        },
+        {
+          "suite": "test_yearly_excel_export.py",
+          "exit": 0,
+          "tests": 9,
+          "seconds": 1.61
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.8
+        },
+        {
+          "suite": "test_toolbox_enrichment.py",
+          "exit": 0,
+          "tests": 11,
+          "seconds": 1.03
+        }
+      ]
+    },
+    "python27": {
+      "python": "C:/Python27/ArcGIS10.8/python.exe",
+      "isolated": true,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 2.56
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 2.8
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 1.25
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 1.3
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.42
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.69
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 4.69
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.2
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.47
+        },
+        {
+          "suite": "test_toolbox_enrichment.py",
+          "exit": 0,
+          "tests": 11,
+          "seconds": 0.47
+        }
+      ]
+    }
+  },
+  "evidence_sha256": {
+    "tests/.output/native-point-enrichment-final/acceptance.json": "540f4341d5dceccea716182d5786988ae7b170aa0ab4fc06d9e8a65704e14753",
+    "tests/.output/native-station-enrichment-verified/acceptance.json": "c4464ef5c5e72528b6daea2a0f2019371234fa242929f685e295feeb691dfceb",
+    "tests/.output/toolbox-enrichment-qa/acceptance.json": "33dfe1eddd6683e69f7f6e88e22a8e342e0ab8c63c7d641de53ba7f458c1d3b3",
+    "tests/.output/toolbox-enrichment-final/summary.json": "4f30e38f24c816ed2b1836d9e67efc15b4c9a6f9bf614648f101e1d949c75e0d",
+    "tests/.output/python27-toolbox-enrichment-final/summary.json": "4b4ef898167ef11187756a31cd77a1e66991ad90f674f5308ecc30766b58c4d3"
+  },
+  "source_sha256": {
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "0104d1bfa2cdef89e39ce7ac43e20080e57613c4efd2e6522e56541d034f787a",
+    "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "e098b37bed90aed8bde056df643d114b61606af6b4b89eb501fad0e658010200",
+    "mirsad_core/toolbox_enrichment.py": "af8acae8fdc3e0d8ab785767afec97298366404fab6267a6127e2b6f4b4cfc25",
+    "mirsad_core/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
+    "tests/test_toolbox_enrichment.py": "c1c3b87251fe7448648a078897a0c2097e0d2d5693eca6e1093c9687f0f392af",
+    "scripts/verify_toolbox_enrichment.py": "a3a7c5ace9b90b3e78c0a6ffefd0314092fee0df599867078dc65e5789fad75e",
+    "scripts/verify_toolbox_enrichment_qa.py": "0aaf25e19dff382c36271a55617e0fe7a9e6aebd698c08dd7e7e7771b513b431",
+    "Documents/Help/tool_parameters.json": "9c14d6a165b68d63605b1c200bf9c525517d32eae8c2e649088b75f90f36623e",
+    "Documents/Help/parameter_notes_ar.json": "770711afb08ee2c46150717ccec0786db9821a25edfd9bdb49a5310254ac573e"
+  },
+  "python27_skips": [
+    "Desktop summary parity and openpyxl readback require Python 3; 9 other new checks ran on Python 2.7"
+  ],
+  "limits": [
+    "No live Toolbox provider acceptance",
+    "Supplementary raster native acceptance pending",
+    "Toolbox PM and optional DEM remain pending",
+    "Native ArcMap remains pending",
+    "Existing frozen candidate/installer evidence belongs to the earlier Desktop source snapshot"
+  ]
+}

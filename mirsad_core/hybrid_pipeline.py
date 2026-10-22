@@ -16,6 +16,7 @@ import os
 import tempfile
 import time
 from .climate_sources import reanalysis_plan,variable_resolution
+from .daily_climate import EXTRA_HOURLY,EXTRA_DAILY,HOURLY_OPERATIONS,hourly_to_daily,POWER_ALIASES
 
 try:
     from urllib.parse import urlencode
@@ -33,6 +34,8 @@ OM_DAILY = {"T2M":"temperature_2m_mean", "T2M_MAX":"temperature_2m_max",
 OM_HOURLY = {"RH2M":"relative_humidity_2m", "T2MDEW":"dew_point_2m", "PS":"surface_pressure",
              "SLP":"pressure_msl", "WS10M":"wind_speed_10m", "WD10M":"wind_direction_10m",
              "CLOUD_AMT":"cloud_cover"}
+OM_DAILY.update(EXTRA_DAILY)
+OM_HOURLY.update(EXTRA_HOURLY)
 NOAA_FIELDS = {"TEMP":("T2M",9999.9,lambda v:(v-32)*5/9),
                "MAX":("T2M_MAX",9999.9,lambda v:(v-32)*5/9),
                "MIN":("T2M_MIN",9999.9,lambda v:(v-32)*5/9),
@@ -193,26 +196,38 @@ def fetch_source(source, station, start, end, required, model, session, cancelle
                 combined["raw"].append(dict(model=selected,error=str(exc)))
                 continue
             combined["series"].update(part["series"])
+            if part.get("state")=="PARTIAL_FAILURE":combined["state"]="PARTIAL_FAILURE"
+            if part.get("processing_by_variable"):
+                combined.setdefault("processing_by_variable",{}).update(part["processing_by_variable"])
             combined["raw"].append(dict(model=selected,response=part["raw"]))
             for key in ("urls","warnings"):combined[key].extend(part.get(key,[]))
             combined["models_by_variable"].update({p:selected for p in variables})
         return combined
     query = dict(latitude=station["latitude"], longitude=station["longitude"])
     warnings = []
+    processing = {}
+    processing_failed = False
     if source == "NOAA GSOD":
         url = "https://www.ncei.noaa.gov/data/global-summary-of-the-day/access/%d/%s.csv" % (start.year, observation_id(station))
     elif source == "Open-Meteo":
         query.update(start_date=start.isoformat(), end_date=end.isoformat(), models=model, timezone="UTC", wind_speed_unit="ms")
         daily = [OM_DAILY[p] for p in required if p in OM_DAILY]
-        hourly = [OM_HOURLY[p] for p in required if p in OM_HOURLY]
+        hourly = []
+        for p in required:
+            if p in OM_HOURLY and OM_HOURLY[p] not in hourly:
+                hourly.append(OM_HOURLY[p])
         if daily:
             query["daily"] = ",".join(daily)
         if hourly:
             query["hourly"] = ",".join(hourly)
         url = "https://archive-api.open-meteo.com/v1/archive?"+urlencode(query)
     else:
+        power_required=[]
+        for p in required:
+            key=POWER_ALIASES.get(p,p)
+            if key not in power_required:power_required.append(key)
         query.update(start=start.strftime("%Y%m%d"), end=end.strftime("%Y%m%d"),
-                     parameters=",".join(required), community="RE", format="JSON")
+                     parameters=",".join(power_required), community="RE", format="JSON")
         query["time-standard"] = "UTC"
         url = "https://power.larc.nasa.gov/api/temporal/daily/point?"+urlencode(query)
     text = _read(url, session, cancelled)
@@ -232,7 +247,7 @@ def fetch_source(source, station, start, end, required, model, session, cancelle
                 raise ValueError("NASA response has no climate parameter data")
             for p in required:
                 series[p] = {dt.datetime.strptime(k, "%Y%m%d").date().isoformat():float(v)
-                             for k,v in parameters.get(p, {}).items() if valid(v)}
+                             for k,v in parameters.get(POWER_ALIASES.get(p,p), {}).items() if valid(v)}
             unit = raw.get("parameters", {}).get("ALLSKY_SFC_SW_DWN", {}).get("units", "").lower()
             if "kw" in unit:
                 series["ALLSKY_SFC_SW_DWN"] = {k:v*3.6 for k,v in series.get("ALLSKY_SFC_SW_DWN", {}).items()}
@@ -244,6 +259,17 @@ def fetch_source(source, station, start, end, required, model, session, cancelle
                 if p in OM_DAILY:
                     series[p] = {day:float(v) for day,v in zip(daily.get("time", []), daily.get(OM_DAILY[p], [])) if valid(v)}
                 elif p in OM_HOURLY:
+                    if p in HOURLY_OPERATIONS:
+                        try:
+                            values,details=hourly_to_daily(hourly.get("time",[]),hourly.get(OM_HOURLY[p],[]),
+                                HOURLY_OPERATIONS[p],unit="percent" if p.startswith("RH") else "m/s at 10m" if p=="WS10M_CONFIRMED" else "kPa",
+                                bounds=(0.,100.) if p.startswith("RH") else (0.,float("inf")))
+                            series[p]=values
+                            processing[p]=details
+                        except ValueError as exc:
+                            series[p]={};processing_failed=True
+                            warnings.append(p+": hourly processing failed; other variables retained: "+str(exc))
+                        continue
                     grouped = {}
                     for timestamp,v in zip(hourly.get("time", []), hourly.get(OM_HOURLY[p], [])):
                         if valid(v):
@@ -264,11 +290,29 @@ def fetch_source(source, station, start, end, required, model, session, cancelle
                             if p in ("PS", "SLP"):
                                 value /= 10
                         series[p][day] = value
+                    # Keep legacy fields byte-for-byte equivalent, but audit the
+                    # old hourly dependencies used by optional daily formulas.
+                    # Their old len(hours)==24 aggregation alone cannot detect
+                    # off-hour stamps or mismatched timestamp/value arrays.
+                    if p in ("T2MDEW","PS") and any(key in HOURLY_OPERATIONS for key in required):
+                        try:
+                            _,details=hourly_to_daily(hourly.get("time",[]),hourly.get(OM_HOURLY[p],[]),"mean",
+                                unit="kPa" if p=="PS" else "deg_C",scale=.1 if p=="PS" else 1.)
+                            processing[p]=details
+                        except ValueError as exc:
+                            processing[p]={day:dict(status="invalid_hourly_input",input_temporal="hourly",output_temporal="daily",
+                                operation="mean",timezone="UTC",valid_samples=None,expected_samples=24,
+                                unit="kPa" if p=="PS" else "deg_C",scale=.1 if p=="PS" else 1.,note=str(exc)) for day in series[p]}
+                            processing_failed=True
+                            warnings.append(p+": optional calculation rejects invalid hourly dependency; legacy values retained: "+str(exc))
     absent=[p for p in required if not series.get(p)]
     if absent:
         warnings.append(source+(" "+model if source=="Open-Meteo" else "")+
                         ": no usable values for "+", ".join(sorted(absent))+" in this request; missing values remain NULL.")
-    return dict(series=series, raw=raw, urls=[url], warnings=warnings, state="COMPLETE")
+    result=dict(series=series, raw=raw, urls=[url], warnings=warnings, state="PARTIAL_FAILURE" if processing_failed else "COMPLETE")
+    if processing:
+        result["processing_by_variable"]=processing
+    return result
 
 
 def run(stations, start, end, required, cache_folder, progress, cancelled,
@@ -301,6 +345,10 @@ def run(stations, start, end, required, cache_folder, progress, cancelled,
             supported = [p for p in required if source != "NOAA GSOD" or p in noaa_params]
             if source == "Open-Meteo":
                 supported = [p for p in supported if p in OM_DAILY or p in OM_HOURLY]
+            if source == "NASA POWER":
+                # These new keys are Open-Meteo protocol fields, not POWER
+                # parameter names. Never poison a fallback request with them.
+                supported = [p for p in supported if (p not in EXTRA_HOURLY and p not in EXTRA_DAILY) or p in POWER_ALIASES]
             if source == "NOAA GSOD" and not observation_id(station):
                 rec["source_events"].append(dict(source=source, state="NO_OBSERVATION_ID"))
                 rec["warnings"].append("No valid USAF/WBAN observation identity. NOAA is station-only; no nearest station was substituted.")
@@ -314,6 +362,7 @@ def run(stations, start, end, required, cache_folder, progress, cancelled,
                 gap_days = [d for values in missing.values() for d in values]
                 first, last, needed = date(min(gap_days)), date(max(gap_days)), sorted(missing)
                 identity = dict(policy=POLICY, source=source, station=station, start=str(first), end=str(last), required=needed, model=model)
+                if any(key in HOURLY_OPERATIONS for key in needed):identity["daily_processing_version"]="utc24-v2"
                 token = hashlib.sha256(json.dumps(identity, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
                 path = os.path.join(cache_folder, token+".json") if cache_folder is not None else None
                 try:
@@ -338,6 +387,9 @@ def run(stations, start, end, required, cache_folder, progress, cancelled,
                     event = dict(source=source, start=str(first), end=str(last), state=response.get("state", "COMPLETE"))
                     rec["source_events"].append(event)
                     rec["warnings"].extend(response.get("warnings", []))
+                    if response.get("processing_by_variable"):
+                        rec.setdefault("processing_attempts",[]).append(dict(source=source,
+                            variables=response["processing_by_variable"]))
                     for p, values in response["series"].items():
                         if p not in needed:
                             continue
@@ -348,6 +400,9 @@ def run(stations, start, end, required, cache_folder, progress, cancelled,
                             if str(start)<=day<=str(end) and valid(v) and not valid(target.get(day)):
                                 target[day], provenance[day] = float(v), label
                                 rec.setdefault("resolution_by_variable",{}).setdefault(p,{})[label]=variable_resolution(source,p,actual_model)
+                                details=response.get("processing_by_variable",{}).get(p,{}).get(day)
+                                if details:
+                                    rec.setdefault("processing_by_variable",{}).setdefault(p,{})[day]=dict(details,source=label)
                 except Cancelled:
                     raise
                 except Exception as exc:

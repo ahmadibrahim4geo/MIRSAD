@@ -109,15 +109,32 @@ class YearlyExcelExport(unittest.TestCase):
         self.assertEqual(row["Status"], "NO_DATA")
 
     def test_large_daily_series_stay_in_excel_without_csv(self):
-        rows = [[index] for index in range(120001)]
-        core.export_excel_with_fallback(os.path.join(self.tmp, "Temperature.xls"),
-            [("Daily", ["Index"], rows, False)], self.messages.append, self.warnings.append)
-        sheets = self.workbooks[0][1]
-        self.assertEqual([s[0] for s in sheets], ["Daily", "Daily_2", "Daily_3"])
-        self.assertEqual([len(s[2]) for s in sheets], [60000, 60000, 1])
-        self.assertEqual([row for sheet in sheets for row in sheet[2]], rows)
-        self.assertFalse(os.listdir(self.tmp))
+        from mirsad_core.xlsx_stream import RowSpool
+        rows=RowSpool()
+        try:
+            for index in range(120001):rows.append([index])
+            ok=core.export_excel_with_fallback(os.path.join(self.tmp, "Temperature.xls"),
+                [("Daily", ["Index"], rows, False)], self.messages.append, self.warnings.append)
+            self.assertTrue(ok)
+        finally:rows.close()
+        self.assertEqual(self.xlsx_ids(os.path.join(self.tmp,"Temperature.xlsx")),120001)
+        self.assertFalse(os.path.exists(os.path.join(self.tmp,"Temperature.xls")))
+        self.assertFalse(any(name.endswith(".csv") for name in os.listdir(self.tmp)))
         self.assertFalse(self.warnings)
+
+    def xlsx_ids(self,path):
+        import zipfile
+        import xml.etree.ElementTree as ET
+        count=0
+        with zipfile.ZipFile(path) as archive:
+            with archive.open("xl/worksheets/sheet1.xml") as stream:
+                for event,element in ET.iterparse(stream,events=("end",)):
+                    if element.tag.endswith("}row"):
+                        if element.get("r")!="1":
+                            value=element[0].find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v")
+                            self.assertEqual(int(value.text),count);count+=1
+                        element.clear()
+        return count
 
     def test_excel_writer_failure_creates_complete_csv_and_reports_fallback(self):
         for failure in ("false", "exception"):
@@ -136,6 +153,17 @@ class YearlyExcelExport(unittest.TestCase):
             self.assertIn("2024-02-29,0.0", content)
         self.assertEqual(len(self.warnings), 2)
         self.assertFalse(any(line.startswith("Excel:") for line in self.messages))
+
+    def test_large_xlsx_failure_reports_without_csv_and_keeps_original(self):
+        target=os.path.join(self.tmp,"large.xlsx")
+        with open(target,"wb") as handle:handle.write(b"preserve original")
+        ok=core.export_excel_with_fallback(os.path.join(self.tmp,"large.xls"),
+            [("Daily",["ID"],[[i] for i in range(60001)],False)],self.messages.append,self.warnings.append)
+        self.assertFalse(ok)
+        self.assertEqual(len(self.warnings),1)
+        self.assertIn("No CSV fallback",self.warnings[0])
+        with open(target,"rb") as handle:self.assertEqual(handle.read(),b"preserve original")
+        self.assertFalse(any(name.endswith(".csv") for name in os.listdir(self.tmp)))
 
     def test_real_excel_roundtrip_keeps_all_rows_and_arabic_station_names(self):
         try:
@@ -158,10 +186,7 @@ class YearlyExcelExport(unittest.TestCase):
         path = os.path.join(self.tmp, "large.xls")
         core.export_excel_with_fallback(path, [("Daily", ["Index"], [[i] for i in range(60001)], False)],
                                         self.messages.append, self.warnings.append)
-        book = xlrd.open_workbook(path)
-        self.assertEqual(book.sheet_names(), ["Daily", "Daily_2"])
-        self.assertEqual(book.sheet_by_name("Daily").nrows, 60001)
-        self.assertEqual(book.sheet_by_name("Daily_2").cell_value(1, 0), 60000)
+        self.assertEqual(self.xlsx_ids(os.path.splitext(path)[0]+".xlsx"),60001)
         self.assertFalse(self.warnings)
         self.assertFalse(any(name.endswith(".csv") for folder, dirs, files in os.walk(self.tmp) for name in files))
 

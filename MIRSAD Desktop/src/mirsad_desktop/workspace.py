@@ -5,7 +5,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel,
     QPushButton, QMenu, QListWidget, QSplitter, QTabWidget, QLineEdit, QComboBox,
     QProgressBar, QTreeWidget, QTreeWidgetItem, QStackedWidget, QCheckBox, QFileDialog,
-    QInputDialog, QSizePolicy)
+    QInputDialog, QSizePolicy, QGroupBox, QFormLayout)
 from . import __version__
 from .catalogue import asset_dir
 from .tools import TOOLS, BY_KEY, fresh_draft
@@ -199,6 +199,20 @@ class WorkspaceMixin:
         self.output_note.setWordWrap(True)
         self.output_note.setObjectName("muted")
         output_form.addWidget(self.output_note)
+        self.dem_group=QGroupBox();self.dem_group.setCheckable(True);self.dem_group.setChecked(False)
+        dem_form=QFormLayout(self.dem_group);dem_form.setRowWrapPolicy(QFormLayout.WrapAllRows)
+        self.dem_source=QComboBox();self.dem_source.addItem("Open-Meteo / Copernicus GLO-90 (DSM)","open-meteo");self.dem_source.addItem("Local DEM / ملف محلي","local")
+        dem_form.addRow(self.dem_source)
+        self.dem_note=QLabel();self.dem_note.setWordWrap(True);self.dem_note.setObjectName("muted");dem_form.addRow(self.dem_note)
+        self.dem_local_box=QWidget();local_form=QFormLayout(self.dem_local_box);local_form.setRowWrapPolicy(QFormLayout.WrapAllRows);local_form.setContentsMargins(0,0,0,0)
+        self.dem_path=QLineEdit();self.dem_path.setReadOnly(True);self.dem_browse=QPushButton("…")
+        self.dem_browse.clicked.connect(self.choose_dem);dem_row=QHBoxLayout();dem_row.addWidget(self.dem_path,1);dem_row.addWidget(self.dem_browse);local_form.addRow(dem_row)
+        self.dem_surface=QComboBox();self.dem_surface.addItem("Unspecified / غير محدد","unspecified");self.dem_surface.addItem("DTM — terrain / تضاريس","DTM");self.dem_surface.addItem("DSM — surface / سطح","DSM")
+        local_form.addRow(self.dem_surface)
+        self.dem_datum=QLineEdit();local_form.addRow(self.dem_datum)
+        dem_form.addRow(self.dem_local_box);self.dem_local_box.hide()
+        self.dem_source.currentIndexChanged.connect(lambda:self.dem_local_box.setVisible(self.dem_source.currentData()=="local"))
+        output_form.addWidget(self.dem_group)
         output_form.addStretch()
         self.inspector.addTab(self.output_panel, tr("tab_outputs", self.arabic))
         self.tool_title, self.tool_note = QLabel(), QLabel()
@@ -302,7 +316,8 @@ class WorkspaceMixin:
             country=self.country.currentData(), search=self.search.text(), project=self.project_name.text(),
             provider=self.provider.currentText(), om_model=self.om_model.currentText(),
             era5_resolution=self.om_model.currentText() if len(resolution_options(self.provider.currentText()))>1 else getattr(self,"_last_era5_resolution",self.om_model.currentText()), start=self.start.date().toString(Qt.ISODate),
-            end=self.end.date().toString(Qt.ISODate), modules=self.chosen_modules(), crs=self.get_clean_crs(self.crs),
+            end=self.end.date().toString(Qt.ISODate), modules=self.chosen_modules(), extra_variables=self.chosen_extra_variables(), elevation_options=self.elevation_settings(),
+            et_methods=[k for k,v in self.et_items.items() if v.checkState(0)==Qt.Checked],et_raster_methods=[k for k,v in self.et_raster_items.items() if v.checkState(0)==Qt.Checked],crs=self.get_clean_crs(self.crs),
             processing_crs=self.get_clean_crs(self.analysis_crs), units=self.units.currentText(),unit_options=self.selected_unit_options(),gap=self.gap.currentData(),
             workflow=self.workflow.currentData(), daily=self.daily.isChecked(), yearly=self.yearly.isChecked(),
             ranges=self.monthly_ranges.isChecked(), generate_monthly_rasters=self.monthly_rasters_cb.isChecked(), scopes=[n for n,c in self.scopes.items() if c.isChecked()],
@@ -316,6 +331,12 @@ class WorkspaceMixin:
         self.restoring_tool = True
         self.active_tool = key
         spec, draft = BY_KEY[key], self.tool_drafts[key]
+        dem=draft.get("elevation_options") or {}
+        self.dem_group.setEnabled(key!="raster")
+        self.dem_group.setChecked(bool(dem))
+        self.dem_source.setCurrentIndex(max(0,self.dem_source.findData(dem.get("source","open-meteo"))))
+        self.dem_path.setText(dem.get("path",""));self.dem_datum.setText(dem.get("vertical_datum",""))
+        self.dem_surface.setCurrentIndex(max(0,self.dem_surface.findData(dem.get("surface_type","unspecified"))))
         widgets = [self.input_mode, self.region, self.country, self.search, self.provider, self.restrict_boundary]
         for widget in widgets: widget.blockSignals(True)
         self.input_mode.clear()
@@ -370,6 +391,9 @@ class WorkspaceMixin:
         for name, check in self.scopes.items(): check.setChecked(name in draft["scopes"])
         self.update_modules()
         for name,item in self.module_items.items(): item.setCheckState(0,Qt.Checked if name in draft["modules"] and item.flags()&Qt.ItemIsEnabled else Qt.Unchecked)
+        for name,item in self.extra_items.items():item.setCheckState(0,Qt.Checked if name in draft.get("extra_variables",[]) and item.flags()&Qt.ItemIsEnabled else Qt.Unchecked)
+        for name,item in self.et_items.items():item.setCheckState(0,Qt.Checked if name in draft.get("et_methods",["HG"]) and item.flags()&Qt.ItemIsEnabled else Qt.Unchecked)
+        for name,item in self.et_raster_items.items():item.setCheckState(0,Qt.Checked if name in draft.get("et_raster_methods",["HG","PM"]) else Qt.Unchecked)
         self.update_data_fields()
         for i in range(self.raster_fields.count()):
             item=self.raster_fields.item(i)

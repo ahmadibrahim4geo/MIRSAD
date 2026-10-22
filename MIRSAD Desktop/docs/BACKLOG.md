@@ -1,12 +1,13 @@
 # Remaining work and acceptance
 
-Updated: 19 October 2026. Completed delivery details live in
+Updated: 22 October 2026. Completed delivery details live in
 [STATUS](STATUS.md), [CHANGELOG](CHANGELOG.md) and [reports/](reports/).
 Retired help/readiness and parity execution plans are recoverable in Git history;
 their outstanding requirements are retained here.
 
 | Area | Remaining evidence or implementation |
 |---|---|
+| Climate enrichment plan | Desktop implements 11 optional variables, hourly audit, local/web DEM, separate HG/PM and streaming/split XLSX. Point/Station Toolbox integrates the 11 variables, separate HG/PM methods, yearly XLSX and per-day/hourly audit; native Pro method fixtures passed. See [variables](reports/climate-enrichment/TOOLBOX_ACCEPTANCE.md) and [PM evidence](reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.md). Remaining: Toolbox DEM and full native raster acceptance, supported regional/product additions, optional Arabic aliases in Desktop, full per-field help dictionary, 1000-point/30-year pipeline benchmark and DPI. Earlier frozen/installer gates cover the 21 October Desktop candidate; they do not package later source/help changes. See [Desktop acceptance](reports/climate-enrichment/DESKTOP_SOURCE_ACCEPTANCE.md) and [tracker](reports/climate-enrichment/IMPLEMENTATION_TRACKER.md). |
 | Toolbox/Desktop parity | Match all advanced inputs, order, activation rules, optional defaults, climate and raster controls against the three tools. Compare the same dataset/provider/period/units across hosts. Resolve differences in filenames, metadata, Excel columns/order, Daily long/wide layout, per-year exports and advanced raster products. Retain actual raw/source provenance. |
 | Native ArcMap | Verify actual loading/processing/exports in licensed ArcMap/Python 2.7. Compatibility checks and ArcPy doubles are not native acceptance. |
 | Authenticated sources | Live end-to-end CDS and NASA IMERG access with an authorized user's free account/accepted terms. Never use or request the developer's credentials in chat. Retain implemented secret-in-memory policy. |

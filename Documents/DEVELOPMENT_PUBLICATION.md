@@ -1,5 +1,12 @@
 # Development handoff and GitHub distribution
 
+22 October source/docs follow-up: the user authorized updating and pushing the
+current source, website index and explanations. See [delivery scope and final checks](SOURCE_UPDATE_2026_10_22.md).
+The installer and release assets identified below remain the 19 October preview;
+they do not contain the later enrichment/Toolbox/help changes. Repository CHMs
+are newer reference resources. This follow-up does not publish or approve a new
+installer, replace the existing release assets, or promote stable.
+
 Updated: 19 October 2026. The user explicitly authorized uploading **source,
 documentation and the current development installer**. This authorizes the
 identified preview below; it does not authorize stable promotion or future

@@ -3,7 +3,7 @@
 Run with a licensed ArcGIS Pro Python. The ordinary help build consumes this
 reviewed snapshot without importing ArcPy. No project/profile is read.
 """
-import hashlib,json,sys
+import hashlib,json,sys,datetime
 from pathlib import Path
 import importlib.machinery
 import importlib.util
@@ -31,8 +31,9 @@ def main():
                 enabled=bool(p.enabled),choices=[] if hidden else list(getattr(p.filter,'list',[]) or []),
                 description=getattr(p,'description','') or '',sensitive=hidden))
         tools.append(dict(id=key,file=filename,en=en.label,ar=ar.label,parameters=parameters))
-    names=[item[1] for item in configs]+['Toolboxes/raster_atlas_generator.py']
-    result=dict(reviewed='2026-10-19',runtime='ArcGIS Pro '+arcpy.GetInstallInfo()['Version'],
+    names=[item[1] for item in configs]+['Toolboxes/raster_atlas_generator.py',
+        'mirsad_core/toolbox_enrichment.py','mirsad_core/toolbox_pm.py']
+    result=dict(reviewed=datetime.date.today().isoformat(),runtime='ArcGIS Pro '+arcpy.GetInstallInfo()['Version'],
         source_hash_policy='normalized-utf8-lf-v1',
         source_raw_sha256={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in names},
         source_sha256={name:hashlib.sha256((ROOT/name).read_text(encoding='utf-8-sig').encode('utf-8')).hexdigest() for name in names},tools=tools)

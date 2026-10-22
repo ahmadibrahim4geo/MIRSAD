@@ -1,0 +1,562 @@
+{
+  "date": "2026-10-22",
+  "recorded": "2026-10-22T08:55:31.792387+00:00",
+  "scope": "Source/documentation acceptance; no new binary publication or complete enrichment-plan acceptance",
+  "base_revision": "09bb7fd043d6e8a9984e8f27f36c2815dbe4e0f2",
+  "passed": true,
+  "desktop": {
+    "tests": 88,
+    "passed": true,
+    "platform": "Windows default Qt platform",
+    "seconds": 172.631,
+    "log": "MIRSAD Desktop/.test-output/source-publication-20261022-windows.log",
+    "log_sha256": "271eef76e7ed0b1cd968270687d2ae50854146aa2a12a28d56298f30d4b83fc1"
+  },
+  "isolated": {
+    "python": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.venv\\Scripts\\python.exe",
+    "isolated": true,
+    "passed": true,
+    "results": [
+      {
+        "suite": "test_arcgis_pro_compatibility.py",
+        "exit": 0,
+        "tests": 7,
+        "seconds": 0.41
+      },
+      {
+        "suite": "test_climate_products.py",
+        "exit": 0,
+        "tests": 7,
+        "seconds": 0.22
+      },
+      {
+        "suite": "test_climate_enrichment_baseline.py",
+        "exit": 0,
+        "tests": 3,
+        "seconds": 1.23
+      },
+      {
+        "suite": "test_daily_climate.py",
+        "exit": 0,
+        "tests": 13,
+        "seconds": 0.17
+      },
+      {
+        "suite": "test_data_quality.py",
+        "exit": 0,
+        "tests": 16,
+        "seconds": 0.3
+      },
+      {
+        "suite": "test_drought_dependencies_108.py",
+        "exit": 0,
+        "tests": 4,
+        "seconds": 0.28
+      },
+      {
+        "suite": "test_excel_export_108.py",
+        "exit": 0,
+        "tests": 5,
+        "seconds": 0.39
+      },
+      {
+        "suite": "test_hybrid_pipeline.py",
+        "exit": 0,
+        "tests": 12,
+        "seconds": 0.31
+      },
+      {
+        "suite": "test_migrate_legacy_database.py",
+        "exit": 0,
+        "tests": 5,
+        "seconds": 0.12
+      },
+      {
+        "suite": "test_modifications.py",
+        "exit": 0,
+        "tests": 12,
+        "seconds": 0.36
+      },
+      {
+        "suite": "test_remote_grid.py",
+        "exit": 0,
+        "tests": 4,
+        "seconds": 0.33
+      },
+      {
+        "suite": "test_repository_layout.py",
+        "exit": 0,
+        "tests": 2,
+        "seconds": 0.39
+      },
+      {
+        "suite": "test_runtime_stability.py",
+        "exit": 0,
+        "tests": 22,
+        "seconds": 0.41
+      },
+      {
+        "suite": "test_station_multi_selection.py",
+        "exit": 0,
+        "tests": 17,
+        "seconds": 0.44
+      },
+      {
+        "suite": "test_tool_validation.py",
+        "exit": 0,
+        "tests": 12,
+        "seconds": 0.61
+      },
+      {
+        "suite": "test_weather_stations_atlas.py",
+        "exit": 0,
+        "tests": 3,
+        "seconds": 0.45
+      },
+      {
+        "suite": "test_weather_stations_dual_lang.py",
+        "exit": 0,
+        "tests": 4,
+        "seconds": 0.44
+      },
+      {
+        "suite": "test_workflow_and_temporal_scope.py",
+        "exit": 0,
+        "tests": 6,
+        "seconds": 0.36
+      },
+      {
+        "suite": "test_yearly_excel_export.py",
+        "exit": 0,
+        "tests": 9,
+        "seconds": 1.47
+      },
+      {
+        "suite": "test_xlsx_stream.py",
+        "exit": 0,
+        "tests": 5,
+        "seconds": 0.64
+      },
+      {
+        "suite": "test_toolbox_enrichment.py",
+        "exit": 0,
+        "tests": 11,
+        "seconds": 0.84
+      },
+      {
+        "suite": "test_toolbox_pm.py",
+        "exit": 0,
+        "tests": 10,
+        "seconds": 0.81
+      }
+    ]
+  },
+  "clean_export_suites": {
+    "python": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.venv\\Scripts\\python.exe",
+    "isolated": true,
+    "passed": true,
+    "results": [
+      {
+        "suite": "test_arcgis_pro_compatibility.py",
+        "exit": 0,
+        "tests": 7,
+        "seconds": 0.41
+      },
+      {
+        "suite": "test_climate_products.py",
+        "exit": 0,
+        "tests": 7,
+        "seconds": 0.23
+      },
+      {
+        "suite": "test_climate_enrichment_baseline.py",
+        "exit": 0,
+        "tests": 3,
+        "seconds": 1.23
+      },
+      {
+        "suite": "test_daily_climate.py",
+        "exit": 0,
+        "tests": 13,
+        "seconds": 0.19
+      },
+      {
+        "suite": "test_data_quality.py",
+        "exit": 0,
+        "tests": 16,
+        "seconds": 0.36
+      },
+      {
+        "suite": "test_drought_dependencies_108.py",
+        "exit": 0,
+        "tests": 4,
+        "seconds": 0.26
+      },
+      {
+        "suite": "test_excel_export_108.py",
+        "exit": 0,
+        "tests": 5,
+        "seconds": 0.42
+      },
+      {
+        "suite": "test_hybrid_pipeline.py",
+        "exit": 0,
+        "tests": 12,
+        "seconds": 0.31
+      },
+      {
+        "suite": "test_migrate_legacy_database.py",
+        "exit": 0,
+        "tests": 5,
+        "seconds": 0.16
+      },
+      {
+        "suite": "test_modifications.py",
+        "exit": 0,
+        "tests": 12,
+        "seconds": 0.36
+      },
+      {
+        "suite": "test_remote_grid.py",
+        "exit": 0,
+        "tests": 4,
+        "seconds": 0.31
+      },
+      {
+        "suite": "test_repository_layout.py",
+        "exit": 0,
+        "tests": 2,
+        "seconds": 0.39
+      },
+      {
+        "suite": "test_runtime_stability.py",
+        "exit": 0,
+        "tests": 22,
+        "seconds": 0.44
+      },
+      {
+        "suite": "test_station_multi_selection.py",
+        "exit": 0,
+        "tests": 17,
+        "seconds": 0.48
+      },
+      {
+        "suite": "test_tool_validation.py",
+        "exit": 0,
+        "tests": 12,
+        "seconds": 0.62
+      },
+      {
+        "suite": "test_weather_stations_atlas.py",
+        "exit": 0,
+        "tests": 3,
+        "seconds": 0.45
+      },
+      {
+        "suite": "test_weather_stations_dual_lang.py",
+        "exit": 0,
+        "tests": 4,
+        "seconds": 0.44
+      },
+      {
+        "suite": "test_workflow_and_temporal_scope.py",
+        "exit": 0,
+        "tests": 6,
+        "seconds": 0.36
+      },
+      {
+        "suite": "test_yearly_excel_export.py",
+        "exit": 0,
+        "tests": 9,
+        "seconds": 1.49
+      },
+      {
+        "suite": "test_xlsx_stream.py",
+        "exit": 0,
+        "tests": 5,
+        "seconds": 0.67
+      },
+      {
+        "suite": "test_toolbox_enrichment.py",
+        "exit": 0,
+        "tests": 11,
+        "seconds": 0.84
+      },
+      {
+        "suite": "test_toolbox_pm.py",
+        "exit": 0,
+        "tests": 10,
+        "seconds": 0.83
+      }
+    ]
+  },
+  "clean_staged_source_preparation": {
+    "passed": true,
+    "exported_files": 793,
+    "steps": [
+      {
+        "command": [
+          "scripts/build_climate_source_catalogue.py"
+        ],
+        "exit": 0,
+        "seconds": 0.297,
+        "output": "Built source catalogue: 11 sources, SHA256 1a9e1400e234c96ee81b4bb7f08626d29ef3ca53afbd72d243cdb493c34e2e4f\r\n"
+      },
+      {
+        "command": [
+          "MIRSAD Desktop/scripts/vendor_science.py"
+        ],
+        "exit": 0,
+        "seconds": 0.219,
+        "output": "Vendored 38 pure scientific functions\r\nVendored shared Python 2/3 Hybrid source pipeline: 26181b83451362837b4bde6344e76edb092095d36a1ca8a8c792baf88e14d4c9\r\nVendored shared provider policies: f116b57cb0a338161df26c383c45b14d36ea20ddc919874a05c67d4a6e53997a\r\nVendored shared product adapter: climate_products.py e0a41e35f6170234924f5d64651f7d2bd031587ae10397c2626e9f6140fe5e72\r\nVendored shared product adapter: remote_grid.py 1731e258e8b4405a357236401178afd2b43309f3e769e68c69d7bb8a3b2d2771\r\nVendored shared product adapter: protected_sources.py c7f808747adac8f2f697cf179bc896a321df25e57b40b3c8269b869469c2fdd3\r\nVendored shared product adapter: daily_climate.py 77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180\r\n"
+      },
+      {
+        "command": [
+          "MIRSAD Desktop/scripts/prepare_assets.py"
+        ],
+        "exit": 0,
+        "seconds": 2.203,
+        "output": "Prepared embedded catalogue: 2026.10.17.3 28066\r\n"
+      },
+      {
+        "command": [
+          "MIRSAD Desktop/scripts/build_user_guide.py"
+        ],
+        "exit": 0,
+        "seconds": 0.703,
+        "output": "Built bilingual help: 45 topics; 19 scientific groups\r\n"
+      },
+      {
+        "command": [
+          "scripts/build_website.py"
+        ],
+        "exit": 0,
+        "seconds": 0.156,
+        "output": "Built index.html and Documents\\07_Climate_Sources_Web_Guide\\climate-sources.html : 19 modules, 11 source/product profiles.\r\n"
+      },
+      {
+        "command": [
+          "scripts/check_repository.py"
+        ],
+        "exit": 0,
+        "seconds": 3.266,
+        "output": "Layout and 276 local documentation links passed.\r\nWebsite passed: 64 local links/assets/anchors; 11 fully localized source profiles; 19 registry modules; generated pages and runtime snapshots unchanged.\r\nClimate baseline passed: 19 modules; complete/missing months and leap-day missingness;\r\nlegacy/Desktop calculation values, field order, Daily records, sheet layouts and legacy paths unchanged.\r\nRepository contracts passed: 0.4.0.dev8 45 bilingual topics; CHM index, source parity and catalogue verified.\r\n"
+      }
+    ]
+  },
+  "extra_check_after_final_docs": "scripts/check_repository.py; final docs/site-only refinements are checked again before commit",
+  "earlier_failed_attempt": {
+    "scope": "Full Desktop suite with QT_QPA_PLATFORM=offscreen",
+    "reason": "PDF text readback empty and cleanup file locked. Help PDF test and complete 88-test suite passed on the normal Windows Qt platform; no application code changed.",
+    "log_sha256": "6c777a68ca462c3bfcee59d79d37eea08ab04d5022285b063ab2a848bc4ea14c"
+  },
+  "earlier_evidence": {
+    "MIRSAD Desktop/docs/reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.json": "ebf26be5864300e9f22ac4849c9100b40884e89e129fae4d106d92eacbb26f25",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/LEGACY_EXCEL_ACCEPTANCE.json": "0fb76ed6a40332deb9110d879970b6845bd2f88c16668fc2d74e399534827b39",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/SOURCE_ACCEPTANCE.json": "6f01c2cb316f91abdd429b01ca87d916088878af9354528df13b8cba647b2125"
+  },
+  "help_manifest": {
+    "version": "0.4.0.dev8",
+    "compiler_sha256": "3e96894609819ae3d595ff6e0fbe9ce6c9ac17bdeda256b994831992f668cb99",
+    "outputs": [
+      {
+        "language": "en",
+        "topics": 45,
+        "bytes": 171645,
+        "sha256": "7f1dbf76276859c3180d8d7fd9a9c70cace9ddd1e897a127ab8490f522d95e37",
+        "compiler_exit": 1,
+        "full_text_index": true
+      },
+      {
+        "language": "ar",
+        "topics": 45,
+        "bytes": 175318,
+        "sha256": "fc6d9aaaaecd644b9e5bb61a38a536ed6357b51d887d0eec6b07286bf3cae71b",
+        "compiler_exit": 1,
+        "full_text_index": true
+      }
+    ]
+  },
+  "delivery_files_sha256": {
+    "AGENTS.md": "0a56f9d2e87379397e5f157601f02fd6eb4c574515606e1b5a1a3cd451700c69",
+    "Documents/00_Documentation_Index.md": "8f224dfaac73f0672059c1e5c909116d3ff42d79d0d186ff3c66e00c41d64589",
+    "Documents/00_Documentation_Index_AR.md": "8ff4ad7277d6a5a4bd354c0e632f17efa126106afabf9e2fae657cb05a871a1c",
+    "Documents/01_Markdown_Manuals/User_Guide_Arabic.md": "e812861ca0a25b42e5647a9e2a534643a2173f1c718c39352a7dd55b04d29418",
+    "Documents/01_Markdown_Manuals/User_Guide_English.md": "4f8084d2676aa52f3838bc09ebcd0881058e093dc76fdc5cfeda65ebccc25057",
+    "Documents/05_Climate_Data_Sources_Directory/02_NOAA_ISD_GHCN_Ground_Stations/Data_Source_Profile.txt": "a377038bcc9b24405bd8d0da3afac6157e3542501af754f28bc806b57e714e2f",
+    "Documents/05_Climate_Data_Sources_Directory/02_NOAA_ISD_GHCN_Ground_Stations/Data_Source_Profile_AR.txt": "969029c2868ea7d1d54e8ae6c2cd49cfa4d0be920c1b5cb259db67c3a0858f55",
+    "Documents/05_Climate_Data_Sources_Directory/02_NOAA_ISD_GHCN_Ground_Stations/README.md": "a377038bcc9b24405bd8d0da3afac6157e3542501af754f28bc806b57e714e2f",
+    "Documents/05_Climate_Data_Sources_Directory/02_NOAA_ISD_GHCN_Ground_Stations/README_AR.md": "969029c2868ea7d1d54e8ae6c2cd49cfa4d0be920c1b5cb259db67c3a0858f55",
+    "Documents/05_Climate_Data_Sources_Directory/03_NASA_POWER_Agroclimatology/Data_Source_Profile.txt": "c07ed2f41fd49bf0384db736f9f7032e5d9d1980bedeedde08bd7e3372ddc17e",
+    "Documents/05_Climate_Data_Sources_Directory/03_NASA_POWER_Agroclimatology/Data_Source_Profile_AR.txt": "e8cb7f07cbcc266a87247e950b40dd3be5057ef383ce2162af2f0c98ca9e6f0d",
+    "Documents/05_Climate_Data_Sources_Directory/03_NASA_POWER_Agroclimatology/README.md": "c07ed2f41fd49bf0384db736f9f7032e5d9d1980bedeedde08bd7e3372ddc17e",
+    "Documents/05_Climate_Data_Sources_Directory/03_NASA_POWER_Agroclimatology/README_AR.md": "e8cb7f07cbcc266a87247e950b40dd3be5057ef383ce2162af2f0c98ca9e6f0d",
+    "Documents/05_Climate_Data_Sources_Directory/04_Open_Meteo_ERA5_Reanalysis/Data_Source_Profile.txt": "0ad1ca663b1ffd37a7d5a9d2535796a51f1626519f4c4d26a4801eee97708e91",
+    "Documents/05_Climate_Data_Sources_Directory/04_Open_Meteo_ERA5_Reanalysis/Data_Source_Profile_AR.txt": "daa3b8b84c4fe373c7a1140c5397bd30a821602cdd04d441ccaf57fc8bc66a86",
+    "Documents/05_Climate_Data_Sources_Directory/04_Open_Meteo_ERA5_Reanalysis/README.md": "0ad1ca663b1ffd37a7d5a9d2535796a51f1626519f4c4d26a4801eee97708e91",
+    "Documents/05_Climate_Data_Sources_Directory/04_Open_Meteo_ERA5_Reanalysis/README_AR.md": "daa3b8b84c4fe373c7a1140c5397bd30a821602cdd04d441ccaf57fc8bc66a86",
+    "Documents/05_Climate_Data_Sources_Directory/05_Copernicus_Climate_Data_Store_CDS/Copernicus_CDS_Specification_AR.md": "b18d73b74052a143d8d98fd4aa48dbe9d9015ddb15ee633cc0890cfa1439bb1a",
+    "Documents/05_Climate_Data_Sources_Directory/05_Copernicus_Climate_Data_Store_CDS/Copernicus_CDS_Specification_EN.md": "2e5a721dbdffb793bb67a936a9074e36b691ad137b7685d3d4cb9515f4863906",
+    "Documents/05_Climate_Data_Sources_Directory/05_Copernicus_Climate_Data_Store_CDS/Data_Source_Profile.txt": "c2a99e6fd26fcc33dd8e45bcbafe1687488f3ff4e4aefca4a6a06332975e2f07",
+    "Documents/05_Climate_Data_Sources_Directory/05_Copernicus_Climate_Data_Store_CDS/Data_Source_Profile_AR.txt": "05d3562cce94ff92240d820aca0cd290a1a177f36b34432542dc9e82f674fd9a",
+    "Documents/05_Climate_Data_Sources_Directory/05_Copernicus_Climate_Data_Store_CDS/README.md": "c2a99e6fd26fcc33dd8e45bcbafe1687488f3ff4e4aefca4a6a06332975e2f07",
+    "Documents/05_Climate_Data_Sources_Directory/05_Copernicus_Climate_Data_Store_CDS/README_AR.md": "05d3562cce94ff92240d820aca0cd290a1a177f36b34432542dc9e82f674fd9a",
+    "Documents/05_Climate_Data_Sources_Directory/06_CHIRPS_v3/Data_Source_Profile.txt": "fd125fae99c244b17dc07523ec5dfbbeb050a7c99205f460590648558dcb2fb5",
+    "Documents/05_Climate_Data_Sources_Directory/06_CHIRPS_v3/Data_Source_Profile_AR.txt": "e5c95551b1bba9709aa6b1316824853bafba997a7e59d068b50084128b7dcc95",
+    "Documents/05_Climate_Data_Sources_Directory/06_CHIRPS_v3/README.md": "fd125fae99c244b17dc07523ec5dfbbeb050a7c99205f460590648558dcb2fb5",
+    "Documents/05_Climate_Data_Sources_Directory/06_CHIRPS_v3/README_AR.md": "e5c95551b1bba9709aa6b1316824853bafba997a7e59d068b50084128b7dcc95",
+    "Documents/05_Climate_Data_Sources_Directory/07_TerraClimate_v1_1/Data_Source_Profile.txt": "6e4fecdcd4821b95f8419b8671843de1ab8315202cec2295857c0c890a692b96",
+    "Documents/05_Climate_Data_Sources_Directory/07_TerraClimate_v1_1/Data_Source_Profile_AR.txt": "3039c97eef577fb430d9dfd8ed0dccd6503a698e30cc792d3767c91d3424395d",
+    "Documents/05_Climate_Data_Sources_Directory/07_TerraClimate_v1_1/README.md": "6e4fecdcd4821b95f8419b8671843de1ab8315202cec2295857c0c890a692b96",
+    "Documents/05_Climate_Data_Sources_Directory/07_TerraClimate_v1_1/README_AR.md": "3039c97eef577fb430d9dfd8ed0dccd6503a698e30cc792d3767c91d3424395d",
+    "Documents/05_Climate_Data_Sources_Directory/08_MODIS_LST/Data_Source_Profile.txt": "076b475962e62f677fd5ec732c864b87f99da93d2faea1822d1300dd45ee1e46",
+    "Documents/05_Climate_Data_Sources_Directory/08_MODIS_LST/Data_Source_Profile_AR.txt": "16def9d3bbf7d790974a08c06baaa8ec1657255ce28dfd615333ed0ed6c15128",
+    "Documents/05_Climate_Data_Sources_Directory/08_MODIS_LST/README.md": "076b475962e62f677fd5ec732c864b87f99da93d2faea1822d1300dd45ee1e46",
+    "Documents/05_Climate_Data_Sources_Directory/08_MODIS_LST/README_AR.md": "16def9d3bbf7d790974a08c06baaa8ec1657255ce28dfd615333ed0ed6c15128",
+    "Documents/05_Climate_Data_Sources_Directory/09_CHELSA_v2_1/Data_Source_Profile.txt": "3d063a304968d5ade663bcfffbd86e82cd88283494051515ed1d9df6f71a1384",
+    "Documents/05_Climate_Data_Sources_Directory/09_CHELSA_v2_1/Data_Source_Profile_AR.txt": "1c467cd6be669ae0723a0818752349b996bc4bce090a076799155c05c1a7588c",
+    "Documents/05_Climate_Data_Sources_Directory/09_CHELSA_v2_1/README.md": "3d063a304968d5ade663bcfffbd86e82cd88283494051515ed1d9df6f71a1384",
+    "Documents/05_Climate_Data_Sources_Directory/09_CHELSA_v2_1/README_AR.md": "1c467cd6be669ae0723a0818752349b996bc4bce090a076799155c05c1a7588c",
+    "Documents/05_Climate_Data_Sources_Directory/10_NASA_IMERG_V07/Data_Source_Profile.txt": "86c28e47b13be05f971be8f030d3fbb43b3d80f8c6759fa4ec2e52788533abbc",
+    "Documents/05_Climate_Data_Sources_Directory/10_NASA_IMERG_V07/Data_Source_Profile_AR.txt": "c3a5cc87cfdf73d7733cce496a6d5515c1561374f1a38b16f4515a77f050e767",
+    "Documents/05_Climate_Data_Sources_Directory/10_NASA_IMERG_V07/README.md": "86c28e47b13be05f971be8f030d3fbb43b3d80f8c6759fa4ec2e52788533abbc",
+    "Documents/05_Climate_Data_Sources_Directory/10_NASA_IMERG_V07/README_AR.md": "c3a5cc87cfdf73d7733cce496a6d5515c1561374f1a38b16f4515a77f050e767",
+    "Documents/05_Climate_Data_Sources_Directory/SOURCES_AR.md": "f3e4d184224a7b74f9ceaa60a474c071ae1f9fdd71dfc5090e2dc643105ef3b0",
+    "Documents/05_Climate_Data_Sources_Directory/SOURCES_EN.md": "5a4f7b070548d647486cb9a7eee676fda2cc7c58c03f707d9d718d88866665dd",
+    "Documents/07_Climate_Sources_Web_Guide/climate-sources.html": "7cc2df64f7313cb4c10988ebd51c57382f592424cc650e5d59742f36e26b6020",
+    "Documents/DEVELOPMENT_PUBLICATION.md": "891b361ced3620b70f9ca993ac0a9660576b67ef1be123f250f9d62f294d40b4",
+    "Documents/Help/ar/modules.html": "e730d6685340f781d2ca2f0a7da11709fd75b7ce864c3ed5f6fd05313165aa84",
+    "Documents/Help/en/modules.html": "bdf1a4f39acb6e377a8f1d433cd9d6c3e54931f3a68f477d49345dc3f60a21fa",
+    "Documents/Help/parameter_notes_ar.json": "22a2830d0833c3b454feca0e680d1de1c22267f759465357843b130c95bf9b61",
+    "Documents/Help/tool_parameters.json": "2a7e5cca062dabdce39c1b95df252cc996e0986e744b4eab4d608f36da66ccdd",
+    "Documents/SOURCE_UPDATE_2026_10_22.md": "bb52fe5580a98920e0ede27093529d7da35989e8db8cfb4d659d833c784b5099",
+    "Documents/TESTING.md": "1deb7763ae59afa5b141bc04f9c15b0943e2b9de82806dcf676c0db91ea27c31",
+    "Help/MIRSAD_Help_AR.chm": "fc6d9aaaaecd644b9e5bb61a38a536ed6357b51d887d0eec6b07286bf3cae71b",
+    "Help/MIRSAD_Help_AR.html": "b52d651c1283739e1a2d6cfb9a68a61e8693b341329bccfecccb30d16024a270",
+    "Help/MIRSAD_Help_EN.chm": "7f1dbf76276859c3180d8d7fd9a9c70cace9ddd1e897a127ab8490f522d95e37",
+    "Help/MIRSAD_Help_EN.html": "6c3eea8c04b40de9d6c55473e505e861a9448927792d86238f4ec711b65a3bb3",
+    "Help/chm_manifest.json": "d6ef9d5fa7246ee2211cd2c20e21bc00cc06ab7bff6f8c388d658e623248258f",
+    "Help/index.html": "6c3eea8c04b40de9d6c55473e505e861a9448927792d86238f4ec711b65a3bb3",
+    "MIRSAD Desktop/AGENTS.md": "f588d33b270b2f42d9ff66ff914a0964d13f1d226c795a5bfe26674613337a2d",
+    "MIRSAD Desktop/assets/MIRSAD_Help_AR.chm": "fc6d9aaaaecd644b9e5bb61a38a536ed6357b51d887d0eec6b07286bf3cae71b",
+    "MIRSAD Desktop/assets/MIRSAD_Help_EN.chm": "7f1dbf76276859c3180d8d7fd9a9c70cace9ddd1e897a127ab8490f522d95e37",
+    "MIRSAD Desktop/assets/climate_sources.json": "1a9e1400e234c96ee81b4bb7f08626d29ef3ca53afbd72d243cdb493c34e2e4f",
+    "MIRSAD Desktop/assets/help_ar.html": "bd9e23f92a35bc8e49d4190d5d73b04bd3e7b2d6d80b0e3a173c5ac6046f65c4",
+    "MIRSAD Desktop/assets/help_en.html": "49ec8859e8d491f662fd6054a13acd5dc663d25d953dd56fda5f205a37a8b99d",
+    "MIRSAD Desktop/assets/help_index.json": "aa250be420225d52bb2d48ee9bccf30f94ece1fcafa227f74b42b46471694033",
+    "MIRSAD Desktop/docs/BACKLOG.md": "73fd167935c3f92d8f6a6f48bdae9ff3da9674adc879acbe001c59e0edb2b61a",
+    "MIRSAD Desktop/docs/CHANGELOG.md": "c7e7370a9fac4b18412f288002186da67b119e7367143d74b588415ea2d5b351",
+    "MIRSAD Desktop/docs/README.md": "4d25f9bad8d21692568617df0f7833bc28f817f7550feab994f82c3e707a66dc",
+    "MIRSAD Desktop/docs/STATUS.md": "bbab0cee45738711e6b0c57c46593c71f1327357d2ba93070857a9009900340b",
+    "MIRSAD Desktop/docs/reports/CLIMATE_SOURCES_AND_RESOLUTION.md": "7f81fe3bb0e496816aa9431e3b05ede44fbacac60e0cad0e83e8ff350035565b",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/BASELINE_AUDIT.md": "317e87feb812d385faece4debc393ad7a9f7e471f05c3e1c60c5f58fad816464",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/CAPABILITY_MATRIX.json": "9530ab5ec726e83418314de37fb681e0e3412b86a5cc56d588f123fb9e406100",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/DESKTOP_SOURCE_ACCEPTANCE.md": "8df3c421a8eefa99c4828755094d647e70a1532220e4ddb1948ede9c0c5d10e0",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/IMPLEMENTATION_TRACKER.md": "293f790c6412329dfe410ae2c20901f6b72f57c2ee2ef9fb477f0ae6bfb34cd7",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/LEGACY_EXCEL_ACCEPTANCE.json": "85fea49875ff73f846f9222125e41e2db0774a9dabd6c4600e997d6461346c2b",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/LEGACY_EXCEL_ACCEPTANCE.md": "7b29c4d9325fce9ae8ad2b6a3ccd192047688e6fb247017eb9b853336ba19af5",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/SCIENTIFIC_CONTRACTS.md": "28f7b42579542f4e35bc40c9462e1ab8abb75c7b7b183a5f120e15ebb0c87b93",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/SERVICE_PROBES.json": "60c664480774419558ebdab24b4dc03e01a7b094d82aeab8c7ada162fbdb2571",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/SOURCE_ACCEPTANCE.json": "3d7fe99228790b27af56be948f08ac17310f539de50f87d718f93169559140f4",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/TOOLBOX_ACCEPTANCE.json": "327da99e4688b038b2dc0de10f2e1abb3db99310a869631f3a4cbdb3d645a43f",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/TOOLBOX_ACCEPTANCE.md": "08964da17fbdcc462cdc4fe3f8bdabd377fa2743ca7cd74a96773492c155e19f",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.json": "dc39c7785d177f90fc2454d00822af0abcfb7b8e5bedc9f4a912d2481331941b",
+    "MIRSAD Desktop/docs/reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.md": "4f8ee53a825e410f11a91a07668b778aefc69a3f88f4f5472f8b2cd72aae37a5",
+    "MIRSAD Desktop/docs/user/USER_GUIDE_AR.html": "b52d651c1283739e1a2d6cfb9a68a61e8693b341329bccfecccb30d16024a270",
+    "MIRSAD Desktop/docs/user/USER_GUIDE_EN.html": "6c3eea8c04b40de9d6c55473e505e861a9448927792d86238f4ec711b65a3bb3",
+    "MIRSAD Desktop/scripts/build_user_guide.py": "265063a548a27ddbe8820c159ff296de9cf632cacc45301c33524b162af4bc92",
+    "MIRSAD Desktop/scripts/help_dynamic.py": "536f8b352ec37995a6f08eb026d08615a4b7f04557baf991ca05da937af87af3",
+    "MIRSAD Desktop/scripts/vendor_science.py": "db92bae6c76f189215862224f5bda79b6ccfb8d8e7b321914c8c52e630275571",
+    "MIRSAD Desktop/scripts/verify_climate_enrichment_network.py": "7715c963c31adf8d2b790e457aa8e0365853c066b8717ed3010701d202ac63dd",
+    "MIRSAD Desktop/scripts/verify_enrichment_frozen.py": "c077d356a0acd6c9dfaf720b4572867fbf490bea686764ec7d6e17e1d2c10347",
+    "MIRSAD Desktop/scripts/verify_enrichment_native_readback.py": "01a9bdc5d1a468b94289563b7cd39c9a7fc59e2c9d37a19d142a5ed2eb89ef88",
+    "MIRSAD Desktop/scripts/verify_excel_streaming.py": "747a96777e36d6680c654f96f56b26ba78073eba916f91cf4d0bd9d5437c6100",
+    "MIRSAD Desktop/scripts/verify_packaged_source_equivalence.py": "a8099170c5d8a9d4f7d8682d1f58daaf4a930987add6e8241061fe68674daccc",
+    "MIRSAD Desktop/src/mirsad_desktop/analysis.py": "4b3bc50895393d56234b59caf9e78b56023680fc37118f6c6e6ce32658c1d026",
+    "MIRSAD Desktop/src/mirsad_desktop/climate.py": "c27f1adb18620aaf3b1f1bbbbebee0c86a07600d44ec835d183bb4385a27fab8",
+    "MIRSAD Desktop/src/mirsad_desktop/climate_sources.py": "f116b57cb0a338161df26c383c45b14d36ea20ddc919874a05c67d4a6e53997a",
+    "MIRSAD Desktop/src/mirsad_desktop/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
+    "MIRSAD Desktop/src/mirsad_desktop/elevation.py": "514e7bc67c5aab79328718f7cf515d66df347f84674fc4d78f96763fcb16aa60",
+    "MIRSAD Desktop/src/mirsad_desktop/enrichment.py": "8df1a913b9e40c96979e8007d6421789c0af1b189cf6baf60b7924a8113a504e",
+    "MIRSAD Desktop/src/mirsad_desktop/excel_stream.py": "ffed44870c277e658bf19f656f1e9c1818bf9ad3087f514db91943af844269db",
+    "MIRSAD Desktop/src/mirsad_desktop/exports.py": "593a76e5f4634023a608784ec2fc35ff702fb7d5368c43d976f752931801dc78",
+    "MIRSAD Desktop/src/mirsad_desktop/hybrid_pipeline.py": "26181b83451362837b4bde6344e76edb092095d36a1ca8a8c792baf88e14d4c9",
+    "MIRSAD Desktop/src/mirsad_desktop/jobs.py": "6bf4f5891bb61793f8b55dc4a286723ba65f0ced2a3c7b4b2b56af53e14e66a1",
+    "MIRSAD Desktop/src/mirsad_desktop/registry.py": "03db5067faf55339cbf3067980b55e4ba22fd30c2ba28bef1069934adc3f79ed",
+    "MIRSAD Desktop/src/mirsad_desktop/science.py": "d655558263ed2d5c6a9934b70d10ff8eb7358c28fdd51fe6ebf48468c09edad8",
+    "MIRSAD Desktop/src/mirsad_desktop/services.py": "5c8cf802422ebe1cb808a9a834d3ca3f31c7b6cd0ff61a4f6bdde12a76f281e2",
+    "MIRSAD Desktop/src/mirsad_desktop/tabular.py": "4e08ec0039411e94341acde2e1c1b3ce2be0feb4647f34d88cdf119b5b2f890b",
+    "MIRSAD Desktop/src/mirsad_desktop/tools.py": "485782f87992e6da06d34de32afdd1897b32361b6a2fd505208ac8cce629af4c",
+    "MIRSAD Desktop/src/mirsad_desktop/ui.py": "9854b9f3326628e7322e6617015271f4e11fc242744a2e4ba5baa37a9cdf9f3a",
+    "MIRSAD Desktop/src/mirsad_desktop/workspace.py": "f805cb7da0c140169bc93f1ac337231491f31ea67f5fc103832e911f7fc1739c",
+    "MIRSAD Desktop/tests/test_elevation.py": "c3fb42a8061b21114b7c5ce95ca3588debb2500e46334945ba2f0d659dfdcfd6",
+    "MIRSAD Desktop/tests/test_enrichment.py": "8880cab3bdee5271e9d8a8a412b264e04a2db98ba5d5cd47ef7fd8e491965365",
+    "MIRSAD Desktop/tests/test_evapotranspiration.py": "711a48e87fe3ad2f11d7dc4709989264a03fab388ddf13b56ad5a30012692856",
+    "MIRSAD Desktop/tests/test_excel_stream.py": "eca6556150bc1a3c2ba764fd1d3d531177af5825213e6d8367a1d3a178834e4b",
+    "MIRSAD Desktop/tests/test_ui.py": "7834de1d017b933edfa4dead7afbd04051d2ae5e831260fb0597e15722a7d477",
+    "MIRSAD_Comprehensive_Development_Plan_AR.md": "ff97782e9bf72ca466d2f4098e41e34bc3ba3615215bcf90ad556dc60722e445",
+    "README.md": "bd50d9d22cba0358fbb297adb9642dc844543034c471d77a4070df39fe82cec5",
+    "Toolboxes/AGENTS.md": "f1980f76eafb30c67f82dd08511f0dbe174da17e34c9a4d0a781343884061074",
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "bb052f1cab3068a7eeeb3a3497f8f9bb24045e8cc50ec7154d0941fb01801b50",
+    "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "fb8963f4ebd95a2eb116c3ed227646bc0447025632a8f67fc77290329c591f5f",
+    "data/climate_sources.json": "1a9e1400e234c96ee81b4bb7f08626d29ef3ca53afbd72d243cdb493c34e2e4f",
+    "index.html": "cb633cf677bc4322304a61a7f60aebd1b2045b1304cc68984f0e3cf9679855b3",
+    "mirsad_core/climate_sources.py": "f116b57cb0a338161df26c383c45b14d36ea20ddc919874a05c67d4a6e53997a",
+    "mirsad_core/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
+    "mirsad_core/hybrid_pipeline.py": "26181b83451362837b4bde6344e76edb092095d36a1ca8a8c792baf88e14d4c9",
+    "mirsad_core/toolbox_enrichment.py": "276eed002740bcc0accdb6dae693f33797baa5747ccb4c712ff886a5d415deca",
+    "mirsad_core/toolbox_pm.py": "641b924b9db97ae6ada9ddfc5636add8ec678a33a6ff99e6b0716aa070ba0257",
+    "mirsad_core/xlsx_stream.py": "88c553a48451465faaf82499c1e1e55cceebaaf0539cfe3d1681c9ee23a0fb1a",
+    "scripts/audit_climate_enrichment.py": "982f1ed22f1cd00f4d29d5a50564e986b17a636963a65c0b142c92d5b2068c55",
+    "scripts/build_climate_source_catalogue.py": "6196339bc405d44686429f8fcc4ca13359a310005de8c680c69d238596003d98",
+    "scripts/build_website.py": "23760d1514499a6d4c37b5b143d83e01fec878979f732f7dd7653dd62a4fa9c3",
+    "scripts/check_repository.py": "9ab6731d44810e111c6eb8bb28dec84c64de49fc6f71860b0756674c54bcfc08",
+    "scripts/check_repository_layout.py": "156cdff67472aed99a25f3ec728e6469dda1d36b1dae7e90260b67a80abf2501",
+    "scripts/export_help_parameters.py": "a43589438a370910e105909d318a0853fa0507aaa657f498d2a9814cb0a55f7e",
+    "scripts/probe_climate_enrichment.py": "01c79da5eed58f0b7a0ec821ddc547a010f4c3334b8197630735a8b7d569dcd9",
+    "scripts/record_climate_enrichment_acceptance.py": "a467eee5f6959e778e0ddb24f56762d15440b7d8da24013ba2df1e9798e8c53a",
+    "scripts/record_legacy_excel_acceptance.py": "9c1afc2562eac25a7b9b32f413a5bb61c446536008a5a6c1dc97f6e40dfcbd3b",
+    "scripts/record_toolbox_enrichment_acceptance.py": "abf92114e4141f215779d93509f460687e63a4fac6e296704359c34e46ad5023",
+    "scripts/record_toolbox_pm_acceptance.py": "2f18370cd7b3ed624a248e38d0891ade7860b605ec7a3c6ada2b758ce7360839",
+    "scripts/run_checks.py": "74fae57e8843b33d563130980642598d1f8785301455aa4443de5d83f28082f7",
+    "scripts/templates/index.html": "f18c01cf38ac48be4b9016d3bd57218ab92fe4a68f13c3a32f526a24a47fdb32",
+    "scripts/verify_legacy_excel_streaming.py": "5406ce2793188a5c6535d50fc08030519682c9cb63c4a4c75fe61fdd79e32364",
+    "scripts/verify_native_xlsx.py": "aae318124471a43d5bfe55718a772a9b5fa95dd8801b41bdc220fbd74e00a83c",
+    "scripts/verify_toolbox_enrichment.py": "a3a7c5ace9b90b3e78c0a6ffefd0314092fee0df599867078dc65e5789fad75e",
+    "scripts/verify_toolbox_enrichment_qa.py": "0aaf25e19dff382c36271a55617e0fe7a9e6aebd698c08dd7e7e7771b513b431",
+    "scripts/verify_toolbox_pm.py": "356b5878c4a8c04b44aaf0d5ef5ec44a17ff023f21dc80ee41548f817044c392",
+    "scripts/website_content.py": "66c52cb22124fe2aea19fa0b96bc23b1ab1d32ed374628b1185ce9961a7a1679",
+    "tests/fixtures/climate_enrichment_baseline.json": "eea3aec663b901e34d07bbd3502616903c5e8a0e7692ec53637e93fd78bd9fa6",
+    "tests/test_climate_enrichment_baseline.py": "1335adc56414935f13be9459c7c689cb78929723090cfa45a4712b95329d2853",
+    "tests/test_daily_climate.py": "997faed71500b73dc64329dc269edb35ce94ad4bf702806c64f4507ab1200c10",
+    "tests/test_modifications.py": "6f3e436601f8ec6cc05f066c4972264e4d6632b7bfa4f1f5b9276656e538ff87",
+    "tests/test_toolbox_enrichment.py": "35200573c9827c1bdda149739d9488f0682baf9463db5f410586b9283e0a8366",
+    "tests/test_toolbox_pm.py": "fe00138f211ca2f7b88209cc02a70d8d65b6870b4e7b4756be2f9851437eb961",
+    "tests/test_xlsx_stream.py": "33cd71e0ff78d043dd2284f42a80f3fb35b8f802816389de2e19e6d032f16cc9",
+    "tests/test_yearly_excel_export.py": "1b40fea555e8d3db33a3adfb499492d71ea5eec3398a004eb1778a2ebafc1d65"
+  },
+  "exclusions": [
+    "Local Sample Data/geodatabases",
+    "Local station explorer deletion",
+    "ArcGIS-generated .pyt.xml edits",
+    "Runtime and installer binaries",
+    "Test/build scratch"
+  ],
+  "pending": [
+    "Toolbox DEM",
+    "Supported regional/product enrichment",
+    "Native supplementary/PM raster and ArcMap acceptance",
+    "Complete optional-field help and Desktop aliases",
+    "1000-point/30-year full pipeline benchmark",
+    "DPI/accessibility and older backlog items",
+    "New frozen candidate acceptance before any new binary publication"
+  ],
+  "final_repository_contracts": {
+    "passed": true,
+    "documentation_links": 287,
+    "website_references": 67,
+    "command": "scripts/check_repository.py",
+    "scope": "After final index/template/CHM-download refinements; no calculation changes"
+  },
+  "delivery_hash_policy": "UTF-8 text (.py/.pyt/.md/.json/.html/.txt) normalized without BOM and with LF newlines; other files raw SHA-256. Receipt itself excluded."
+}

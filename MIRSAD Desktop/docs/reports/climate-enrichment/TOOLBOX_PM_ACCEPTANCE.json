@@ -1,0 +1,388 @@
+{
+  "passed": true,
+  "recorded": "2026-10-22T08:40:33.939911+00:00",
+  "scope": "HG / daily FAO56 PM / both in Point and Station, native Pro with offline synthetic source responses",
+  "evidence": {
+    "points": {
+      "passed": true,
+      "runtime": {
+        "LicenseLevel": "Advanced",
+        "InstallDir": "c:\\program files\\arcgis\\pro\\",
+        "Installer": "ahmad",
+        "ProductName": "ArcGISPro",
+        "Version": "3.6",
+        "SourceDir": "D:\\New folder (2)\\Be GISer ArcGIS Pro 3.6\\1 Arcgis pro 3.6\\ArcGISPro\\",
+        "InstallType": "N/A",
+        "BuildNumber": "59527",
+        "InstallDate": "11/08/2026",
+        "InstallTime": "14:35:07",
+        "SPNumber": "N/A",
+        "SPBuild": "N/A",
+        "LicenseType": ""
+      },
+      "cases": {
+        "HG": {
+          "passed": true,
+          "methods": "HG",
+          "warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "hg_unchanged": true,
+          "pm_fao_example18": false,
+          "native_excel_readback": false,
+          "parameters": 83
+        },
+        "PM": {
+          "passed": true,
+          "methods": "PM",
+          "warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "hg_unchanged": true,
+          "pm_fao_example18": true,
+          "native_excel_readback": true,
+          "parameters": 83
+        },
+        "HG_PM": {
+          "passed": true,
+          "methods": "HG;PM",
+          "warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "hg_unchanged": true,
+          "pm_fao_example18": true,
+          "native_excel_readback": true,
+          "parameters": 83
+        }
+      },
+      "source_sha256": {
+        "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "013100d6706ff84d6140b6335ae9b0c54a8935558c3926438d992a26c4aa3255",
+        "mirsad_core/toolbox_pm.py": "8f26cc85b4cdfa676b4c62b1e67c1c5df47ecacd1096754f2e1dcf3af2f5599e",
+        "mirsad_core/toolbox_enrichment.py": "276eed002740bcc0accdb6dae693f33797baa5747ccb4c712ff886a5d415deca"
+      },
+      "limits": [
+        "Synthetic offline provider responses",
+        "Point native execution; Station uses the same calculation/export engine",
+        "Raster disabled; independent raster routing covered separately",
+        "No ArcMap claim"
+      ]
+    },
+    "stations": {
+      "passed": true,
+      "kind": "stations",
+      "runtime": {
+        "LicenseLevel": "Advanced",
+        "InstallDir": "c:\\program files\\arcgis\\pro\\",
+        "Installer": "ahmad",
+        "ProductName": "ArcGISPro",
+        "Version": "3.6",
+        "SourceDir": "D:\\New folder (2)\\Be GISer ArcGIS Pro 3.6\\1 Arcgis pro 3.6\\ArcGISPro\\",
+        "InstallType": "N/A",
+        "BuildNumber": "59527",
+        "InstallDate": "11/08/2026",
+        "InstallTime": "14:35:07",
+        "SPNumber": "N/A",
+        "SPBuild": "N/A",
+        "LicenseType": ""
+      },
+      "cases": {
+        "HG": {
+          "passed": true,
+          "methods": "HG",
+          "warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "hg_unchanged": true,
+          "pm_fao_example18": false,
+          "native_excel_readback": false,
+          "parameters": 90
+        },
+        "PM": {
+          "passed": true,
+          "methods": "PM",
+          "warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "hg_unchanged": true,
+          "pm_fao_example18": true,
+          "native_excel_readback": true,
+          "parameters": 90
+        },
+        "HG_PM": {
+          "passed": true,
+          "methods": "HG;PM",
+          "warnings": [
+            "Geographic output SR: cell sizes treated as metres and converted to degrees (base=0.00449 deg, wind=0.22458 deg).",
+            "  [COMPLETED WITH WARNINGS] Review the processing log; retained outputs are listed above."
+          ],
+          "hg_unchanged": true,
+          "pm_fao_example18": true,
+          "native_excel_readback": true,
+          "parameters": 90
+        }
+      },
+      "source_sha256": {
+        "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "013100d6706ff84d6140b6335ae9b0c54a8935558c3926438d992a26c4aa3255",
+        "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "ce1963c8894281776dc55da914c250b308b4a1e6ff756d2d8117e6863426c0d9",
+        "mirsad_core/toolbox_pm.py": "641b924b9db97ae6ada9ddfc5636add8ec678a33a6ff99e6b0716aa070ba0257",
+        "mirsad_core/toolbox_enrichment.py": "276eed002740bcc0accdb6dae693f33797baa5747ccb4c712ff886a5d415deca"
+      },
+      "limits": [
+        "Synthetic offline provider responses",
+        "stations native execution",
+        "Raster disabled; independent raster routing covered separately",
+        "No ArcMap claim"
+      ]
+    },
+    "isolated": {
+      "python": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.venv\\Scripts\\python.exe",
+      "isolated": true,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_arcgis_pro_compatibility.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.25
+        },
+        {
+          "suite": "test_climate_enrichment_baseline.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 1.28
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.19
+        },
+        {
+          "suite": "test_data_quality.py",
+          "exit": 0,
+          "tests": 16,
+          "seconds": 0.33
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.28
+        },
+        {
+          "suite": "test_excel_export_108.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_migrate_legacy_database.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.12
+        },
+        {
+          "suite": "test_modifications.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.38
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.42
+        },
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_station_multi_selection.py",
+          "exit": 0,
+          "tests": 17,
+          "seconds": 0.49
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.69
+        },
+        {
+          "suite": "test_weather_stations_atlas.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 0.51
+        },
+        {
+          "suite": "test_weather_stations_dual_lang.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.5
+        },
+        {
+          "suite": "test_workflow_and_temporal_scope.py",
+          "exit": 0,
+          "tests": 6,
+          "seconds": 0.39
+        },
+        {
+          "suite": "test_yearly_excel_export.py",
+          "exit": 0,
+          "tests": 9,
+          "seconds": 1.55
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.73
+        },
+        {
+          "suite": "test_toolbox_enrichment.py",
+          "exit": 0,
+          "tests": 11,
+          "seconds": 0.91
+        },
+        {
+          "suite": "test_toolbox_pm.py",
+          "exit": 0,
+          "tests": 10,
+          "seconds": 0.88
+        }
+      ]
+    },
+    "python27": {
+      "python": "C:/Python27/ArcGIS10.8/python.exe",
+      "isolated": true,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.59
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 1.08
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.22
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.34
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.55
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 2.56
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.16
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.28
+        },
+        {
+          "suite": "test_toolbox_enrichment.py",
+          "exit": 0,
+          "tests": 11,
+          "seconds": 0.42
+        },
+        {
+          "suite": "test_toolbox_pm.py",
+          "exit": 0,
+          "tests": 10,
+          "seconds": 0.42
+        }
+      ]
+    }
+  },
+  "metadata_only_source_differences": [
+    {
+      "source": "mirsad_core/toolbox_pm.py",
+      "native_sha256": "8f26cc85b4cdfa676b4c62b1e67c1c5df47ecacd1096754f2e1dcf3af2f5599e",
+      "current_sha256": "641b924b9db97ae6ada9ddfc5636add8ec678a33a6ff99e6b0716aa070ba0257",
+      "difference": "Only the p.description localization assignment; reconstructed earlier file matches native hash byte-for-byte. Current Station run and EN/AR parameter snapshot cover localization."
+    }
+  ],
+  "evidence_sha256": {
+    "tests/.output/native-toolbox-pm-pro/acceptance.json": "eb5dfcb6d5bd8f22694ab60e5d3043b844d7e34e9f6251ab5eb093822a1f2766",
+    "tests/.output/native-toolbox-pm-stations-pro/acceptance.json": "009dfd5ff10ee952a6eb8ba4f4d7cd2dc047676635dc88070111fc18935a180a",
+    "tests/.output/toolbox-pm-final/summary.json": "63fdcb01d6ee9d319956a2d94f69f3ac43c021653648bea9fc5fd1e9be3cce9e",
+    "tests/.output/python27-toolbox-pm-final/summary.json": "a302c4f3b335006bcfd2d012aac1825839f707f4ec84114e8b21638181544b11"
+  },
+  "source_sha256": {
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "013100d6706ff84d6140b6335ae9b0c54a8935558c3926438d992a26c4aa3255",
+    "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "ce1963c8894281776dc55da914c250b308b4a1e6ff756d2d8117e6863426c0d9",
+    "mirsad_core/toolbox_pm.py": "641b924b9db97ae6ada9ddfc5636add8ec678a33a6ff99e6b0716aa070ba0257",
+    "mirsad_core/toolbox_enrichment.py": "276eed002740bcc0accdb6dae693f33797baa5747ccb4c712ff886a5d415deca",
+    "mirsad_core/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
+    "tests/test_toolbox_pm.py": "fe00138f211ca2f7b88209cc02a70d8d65b6870b4e7b4756be2f9851437eb961",
+    "tests/test_toolbox_enrichment.py": "efc380a0a10910c91556e119f73c1600e597218ea7e3b57fbc2da4335ce1acd7",
+    "scripts/verify_toolbox_pm.py": "356b5878c4a8c04b44aaf0d5ef5ec44a17ff023f21dc80ee41548f817044c392",
+    "Documents/Help/tool_parameters.json": "56dfd6553f5dcf049cc3c8c3df681942a384627d6eadc71698c14af92ff931a4",
+    "Documents/Help/parameter_notes_ar.json": "22a2830d0833c3b454feca0e680d1de1c22267f759465357843b130c95bf9b61"
+  },
+  "limits": [
+    "No live Toolbox network acceptance",
+    "Native PM raster acceptance pending; dispatch tested in isolation",
+    "No native ArcMap acceptance",
+    "Optional DEM in Toolbox remains pending",
+    "21 October frozen candidate/installer do not package these later source/help changes"
+  ]
+}

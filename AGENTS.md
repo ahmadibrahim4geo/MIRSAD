@@ -1,5 +1,23 @@
 # MIRSAD development guide
 
+## Source handoff update — 22 October 2026
+
+The sections dated 19 October below describe that accepted historical baseline.
+Current source adds 11 default-off daily variables, independent HG/PM methods and
+streaming XLSX in Desktop and Point/Station Toolbox; Desktop also has optional
+local/web DEM enrichment. Current native parameter counts are 83/90/36, with
+19 module groups. Read [the current tracker](MIRSAD%20Desktop/docs/reports/climate-enrichment/IMPLEMENTATION_TRACKER.md)
+and [source publication scope](Documents/SOURCE_UPDATE_2026_10_22.md) before
+asserting complete plan delivery or binary equivalence. The public dev8 installer
+is still the 19 October candidate; later source/help is not included in it.
+Toolbox DEM, regional enrichment, native raster/ArcMap acceptance, complete field
+help, large-pipeline performance and DPI remain in the backlog.
+
+The user authorized pushing the current source, index and explanations on
+22 October. This source/docs update does not authorize a new binary release or
+stable promotion. Preserve the unrelated local Sample Data, station explorer
+deletions and ArcGIS-generated XML changes when staging.
+
 ## Start here — development handoff, 19 October 2026
 
 This file is the shared handoff for future maintainers. Read it together with

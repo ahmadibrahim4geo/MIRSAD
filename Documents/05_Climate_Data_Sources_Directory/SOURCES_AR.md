@@ -1,6 +1,6 @@
 # دليل مصادر مرصاد — الحالة المنفذة
 
-مراجعة 2026-10-18. نهاية الأرشيف متغيرة؛ لا تعني بداية المنتج وجود كل عنصر في كل موقع. بيانات المصدر ومؤشرات التغطية هي المرجع لكل تشغيل.
+مراجعة 2026-10-21. نهاية الأرشيف متغيرة؛ لا تعني بداية المنتج وجود كل عنصر في كل موقع. بيانات المصدر ومؤشرات التغطية هي المرجع لكل تشغيل.
 
 ## NASA POWER
 
@@ -20,9 +20,9 @@ ERA5 1940; Land 1950 → Latest archive, typically delayed | Auto: Land 0.1 degr
 
 Global; Land variables require valid land cells | points, stations
 
-**Variables:** T2M, T2M_MAX, T2M_MIN, PRECTOTCORR, ALLSKY_SFC_SW_DWN, RH2M, T2MDEW, PS, SLP, WS10M, WD10M, CLOUD_AMT
+**Variables:** T2M, T2M_MAX, T2M_MIN, PRECTOTCORR, ALLSKY_SFC_SW_DWN, SUNSHINE_DURATION, RH2M, T2MDEW, PS, SLP, WS10M, WD10M, CLOUD_AMT, RH2M_MAX, RH2M_MIN, VPD_SOURCE, WS10M_CONFIRMED
 
-Auto يستخدم Land للحرارة والرطوبة والندى، وERA5 لبقية المتغيرات المدعومة. للفترة التي تبدأ قبل 1950 يستخدم ERA5 كاملًا. الوضع المستقل لا يستكمل NASA؛ المسار القديم والهجين لهما سياسة معلنة منفصلة.
+Auto يستخدم Land للحرارة والرطوبة والندى، وERA5 لبقية المتغيرات المدعومة. للفترة التي تبدأ قبل 1950 يستخدم ERA5 كاملًا. الوضع المستقل لا يستكمل NASA؛ المسار القديم والهجين لهما سياسة معلنة منفصلة. إضافات RHmax/RHmin وVPD وساعات السطوع والرياح ذات ارتفاع القياس المؤكد مدمجة في Desktop وأداتَي Point وStation بالمسار اليومي؛ لا تشمل الشبكة الإقليمية. ملخصات الساعات تشترط 24 ساعة UTC صحيحة؛ counts وعمليات الاشتقاق محفوظة في Excel.
 
 [Official reference](https://open-meteo.com/en/docs/historical-weather-api)
 

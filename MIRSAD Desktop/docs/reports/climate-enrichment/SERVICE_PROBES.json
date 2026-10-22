@@ -1,0 +1,136 @@
+{
+  "point": {
+    "latitude": 30.0,
+    "longitude": 31.0
+  },
+  "timezone": "UTC",
+  "start": "2024-02-28",
+  "end": "2024-03-01",
+  "results": [
+    {
+      "model": "era5_land",
+      "daily_variable": "relative_humidity_2m_max",
+      "hourly_variable": "relative_humidity_2m",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=30.0&longitude=31.0&start_date=2024-02-28&end_date=2024-03-01&models=era5_land&timezone=UTC&daily=relative_humidity_2m_max&hourly=relative_humidity_2m",
+      "retrieved_utc": "2026-10-19T15:08:51.154337+00:00",
+      "acceptance": "single public sample only; not production adapter acceptance",
+      "http_status": 200,
+      "response_sha256": "2420aed71611495e558c8b165efca4ea2d963dc7b8b60574f3dd0fb52490d500",
+      "response_file": "era5_land-relative_humidity_2m_max.json",
+      "dates": [
+        "2024-02-28",
+        "2024-02-29",
+        "2024-03-01"
+      ],
+      "values": [
+        96,
+        91,
+        42
+      ],
+      "units": "%",
+      "usable": true,
+      "hourly_valid_counts": {
+        "2024-02-28": 24,
+        "2024-02-29": 24,
+        "2024-03-01": 24
+      },
+      "recomputed_daily": [
+        96,
+        91,
+        42
+      ],
+      "matches_hourly_within_0_11": true
+    },
+    {
+      "model": "era5_land",
+      "daily_variable": "relative_humidity_2m_min",
+      "hourly_variable": "relative_humidity_2m",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=30.0&longitude=31.0&start_date=2024-02-28&end_date=2024-03-01&models=era5_land&timezone=UTC&daily=relative_humidity_2m_min&hourly=relative_humidity_2m",
+      "retrieved_utc": "2026-10-19T15:08:51.154337+00:00",
+      "acceptance": "single public sample only; not production adapter acceptance",
+      "http_status": 200,
+      "response_sha256": "49e33c625f5b68e656954386e677734d5bbcf314bd9dac09ad48522229006f9a",
+      "response_file": "era5_land-relative_humidity_2m_min.json",
+      "dates": [
+        "2024-02-28",
+        "2024-02-29",
+        "2024-03-01"
+      ],
+      "values": [
+        26,
+        14,
+        15
+      ],
+      "units": "%",
+      "usable": true,
+      "hourly_valid_counts": {
+        "2024-02-28": 24,
+        "2024-02-29": 24,
+        "2024-03-01": 24
+      },
+      "recomputed_daily": [
+        26,
+        14,
+        15
+      ],
+      "matches_hourly_within_0_11": true
+    },
+    {
+      "model": "era5",
+      "daily_variable": "sunshine_duration",
+      "hourly_variable": null,
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=30.0&longitude=31.0&start_date=2024-02-28&end_date=2024-03-01&models=era5&timezone=UTC&daily=sunshine_duration",
+      "retrieved_utc": "2026-10-19T15:08:51.154337+00:00",
+      "acceptance": "single public sample only; not production adapter acceptance",
+      "http_status": 200,
+      "response_sha256": "3ad0ff7ac64aff6bd3bd5dc9c11079b5e203b0b13d5853430a0dfeb92b29ba8b",
+      "response_file": "era5-sunshine_duration.json",
+      "dates": [
+        "2024-02-28",
+        "2024-02-29",
+        "2024-03-01"
+      ],
+      "values": [
+        39646.6,
+        39923.7,
+        40199.44
+      ],
+      "units": "s",
+      "usable": true
+    },
+    {
+      "model": "era5",
+      "daily_variable": "vapour_pressure_deficit_max",
+      "hourly_variable": "vapour_pressure_deficit",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=30.0&longitude=31.0&start_date=2024-02-28&end_date=2024-03-01&models=era5&timezone=UTC&daily=vapour_pressure_deficit_max&hourly=vapour_pressure_deficit",
+      "retrieved_utc": "2026-10-19T15:08:51.155339+00:00",
+      "acceptance": "single public sample only; not production adapter acceptance",
+      "http_status": 200,
+      "response_sha256": "8e9d71dc2a8f96d7926bb84ba067d4de603e788501af575b6459f05075e1dec2",
+      "response_file": "era5-vapour_pressure_deficit_max.json",
+      "dates": [
+        "2024-02-28",
+        "2024-02-29",
+        "2024-03-01"
+      ],
+      "values": [
+        1.82,
+        2.91,
+        3.21
+      ],
+      "units": "kPa",
+      "usable": true,
+      "hourly_valid_counts": {
+        "2024-02-28": 24,
+        "2024-02-29": 24,
+        "2024-03-01": 24
+      },
+      "recomputed_daily": [
+        1.82,
+        2.91,
+        3.21
+      ],
+      "matches_hourly_within_0_11": true
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # MIRSAD Desktop — implementation and maintenance
 
+Source update, 22 October: [STATUS](docs/STATUS.md), [BACKLOG](docs/BACKLOG.md)
+and [the enrichment tracker](docs/reports/climate-enrichment/IMPLEMENTATION_TRACKER.md)
+supersede historical capability/test counts below. Desktop source includes the
+11 additions, optional DEM, independent HG/PM and streaming XLSX. The 21 October
+frozen candidate predates the subsequent source/help changes; the publicly
+downloadable dev8 installer is older still (19 October). Do not describe either
+binary as packaging current source. See [publication scope](../Documents/SOURCE_UPDATE_2026_10_22.md).
+
 Read the root AGENTS.md, `docs/STATUS.md` and `docs/BACKLOG.md` first. Original product requirements are retained under `docs/architecture/` and `docs/design/reference/`. This file describes the development contract; it does not authorize publishing an unapproved release.
 
 ## Development history and current handoff — 19 October 2026

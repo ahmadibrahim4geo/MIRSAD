@@ -1,0 +1,264 @@
+{
+  "date": "2026-10-21",
+  "scope": "Point/station large-Daily XLSX, not climate option/regional parity",
+  "evidence": {
+    "tests": {
+      "python": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.venv\\Scripts\\python.exe",
+      "isolated": true,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_arcgis_pro_compatibility.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.45
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.27
+        },
+        {
+          "suite": "test_climate_enrichment_baseline.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 1.42
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.2
+        },
+        {
+          "suite": "test_data_quality.py",
+          "exit": 0,
+          "tests": 16,
+          "seconds": 0.38
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.33
+        },
+        {
+          "suite": "test_excel_export_108.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.45
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.39
+        },
+        {
+          "suite": "test_migrate_legacy_database.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.16
+        },
+        {
+          "suite": "test_modifications.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.41
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.38
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.45
+        },
+        {
+          "suite": "test_station_multi_selection.py",
+          "exit": 0,
+          "tests": 17,
+          "seconds": 0.47
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.67
+        },
+        {
+          "suite": "test_weather_stations_atlas.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 0.48
+        },
+        {
+          "suite": "test_weather_stations_dual_lang.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.48
+        },
+        {
+          "suite": "test_workflow_and_temporal_scope.py",
+          "exit": 0,
+          "tests": 6,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_yearly_excel_export.py",
+          "exit": 0,
+          "tests": 9,
+          "seconds": 1.52
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.7
+        }
+      ],
+      "suites": 20,
+      "tests": 168
+    },
+    "python27": {
+      "python": "C:/Python27/ArcGIS10.8/python.exe",
+      "isolated": true,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.67
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 1.19
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.26
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.39
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.41
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.61
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 2.75
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.2
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.33
+        }
+      ],
+      "suites": 9,
+      "tests": 81
+    },
+    "boundary": {
+      "files": [
+        "D:\\My Software\\MIRSAD Climate Atlas Generator\\tests\\.output\\legacy-excel\\Boundary.xlsx"
+      ],
+      "seconds": 22.028,
+      "rows": 1000001,
+      "sheets": 2,
+      "passed": true,
+      "python": "2.7.18.4 (default, Aug  9 2021, 23:37:24) [MSC v.1500 32 bit (Intel)]",
+      "scope": "Real standard-library XLSX boundary; not native ArcMap processing or a climate-download memory benchmark"
+    },
+    "native_pro": {
+      "passed": true,
+      "scope": "Native feature export and ExcelToTable readback, not new climate calculations/Toolbox option parity",
+      "runtime": {
+        "LicenseLevel": "Advanced",
+        "InstallDir": "c:\\program files\\arcgis\\pro\\",
+        "Installer": "ahmad",
+        "ProductName": "ArcGISPro",
+        "Version": "3.6",
+        "SourceDir": "D:\\New folder (2)\\Be GISer ArcGIS Pro 3.6\\1 Arcgis pro 3.6\\ArcGISPro\\",
+        "InstallType": "N/A",
+        "BuildNumber": "59527",
+        "InstallDate": "11/08/2026",
+        "InstallTime": "14:35:07",
+        "SPNumber": "N/A",
+        "SPBuild": "N/A",
+        "LicenseType": ""
+      },
+      "product": "ArcInfo",
+      "rows": 60001,
+      "output": "D:\\My Software\\MIRSAD Climate Atlas Generator\\tests\\.output\\native-xlsx-pro-verified",
+      "checks": [
+        "Actual feature class read by legacy exporter",
+        "60001 rows in XLSX",
+        "Native ExcelToTable preserves identifiers/order/values",
+        "Source attributes/Arabic/geometry unchanged"
+      ]
+    },
+    "native_arcmap": {
+      "passed": false,
+      "scope": "Native XLSX acceptance incomplete",
+      "error": "Native geoprocessor did not finish within 120 seconds; child was terminated. Timeout report serialization was repaired after a Python 2 Unicode error.",
+      "timeout_seconds": 120
+    }
+  },
+  "source_sha256": {
+    "mirsad_core/xlsx_stream.py": "88c553a48451465faaf82499c1e1e55cceebaaf0539cfe3d1681c9ee23a0fb1a",
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "7b1260990d8981f28d765491b7234e7bb8449142fabeb84a2ba2866cc6e0bf59",
+    "tests/test_xlsx_stream.py": "33cd71e0ff78d043dd2284f42a80f3fb35b8f802816389de2e19e6d032f16cc9",
+    "tests/test_yearly_excel_export.py": "1b40fea555e8d3db33a3adfb499492d71ea5eec3398a004eb1778a2ebafc1d65",
+    "scripts/verify_legacy_excel_streaming.py": "5406ce2793188a5c6535d50fc08030519682c9cb63c4a4c75fe61fdd79e32364",
+    "scripts/verify_native_xlsx.py": "aae318124471a43d5bfe55718a772a9b5fa95dd8801b41bdc220fbd74e00a83c"
+  },
+  "evidence_sha256": {
+    "tests/.output/legacy-streaming-final/summary.json": "cfa3d64cc0980876390168a7828f9b119e5a7a3b045d5ea64d929fb046b2437e",
+    "tests/.output/python27-legacy-streaming/summary.json": "c1dba6f97a0b39c7ddb93e63f65bbb38bdf4def8b9138ff3db4aeb1ce3ee5c98",
+    "tests/.output/legacy-excel/Boundary.acceptance.json": "8e9609b3884a480da285cd4249426bea1daac28907f9f8437552505293f0e275",
+    "tests/.output/native-xlsx-pro-verified/acceptance.json": "66f27c7ea2d0ce55ee7ed6b64731f613cafa27a008b17c6365641320371624c9",
+    "tests/.output/native-xlsx-arcmap-bounded/acceptance.json": "5c1e9f1b70dd07b966c6907975dd8e05dbc2676252bb94572da0e2fdc25aaf63"
+  },
+  "limits": [
+    "Native ArcMap geoprocessor initialization",
+    "Full climate-download memory/time benchmark",
+    "Legacy partial-export propagation at project level",
+    "New Toolbox variables/PM/DEM and regional parity"
+  ]
+}

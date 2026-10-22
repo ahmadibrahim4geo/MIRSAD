@@ -51,6 +51,7 @@ def canonical_resolution(value):
 
 
 LAND_VARIABLES=("T2M","T2M_MAX","T2M_MIN","RH2M","T2MDEW")
+ENRICHMENT_LAND_VARIABLES=("RH2M_MAX","RH2M_MIN")
 
 
 def model_code(value):
@@ -67,8 +68,8 @@ def reanalysis_plan(required,selection,start):
     selected=model_code(selection)
     if selected!="auto":return [(selected,list(required))]
     if start.year<1950:return [("era5",list(required))]
-    land=[p for p in required if p in LAND_VARIABLES]
-    atmospheric=[p for p in required if p not in LAND_VARIABLES]
+    land=[p for p in required if p in LAND_VARIABLES+ENRICHMENT_LAND_VARIABLES]
+    atmospheric=[p for p in required if p not in LAND_VARIABLES+ENRICHMENT_LAND_VARIABLES]
     return [(code,params) for code,params in (("era5_land",land),("era5",atmospheric)) if params]
 
 

@@ -48,7 +48,7 @@ print("Vendored shared Python 2/3 Hybrid source pipeline:",hashlib.sha256(pipeli
 sources=ROOT.parent/"mirsad_core/climate_sources.py"
 (ROOT/"src/mirsad_desktop/climate_sources.py").write_bytes(sources.read_bytes())
 print("Vendored shared provider policies:",hashlib.sha256(sources.read_bytes()).hexdigest())
-for name in ("climate_products.py","remote_grid.py","protected_sources.py"):
+for name in ("climate_products.py","remote_grid.py","protected_sources.py","daily_climate.py"):
     shared=ROOT.parent/"mirsad_core"/name
     (ROOT/"src/mirsad_desktop"/name).write_bytes(shared.read_bytes())
     print("Vendored shared product adapter:",name,hashlib.sha256(shared.read_bytes()).hexdigest())

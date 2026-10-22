@@ -25,7 +25,7 @@ MODULES = [
  Module("Heat Index","مؤشر الحرارة والإجهاد الحراري",("T2M","RH2M"),("HI_","WBGT_"),"deg_C","derived"),
  Module("Wind Chill","برودة الرياح والإجهاد البارد",("T2M","WS10M"),("WC_",),"deg_C","derived"),
  Module("De Martonne Aridity","الجفاف: دي مارتون",("T2M","PRECTOTCORR"),("DM_",),"index","derived"),
- Module("Evapotranspiration","البخر والنتح: هارجريفز",("T2M","T2M_MAX","T2M_MIN"),("ET_","PET_"),"mm","derived"),
+ Module("Evapotranspiration","البخر والنتح",("T2M","T2M_MAX","T2M_MIN"),("ET_","PET_"),"mm","derived"),
  Module("UNEP Aridity","الجفاف: UNEP",("T2M","T2M_MAX","T2M_MIN","PRECTOTCORR"),("UNEP_",),"ratio","derived"),
  Module("Water Deficit","العجز المائي",("T2M","T2M_MAX","T2M_MIN","PRECTOTCORR"),("Water_Deficit_",),"mm","derived"),
  Module("Dry Months","عدد الأشهر الجافة",("T2M","PRECTOTCORR"),("Dry_Months_",),"months","derived"),

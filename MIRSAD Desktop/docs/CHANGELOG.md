@@ -1,10 +1,55 @@
 # Desktop delivery history
 
+22 October 2026 — source/docs publication preparation: refreshed the bilingual
+documentation indices and website from templates, replaced obsolete local-machine
+links and counts, and distinguished current enrichment source/help from the public
+19 October installer. Added [delivery scope and final-check evidence](../../Documents/SOURCE_UPDATE_2026_10_22.md).
+The complete enrichment plan remains open as documented in the backlog; no new
+binary release or stable promotion is part of this source update.
+
 Historical delivery entries follow. For current implementation and remaining work, read
 [STATUS](STATUS.md) and [BACKLOG](BACKLOG.md). Original requirements are reference
 documents, not an active unfinished execution plan.
 
 ## Fixed product locations
+
+Later on 22 October 2026 — Point/Station added independent HG/PM calculation and
+raster selections (83/90 parameters), canonical daily PM inputs/provenance,
+separate layers/workbooks/folders, precipitation output units and complete-period
+daily accumulation. Native Pro executed HG/PM/both for Point and Station, retained
+identical HG values and re-read the FAO56 example and monthly sums through Excel.
+Local NULL station height no longer triggers silent catalogue substitution.
+[PM evidence](reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.md).
+
+22 October 2026 — Point/Station Toolbox integrates the 11 optional daily variables
+with append-only EN/AR parameters (81/88; regional remains 36), separate source
+inputs/provenance, conservative yearly summaries and audited XLSX sheets. Added
+independent interpolation controls and unit-specific monthly groups; coverage counts
+stay tabular. Preserved WBAN from local station layers and Arabic text on Python 2.7,
+with explicit known/missing elevation flags for new Rn calculations. Refreshed the
+native parameter snapshot, source guides and bilingual help. Existing candidate
+binaries were not rebuilt/replaced. [Scope and evidence](reports/climate-enrichment/TOOLBOX_ACCEPTANCE.md).
+
+21 October 2026 — climate enrichment in Desktop source: added 11 opt-in nested
+variables, strict hourly aggregation/provenance, optional local/web DEM attributes,
+independent daily FAO56 PM alongside preserved HG, separate method workbooks/rasters,
+and streaming XLSX with indexed sheet/file splitting. Added real export/scientific/
+failure checks, a live leap-month fixture, million-row readback, Pro default-alias
+readback and bilingual generated help. A build-scratch frozen candidate passed general
+gates, a real recorded-data enrichment worker and 25-module source comparison; no
+development runtime replacement or publication. The matching candidate installer
+passed isolated QA install/payload/workspace/uninstall/user-file-preservation gates.
+The next source batch added standard-library XLSX for legacy point/station Daily
+tables over 60,000 rows and disk row staging. Python 2.7 million-row and native Pro
+ExcelToTable acceptance passed; see [legacy Excel scope](reports/climate-enrichment/LEGACY_EXCEL_ACCEPTANCE.md).
+Scope and open cross-host work: [acceptance](reports/climate-enrichment/DESKTOP_SOURCE_ACCEPTANCE.md).
+
+Climate enrichment preparation, 19 October 2026: completed a pre-change inventory,
+captured field/value/order/Daily/sheet/path baselines for all 19 modules, added three
+regression guards, and verified four public ERA5/ERA5-Land requests across leap day.
+The user clarified optional elevation enrichment and explicit hourly-to-daily provenance.
+No climate runtime, binary or installer was changed by this preparation. Evidence and
+remaining implementation are in [the baseline report](reports/climate-enrichment/BASELINE_AUDIT.md).
 
 Map UI follow-up (0.4.0.dev3): replaced the full-width basemap combo with a compact native icon/gallery, moved navigation into floating map controls, added local scalable outline icons and viewer-tab styling, localized accessible tooltips and canvas-scoped keyboard shortcuts. See [MAP_CONTROLS_REWORK.md](reports/MAP_CONTROLS_REWORK.md) for visual and interaction acceptance. Stable remains unchanged.
 

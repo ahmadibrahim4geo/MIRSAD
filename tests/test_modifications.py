@@ -503,7 +503,8 @@ class TestClimateToolboxModifications(unittest.TestCase):
         with open(PYT_PATH, encoding="utf-8") as _fh:
             pyt_src = _fh.read()
         # Shapefile export: short NAME, alias = full English field name
-        self.assertIn("AlterField(tmp_copy, n, SHP_FIELD_MAP[n], n)", pyt_src)
+        self.assertTrue("AlterField(tmp_copy, n, field_map[n], n)" in pyt_src,
+                        "SHP names may be abbreviated; aliases must retain the English field name")
         # Main GDB: alias = field name
         self.assertIn("AddField(fc, wf, field_type, field_alias=wf)", pyt_src)
         # Arabic DB command maps every registered field (incl. new HI monthly) to Arabic
@@ -538,9 +539,9 @@ class TestClimateToolboxModifications(unittest.TestCase):
         self.assertEqual(pyt_mod.resolve_module_canonical("02_Land_Surface_Temperature"), "Land Surface Temperature")
         self.assertEqual(rag.resolve_module_canonical("02_Land_Surface_Temperature"), "Land Surface Temperature")
 
-        # 3. Current native parameter contract: 69 point, 36 regional raster.
+        # 3. Append-only daily additions and ET methods: 83 point, 36 regional raster.
         pyt_params = pyt_mod.PowerClimateAtlasGenerator().getParameterInfo()
-        self.assertEqual(len(pyt_params), 69)
+        self.assertEqual(len(pyt_params), 83)
         rag_params = rag.RasterDataClimateAtlasGenerator().getParameterInfo()
         self.assertEqual(len(rag_params), 36)
         self.assertIn("Generate_Monthly_Rasters", [p.name for p in rag_params])

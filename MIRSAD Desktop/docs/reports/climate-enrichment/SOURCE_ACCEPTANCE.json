@@ -1,0 +1,675 @@
+{
+  "date": "2026-10-21",
+  "base_revision": "09bb7fd043d6e8a9984e8f27f36c2815dbe4e0f2",
+  "scope": "Desktop source enrichment and verified frozen build scratch; no Toolbox processing, runtime replacement or publication acceptance",
+  "tests": {
+    "legacy": {
+      "suites": 20,
+      "tests": 168,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_arcgis_pro_compatibility.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.45
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.27
+        },
+        {
+          "suite": "test_climate_enrichment_baseline.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 1.42
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.2
+        },
+        {
+          "suite": "test_data_quality.py",
+          "exit": 0,
+          "tests": 16,
+          "seconds": 0.38
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.33
+        },
+        {
+          "suite": "test_excel_export_108.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.45
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.39
+        },
+        {
+          "suite": "test_migrate_legacy_database.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.16
+        },
+        {
+          "suite": "test_modifications.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.41
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.38
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.44
+        },
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.45
+        },
+        {
+          "suite": "test_station_multi_selection.py",
+          "exit": 0,
+          "tests": 17,
+          "seconds": 0.47
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.67
+        },
+        {
+          "suite": "test_weather_stations_atlas.py",
+          "exit": 0,
+          "tests": 3,
+          "seconds": 0.48
+        },
+        {
+          "suite": "test_weather_stations_dual_lang.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.48
+        },
+        {
+          "suite": "test_workflow_and_temporal_scope.py",
+          "exit": 0,
+          "tests": 6,
+          "seconds": 0.36
+        },
+        {
+          "suite": "test_yearly_excel_export.py",
+          "exit": 0,
+          "tests": 9,
+          "seconds": 1.52
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.7
+        }
+      ]
+    },
+    "python27": {
+      "suites": 9,
+      "tests": 81,
+      "passed": true,
+      "results": [
+        {
+          "suite": "test_runtime_stability.py",
+          "exit": 0,
+          "tests": 22,
+          "seconds": 0.67
+        },
+        {
+          "suite": "test_tool_validation.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 1.19
+        },
+        {
+          "suite": "test_climate_products.py",
+          "exit": 0,
+          "tests": 7,
+          "seconds": 0.26
+        },
+        {
+          "suite": "test_remote_grid.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 0.39
+        },
+        {
+          "suite": "test_hybrid_pipeline.py",
+          "exit": 0,
+          "tests": 12,
+          "seconds": 0.41
+        },
+        {
+          "suite": "test_repository_layout.py",
+          "exit": 0,
+          "tests": 2,
+          "seconds": 0.61
+        },
+        {
+          "suite": "test_drought_dependencies_108.py",
+          "exit": 0,
+          "tests": 4,
+          "seconds": 2.75
+        },
+        {
+          "suite": "test_daily_climate.py",
+          "exit": 0,
+          "tests": 13,
+          "seconds": 0.2
+        },
+        {
+          "suite": "test_xlsx_stream.py",
+          "exit": 0,
+          "tests": 5,
+          "seconds": 0.33
+        }
+      ]
+    },
+    "desktop": {
+      "tests": 88,
+      "seconds": 216.527,
+      "passed": true
+    }
+  },
+  "live": {
+    "passed": true,
+    "scope": "Small live Desktop-source acceptance; no frozen/native Toolbox claim",
+    "checks": [
+      "Complete source/service run without hidden export failures",
+      "Project.gpkg: separate HG and PM layers",
+      "Project.gpkg: full leap-month hourly extrema coverage",
+      "Project.gpkg: actual DEM value/source retained",
+      "Project.gpkg: separate VPD statistics",
+      "Project.gdb: separate HG and PM layers",
+      "Project.gdb: full leap-month hourly extrema coverage",
+      "Project.gdb: actual DEM value/source retained",
+      "Project.gdb: separate VPD statistics",
+      "PM workbook has daily/monthly/method/field sheets",
+      "PM workbook includes hourly counts and DEM metadata",
+      "Hourly processing exports complete 24-hour sample counts",
+      "DEM workbook discloses DSM and vertical datum",
+      "Monthly PM is the sum of the 29 calculated daily values",
+      "Desktop source runtime imports no ArcPy"
+    ],
+    "output": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.test-output\\climate-enrichment-quality-live\\Verified_Source_Sample",
+    "source_warnings": [],
+    "date": "2026-10-21"
+  },
+  "excel_boundary": {
+    "passed": true,
+    "rows": 1000001,
+    "sheets": 2,
+    "files": [
+      "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.test-output\\excel-streaming\\Boundary.xlsx"
+    ],
+    "seconds": 38.828,
+    "scope": "Real default-capacity row boundary; not a full 1000-point/30-year climate pipeline benchmark"
+  },
+  "pro_readback": {
+    "passed": true,
+    "new_fields": 254,
+    "scope": "Native ArcGIS Pro reads Desktop FileGDB and verifies default aliases; not native Toolbox processing"
+  },
+  "evidence_files": {
+    "tests/.output/legacy-streaming-final/summary.json": "cfa3d64cc0980876390168a7828f9b119e5a7a3b045d5ea64d929fb046b2437e",
+    "tests/.output/python27-legacy-streaming/summary.json": "c1dba6f97a0b39c7ddb93e63f65bbb38bdf4def8b9138ff3db4aeb1ce3ee5c98",
+    "MIRSAD Desktop/.test-output/climate-enrichment-quality-live/acceptance.json": "bc889fd06c680c7ca65ffc69ac0ae4294e1a985e5b179b15eb506abc79539a49",
+    "MIRSAD Desktop/.test-output/excel-streaming/Boundary.acceptance.json": "c8cc98cc72dd2a320edf85a2ea3e40ef52b16cde652c6bc72aff6ca018a3aa6e",
+    "MIRSAD Desktop/.test-output/climate-enrichment-quality-live/native-readback.json": "86f9942b2bed134403aaa96c95cf07db5af614e991e487bbdaacb344be9282f8",
+    "MIRSAD Desktop/.test-output/climate-enrichment-final-tests.log": "2fb18a637403ab2450b0036097ad250ab45184ad995ec0a7608b208dc5346999",
+    "MIRSAD Desktop/.test-output/frozen-enrichment-quality/acceptance.json": "fb6030bf69adfe1f3dfdf01189038bb421cff63da95166627a35acf3e22a2b0b",
+    "MIRSAD Desktop/.test-output/climate-enrichment-source-equivalence.json": "05f8669f090b85ccfed3ff5a041d01f37ccb180da38db6ea9cfd459b5cea6b0b",
+    "MIRSAD Desktop/.build/dist/MIRSAD/build_manifest.json": "afd800d53b3f047a2b8dd8a9a7126cfe9c9c84ce89406e0a0a66af8e517da098",
+    "MIRSAD Desktop/.test-output/installer_acceptance.json": "8a83196f775d8e9fdf34eb28b0b414ca78d97534d82050238942251aff4f3f4a",
+    "MIRSAD Desktop/runtime/installers/development/installer_manifest.json": "0480d001cb4f955fa47b2b8ead78f69679763b7c95f56a3bbc39d89df0e3e669"
+  },
+  "runtime_source_sha256": {
+    "MIRSAD Desktop/src/mirsad_desktop/__init__.py": "d7cfe744fd21c5d2bb9d65aeb0aba0818008927de00814c0e85e4bbcf5a1f42d",
+    "MIRSAD Desktop/src/mirsad_desktop/analysis.py": "1801e9475beb1cdfc6ba0bcdc050587a5ba7f0ce0853023721dd73f5346e8ce4",
+    "MIRSAD Desktop/src/mirsad_desktop/catalogue.py": "6ea3f90e3a1924ee7f6cb45a3275fd7f1212a502f0cd6725f233d497d82db42b",
+    "MIRSAD Desktop/src/mirsad_desktop/climate.py": "7a824c0a950cbfa086790426b7e0baee2ffa529362a6fbf2260982784afc5742",
+    "MIRSAD Desktop/src/mirsad_desktop/climate_products.py": "e0a41e35f6170234924f5d64651f7d2bd031587ae10397c2626e9f6140fe5e72",
+    "MIRSAD Desktop/src/mirsad_desktop/climate_sources.py": "f116b57cb0a338161df26c383c45b14d36ea20ddc919874a05c67d4a6e53997a",
+    "MIRSAD Desktop/src/mirsad_desktop/crs.py": "0c1622ffe7dcdac976fe0eff328455c8d7c4fe9389000faea27b92c7e4abdd72",
+    "MIRSAD Desktop/src/mirsad_desktop/crspicker.py": "4391fdd7ec169cc33ac891fb9190711c8f1506cbe926a3bf2022f6ab31e2b7d2",
+    "MIRSAD Desktop/src/mirsad_desktop/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
+    "MIRSAD Desktop/src/mirsad_desktop/dialogs.py": "c8ee926ca2eefb78172940a890cf448c93c5bdf50bc066f93e811ca4182941c7",
+    "MIRSAD Desktop/src/mirsad_desktop/elevation.py": "514e7bc67c5aab79328718f7cf515d66df347f84674fc4d78f96763fcb16aa60",
+    "MIRSAD Desktop/src/mirsad_desktop/enrichment.py": "8df1a913b9e40c96979e8007d6421789c0af1b189cf6baf60b7924a8113a504e",
+    "MIRSAD Desktop/src/mirsad_desktop/excel_stream.py": "ffed44870c277e658bf19f656f1e9c1818bf9ad3087f514db91943af844269db",
+    "MIRSAD Desktop/src/mirsad_desktop/exports.py": "354d153ea29432db091ea45f93301f03805c336d63dceef45da7e639bdaa1c2b",
+    "MIRSAD Desktop/src/mirsad_desktop/hybrid_pipeline.py": "26181b83451362837b4bde6344e76edb092095d36a1ca8a8c792baf88e14d4c9",
+    "MIRSAD Desktop/src/mirsad_desktop/i18n.py": "2bbbecf80fb856bcd13d89326f22d64734849dbafb05ec38206eae54ab1a453f",
+    "MIRSAD Desktop/src/mirsad_desktop/icons.py": "77effff3028b8013625f9996a88fda801841db97c6e8e9017ba3b4dc263dfa62",
+    "MIRSAD Desktop/src/mirsad_desktop/inputs.py": "7aad76b998e337e882e13508758991dc3b7ca66ed533723cfaac563e4dea3f95",
+    "MIRSAD Desktop/src/mirsad_desktop/jobs.py": "6bf4f5891bb61793f8b55dc4a286723ba65f0ced2a3c7b4b2b56af53e14e66a1",
+    "MIRSAD Desktop/src/mirsad_desktop/mapcontrols.py": "88e650039eb31875128141e9115f078fa74a9a0544dccd0ef619564d64ea243d",
+    "MIRSAD Desktop/src/mirsad_desktop/mapview.py": "06ef6433f8e99a9bfe52af441e3573fdab97926e037eb1f46bb34dd6c4162564",
+    "MIRSAD Desktop/src/mirsad_desktop/observations.py": "1ed304625286a9106d0689b1a4d14b3e83f359a0ea5d5cade32864b0ec73dd1c",
+    "MIRSAD Desktop/src/mirsad_desktop/process_worker.py": "a66607b9269b284ed2db42cb983bc5963155e3ec087f0e211a495b8662fc98b3",
+    "MIRSAD Desktop/src/mirsad_desktop/protected_sources.py": "c7f808747adac8f2f697cf179bc896a321df25e57b40b3c8269b869469c2fdd3",
+    "MIRSAD Desktop/src/mirsad_desktop/regional.py": "39aa74d7f3decd81880de0b21e822293e9a3c6ec47afdb3e3fe2df20d72ff89f",
+    "MIRSAD Desktop/src/mirsad_desktop/registry.py": "64bbe7c6ff446c5d4bb501b5b995cbd20350a51b66cfda68a9b8df99cd88b1c6",
+    "MIRSAD Desktop/src/mirsad_desktop/remote_grid.py": "1731e258e8b4405a357236401178afd2b43309f3e769e68c69d7bb8a3b2d2771",
+    "MIRSAD Desktop/src/mirsad_desktop/science.py": "c0be913c1ea0f14525106ffe3fce8bda73f959e63c052e440b16f626b72bfa07",
+    "MIRSAD Desktop/src/mirsad_desktop/services.py": "11115c12ea7adce786c403dc22032537ac450bebbe6ca9e97b250ea7d5bebc3e",
+    "MIRSAD Desktop/src/mirsad_desktop/tabular.py": "4e08ec0039411e94341acde2e1c1b3ce2be0feb4647f34d88cdf119b5b2f890b",
+    "MIRSAD Desktop/src/mirsad_desktop/themes.py": "8a9e7ef5ab40e7490137f9bc1f6902a98a29cee091608429940b83da76db44bf",
+    "MIRSAD Desktop/src/mirsad_desktop/tools.py": "485782f87992e6da06d34de32afdd1897b32361b6a2fd505208ac8cce629af4c",
+    "MIRSAD Desktop/src/mirsad_desktop/ui.py": "eb8f1d006eb4b1720cfc97ce73bbc000dc393ce7e58e9a70be4901ce65132147",
+    "MIRSAD Desktop/src/mirsad_desktop/ui_acceptance.py": "0856119b9207d5185614acc74098e1ccf9f7f38f3dcb1991b428abcd9647ea19",
+    "MIRSAD Desktop/src/mirsad_desktop/userguide.py": "5305cc60ff4715993bd67bc6bbc880df79e37d384a2c7197745082e132e0af25",
+    "MIRSAD Desktop/src/mirsad_desktop/validation.py": "6ae0be96a2984f266fdca738ea52162f0eeb2acb4bcb0081aeb34619ebc3c54f",
+    "MIRSAD Desktop/src/mirsad_desktop/viewers.py": "7097f9037f12ccb64ab0a1a609c82f45f86a6d1cdc79f8f8ecadb722ea85a46a",
+    "MIRSAD Desktop/src/mirsad_desktop/widgets.py": "f84933be40e6d8701d380a23f3b7807a5b10a24a6a44eac47dc0c4f14f637f72",
+    "MIRSAD Desktop/src/mirsad_desktop/workspace.py": "f805cb7da0c140169bc93f1ac337231491f31ea67f5fc103832e911f7fc1739c",
+    "mirsad_core/__init__.py": "6cbe75d1c29523ae68d35d5561eadb8a03c9e50cc2cfb9ae645222ee21d2ef48",
+    "mirsad_core/arcgis_runtime.py": "0a0aa7042b30b9a4e36dbdc996a707f8ed96afeb32f543c1a5465aaef33505b8",
+    "mirsad_core/calendar_dialog.py": "ad2ccd66ade8201a53c33294a7cd01e4ee1e3f9f94019c9021bdb7634432f0a0",
+    "mirsad_core/climate_products.py": "e0a41e35f6170234924f5d64651f7d2bd031587ae10397c2626e9f6140fe5e72",
+    "mirsad_core/climate_quality.py": "10a63974baafe1c6b4935ee54e060e239c88cddfb1faefe99991ae74cb116472",
+    "mirsad_core/climate_sources.py": "f116b57cb0a338161df26c383c45b14d36ea20ddc919874a05c67d4a6e53997a",
+    "mirsad_core/daily_climate.py": "77a58a2f5914275df79e6589de53e1be716ec4553cc9de18c2cf97382d759180",
+    "mirsad_core/help_viewer.py": "02524a002d956ed372d50d1531c8bd3835e8249cab2e12243d16a6cd4889e50b",
+    "mirsad_core/hybrid_pipeline.py": "26181b83451362837b4bde6344e76edb092095d36a1ca8a8c792baf88e14d4c9",
+    "mirsad_core/protected_sources.py": "c7f808747adac8f2f697cf179bc896a321df25e57b40b3c8269b869469c2fdd3",
+    "mirsad_core/remote_grid.py": "1731e258e8b4405a357236401178afd2b43309f3e769e68c69d7bb8a3b2d2771",
+    "mirsad_core/station_catalogue.py": "fed0d884a0b72686fc73c1cc6d900df5bd0ec1bf6b231bb71a275129848eb060",
+    "mirsad_core/xlsx_stream.py": "88c553a48451465faaf82499c1e1e55cceebaaf0539cfe3d1681c9ee23a0fb1a",
+    "Toolboxes/MIRSAD_Climate_Atlas_Generator_10_8.pyt": "7b1260990d8981f28d765491b7234e7bb8449142fabeb84a2ba2866cc6e0bf59",
+    "Toolboxes/MIRSAD_Grid_Raster_Climate_Atlas_Generator.pyt": "4994ee7c40606a0b25f9372dc9481689455537ea2a801eb3375bbae374de82e3",
+    "Toolboxes/MIRSAD_Weather_Stations_Atlas_Generator.pyt": "1e39af687de23bdbc1c3c87f22bb539cfc280b73bed0110d602c4e52aed252ae"
+  },
+  "baseline_fixture_sha256": "2d5620b0d4d8a4aa004f4183b76f7a163fc447c73305fe2c8e3b8bf0c7f654ee",
+  "help_manifest": {
+    "version": "0.4.0.dev8",
+    "compiler_sha256": "3e96894609819ae3d595ff6e0fbe9ce6c9ac17bdeda256b994831992f668cb99",
+    "outputs": [
+      {
+        "language": "en",
+        "topics": 45,
+        "bytes": 162825,
+        "sha256": "c413f95cbdf2c1c0b8134c81e099f1aed07fa1ad5603bb69a7674e7248595b4b",
+        "compiler_exit": 1,
+        "full_text_index": true
+      },
+      {
+        "language": "ar",
+        "topics": 45,
+        "bytes": 169612,
+        "sha256": "e2fb1f6f937007f5ecdc38345511a07aee55e5bbacd984410be30083f6cc78fa",
+        "compiler_exit": 1,
+        "full_text_index": true
+      }
+    ]
+  },
+  "remaining": [
+    "Toolbox UI/execution/exports and native ArcMap acceptance",
+    "Supported regional enrichment",
+    "Optional localized Desktop aliases and full generated field help",
+    "Large climate pipeline memory/time acceptance",
+    "Complete DPI/accessibility and fresh-checkout build acceptance"
+  ],
+  "frozen_candidate": {
+    "worker": {
+      "passed": true,
+      "exe": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.build\\dist\\MIRSAD\\MIRSAD.exe",
+      "exe_sha256": "689886812485be57c925aa0129bbf70572603e681ff4fc7bcb882ece0e0c004d",
+      "scope": "Actual frozen worker outside checkout, clean PATH, real recorded public source cache; network blocked by invalid proxy; no Toolbox/installer claim",
+      "checks": [
+        "Both method layers in real GPKG/FileGDB",
+        "29 complete leap-month RH extremes and DEM source",
+        "PM daily sums and hourly/DEM metadata in XLSX"
+      ],
+      "output": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.test-output\\frozen-enrichment-quality\\Frozen_Source_Sample"
+    },
+    "source_equivalence": {
+      "passed": true,
+      "checks": [
+        {
+          "module": "science",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "hybrid_pipeline",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "climate_sources",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "climate_products",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "protected_sources",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "remote_grid",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "climate",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "services",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "exports",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "regional",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "ui",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "workspace",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "jobs",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "process_worker",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "ui_acceptance",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "registry",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "userguide",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "themes",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "daily_climate",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "elevation",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "enrichment",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "excel_stream",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "tabular",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "tools",
+          "equivalent": true,
+          "source_documentation_matches": true
+        },
+        {
+          "module": "analysis",
+          "equivalent": true,
+          "source_documentation_matches": true
+        }
+      ],
+      "exe_sha256": "689886812485be57c925aa0129bbf70572603e681ff4fc7bcb882ece0e0c004d",
+      "scope": "Static code comparison; no extracted code executed. Filenames/line tables and generated science source-hash docstring excluded. This does not verify native ArcGIS raster workspace changes."
+    },
+    "build": {
+      "version": "0.4.0.dev8",
+      "frozen": true,
+      "catalogue": {
+        "catalogue_version": "2026.10.17.3",
+        "catalogue_hash": "167239e5bd5613d0455a967a82b23ddcb91f659c07bf95024e2b4855171dbcf5",
+        "count": 28066,
+        "source": "NOAA ISD station locations; MIRSAD display policy retained",
+        "source_dbf_sha256": "b584ac3742de74b8ba2ef5b938fc95be4d5a0a876489bc55608b808397328f57",
+        "reference_url": "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv",
+        "reference_sha256": "1994747ab4af1b97e63adb434b4d0d022f2daee76f0c144ea9ab46be2d906604",
+        "audited_utc": "2026-10-17T18:19:57.446037+00:00",
+        "qa_counts": {
+          "reference_match": 28064,
+          "review_required": 2
+        },
+        "accuracy_limit": "Catalogue agreement is not ground verification; discrepancies are not silently relocated."
+      },
+      "catalogue_file_hash": "bead86dbe5bf8bf4f0cf90502ce0211ad4f5c5795050aafc9725366030c35e00",
+      "gdal": "3.12.4",
+      "drivers": {
+        "GPKG": "raw",
+        "OpenFileGDB": "raw"
+      },
+      "executable": "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.build\\dist\\MIRSAD\\MIRSAD.exe",
+      "python_paths": [
+        "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.build\\dist\\MIRSAD\\_internal\\base_library.zip",
+        "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.build\\dist\\MIRSAD\\_internal\\python3.12\\lib-dynload",
+        "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.build\\dist\\MIRSAD\\_internal",
+        "D:\\My Software\\MIRSAD Climate Atlas Generator\\MIRSAD Desktop\\.build\\dist\\MIRSAD\\_internal\\setuptools\\_vendor"
+      ],
+      "arcpy_imported": false,
+      "export_self_test": {
+        "run_id": "494a8e4b-2c90-48af-8e7a-b683ef8f0b79",
+        "job_id": null,
+        "version": "0.4.0.dev8",
+        "output_crs": "EPSG:4326",
+        "created_utc": "2026-10-21T19:44:37.711551+00:00",
+        "catalogue": {
+          "catalogue_version": "2026.10.17.3",
+          "catalogue_hash": "167239e5bd5613d0455a967a82b23ddcb91f659c07bf95024e2b4855171dbcf5",
+          "count": 28066,
+          "source": "NOAA ISD station locations; MIRSAD display policy retained",
+          "source_dbf_sha256": "b584ac3742de74b8ba2ef5b938fc95be4d5a0a876489bc55608b808397328f57",
+          "reference_url": "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv",
+          "reference_sha256": "1994747ab4af1b97e63adb434b4d0d022f2daee76f0c144ea9ab46be2d906604",
+          "audited_utc": "2026-10-17T18:19:57.446037+00:00",
+          "qa_counts": {
+            "reference_match": 28064,
+            "review_required": 2
+          },
+          "accuracy_limit": "Catalogue agreement is not ground verification; discrepancies are not silently relocated."
+        },
+        "outputs": {
+          "Project.gpkg": [
+            {
+              "layer": "Stations",
+              "features": 3,
+              "crs": "EPSG:4326",
+              "readback": "passed"
+            }
+          ],
+          "Project.gdb": [
+            {
+              "layer": "Stations",
+              "features": 3,
+              "crs": "EPSG:4326",
+              "readback": "passed"
+            }
+          ],
+          "Stations.xlsx": {
+            "sha256": "c76d68355a99b670d9b60f04486c26b5d5dd223f3178c7658cb9bf803166df08"
+          }
+        },
+        "errors": [],
+        "status": "complete"
+      },
+      "workspace_self_test": {
+        "modules": 19,
+        "calculated_fields": 389,
+        "user_import": "passed",
+        "raster_atlas": {
+          "run_id": "34a730d1-b1d8-42af-9c85-4767f5b699cf",
+          "job_id": null,
+          "version": "0.4.0.dev8",
+          "output_crs": "EPSG:32636",
+          "created_utc": "2026-10-21T19:44:38.049234+00:00",
+          "catalogue": {
+            "catalogue_version": "2026.10.17.3",
+            "catalogue_hash": "167239e5bd5613d0455a967a82b23ddcb91f659c07bf95024e2b4855171dbcf5",
+            "count": 28066,
+            "source": "NOAA ISD station locations; MIRSAD display policy retained",
+            "source_dbf_sha256": "b584ac3742de74b8ba2ef5b938fc95be4d5a0a876489bc55608b808397328f57",
+            "reference_url": "https://www.ncei.noaa.gov/pub/data/noaa/isd-history.csv",
+            "reference_sha256": "1994747ab4af1b97e63adb434b4d0d022f2daee76f0c144ea9ab46be2d906604",
+            "audited_utc": "2026-10-17T18:19:57.446037+00:00",
+            "qa_counts": {
+              "reference_match": 28064,
+              "review_required": 2
+            },
+            "accuracy_limit": "Catalogue agreement is not ground verification; discrepancies are not silently relocated."
+          },
+          "outputs": {
+            "Project.gpkg": [
+              {
+                "layer": "Stations",
+                "features": 4,
+                "crs": "EPSG:32636",
+                "readback": "passed"
+              },
+              {
+                "layer": "Input_Climate",
+                "features": 4,
+                "crs": "EPSG:32636",
+                "readback": "passed"
+              }
+            ],
+            "Project.gdb": [
+              {
+                "layer": "Stations",
+                "features": 4,
+                "crs": "EPSG:32636",
+                "readback": "passed"
+              },
+              {
+                "layer": "Input_Climate",
+                "features": 4,
+                "crs": "EPSG:32636",
+                "readback": "passed"
+              }
+            ],
+            "Stations.xlsx": {
+              "sha256": "a3e6152ef6fd0960f814a77c7b684b0a834d0b1ab6b6218ff3ca7c76a0c29847"
+            },
+            "Input_Climate.xlsx": {
+              "sha256": "e02890fd5419ba89030186baea635b03e13c57c63b2fd6c0661e915f74b04d3c"
+            },
+            "Atlas\\Input_Climate__T_Annual_Mean.tif": {
+              "crs": "EPSG:32636",
+              "shape": [
+                8,
+                7
+              ],
+              "method": "IDW",
+              "readback": "passed",
+              "validation": {
+                "n": 4,
+                "sampling": "first 100 input sites",
+                "valid_predictions": 4,
+                "RMSE": 1.2675387162664877,
+                "bias": 0.0005091797429379596
+              },
+              "kriging_model": null
+            },
+            "Atlas/MIRSAD_Climate_Atlas.pdf": {
+              "type": "PDF climate atlas"
+            }
+          },
+          "errors": [],
+          "status": "complete"
+        }
+      },
+      "gui_smoke_passed": true,
+      "ui_worker_export_passed": true,
+      "workspace_acceptance_passed": true,
+      "help_acceptance_passed": true,
+      "exe_sha256": "689886812485be57c925aa0129bbf70572603e681ff4fc7bcb882ece0e0c004d",
+      "bundle_sha256": "7da037d599096bbb60efe74cba9ed41166cd2f6ed88f992e4cd812d1f17bfd46"
+    },
+    "installer": {
+      "manifest": {
+        "version": "0.4.0.dev8",
+        "channel": "development",
+        "bundle_sha256": "7da037d599096bbb60efe74cba9ed41166cd2f6ed88f992e4cd812d1f17bfd46",
+        "installer_sha256": "44e6a7c1cbf8048b0a8c863daedcb8ae28b0d82a0d86268beda53af5157f012d",
+        "approved": false,
+        "signed": false,
+        "installation_acceptance_passed": true
+      },
+      "acceptance": {
+        "passed": true,
+        "installer_sha256": "44e6a7c1cbf8048b0a8c863daedcb8ae28b0d82a0d86268beda53af5157f012d",
+        "payload_readback": "passed",
+        "installed_workspace": "passed",
+        "uninstall": "passed",
+        "user_files_preserved": true,
+        "qa_app_id": "MIRSAD.Desktop.InstallationQA",
+        "production_installation_changed": false
+      }
+    }
+  }
+}

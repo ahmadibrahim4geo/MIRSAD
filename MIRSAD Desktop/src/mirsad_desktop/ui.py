@@ -191,7 +191,13 @@ class MainWindow(WorkspaceMixin,QMainWindow):
         self.monthly_rasters_cb=QCheckBox()
         for checkbox in (self.monthly_ranges,self.daily,self.yearly,self.monthly_rasters_cb):form.addRow(checkbox)
         top.addWidget(group,1);group=QGroupBox();self.modules_group=group;modulesbox=QVBoxLayout(group)
-        self.module_tree=QTreeWidget();self.module_tree.setColumnWidth(0,245);self.module_items={}
+        self.module_tree=QTreeWidget();self.module_tree.setMinimumHeight(360);self.module_tree.setColumnWidth(0,245);self.module_items={};self.extra_items={};self.et_items={};self.et_raster_items={}
+        self.extra_labels={"RHmax":"أقصى رطوبة يومية", "RHmin":"أدنى رطوبة يومية", "ea":"ضغط البخار الفعلي",
+            "es":"ضغط البخار المشبع", "VPD_Source":"عجز ضغط البخار من المصدر — أقصى يومي",
+            "VPD_FAO56":"عجز ضغط البخار وفق FAO-56", "Trange":"المدى الحراري اليومي",
+            "Sunshine_Hours":"مدة السطوع الشمسي الفعلية", "Ra":"الإشعاع اليومي خارج الغلاف الجوي",
+            "U2":"سرعة الرياح عند مترين", "Rn_FAO56":"صافي إشعاع السطح المرجعي — يحتاج منسوبًا معلومًا"}
+        from .daily_climate import VARIABLES
         self.module_cat_items={}
         for category,code in (("primary","primary_elements"),("derived","derived_models")):
             parent=QTreeWidgetItem(self.module_tree,[code]);parent.setExpanded(True);self.module_cat_items[category]=parent
@@ -199,6 +205,19 @@ class MainWindow(WorkspaceMixin,QMainWindow):
                 if module.group!=category:continue
                 item=QTreeWidgetItem(parent,[module.name,module.unit]);item.setFlags(item.flags()|Qt.ItemIsUserCheckable)
                 item.setCheckState(0,Qt.Unchecked);self.module_items[module.name]=item
+                if module.name=="Evapotranspiration":
+                    for method in ("HG","PM"):
+                        child=QTreeWidgetItem(item,[method,"mm"]);child.setFlags(child.flags()|Qt.ItemIsUserCheckable)
+                        child.setCheckState(0,Qt.Checked if method=="HG" else Qt.Unchecked);self.et_items[method]=child
+                    for method in ("HG","PM"):
+                        child=QTreeWidgetItem(item,[method+" rasters",""]);child.setFlags(child.flags()|Qt.ItemIsUserCheckable)
+                        child.setCheckState(0,Qt.Checked);self.et_raster_items[method]=child
+                for name,spec in VARIABLES.items():
+                    if spec["module"]!=module.name:continue
+                    child=QTreeWidgetItem(item,[name,spec["unit"]]);child.setFlags(child.flags()|Qt.ItemIsUserCheckable)
+                    child.setCheckState(0,Qt.Unchecked);self.extra_items[name]=child
+        self._child_check_states={id(item):item.checkState(0) for item in [*self.extra_items.values(),*self.et_items.values(),*self.et_raster_items.values()]}
+        self.module_tree.itemChanged.connect(self.extra_variable_changed)
         modulesbox.addWidget(self.module_tree);modulesbar=QHBoxLayout();self.select_modules_btn=QPushButton();self.clear_modules_btn=QPushButton()
         self.select_modules_btn.clicked.connect(lambda:self.check_modules(True));self.clear_modules_btn.clicked.connect(lambda:self.check_modules(False))
         modulesbar.addWidget(self.select_modules_btn);modulesbar.addWidget(self.clear_modules_btn);modulesbox.addLayout(modulesbar)
@@ -415,12 +434,21 @@ class MainWindow(WorkspaceMixin,QMainWindow):
             if module.name in self.module_items:
                 label = module.arabic if self.arabic else module.name
                 self.module_items[module.name].setText(0, label)
+        for name,item in self.extra_items.items():
+            item.setText(0,self.extra_labels[name] if self.arabic else name)
+        for method,item in self.et_items.items():item.setText(0,("هارجريفز–ساماني (HG)" if self.arabic else "Hargreaves–Samani (HG)") if method=="HG" else "FAO-56 Penman–Monteith (PM)")
+        for method,item in self.et_raster_items.items():item.setText(0,("راستر "+method) if self.arabic else method+" rasters")
         self.select_modules_btn.setText(tr("select_available", self.arabic))
         self.clear_modules_btn.setText(tr("clear_all", self.arabic))
 
         self.daily.setText(tr("include_daily", self.arabic))
         self.yearly.setText(tr("include_yearly", self.arabic))
         self.monthly_ranges.setText(tr("include_ranges", self.arabic))
+        if hasattr(self,"dem_group"):
+            self.dem_group.setTitle(self.t("إضافة منسوب DEM للنقاط — اختياري","Retrieve DEM elevation for points — optional"))
+            self.dem_note.setText(self.t("المصدر المتصل DSM بدقة 90 م ويشمل أثر العمران والنباتات. يمكنك اختيار DTM محلي؛ وحدته الرأسية متر. يُحفظ المنسوب الأصلي.",
+                "Online source: 90m DSM, including vegetation/buildings. You may choose a local DTM; vertical units must be metres. Original elevation is preserved."))
+            self.dem_datum.setPlaceholderText(self.t("المرجع الرأسي المحلي — غير محدد إن تُرك فارغًا","Local vertical datum — unspecified if blank"))
         self.download_button.setText(tr("btn_run_tool", self.arabic))
 
         # Raster labels
@@ -643,6 +671,23 @@ class MainWindow(WorkspaceMixin,QMainWindow):
         self.modules_note.setText(self.t("المتاح لهذا المصدر: %d من 19. مرّر المؤشر لعرض التبعيات.","Available for this source: %d of 19. Hover to inspect dependencies.")%count)
         from .climate_products import descriptor
         spec=descriptor(provider);auth=spec.get("auth") if spec else None
+        from .climate_sources import pipeline_sources
+        from .daily_climate import VARIABLES
+        has_hourly="Open-Meteo" in (pipeline_sources(provider) or ()) or "Open-Meteo" in provider
+        for name,item in self.extra_items.items():
+            enabled=not spec and getattr(self,"active_tool",None)!="raster" and (
+                has_hourly or (name=="U2" and ("NASA POWER" in provider or "NASA" in (pipeline_sources(provider) or ()))) or name not in ("RHmax","RHmin","VPD_Source","Sunshine_Hours","U2"))
+            item.setDisabled(not enabled)
+            if not enabled:item.setCheckState(0,Qt.Unchecked)
+            item.setToolTip(0,self.t("متغير إضافي اختياري؛ الوحدات القياسية موضحة لكل حقل في Excel. اليوم الناقص يبقى NULL. المدخلات: ",
+                "Optional supplementary variable; canonical units are documented per field in Excel. Incomplete days stay NULL. Inputs: ")+
+                ", ".join(VARIABLES[name]["dependencies"]) if enabled else self.t("مسار المتغير الإضافي غير متاح لهذا المصدر/الأداة بعد.",
+                "Supplementary variable is not integrated with this source/tool yet."))
+        pm_enabled=not spec and getattr(self,"active_tool",None)!="raster" and provider!=NOAA_ONLY
+        self.et_items["PM"].setDisabled(not pm_enabled);self.et_raster_items["PM"].setDisabled(not pm_enabled)
+        if not pm_enabled:self.et_items["PM"].setCheckState(0,Qt.Unchecked)
+        self.et_items["PM"].setToolTip(0,self.t("حساب يومي مرجعي؛ يحتاج منسوبًا معلومًا ومدخلات مكتملة. طبقة وExcel مستقلان عن HG.",
+            "Daily reference calculation; known elevation and complete inputs required. Separate layer and workbook from HG."))
         self.daily.setEnabled(not spec or spec["temporal"]=="Daily")
         self.daily.setToolTip(self.t("المنتج الشهري/المركب لا ينتج أيامًا مصطنعة.","Monthly/composite products do not generate fabricated daily rows.") if spec and spec["temporal"]!="Daily" else "")
         self.source_credentials.setVisible(bool(auth))
@@ -661,19 +706,44 @@ class MainWindow(WorkspaceMixin,QMainWindow):
         elif "Open-Meteo" in provider:
             self.modules_note.setText(self.t("جميع العناصر متاحة. تُستكمل متغيرات ERA5 غير المتاحة والقيم المفقودة من NASA POWER مع توثيق مصدر كل قيمة.","All modules available. Missing ERA5 variables/values use an explicit NASA POWER supplement, recorded per value."))
 
+    def extra_variable_changed(self,item,column):
+        if column!=0 or id(item) not in self._child_check_states:return
+        old=self._child_check_states[id(item)];self._child_check_states[id(item)]=item.checkState(0)
+        if old==item.checkState(0) or getattr(self,"restoring_tool",False) or not item.flags()&Qt.ItemIsEnabled:return
+        if item in self.extra_items.values() and item.checkState(0)==Qt.Checked:
+            item.parent().setCheckState(0,Qt.Checked)
+        if item in self.et_items.values() and item.checkState(0)==Qt.Checked:item.parent().setCheckState(0,Qt.Checked)
+        if item in self.et_raster_items.values() and item.checkState(0)==Qt.Checked:
+            method=next(k for k,v in self.et_raster_items.items() if v==item)
+            self.et_items[method].setCheckState(0,Qt.Checked)
+
+    def chosen_extra_variables(self):
+        from .daily_climate import VARIABLES
+        selected=self.chosen_modules()
+        return [name for name,item in self.extra_items.items() if item.checkState(0)==Qt.Checked
+                and item.flags()&Qt.ItemIsEnabled and VARIABLES[name]["module"] in selected]
+
     def check_modules(self,value):
         for item in self.module_items.values():
             if item.flags()&Qt.ItemIsEnabled:item.setCheckState(0,Qt.Checked if value else Qt.Unchecked)
+        if not value:
+            for item in self.extra_items.values():item.setCheckState(0,Qt.Unchecked)
+            self.et_items["PM"].setCheckState(0,Qt.Unchecked)
     def chosen_modules(self):return [name for name,item in self.module_items.items() if item.checkState(0)==Qt.Checked and item.flags()&Qt.ItemIsEnabled]
     def raster_options(self):
         from shapely.geometry import mapping
-        return dict(crs=self.get_clean_crs(self.analysis_crs),cell_size=self.cell_size.value(),
+        options=dict(crs=self.get_clean_crs(self.analysis_crs),cell_size=self.cell_size.value(),
                     method=self.method.currentText(),power=self.power.value(),neighbours=self.neighbours.value(),
                     boundary=mapping(self.boundary) if self.boundary is not None else None,
                     reclass_enabled=self.reclass_en.isChecked() if hasattr(self, "reclass_en") else False,
                     reclass_method=self.reclass_method.currentText() if hasattr(self, "reclass_method") else "Natural Breaks (Jenks)",
                     reclass_classes=self.reclass_classes.value() if hasattr(self, "reclass_classes") else 5,
                     pdf=self.pdf.isChecked())
+        if "Evapotranspiration" in self.chosen_modules():
+            methods=[k for k,v in self.et_items.items() if v.checkState(0)==Qt.Checked and v.flags()&Qt.ItemIsEnabled]
+            rasters=[k for k in methods if self.et_raster_items[k].checkState(0)==Qt.Checked]
+            if methods!=["HG"] or rasters!=["HG"]:options["et_raster_methods"]=rasters
+        return options
     def selected_unit_options(self):
         return {k:w.currentData() for k,w in self.unit_controls.items() if w.currentData()} if self.unit_group.isChecked() else {}
     def validated_points(self):
@@ -688,7 +758,9 @@ class MainWindow(WorkspaceMixin,QMainWindow):
     def export_stations(self):
         try:
             points=self.validated_points();folder,name,crs=self.folder.text(),self.project_name.text(),self.get_clean_crs(self.crs)
-            self.start_request(dict(operation="export",points=points,folder=folder,name=name,metadata=self.meta,options={"crs":crs}),{"export":(0,100)})
+            options={"crs":crs}
+            if self.elevation_settings():options["elevation_options"]=self.elevation_settings()
+            self.start_request(dict(operation="export",points=points,folder=folder,name=name,metadata=self.meta,options=options),{"export":(0,100)})
         except Exception as exc:self.on_error(str(exc))
     def download_climate(self):
         try:
@@ -700,6 +772,11 @@ class MainWindow(WorkspaceMixin,QMainWindow):
             monthly_rasters=self.monthly_rasters_cb.isChecked() if hasattr(self, "monthly_rasters_cb") else False
             raster=self.raster_options() if self.workflow.currentData() in ("atlas", "full") else None
             options=dict(start=start.isoformat(),end=end.isoformat(),provider=provider,om_model=om_model,modules=modules,save_daily=daily,separate_years=yearly,crs=crs,gap_method=gap,scopes=scopes,monthly_ranges=ranges,monthly_rasters=monthly_rasters,raster_options=raster,units=units,unit_options=self.selected_unit_options())
+            if self.chosen_extra_variables():options["extra_variables"]=self.chosen_extra_variables()
+            if self.elevation_settings():options["elevation_options"]=self.elevation_settings()
+            if "Evapotranspiration" in modules:
+                methods=[k for k,v in self.et_items.items() if v.checkState(0)==Qt.Checked and v.flags()&Qt.ItemIsEnabled]
+                if methods!=["HG"]:options["et_methods"]=methods
             from .climate_products import descriptor
             spec=descriptor(provider);auth=spec.get("auth") if spec else None;credentials=None
             if auth=="cds_token":credentials={"token":self.source_token.text().strip()}
@@ -735,8 +812,20 @@ class MainWindow(WorkspaceMixin,QMainWindow):
             if not points or not fields:raise ValueError("اختر نقاطك المستوردة وحقول الاستيفاء / Select imported points and numeric interpolation fields.")
             folder,name=self.folder.text(),self.project_name.text();options=self.raster_options()
             options["fields"]=fields
+            if self.elevation_settings():options["elevation_options"]=self.elevation_settings()
             self.start_request(dict(operation="analysis",points=points,folder=folder,name=name,metadata=self.meta,options=options),{"export":(0,20),"raster":(20,100)})
         except Exception as exc:self.on_error(str(exc))
+    def elevation_settings(self):
+        if not self.dem_group.isChecked() or not self.dem_group.isEnabled():return None
+        options=dict(source=self.dem_source.currentData())
+        if options["source"]=="local":
+            options.update(path=self.dem_path.text(),surface_type=self.dem_surface.currentData(),vertical_datum=self.dem_datum.text(),sampling="nearest")
+        return options
+
+    def choose_dem(self):
+        path,_=QFileDialog.getOpenFileName(self,self.t("اختر DEM محلي بوحدة متر","Choose local DEM with metre heights"),"","GeoTIFF (*.tif *.tiff)")
+        if path:self.dem_path.setText(path)
+
     def start_request(self,request,stages=None):
         if self.job_thread:return
         self.request_operation=request.get("operation")

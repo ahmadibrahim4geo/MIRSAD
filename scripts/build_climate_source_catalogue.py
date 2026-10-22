@@ -11,6 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from mirsad_core.climate_products import PRODUCTS,REGIONAL,GHCN
 from mirsad_core.hybrid_pipeline import OM_DAILY,OM_HOURLY
+ENRICHMENT_UNITS=dict(RH2M_MAX="percent",RH2M_MIN="percent",VPD_SOURCE="kPa; daily maximum",SUNSHINE_DURATION="seconds/day",WS10M_CONFIRMED="m/s at confirmed 10m")
 
 UNITS={"T2M":"deg C","T2M_MAX":"deg C","T2M_MIN":"deg C","T2MDEW":"deg C","TS":"deg C",
        "PRECTOTCORR":"mm per day or native month total","RH2M":"percent","CLOUD_AMT":"percent",
@@ -40,15 +41,19 @@ def catalogue():
         dict(id="openmeteo",label="Open-Meteo ERA5 / ERA5-Land",variables=list(OM_DAILY)+list(OM_HOURLY),resolution="Auto: Land 0.1 degree or ERA5 0.25 degree per variable and full interval",temporal="Daily",start="ERA5 1940; Land 1950",end="Latest archive, typically delayed",region="Global; Land variables require valid land cells",url="https://open-meteo.com/en/docs/historical-weather-api",auth=None,tools=["points","stations"],implementation="implemented",normalized_units=UNITS,notes_ar="Auto يستخدم Land للحرارة والرطوبة والندى، وERA5 لبقية المتغيرات المدعومة. للفترة التي تبدأ قبل 1950 يستخدم ERA5 كاملًا. الوضع المستقل لا يستكمل NASA؛ المسار القديم والهجين لهما سياسة معلنة منفصلة.",notes_en="Auto uses Land for temperature, RH and dewpoint and ERA5 for other supported variables. An interval beginning before 1950 uses ERA5 throughout. Standalone never supplements NASA; legacy and Hybrid retain explicitly separate policies."),
         dict(id="gsod",label="NOAA GSOD",variables=["T2M","T2M_MAX","T2M_MIN","T2MDEW","PRECTOTCORR","PS","SLP","WS10M"],resolution="Station observations",temporal="Daily summaries",start="General archive 1929; station/element-specific",end="Station/year-specific",region="Exact catalogue station",url="https://www.ncei.noaa.gov/data/global-summary-of-the-day/",auth=None,tools=["stations"],implementation="implemented",normalized_units=UNITS,notes_ar="USAF وWBAN والموقع معًا؛ ليس ISD الساعي ولا GHCN. الهجين ينهي NOAA ثم ERA5 ثم NASA ثم Gap Fill الشهري.",notes_en="USAF, WBAN and location are required together. This is not hourly ISD or GHCN. Hybrid finishes NOAA, then ERA5, then NASA, then optional monthly Gap Fill."),
     ]
-    return dict(version="2026-10-18-products-v1",reviewed="2026-10-18",sources=sources)
+    om=next(s for s in sources if s["id"]=="openmeteo")
+    om["normalized_units"]=dict(UNITS,**ENRICHMENT_UNITS)
+    om["notes_ar"]+=" إضافات RHmax/RHmin وVPD وساعات السطوع والرياح ذات ارتفاع القياس المؤكد مدمجة في Desktop وأداتَي Point وStation بالمسار اليومي؛ لا تشمل الشبكة الإقليمية. ملخصات الساعات تشترط 24 ساعة UTC صحيحة؛ counts وعمليات الاشتقاق محفوظة في Excel."
+    om["notes_en"]+=" New RH extrema, VPD, sunshine and confirmed-height wind options are integrated in Desktop and the Daily Point/Station tools; regional activation is not included. Hourly aggregation requires 24 valid UTC hours; sample counts and operations are exported in Excel."
+    return dict(version="2026-10-22-products-v3",reviewed="2026-10-21",sources=sources)
 
 
 def main():
     data=catalogue();content=json.dumps(data,ensure_ascii=False,sort_keys=True,indent=2)+"\n"
     for path in (ROOT/'data/climate_sources.json',ROOT/'MIRSAD Desktop/assets/climate_sources.json'):
         path.write_text(content,encoding='utf-8')
-    ar=['# دليل مصادر مرصاد — الحالة المنفذة','', 'مراجعة 2026-10-18. نهاية الأرشيف متغيرة؛ لا تعني بداية المنتج وجود كل عنصر في كل موقع. بيانات المصدر ومؤشرات التغطية هي المرجع لكل تشغيل.','']
-    en=['# MIRSAD climate sources — implemented state','','Reviewed 2026-10-18. Archive ends change; a product start does not guarantee every variable at every location. Inspect per-run provenance and coverage.','']
+    ar=['# دليل مصادر مرصاد — الحالة المنفذة','', 'مراجعة '+data['reviewed']+'. نهاية الأرشيف متغيرة؛ لا تعني بداية المنتج وجود كل عنصر في كل موقع. بيانات المصدر ومؤشرات التغطية هي المرجع لكل تشغيل.','']
+    en=['# MIRSAD climate sources — implemented state','','Reviewed '+data['reviewed']+'. Archive ends change; a product start does not guarantee every variable at every location. Inspect per-run provenance and coverage.','']
     for s in data['sources']:
         common=f"{s['start']} → {s['end']} | {s['resolution']} | {s['temporal']}"
         for language,lines in (('ar',ar),('en',en)):
@@ -76,7 +81,7 @@ def main():
     for folder,identifiers in groups.items():
         target=directory/folder;target.mkdir(exist_ok=True)
         for language in ('ar','en'):
-            lines=['# MIRSAD climate source profile','', '2026-10-18 · Implemented development source contract','']
+            lines=['# MIRSAD climate source profile','', data['reviewed']+' · Implemented development source contract','']
             for item in data['sources']:
                 if item['id'] not in identifiers:continue
                 lines.extend(['## '+item['label'],'',item['start']+' → '+item['end'],'',item['resolution']+' | '+item['temporal'],'',item['region']+' | '+', '.join(item['tools']),'',', '.join(item['variables']),'',item['notes_'+language],'',item['url'],''])

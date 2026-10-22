@@ -6,12 +6,12 @@ Native ArcGIS scripts are intentionally explicit, licensed host checks.
 import argparse,concurrent.futures,json,os,re,subprocess,sys,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-SUITES=('test_arcgis_pro_compatibility.py','test_climate_products.py','test_data_quality.py',
+SUITES=('test_arcgis_pro_compatibility.py','test_climate_products.py','test_climate_enrichment_baseline.py','test_daily_climate.py','test_data_quality.py',
  'test_drought_dependencies_108.py','test_excel_export_108.py','test_hybrid_pipeline.py',
  'test_migrate_legacy_database.py','test_modifications.py','test_remote_grid.py','test_repository_layout.py',
  'test_runtime_stability.py','test_station_multi_selection.py','test_tool_validation.py',
  'test_weather_stations_atlas.py','test_weather_stations_dual_lang.py',
- 'test_workflow_and_temporal_scope.py','test_yearly_excel_export.py')
+ 'test_workflow_and_temporal_scope.py','test_yearly_excel_export.py','test_xlsx_stream.py','test_toolbox_enrichment.py','test_toolbox_pm.py')
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--python',default=sys.executable)

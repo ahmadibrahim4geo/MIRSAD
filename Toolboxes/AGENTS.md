@@ -4,6 +4,23 @@ Read `../AGENTS.md` first. Updated 19 October 2026. This scope covers the three
 ArcGIS toolboxes, their compatibility modules and metadata. Shared runtime
 support is `../mirsad_core/`; maintenance commands are `../scripts/`.
 
+22 October follow-up: Point/Station now append 11 default-off daily additions
+and an independent supplementary raster switch (81/88 parameters; regional 36).
+`mirsad_core/toolbox_enrichment.py` preserves legacy inputs and records separate
+canonical source, daily/hourly and yearly-XLSX audits. Public point-source support
+is explicit; product/regional additions and Toolbox PM/DEM remain pending.
+Current evidence and native Pro fixture scope:
+[Toolbox acceptance](../MIRSAD%20Desktop/docs/reports/climate-enrichment/TOOLBOX_ACCEPTANCE.md).
+The 19 October counts below are historical; ArcMap and supplementary raster native
+acceptance remain open. The existing frozen candidate predates this source batch.
+
+Later 22 October: HG/PM calculation and raster selection are independent in both
+Point and Station. Current counts are 83/90/36. Daily PM has separate canonical
+inputs, layer/workbook/yearly sums and folders; HG-only remains unchanged. Native
+Pro fixtures passed all three method choices for each tool. See
+[PM acceptance](../MIRSAD%20Desktop/docs/reports/climate-enrichment/TOOLBOX_PM_ACCEPTANCE.md).
+Toolbox DEM, product/regional PM and native raster/ArcMap acceptance remain open.
+
 ## Current files and separation
 
 | Entry point | Registered tools |

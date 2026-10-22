@@ -171,7 +171,7 @@ def fetch_series(session, station, start, end, provider, cancelled, modules=None
     return result, source_url, payload
 
 
-def download(stations, start, end, provider, modules, cache_folder, progress, cancelled, om_model="auto",credentials=None):
+def download(stations, start, end, provider, modules, cache_folder, progress, cancelled, om_model="auto",credentials=None,extra_variables=None,et_methods=None):
     import hashlib
     import json
     import requests
@@ -187,6 +187,16 @@ def download(stations, start, end, provider, modules, cache_folder, progress, ca
     cache = Path(cache_folder)
     cache.mkdir(parents=True, exist_ok=True)
     from .climate_products import descriptor,run as download_product
+    required=parameters(modules)
+    order=pipeline_sources(provider)
+    from .daily_climate import selected_dependencies,validate_et_methods,PM_DEPENDENCIES
+    methods=validate_et_methods(et_methods,modules)
+    if extra_variables or "PM" in methods:
+        required=sorted(set(required+selected_dependencies(extra_variables or [],modules)+list(PM_DEPENDENCIES if "PM" in methods else ())))
+        if descriptor(provider):
+            raise ValueError("Supplementary daily variables are not integrated with this product yet; choose an ERA5/POWER/GSOD point source.")
+        if order is None:
+            order=("Open-Meteo","NASA POWER") if "Open-Meteo" in provider else ("NASA POWER",)
     if descriptor(provider):
         from .hybrid_pipeline import Cancelled
         try:records=download_product(provider,stations,start,end,parameters(modules),str(cache),progress,cancelled,credentials=credentials)
@@ -201,13 +211,13 @@ def download(stations, start, end, provider, modules, cache_folder, progress, ca
         session.headers["User-Agent"] = "MIRSAD-Desktop/0.1.0 (climate research)"
         retry = Retry(total=2, backoff_factor=1.0, status_forcelist=[429, 500, 502, 503, 504], respect_retry_after_header=True)
         session.mount("https://", HTTPAdapter(max_retries=retry))
-        if pipeline_sources(provider):
+        if order:
             from .hybrid_pipeline import run, Cancelled
             # The shared pipeline owns bounded retries, without nested HTTP retries.
             session.mount("https://", HTTPAdapter(max_retries=0))
             try:
-                records=run(stations,start,end,parameters(modules),str(cache),progress,cancelled,
-                            model=model_code(om_model) if uses_reanalysis(provider) else "native",session=session,sources=pipeline_sources(provider))
+                records=run(stations,start,end,required,str(cache),progress,cancelled,
+                            model=model_code(om_model) if uses_reanalysis(provider) else "native",session=session,sources=order)
             except Cancelled as exc:
                 raise InterruptedError(str(exc)) from exc
             for rec in records:
@@ -259,7 +269,8 @@ def prepare_outputs(results, modules, start, end, provider, gap_method="none",sc
             for key in ("monthly","monthly_prepared","monthly_gap_provenance"):
                 rec[key]=prepared[key]
     for module in modules:
-        records, daily_rows = [], []
+        from .tabular import RowBuffer
+        records, daily_rows = [], RowBuffer()
         for result in results:
             station = result["station"]
             raw=result["series"]

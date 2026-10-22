@@ -14,6 +14,37 @@ from mirsad_desktop.ui import MainWindow
 
 
 class UiTests(unittest.TestCase):
+    def test_supplementary_choices_are_nested_optional_and_keep_each_tools_draft(self):
+        from mirsad_desktop.climate_sources import ERA5_ONLY
+        from mirsad_desktop.climate_products import CHELSA
+        window=MainWindow();window.show();self.app.processEvents()
+        try:
+            window.navigation.setCurrentRow(0)
+            window.provider.setCurrentText(ERA5_ONLY)
+            self.assertEqual(window.chosen_extra_variables(),[])
+            self.assertEqual(len(window.module_items),19)
+            self.assertNotIn("Evapotranspiration",window.chosen_modules())
+            window.extra_items["RHmax"].setCheckState(0,Qt.Checked)
+            self.assertEqual(window.module_items["Relative Humidity"].checkState(0),Qt.Checked)
+            self.assertEqual(window.chosen_extra_variables(),["RHmax"])
+            window.navigation.setCurrentRow(1)
+            self.assertEqual(window.chosen_extra_variables(),[])
+            window.navigation.setCurrentRow(0)
+            self.assertEqual(window.chosen_extra_variables(),["RHmax"])
+            window.inspector.setCurrentIndex(1)
+            window.module_items["Relative Humidity"].setExpanded(True)
+            window.resize(1600,950)
+            for arabic,dark,name in ((True,True,"ar-dark"),(False,False,"en-light")):
+                window.arabic=arabic;window.dark=dark;window.translate();window.apply_theme();self.app.processEvents()
+                window.inspector.widget(1).ensureWidgetVisible(window.module_tree)
+                window.module_tree.scrollToItem(window.extra_items["RHmax"])
+                self.app.processEvents()
+                self.assertTrue(window.grab().save(str(ROOT/".test-output"/("supplementary-"+name+".png"))))
+            window.provider.setCurrentText(CHELSA)
+            self.assertFalse(window.extra_items["RHmax"].flags()&Qt.ItemIsEnabled)
+            self.assertEqual(window.chosen_extra_variables(),[])
+        finally:window.close()
+
     @classmethod
     def setUpClass(cls):
         (ROOT/".test-output").mkdir(exist_ok=True)

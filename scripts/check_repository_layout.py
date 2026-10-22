@@ -17,6 +17,7 @@ def main():
     pages=[ROOT/name for name in ('README.md','AGENTS.md','CONTRIBUTING.md','CONTRIBUTING_AR.md',
            'Toolboxes/README.md','Toolboxes/AGENTS.md','mirsad_core/README.md',
            'MIRSAD Desktop/README.md','MIRSAD Desktop/AGENTS.md','Documents/DEVELOPMENT_PUBLICATION.md',
+           'Documents/SOURCE_UPDATE_2026_10_22.md',
            'Documents/00_Documentation_Index.md','Documents/00_Documentation_Index_AR.md',
            'Documents/05_Climate_Data_Sources_Directory/README.md','Documents/07_Climate_Sources_Web_Guide/README.md')]
     pages+=list((ROOT/'MIRSAD Desktop/docs').rglob('*.md'))

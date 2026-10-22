@@ -106,6 +106,8 @@ from mirsad_core.arcgis_runtime import preserve_arcpy_environment, SpatialLicens
 from mirsad_core.climate_sources import (pipeline_sources, resolution_options, canonical_resolution,
     GRID_HYBRID, NOAA_ONLY, ERA5_ONLY, ERA5_MODELS)
 from mirsad_core.climate_quality import merge_point_layers, coordinates, derive_from_fields, IDENTITY_FIELDS
+from mirsad_core import toolbox_enrichment as enrichment
+from mirsad_core import toolbox_pm as pm
 
 try:
     from raster_atlas_generator import RasterDataClimateAtlasGenerator, RasterDataClimateAtlasGeneratorAR
@@ -393,6 +395,7 @@ MODULE_PARAMS = {
 }
 
 MODULE_FOLDER = {
+    pm.PM_PRODUCT: "15_Evapotranspiration/Penman_Monteith",
     "Temperature": "01_Temperature",
     "Land Surface Temperature": "02_Land_Surface_Temperature",
     "Precipitation": "03_Precipitation",
@@ -671,7 +674,18 @@ def write_master_excel_workbook(path, sheets_list):
 
 
 def export_excel_with_fallback(path, sheets, msg, warn):
-    """Keep every row in Excel; use CSV only when workbook creation fails."""
+    """Large Daily tables use streaming XLSX; legacy small XLS keeps its contract."""
+    if path.lower().endswith(".xlsx") or any(name=="Daily" and len(rows)>60000 for name,header,rows,rtl in sheets):
+        from mirsad_core.xlsx_stream import write_workbook,ExcelWriteError
+        target=os.path.splitext(path)[0]+".xlsx"
+        try:
+            result=write_workbook(target,sheets)
+            for saved in result["files"]:msg("Excel XLSX: %s"%saved)
+            if result["split"]:msg("Daily parts are listed in Export_Index: %s"%target)
+            return True
+        except Exception as error:
+            warn("Streaming Excel failed: %s; completed files retained: %s. No CSV fallback for this XLSX path."%(error,", ".join(getattr(error,"files",[]))))
+            return False
     split_sheets = []
     for name, header, rows, rtl in sheets:
         for start in range(0, max(1, len(rows)), 60000):
@@ -2533,6 +2547,9 @@ def monthly_group_key(module, field):
     element, with Wind speed and direction kept separate (different units).
     Trends & Anomalies monthly fields are split by variable group so that
     C, mm, mm/decade, C/decade and % never share one stretch."""
+    extra = enrichment.variable_for_field(field)
+    if extra:
+        return (module, extra)
     if module == "Wind":
         return (module, "Spd" if field.startswith("W_Spd") else "Dir")
     if module == "Trends & Anomalies":
@@ -2547,6 +2564,7 @@ def monthly_group_key(module, field):
     return (module, "")
 
 MODULE_SHORT = {
+    pm.PM_PRODUCT: pm.PM_PRODUCT,
     "Temperature": "Temperature",
     "Precipitation": "Precipitation",
     "Sea Level Pressure": "Sea_Level_Pressure",
@@ -3273,6 +3291,22 @@ def metadata_rows_for_modules(modules, wanted_fields_by_module=None):
                 "Description_EN": r[9], "Calculation": r[10],
                 "Source": "NASA POWER", "Notes": "",
             })
+    if wanted_fields_by_module is not None:
+        for module in modules:
+            for field in wanted_fields_by_module.get(module, []):
+                if module == pm.PM_PRODUCT and pm.is_field(field):
+                    definition = pm.definition(field)
+                    rows.append(dict(Field_Name=field, Full_Name_EN=definition[7], Name_AR=definition[8],
+                        NASA_Code=definition[9], Module=module, Period=definition[4], Statistic=definition[6],
+                        Unit=definition[5], Description_AR=definition[8], Description_EN=definition[7],
+                        Calculation=definition[10], Source="Per-day PM input provenance", Notes=definition[11]))
+                name = enrichment.variable_for_field(field)
+                if name and enrichment.VARIABLES[name]["module"] == module:
+                    definition = enrichment.field_definition(name, field)
+                    rows.append(dict(Field_Name=field, Full_Name_EN=definition[7], Name_AR=definition[8],
+                        NASA_Code=definition[9], Module=module, Period=definition[4], Statistic=definition[6],
+                        Unit=definition[5], Description_AR=definition[8], Description_EN=definition[7],
+                        Calculation=definition[10], Source="Per-day supplementary input provenance", Notes=definition[11]))
     return rows
 
 
@@ -5349,7 +5383,7 @@ class PowerClimateAtlasGenerator(object):
                 p13, p31, p32,
                 p25, p26, p27,
                 p23, p28,
-                p22, p_yearly_excel, p_source_user, p_source_password]
+                p22, p_yearly_excel, p_source_user, p_source_password] + enrichment.parameters(arcpy) + pm.parameters(arcpy)
 
     def isLicensed(self):
         return True
@@ -5700,6 +5734,29 @@ class PowerClimateAtlasGenerator(object):
             else:
                 p_dly.value = False
 
+        extra_modules = [resolve_module_canonical(item.strip().strip("'\""))
+                         for item in (pdict["Climate_Modules"].valueAsText or "").split(";")]
+        extra_temporal = pdict["Temporal_Resolution"].valueAsText or ""
+        extra_daily = "Daily" in extra_temporal or "يومي" in extra_temporal
+        for name in enrichment.ORDER:
+            p = pdict.get(enrichment.parameter_name(name))
+            if p is not None:
+                p.enabled = not is_offline and extra_daily and enrichment.VARIABLES[name]["module"] in extra_modules and enrichment.available(name, src_text)
+                if not p.enabled:
+                    p.value = False
+        if "Supplementary_Rasters" in pdict:
+            pdict["Supplementary_Rasters"].enabled = not is_offline and extra_daily and bool(enrichment.selection(pdict))
+        p_methods, p_et_rasters = pdict.get(pm.METHODS_PARAMETER), pdict.get(pm.RASTERS_PARAMETER)
+        if p_methods is not None:
+            p_methods.enabled = "Evapotranspiration" in extra_modules and not is_offline
+            allow_pm = p_methods.enabled and extra_daily and not spec and pipeline_sources(src_text) != ("NOAA GSOD",)
+            p_methods.filter.list = ["HG", "PM"] if allow_pm else ["HG"]
+            requested = [name for name in pm.values(p_methods, ["HG"]) if name in p_methods.filter.list]
+            p_methods.value = ";".join(requested) if requested else "HG"
+            if p_et_rasters is not None:
+                p_et_rasters.enabled = p_methods.enabled
+                p_et_rasters.filter.list = requested or ["HG"]
+                p_et_rasters.value = ";".join(name for name in pm.values(p_et_rasters, ["HG"]) if name in (requested or ["HG"])) or None
         return
 
 
@@ -5714,6 +5771,20 @@ class PowerClimateAtlasGenerator(object):
             p_op = pdict.get("Operation_Mode")
             op_text = p_op.valueAsText if p_op else "Download & Generate Atlas (Full Pipeline) [Default]"
             is_offline = is_offline_mode(op_text)
+
+            selected_extra = enrichment.selection(pdict)
+            try:
+                enrichment.validate(selected_extra,
+                    [resolve_module_canonical(item.strip().strip("'\"")) for item in (pdict["Climate_Modules"].valueAsText or "").split(";")],
+                    pdict["Temporal_Resolution"].valueAsText, is_offline, pdict["Climate_Data_Source"].valueAsText)
+            except ValueError as ex:
+                for name in selected_extra:
+                    pdict[enrichment.parameter_name(name)].setErrorMessage(_excel_text(ex))
+            try:
+                pm.selected(pdict, [resolve_module_canonical(item.strip().strip("'\"")) for item in (pdict["Climate_Modules"].valueAsText or "").split(";")],
+                            pdict["Temporal_Resolution"].valueAsText, is_offline, pdict["Climate_Data_Source"].valueAsText)
+            except ValueError as ex:
+                if pdict.get(pm.METHODS_PARAMETER) is not None:pdict[pm.METHODS_PARAMETER].setErrorMessage(_excel_text(ex))
 
             p_provider = pdict.get("Climate_Data_Source")
             if not is_offline and p_provider:
@@ -6085,6 +6156,15 @@ class PowerClimateAtlasGenerator(object):
                 # including calls made outside ArcPy's updateParameters cycle.
                 temporal="Monthly";save_daily=False
             is_hybrid = bool(source_order or product_spec)
+            self._supplementary_selected = enrichment.selection(pdict)
+            enrichment.validate(self._supplementary_selected, modules, temporal, is_offline, provider)
+            self._supplementary_rasters = bool(pdict.get("Supplementary_Rasters") and pdict["Supplementary_Rasters"].value)
+            self._et_methods, self._et_raster_methods = pm.selected(pdict, modules, temporal, is_offline, provider)
+            self._daily_reference_et = "PM" in self._et_methods
+            if self._daily_reference_et:
+                if "HG" not in self._et_methods:
+                    active_export_modules = [module for module in active_export_modules if module != "Evapotranspiration"]
+                active_export_modules.append(pm.PM_PRODUCT)
             p_cds_k = pdict.get("CDS_API_Key")
             cds_key = p_cds_k.valueAsText if (p_cds_k and p_cds_k.valueAsText) else None
             source_credentials=dict(token=cds_key or "")
@@ -6130,6 +6210,8 @@ class PowerClimateAtlasGenerator(object):
             wanted_fields_by_module = resolve_filtered_fields(
                 active_export_modules, filter_scope, filter_aggs, filter_seasons, filter_custom_flds, temporal_scope=filter_tscope
             )
+            if self._daily_reference_et:
+                wanted_fields_by_module[pm.PM_PRODUCT] = pm.fields(_dt.date(2001, 1, 1), _dt.date(2001, 12, 31), t_scope_set, monthly_ranges_on)
             # Opt-in extended WC seasons: default OFF keeps the clean 2-field
             # schema (Winter + Annual). Stripped here so GDB fields, Excel,
             # rasters and dictionaries all stay byte-identical to legacy runs.
@@ -6556,7 +6638,28 @@ class PowerClimateAtlasGenerator(object):
                 "provider": provider, "om_model": om_model, "om_slug": om_slug,
                 "gap_method": gap_method, "gap_txt": _gap_txt
             }
+            if self._supplementary_selected:
+                extra_start = _dt.datetime.strptime(start_date_str, "%Y-%m-%d").date() if start_date_str else _dt.date(y0, 1, 1)
+                extra_end = _dt.datetime.strptime(end_date_str, "%Y-%m-%d").date() if end_date_str else _dt.date(y1, 12, 31)
+                extra_fields = enrichment.fields_by_module(self._supplementary_selected, extra_start, extra_end,
+                                                           t_scope_set, monthly_ranges_on)
+                for module, fields in extra_fields.items():
+                    wanted_fields_by_module.setdefault(module, []).extend(fields)
+                admin_meta.update(supplementary_selected=list(self._supplementary_selected),
+                                  supplementary_start=str(extra_start), supplementary_end=str(extra_end),
+                                  supplementary_scopes=sorted(t_scope_set), supplementary_ranges=monthly_ranges_on,
+                                  supplementary_save_daily=save_daily)
+                msg("Optional daily additions: %s. Canonical units are documented per field; legacy inputs and fields are preserved."
+                    % ", ".join(self._supplementary_selected))
             self._admin_meta = admin_meta
+            if self._daily_reference_et:
+                pm_start = _dt.datetime.strptime(start_date_str, "%Y-%m-%d").date()
+                pm_end = _dt.datetime.strptime(end_date_str, "%Y-%m-%d").date()
+                wanted_fields_by_module[pm.PM_PRODUCT] = pm.fields(pm_start, pm_end, t_scope_set, monthly_ranges_on)
+                admin_meta.update(pm_start=str(pm_start), pm_end=str(pm_end), et_methods=list(self._et_methods),
+                                  et_raster_methods=list(self._et_raster_methods), pm_scopes=sorted(t_scope_set), pm_ranges=monthly_ranges_on)
+                unit = pm.output_units(unit_precip_text)[1]
+                units_by_module[pm.PM_PRODUCT] = unit + "; complete period accumulations; Daily: " + unit + "/day"
             element_fcs = {}
             raster_registry = []
             sa_avail = False
@@ -6664,7 +6767,7 @@ class PowerClimateAtlasGenerator(object):
                     except Exception:
                         sess = None
 
-                if is_hybrid:
+                if is_hybrid and any(module != pm.PM_PRODUCT for module in ordered_modules):
                     from mirsad_core import hybrid_pipeline
                     required = set()
                     for selected_module in ordered_modules:
@@ -6673,8 +6776,8 @@ class PowerClimateAtlasGenerator(object):
                                 required.update(SUBMODEL_DEPS[submodel].get("params", []))
                         else:
                             required.update(MODULE_PARAMS.get(selected_module, []))
-                    hybrid_start = hybrid_pipeline.date(start_date_str) if start_date_str else datetime.date(y0,1,1)
-                    hybrid_end = hybrid_pipeline.date(end_date_str) if end_date_str else datetime.date(y1,12,31)
+                    hybrid_start = hybrid_pipeline.date(start_date_str) if start_date_str else _dt.date(y0,1,1)
+                    hybrid_end = hybrid_pipeline.date(end_date_str) if end_date_str else _dt.date(y1,12,31)
                     hybrid_stations = []
                     for p in pts:
                         usaf, wban = p.get("station_id", ""), p.get("wban", "")
@@ -6720,6 +6823,45 @@ class PowerClimateAtlasGenerator(object):
                         ordered_modules, model=om_slug, start_date=start_date_str, end_date=end_date_str)
                     if _om_note:
                         warn(_om_note)
+
+                if self._supplementary_selected:
+                    msg("Downloading separate canonical supplementary inputs using the selected source policy ...")
+                    def extra_progress(event):
+                        msg(event["message"])
+                    def extra_cancelled():
+                        return bool(getattr(arcpy.env, "isCancelled", False))
+                    extra_sources = enrichment.download(pts, self._supplementary_selected, extra_start, extra_end,
+                        provider, om_slug, os.path.join(paths["source_data"], "Supplementary_Inputs"),
+                        extra_progress, extra_cancelled, credentials=source_credentials)
+                    for rec, extra_source in zip(results, extra_sources):
+                        for warning in extra_source.get("warnings", []):
+                            warn("Supplementary point %s: %s" % (rec.get("oid"), warning))
+                        rec["supplementary"] = enrichment.calculate(rec, extra_source, self._supplementary_selected,
+                            extra_start, extra_end, t_scope_set, monthly_ranges_on, extra_cancelled)
+                    from mirsad_core.hybrid_pipeline import atomic_json
+                    atomic_json(os.path.join(paths["source_data"], "Supplementary_Provenance.json"),
+                        dict(version=enrichment.VERSION, selected=self._supplementary_selected,
+                             start=str(extra_start), end=str(extra_end),
+                             points=[dict(oid=rec.get("oid"), station_key=source["station"]["station_key"],
+                                 elevation_m=rec.get("calculation_elevation"),
+                                 sources=source.get("source_summary", ""), raw_paths=source.get("raw_paths", []),
+                                 variables=rec["supplementary"]["provenance"]) for rec, source in zip(results, extra_sources)]))
+
+                if self._daily_reference_et:
+                    msg("Downloading independent daily PM inputs; monthly gap estimates are excluded ...")
+                    def pm_cancelled():return bool(getattr(arcpy.env, "isCancelled", False))
+                    pm_sources = enrichment.download(pts, [], pm_start, pm_end, provider, om_slug,
+                        os.path.join(paths["source_data"], "PM_Inputs"), lambda event: msg(event["message"]), pm_cancelled,
+                        credentials=source_credentials, required=pm.PM_DEPENDENCIES)
+                    for rec, source in zip(results, pm_sources):
+                        for warning in source.get("warnings", []):warn("PM point %s: %s" % (rec.get("oid"), warning))
+                        rec["pm"] = pm.calculate(rec, source, pm_start, pm_end, t_scope_set, monthly_ranges_on, unit_precip_text, pm_cancelled)
+                        if source.get("status") == "OK" and rec.get("source_status") != "OK":rec["source_status"] = "OK"
+                    from mirsad_core.hybrid_pipeline import atomic_json
+                    atomic_json(os.path.join(paths["source_data"], "PM_Provenance.json"), dict(version=pm.VERSION,
+                        start=str(pm_start), end=str(pm_end), methods=list(self._et_methods), daily_unit=unit+"/day",
+                        points=[dict(oid=rec.get("oid"), station_key=source["station"]["station_key"],
+                            raw_paths=source.get("raw_paths", []), variables=rec["pm"]["provenance"]) for rec, source in zip(results, pm_sources)]))
 
                 try:
                     for mi, m in enumerate(ordered_modules):
@@ -6894,6 +7036,10 @@ class PowerClimateAtlasGenerator(object):
                         msg("Element [%d/%d] %s: Computing indicators ..." % (mi + 1, len(ordered_modules), m))
                         for idx, rec in enumerate(results):
                             try:
+                                if m == pm.PM_PRODUCT:
+                                    rec["fields"].update(rec["pm"]["fields"])
+                                    rec.update(status=rec["pm"]["status"], error=rec["pm"]["error"])
+                                    continue
                                 if use_om or is_hybrid:
                                     monthly = rec.get("monthly", {})
                                     daily_raw = rec.get("daily_raw", {})
@@ -6947,7 +7093,7 @@ class PowerClimateAtlasGenerator(object):
                                 warn("Element '%s' failed at point %s: %s"
                                      % (m, rec.get("oid"), str(ex)[:200]))
 
-                        if gap_method != "none" and not is_hybrid:
+                        if gap_method != "none" and not is_hybrid and m != pm.PM_PRODUCT:
                             spatial_impute_missing(results, [m])
 
                         if m == "UV Index" and not use_om and years and min(years) < 2001:
@@ -6965,6 +7111,9 @@ class PowerClimateAtlasGenerator(object):
                                 rec["error"] = "No valid values from " + provider
 
                         # Immediate GDB Layer Commit for this element
+                        for rec in results:
+                            rec["fields"].update((field, value) for field, value in rec.get("supplementary", {}).get("fields", {}).items()
+                                if enrichment.VARIABLES[enrichment.variable_for_field(field)]["module"] == m)
                         w_fields = wanted_fields_by_module.get(m, []) if wanted_fields_by_module else None
                         fc = self._build_single_element_layer(
                             tmp_base, gdb_path, results, m, admin_meta, msg, warn, wanted_fields=w_fields)
@@ -6978,14 +7127,18 @@ class PowerClimateAtlasGenerator(object):
                         daily_pkg = None
                         if save_daily and temporal == "Daily":
                             try:
-                                daily_pkg = self._build_daily_table(results, list(MODULE_PARAMS.get(m, [])), module_name=m)
+                                daily_pkg = pm.daily_table(results, pm_start, pm_end) if m == pm.PM_PRODUCT else self._build_daily_table(results, list(MODULE_PARAMS.get(m, [])), module_name=m)
                             except Exception as ex_d:
                                 warn("Daily table skipped for '%s': %s" % (m, str(ex_d)[:150]))
-                        self._export_excel(fc, os.path.join(paths["vec"], short + ".xls"), msg, warn,
-                                           daily=daily_pkg, module_name=m)
+                        export_dir = paths["vec"]
+                        if self._daily_reference_et and m in ("Evapotranspiration", pm.PM_PRODUCT):
+                            export_dir = os.path.join(out_ws, "15_Evapotranspiration", "Hargreaves" if m == "Evapotranspiration" else "Penman_Monteith")
+                            makedirs_ok(export_dir)
+                        self._export_excel(fc, os.path.join(export_dir, short + (".xlsx" if self._daily_reference_et and m in ("Evapotranspiration", pm.PM_PRODUCT) else ".xls")), msg, warn,
+                                           daily=daily_pkg, module_name=m, supplementary_results=results)
                         if separate_years and len(years) > 1:
                             self._export_yearly_excel(
-                                results, years, m, os.path.join(out_ws, MODULE_FOLDER[m], "Years"),
+                                results, years, m, os.path.join(export_dir if self._daily_reference_et and m in ("Evapotranspiration", pm.PM_PRODUCT) else os.path.join(out_ws, MODULE_FOLDER[m]), "Years"),
                                 admin_meta, msg, warn, save_daily=save_daily,
                                 wanted_fields=w_fields, monthly_ranges=monthly_ranges_on)
                         if daily_pkg:
@@ -7616,6 +7769,13 @@ class PowerClimateAtlasGenerator(object):
         if st_elev_field:
             f_map["st_elev"] = len(search_fields)
             search_fields.append(st_elev_field)
+        if getattr(self, "_supplementary_selected", []) or getattr(self, "_daily_reference_et", False):
+            if "Point_Type" in fields_in:
+                f_map["point_type"] = len(search_fields)
+                search_fields.append("Point_Type")
+            if "Z_Known" in fields_in:
+                f_map["z_known"] = len(search_fields)
+                search_fields.append("Z_Known")
 
         pts = []
         with arcpy.da.SearchCursor(in_points, search_fields) as cur:
@@ -7633,18 +7793,18 @@ class PowerClimateAtlasGenerator(object):
                         lon, lat = x, y
 
                     p_info = {"oid": row[0], "lat": float(lat), "lon": float(lon)}
-                    p_info["ghcn_id"] = str(row[f_map["ghcn_id"]]) if "ghcn_id" in f_map and row[f_map["ghcn_id"]] is not None else None
-                    p_info["wban"] = str(row[f_map["wban"]]) if "wban" in f_map and row[f_map["wban"]] is not None else ""
+                    p_info["ghcn_id"] = _excel_text(row[f_map["ghcn_id"]]) if "ghcn_id" in f_map and row[f_map["ghcn_id"]] is not None else None
+                    p_info["wban"] = _excel_text(row[f_map["wban"]]) if "wban" in f_map and row[f_map["wban"]] is not None else ""
                     if "st_id" in f_map and row[f_map["st_id"]] is not None:
-                        p_info["station_id"] = str(row[f_map["st_id"]])
+                        p_info["station_id"] = _excel_text(row[f_map["st_id"]])
                     else:
                         p_info["station_id"] = "PNT_%04d" % row[0]
                     if "st_nm" in f_map and row[f_map["st_nm"]]:
-                        p_info["station_name"] = str(row[f_map["st_nm"]])
+                        p_info["station_name"] = _excel_text(row[f_map["st_nm"]])
                     else:
                         p_info["station_name"] = "Point %d" % row[0]
                     if "st_ctry" in f_map and row[f_map["st_ctry"]]:
-                        p_info["country"] = str(row[f_map["st_ctry"]])
+                        p_info["country"] = _excel_text(row[f_map["st_ctry"]])
                     else:
                         p_info["country"] = "Regional"
                     if "st_elev" in f_map and row[f_map["st_elev"]] is not None:
@@ -7654,6 +7814,15 @@ class PowerClimateAtlasGenerator(object):
                             p_info["elevation"] = 0.0
                     else:
                         p_info["elevation"] = 0.0
+
+                    if getattr(self, "_supplementary_selected", []) or getattr(self, "_daily_reference_et", False):
+                        # The old zero placeholder is retained only for legacy
+                        # fields. Optional Rn never treats it as known sea level.
+                        raw_z = row[f_map["st_elev"]] if "st_elev" in f_map else None
+                        is_supplement = "point_type" in f_map and "supplement" in _excel_text(row[f_map["point_type"]]).lower()
+                        known_metre_field = st_elev_field in ("Elev_m", "Elev_Meters", "ELEV_M")
+                        known_flag = "z_known" not in f_map or bool(row[f_map["z_known"]])
+                        p_info["calculation_elevation"] = enrichment.number(raw_z) if known_metre_field and known_flag and not is_supplement else None
 
                     pts.append(p_info)
                 except Exception:
@@ -7783,14 +7952,17 @@ class PowerClimateAtlasGenerator(object):
             except Exception:
                 pass
             current = set(f.name for f in arcpy.ListFields(fc))
-            long_names = [n for n in SHP_FIELD_MAP if n in current]
+            field_map = dict(SHP_FIELD_MAP)
+            field_map.update((name, enrichment.short_field(name)) for name in current if enrichment.variable_for_field(name))
+            field_map.update((name, pm.short_field(name)) for name in current if pm.is_field(name))
+            long_names = [n for n in field_map if n in current]
             if long_names:
                 arcpy.management.CopyFeatures(fc, tmp_copy)
                 for n in long_names:
                     try:
-                        arcpy.management.AlterField(tmp_copy, n, SHP_FIELD_MAP[n], n)
+                        arcpy.management.AlterField(tmp_copy, n, field_map[n], n)
                     except Exception as ex:
-                        warn("Shapefile field rename %s->%s failed: %s" % (n, SHP_FIELD_MAP[n], ex))
+                        warn("Shapefile field rename %s->%s failed: %s" % (n, field_map[n], ex))
                 export_fc = tmp_copy
         except Exception as ex:
             warn("Shapefile prep failed, exporting as-is: %s" % ex)
@@ -7819,7 +7991,7 @@ class PowerClimateAtlasGenerator(object):
             msg("Shapefile: %s" % shp_path)
             if export_fc != fc:
                 warn("Shapefile truncations applied (GDB keeps full names): %s"
-                     % ", ".join("%s->%s" % (k, SHP_FIELD_MAP[k]) for k in SHP_FIELD_MAP))
+                     % ", ".join("%s->%s" % (k, field_map[k]) for k in sorted(current) if k in field_map))
         except Exception as ex:
             warn("Shapefile export failed: %s" % ex)
         finally:
@@ -8009,7 +8181,8 @@ class PowerClimateAtlasGenerator(object):
         if not have:
             return None
 
-        out_rows = []
+        from mirsad_core.xlsx_stream import RowSpool
+        out_rows = RowSpool()
         for rec in results:
             draw = rec.get("daily_raw", {}) or {}
             if not any(isinstance(draw.get(p), dict) and draw[p] for p in have):
@@ -8069,7 +8242,13 @@ class PowerClimateAtlasGenerator(object):
                 yearly = dict(rec, monthly=monthly, daily_raw=daily_raw, fields={},
                               status="NO_DATA", error="No observations for this year.")
                 has_data = any(value is not None for values in monthly.values() for value in values.values())
-                if has_data:
+                if module_name == pm.PM_PRODUCT:
+                    pstart = max(_dt.datetime.strptime(admin_meta["pm_start"], "%Y-%m-%d").date(), _dt.date(year, 1, 1))
+                    pend = min(_dt.datetime.strptime(admin_meta["pm_end"], "%Y-%m-%d").date(), _dt.date(year, 12, 31))
+                    yearly["pm"] = pm.calculate(yearly, rec.get("pm", {}).get("source", {}), pstart, pend,
+                        admin_meta.get("pm_scopes"), monthly_ranges, admin_meta.get("unit_precip"))
+                    yearly.update(fields=yearly["pm"]["fields"], status=yearly["pm"]["status"], error=yearly["pm"]["error"])
+                elif has_data:
                     try:
                         yearly["fields"] = compute_point_fields(
                             monthly, [year], [module_name], temporal, daily_raw,
@@ -8083,13 +8262,21 @@ class PowerClimateAtlasGenerator(object):
                         yearly.update(status="FAILED", error=str(ex))
                         warn("Year %d, %s, point %s: %s" % (year, module_name, rec.get("oid"), ex))
                 yearly_results.append(yearly)
-            if gap_method != "none" and not any(rec.get("hybrid") for rec in results):
+            if gap_method != "none" and not any(rec.get("hybrid") for rec in results) and module_name != pm.PM_PRODUCT:
                 spatial_impute_missing(yearly_results, [module_name])
             meta = dict(admin_meta, y0=year, y1=year,
                         data_start=max(admin_meta.get("request_start") or "%04d-01-01" % year,
                                        "%04d-01-01" % year),
                         data_end=min(admin_meta.get("request_end") or "%04d-12-31" % year,
                                      "%04d-12-31" % year))
+            extra_selected = meta.get("supplementary_selected", [])
+            if extra_selected:
+                start = _dt.datetime.strptime(meta["data_start"], "%Y-%m-%d").date()
+                end = _dt.datetime.strptime(meta["data_end"], "%Y-%m-%d").date()
+                for yearly in yearly_results:
+                    yearly["supplementary"] = enrichment.calculate(yearly, yearly.get("supplementary", {}).get("source", {}),
+                        extra_selected, start, end, meta.get("supplementary_scopes"), meta.get("supplementary_ranges", False))
+                    yearly["fields"].update(yearly["supplementary"]["fields"])
             rows = []
             for rec in yearly_results:
                 values = dict(rec["fields"])
@@ -8107,14 +8294,17 @@ class PowerClimateAtlasGenerator(object):
                 rows.append([values.get(field) for field in fields])
             daily = None
             if save_daily and temporal == "Daily":
-                daily = self._build_daily_table(yearly_results, list(MODULE_PARAMS.get(module_name, [])),
+                daily = pm.daily_table(yearly_results, pstart, pend) if module_name == pm.PM_PRODUCT else self._build_daily_table(yearly_results, list(MODULE_PARAMS.get(module_name, [])),
                                                  module_name=module_name)
             short = MODULE_SHORT.get(module_name, module_name)
             self._export_excel(None, os.path.join(folder, "%s_%d.xls" % (short, year)), msg, warn,
-                               daily=daily, module_name=module_name, table=(fields, rows), admin_meta=meta)
+                               daily=daily, module_name=module_name, table=(fields, rows), admin_meta=meta,
+                               supplementary_results=yearly_results)
 
     def _export_excel(self, fc, xls_path, msg, warn, daily=None, module_name=None,
-                      table=None, admin_meta=None):
+                      table=None, admin_meta=None, supplementary_results=None):
+        extra_sheets = []
+        admin_m = admin_meta if admin_meta is not None else (getattr(self, "_admin_meta", {}) or {})
         try:
             if table is None:
                 fields = [f.name for f in arcpy.ListFields(fc)
@@ -8203,9 +8393,33 @@ class PowerClimateAtlasGenerator(object):
             except Exception as ex_p:
                 pass
             
+            selected = admin_m.get("supplementary_selected", [])
+            if supplementary_results is not None and any(enrichment.VARIABLES[name]["module"] == module_name for name in selected):
+                start = _dt.datetime.strptime(admin_m.get("request_start") or admin_m["supplementary_start"], "%Y-%m-%d").date()
+                end = _dt.datetime.strptime(admin_m.get("request_end") or admin_m["supplementary_end"], "%Y-%m-%d").date()
+                if admin_meta is not None:
+                    start = max(start, _dt.datetime.strptime(admin_m["data_start"], "%Y-%m-%d").date())
+                    end = min(end, _dt.datetime.strptime(admin_m["data_end"], "%Y-%m-%d").date())
+                extra_sheets = enrichment.sheets(supplementary_results, module_name, selected, start, end,
+                    save_daily=admin_m.get("supplementary_save_daily", False), wanted=fields)
+                sheets_to_write.extend(extra_sheets)
+                xls_path = os.path.splitext(xls_path)[0] + ".xlsx"
+            if module_name == pm.PM_PRODUCT and supplementary_results is not None:
+                start = _dt.datetime.strptime(admin_m["pm_start"], "%Y-%m-%d").date()
+                end = _dt.datetime.strptime(admin_m["pm_end"], "%Y-%m-%d").date()
+                if admin_meta is not None:
+                    start = max(start, _dt.datetime.strptime(admin_m["data_start"], "%Y-%m-%d").date())
+                    end = min(end, _dt.datetime.strptime(admin_m["data_end"], "%Y-%m-%d").date())
+                extra_sheets = pm.sheets(supplementary_results, start, end, fields, admin_m.get("unit_precip"))
+                sheets_to_write.extend(extra_sheets)
+                xls_path = os.path.splitext(xls_path)[0] + ".xlsx"
             export_excel_with_fallback(xls_path, sheets_to_write, msg, warn)
         except Exception as ex:
             warn("Excel export failed: %s" % ex)
+        finally:
+            for sheet in extra_sheets:
+                if hasattr(sheet[2], "close"):
+                    sheet[2].close()
 
     def _export_csv(self, fc, csv_path, msg, warn, module_name=None):
         xls_path = os.path.splitext(csv_path)[0] + ".xls"
@@ -8255,7 +8469,7 @@ class PowerClimateAtlasGenerator(object):
                                 cleaned_vals.append(fv if fv == fv else None)
                             except Exception:
                                 cleaned_vals.append(None)
-                    row_data = [r[1], str(r[2] or ""), str(r[3] or ""), str(r[4] or ""), r[5], r[6], str(r[7] or "")] + cleaned_vals
+                    row_data = [r[1], _excel_text(r[2]), _excel_text(r[3]), _excel_text(r[4]), r[5], r[6], _excel_text(r[7])] + cleaned_vals
                     cur.insertRow(row_data)
             cnt = int(arcpy.management.GetCount(tbl_path)[0])
             msg("Saved Geodatabase Daily Table: %s (%d records)" % (tbl_name, cnt))
@@ -8393,8 +8607,10 @@ class PowerClimateAtlasGenerator(object):
         # The second return value is kept (None) so existing unpacking call
         # sites keep working.
         folder = MODULE_FOLDER[module]
+        if module == "Evapotranspiration" and "PM" in getattr(self, "_et_methods", []):
+            folder = os.path.join(folder, "Hargreaves")
         if module == "Wind":
-            sub = "Speed" if field.startswith("W_Spd") else "Direction"
+            sub = "Speed" if field.startswith(("W_Spd", "U2_")) else "Direction"
             rdir = os.path.join(out_ws, folder, sub)
         else:
             rdir = os.path.join(out_ws, folder)
@@ -8404,14 +8620,16 @@ class PowerClimateAtlasGenerator(object):
         return os.path.join(rdir, field + ".tif"), None
 
     def _module_of_field(self, field):
+        if pm.is_field(field):return pm.PM_PRODUCT
         for m, fs in MODULE_FIELDS.items():
             if field in fs:
                 return m
         return None
 
     def _colors_for(self, module, field):
+        if module == pm.PM_PRODUCT:module = "Evapotranspiration"
         if module == "Wind":
-            if field.startswith("W_Spd"):
+            if field.startswith(("W_Spd", "U2_")):
                 return COLOR_RAMPS["Wind_Speed"]
             return COLOR_RAMPS["Wind_Direction"]
         if module == "UV Index":
@@ -8730,9 +8948,22 @@ class PowerClimateAtlasGenerator(object):
                 wanted = wanted_fields
             else:
                 wanted = MODULE_FIELDS.get(m, [])
+            collisions = [field for field in wanted if (enrichment.variable_for_field(field) or pm.is_field(field)) and field in existing]
+            if collisions:
+                raise ValueError("Supplementary field collision with input attributes: " + ", ".join(collisions))
+            extra_new = [field for field in wanted if enrichment.variable_for_field(field) or pm.is_field(field)]
+            if extra_new and not PY27 and hasattr(arcpy.management, "AddFields"):
+                # Pro can add the optional schema in one operation. The old
+                # schema still follows its existing path; ArcMap uses AddField.
+                try:
+                    arcpy.management.AddFields(fc, [[field, "LONG" if field.endswith("_Days") else "DOUBLE", field] for field in extra_new])
+                    existing.update(extra_new)
+                except Exception as ex:
+                    warn("Supplementary batch schema failed; retrying missing fields individually: %s" % ex)
+                    existing.update(f.name for f in arcpy.ListFields(fc))
             for f in wanted:
                 if f not in existing:
-                    field_type = "LONG" if f == "Dry_Months_Count" else "DOUBLE"
+                    field_type = "LONG" if f == "Dry_Months_Count" or (enrichment.variable_for_field(f) or pm.is_field(f)) and f.endswith("_Days") else "DOUBLE"
                     arcpy.management.AddField(fc, f, field_type, field_alias=f)
 
             by_oid = dict((r.get("oid"), r) for r in results if r.get("oid") is not None)
@@ -8774,6 +9005,8 @@ class PowerClimateAtlasGenerator(object):
                     ds_val = str(admin_meta.get("data_start", str(y0)))
                     de_val = str(admin_meta.get("data_end", str(y1)))
                     unit_val = admin_meta.get("units_by_module", {}).get(m, "") if admin_meta else ""
+                    if any(enrichment.VARIABLES[name]["module"] == m for name in (admin_meta or {}).get("supplementary_selected", [])):
+                        unit_val += "; supplementary canonical units: see Field_Dictionary"
                     admin = [r.get("oid", row[0]), r.get("lat"), r.get("lon"), ds_val, de_val, temporal,
                              interp, base_cell, wind_cell, unit_val, r.get("status", "FAILED"),
                              (r.get("error", "") or "")[:255]]
@@ -8845,6 +9078,11 @@ class PowerClimateAtlasGenerator(object):
             else:
                 flist = MODULE_FIELDS.get(m, [])
             for f in flist:
+                if m == "Evapotranspiration" and "HG" not in getattr(self, "_et_raster_methods", ["HG"]):continue
+                if pm.is_field(f) and ("PM" not in getattr(self, "_et_raster_methods", []) or f.endswith("_Days")):continue
+                if enrichment.variable_for_field(f):
+                    if not getattr(self, "_supplementary_rasters", False) or f.endswith(("_Valid_Days", "_Expected_Days")):
+                        continue
                 # Monthly climatology surfaces are interpolated only when the
                 # monthly option is enabled (multi-year span, >= 2 years).
                 # Monthly *ranges* additionally pass with the independent
@@ -9115,6 +9353,14 @@ class PowerClimateAtlasGenerator(object):
         When is_classified is False: points directly to the continuous float GeoTIFF (<field>.tif).
         """
         info = FIELD_BY_NAME.get(field, (field, field, "", "", module, "", "", "", "", "", ""))
+        extra_name = enrichment.variable_for_field(field)
+        if extra_name:
+            extra_def = enrichment.field_definition(extra_name, field)
+            info = (field, extra_def[7], extra_def[8], extra_def[9], module, extra_def[4],
+                    extra_def[6], extra_def[5], extra_def[8], extra_def[7], extra_def[10])
+        if pm.is_field(field):
+            extra_def = pm.definition(field, getattr(self, "_admin_meta", {}).get("unit_precip"))
+            info = (field, extra_def[7], extra_def[8], extra_def[9], module, extra_def[4], extra_def[6], extra_def[5], extra_def[8], extra_def[7], extra_def[10])
         try:
             if arcpy.Exists(lyr_path):
                 arcpy.management.Delete(lyr_path)
@@ -9403,7 +9649,10 @@ class PowerClimateAtlasGenerator(object):
                     for f in arcpy.ListFields(out_fc):
                         if f.type in ("OID", "Geometry"):
                             continue
-                        alias = ar_map.get(f.name, f.name)
+                        extra_name = enrichment.variable_for_field(f.name)
+                        alias = (enrichment.field_definition(extra_name, f.name)[8] + " - " +
+                                 f.name[len(enrichment.VARIABLES[extra_name]["prefix"])+1:]) if extra_name else ar_map.get(f.name, f.name)
+                        if pm.is_field(f.name):alias = pm.definition(f.name)[8] + " - " + f.name[len(pm.PREFIX)+1:]
                         try:
                             arcpy.management.AlterField_management(
                                 out_fc, f.name, new_field_alias=alias)
@@ -9421,6 +9670,12 @@ class PowerClimateAtlasGenerator(object):
     def _write_dictionaries(self, vec_dir, modules, msg, provider="NASA POWER API", wanted_fields_by_module=None):
         rows = metadata_rows_for_modules(modules, wanted_fields_by_module=wanted_fields_by_module)
         for r in rows:
+            if pm.is_field(r["Field_Name"]):
+                r["Unit"] = pm.definition(r["Field_Name"], getattr(self, "_admin_meta", {}).get("unit_precip"))[5]
+            if enrichment.variable_for_field(r["Field_Name"]) or pm.is_field(r["Field_Name"]):
+                # Actual per-day source/method remains in the supplementary
+                # audit, independently of the parent's legacy source label.
+                continue
             if r["Field_Name"] == "R_Annual_Mean":
                 r["Notes"] = "Climatological annual mean (mean of per-year sums)"
             if r["Field_Name"] == "R_Annual_Range":
@@ -9531,7 +9786,9 @@ class PowerClimateAtlasGenerator(object):
                  % (_total - len(_miss), _total, _miss[:8]))
             _allw = [f for m in modules for f in (wanted_fields_by_module or {}).get(m, MODULE_FIELDS.get(m, []))]
             _add("shapefile name length<=10 (or mapped)",
-                 all(len(n) <= 10 or n in SHP_FIELD_MAP for n in _allw),
+                 all(len(n) <= 10 or n in SHP_FIELD_MAP or
+                     enrichment.variable_for_field(n) and len(enrichment.short_field(n)) <= 10 or
+                     pm.is_field(n) and len(pm.short_field(n)) <= 10 for n in _allw),
                  "mapped=%d fields" % len(SHP_FIELD_MAP))
         except Exception as ex:
             _add("field names present", False, str(ex))
@@ -9794,6 +10051,14 @@ class SpatialClimateAtlasGeneratorAR(PowerClimateAtlasGenerator):
     def getParameterInfo(self):
         params = PowerClimateAtlasGenerator.getParameterInfo(self)
         pdict = dict((p.name, p) for p in params)
+        for translated in enrichment.parameters(arcpy, arabic=True):
+            pdict[translated.name].displayName = translated.displayName
+            pdict[translated.name].category = translated.category
+            pdict[translated.name].description = translated.description
+        for translated in pm.parameters(arcpy, arabic=True):
+            pdict[translated.name].displayName = translated.displayName
+            pdict[translated.name].category = translated.category
+            pdict[translated.name].description = translated.description
 
         p_op = pdict.get("Operation_Mode")
         if p_op:

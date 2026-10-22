@@ -21,6 +21,7 @@ def bi(ar, en):
 def source_cards(data):
     cards=[];nav=[]
     units_ar={'deg C':'درجة مئوية','mm per day or native month total':'مم/يوم أو مجموع الشهر الأصلي، حسب المنتج','percent':'نسبة مئوية','kPa':'كيلوباسكال','m/s':'متر/ثانية','degree':'درجة زاوية','MJ/m2/day':'ميجاجول/م²/يوم','source UV index':'مؤشر الأشعة فوق البنفسجية من المصدر'}
+    units_ar.update({'seconds/day':'ثانية/يوم','kPa; daily maximum':'كيلوباسكال؛ أقصى يومي','m/s at confirmed 10m':'متر/ثانية عند ارتفاع قياس مؤكد 10 أمتار'})
     fields={'start':('بداية الأرشيف','Archive starts'),'end':('نهاية الأرشيف','Archive ends'),'resolution':('الدقة المكانية للمصدر','Source spatial resolution'),'temporal':('الفاصل الزمني المستخدم','Ingested time step'),'region':('النطاق الجغرافي','Geographic coverage')}
     for i,s in enumerate(data['sources'],1):
         localized=SOURCE_AR[s['id']]
