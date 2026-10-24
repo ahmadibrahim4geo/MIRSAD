@@ -7,7 +7,7 @@
 - **Questions / الأسئلة:** [Ask for help](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=question.yml)
 - **Feature requests / المقترحات:** [Request a feature](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=feature_request.yml)
 - **Scientific or documentation corrections / التصحيحات العلمية أو الدليل:** [Documentation issue](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=documentation.yml)
-- **Leave a short comment / تعليق بسيط:** [Welcome community thread](https://github.com/ahmadibrahim4geo/MIRSAD/issues/1)
+- **Browse community discussions / المناقشات المجتمعية:** [MIRSAD Discussions](https://github.com/ahmadibrahim4geo/MIRSAD/discussions)
 
 Anyone with a GitHub account can share feedback or ask questions, subject to GitHub's participation settings. A reproducible bug report helps development, but no code expertise is required for general feedback. If you received an invitation by email, you can also reply to that email with your comments. Please do not attach credentials or private data.
 
