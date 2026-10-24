@@ -1,0 +1,45 @@
+name: "User feedback / رأيك في مرصاد"
+description: "Share your experience or general review without needing to reproduce a bug. / شارك تجربتك أو تقييمك العام."
+title: "[Feedback / رأي] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for testing MIRSAD! You can write in Arabic or English. **All feedback is welcome, including criticism.** Please do not include passwords, tokens, private projects or personal data.
+
+        شكرًا لتجربة مرصاد. يمكنك الكتابة بالعربية أو الإنجليزية، ونرحب بكل الملاحظات حتى الانتقادات. يُرجى عدم نشر كلمات مرور أو رموز دخول أو بيانات شخصية أو مشروعات خاصة.
+  - type: dropdown
+    id: component
+    attributes:
+      label: "What did you test? / ماذا جرّبت؟"
+      options:
+        - "MIRSAD Desktop"
+        - "Weather Stations Toolbox / أداة المحطات"
+        - "Climate Atlas at My Points / أداة النقاط"
+        - "Grid / Raster Toolbox / أداة الراستر"
+        - "Documentation / الدليل"
+        - "Other or not tested yet / أخرى أو لم أجرّب بعد"
+    validations:
+      required: false
+  - type: textarea
+    id: experience
+    attributes:
+      label: "Your experience or opinion / تجربتك أو رأيك"
+      description: "What worked well? What was confusing, missing, or difficult? / ما الذي نجح أو كان معقدًا أو ناقصًا؟"
+      placeholder: "A short comment is enough. / يكفي تعليق قصير."
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: "Optional example / مثال اختياري"
+      description: "If applicable: version, climate source, area, dates, CRS, expected vs actual output. Keep details non-sensitive. / الإصدار والمصدر والمنطقة والفترة والمسقط والنتيجة المتوقعة والفعلية إذا انطبق."
+    validations:
+      required: false
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: "Suggested improvement / اقتراح للتحسين"
+      description: "Optional; no need to propose a solution to report a problem. / اختياري؛ لست مطالبًا باقتراح حل."
+    validations:
+      required: false
