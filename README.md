@@ -40,7 +40,7 @@
 | ✨ اقترح إضافة أو مصدرًا مناخيًا | Request a feature | [Idea / فكرة](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=feature_request.yml) |
 | 📖 صحح معلومة علمية أو ترجمة | Documentation correction | [Docs / التوثيق](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=documentation.yml) |
 
-**[🗨️ اكتب تعليقًا مباشرًا على الموضوع الترحيبي | Leave a comment on the welcome thread](https://github.com/ahmadibrahim4geo/MIRSAD/issues/1)**
+**[🗨️ شارك في مناقشات مرصاد | Join MIRSAD Discussions](https://github.com/ahmadibrahim4geo/MIRSAD/discussions)**
 
 [قائمة البلاغات والأسئلة | All issues](https://github.com/ahmadibrahim4geo/MIRSAD/issues) · [دليل الدعم | Support](SUPPORT.md) · [المساهمة بالعربية](CONTRIBUTING_AR.md) · [Contributing in English](CONTRIBUTING.md)
 
