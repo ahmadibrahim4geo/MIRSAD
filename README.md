@@ -26,6 +26,27 @@
   <a href="Documents/00_Documentation_Index.md">English Docs</a>
 </p>
 
+
+## 💬 شاركنا تجربتك | Feedback & Community
+
+**نجرب مرصاد مع الباحثين والمتخصصين حول العالم، ونرحب بكل الآراء والأسئلة والبلاغات، بما فيها الملاحظات السلبية.**
+**We welcome real-world tests, questions, scientific corrections, suggestions, and bug reports in Arabic or English.**
+
+| بالعربية | English | فتح |
+|---|---|---|
+| 💬 شارك تجربتك أو رأيك العام | Share feedback | [Feedback / رأيك](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=feedback.yml) |
+| 🐞 أبلغ عن عطل أو نتيجة غير صحيحة | Report a bug | [Bug report / عطل](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=bug_report.yml) |
+| ❓ اسأل عن الأداة أو طريقة استخدامها | Ask a question | [Ask / سؤال](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=question.yml) |
+| ✨ اقترح إضافة أو مصدرًا مناخيًا | Request a feature | [Idea / فكرة](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=feature_request.yml) |
+| 📖 صحح معلومة علمية أو ترجمة | Documentation correction | [Docs / التوثيق](https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=documentation.yml) |
+
+**[🗨️ اكتب تعليقًا مباشرًا على الموضوع الترحيبي | Leave a comment on the welcome thread](https://github.com/ahmadibrahim4geo/MIRSAD/issues/1)**
+
+[قائمة البلاغات والأسئلة | All issues](https://github.com/ahmadibrahim4geo/MIRSAD/issues) · [دليل الدعم | Support](SUPPORT.md) · [المساهمة بالعربية](CONTRIBUTING_AR.md) · [Contributing in English](CONTRIBUTING.md)
+
+> تتطلب المشاركة عبر GitHub حساب GitHub. رجاءً لا تنشر بيانات شخصية أو رموز دخول. إصدار Desktop ما زال تجريبيًا.
+> Participation on GitHub requires a GitHub account. Do not publish credentials or private datasets. Desktop remains a development build.
+
 ---
 
 ## تنظيم المستودع | Repository layout
