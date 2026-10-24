@@ -67,6 +67,18 @@ def main():
         assert (ROOT/'assets'/resource).is_file(),resource
     home=(ROOT/'index.html').read_text(encoding='utf-8')
     assert all(key in home for key in ('class="author-bio"','class="consultation"','#icon-github','#icon-mail','#icon-whatsapp'))
+    # Community entry points must remain visible in both languages and survive site generation.
+    assert home.count('id="community"')==1 and 'href="#community"' in home
+    community_routes=(
+        'https://github.com/ahmadibrahim4geo/MIRSAD/discussions',
+        'https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=bug_report.yml',
+        'https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=feedback.yml',
+        'https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=feature_request.yml',
+        'https://github.com/ahmadibrahim4geo/MIRSAD/issues/new?template=question.yml',
+    )
+    for route in community_routes:assert route in home,route
+    assert 'Help shape the next version of MIRSAD.' in home
+    assert 'تجربتك هي الخطوة التالية في تطوير مرصاد.' in home
     for path in (ROOT/'Documents/04_Interactive_HTML_Guides').glob('*.html'):
         assert 'href="../../climate-sources.html"' not in path.read_text(encoding='utf-8-sig'),path
     print('Website passed:',checked,'local links/assets/anchors;',len(data['sources']),'fully localized source profiles; 19 registry modules; generated pages and runtime snapshots unchanged.')
