@@ -1,0 +1,38 @@
+name: "Question or help / سؤال أو مساعدة"
+description: "Ask how to use MIRSAD or about its data and methods. / اسأل عن استخدام مرصاد أو بياناته أو منهجيته."
+title: "[Question / سؤال] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Questions in Arabic or English are welcome. Start with the [help guide](https://github.com/ahmadibrahim4geo/MIRSAD/blob/main/SUPPORT.md) if useful. Do not share API tokens, credentials or private data.
+
+        نرحب بالأسئلة بالعربية والإنجليزية. يمكنك مراجعة [دليل المساعدة](https://github.com/ahmadibrahim4geo/MIRSAD/blob/main/SUPPORT.md). لا تنشر رموز API أو كلمات مرور أو بيانات خاصة.
+  - type: textarea
+    id: question
+    attributes:
+      label: "Your question / سؤالك"
+      description: "Explain what you are trying to achieve. / ما الذي تريد إنجازه؟"
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Related component / الجزء المقصود"
+      options:
+        - "Desktop application / تطبيق سطح المكتب"
+        - "Stations / المحطات"
+        - "Points / النقاط"
+        - "Raster / الراستر"
+        - "Climate formulas / المعادلات المناخية"
+        - "Installation / التثبيت"
+        - "Other / أخرى"
+    validations:
+      required: false
+  - type: textarea
+    id: attempted
+    attributes:
+      label: "What have you tried? / ماذا جرّبت؟"
+      description: "Optional version and general environment details can help. / تفاصيل الإصدار وبيئة التشغيل اختيارية."
+    validations:
+      required: false
